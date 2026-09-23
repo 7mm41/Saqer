@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>أداة نافذة المتجر</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fafaf9;--card:#fff;--fg:#1c1917;--muted:#78716c;--line:#e7e5e4;--accent:#0f766e}
+  @media (prefers-color-scheme:dark){:root{--bg:#0c0a09;--card:#1c1917;--fg:#f5f5f4;--muted:#a8a29e;--line:#34302d}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Tajawal',system-ui,sans-serif}
+  main{max-width:960px;margin:0 auto;padding:32px 16px 96px}
+  h1{margin:0 0 6px;font-size:28px}
+  .lead{margin:0 0 24px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .grid>*{min-width:0}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .card h3{margin:0 0 14px;font-size:16px}
+  label{display:block;margin:0 0 12px;font-size:13px;color:var(--muted)}
+  input,textarea{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit;font-size:14px}
+  input[type=color]{height:42px;padding:4px}
+  textarea{min-height:70px;resize:vertical}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+  pre{margin:12px 0 0;padding:14px;border-radius:10px;background:#0c0a09;color:#e7e5e4;font-size:12px;line-height:1.6;overflow:auto;direction:ltr;text-align:left;max-height:340px}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<main>
+  <h1>أداة نافذة المتجر</h1>
+  <p class="lead">عدّل بيانات متجرك، جرّب النافذة المنبثقة، ثم انسخ كود التضمين والصقه في موقعك.</p>
+
+  <div class="grid">
+    <form class="card" id="form" autocomplete="off">
+      <h3>بيانات المتجر</h3>
+      <label>اسم المتجر<input name="name" value="متجر صقر"></label>
+      <label>عبارة قصيرة<input name="tagline" value="منتجات مختارة بعناية"></label>
+      <label>وصف<textarea name="description">نوفّر لك أفضل المنتجات بأسعار منافسة وتوصيل سريع لجميع المناطق.</textarea></label>
+      <label>رابط صورة المتجر (الغلاف)<input name="image" dir="ltr" value="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900&q=70"></label>
+      <label>رابط الشعار (اختياري)<input name="logo" dir="ltr" value=""></label>
+      <label>رابط المتجر<input name="url" dir="ltr" value="https://example.com"></label>
+
+      <h3 style="margin-top:20px">معلومات الاتصال</h3>
+      <div class="two">
+        <label>الهاتف<input name="phone" dir="ltr" value="+966 50 000 0000"></label>
+        <label>واتساب (دولي)<input name="whatsapp" dir="ltr" value="966500000000"></label>
+      </div>
+      <label>البريد الإلكتروني<input name="email" dir="ltr" value="info@example.com"></label>
+      <label>العنوان<input name="address" value="الرياض، المملكة العربية السعودية"></label>
+      <label>ساعات العمل<input name="hours" value="يومياً 9 ص – 11 م"></label>
+      <div class="two">
+        <label>إنستغرام<input name="instagram" dir="ltr" value="mystore"></label>
+        <label>إكس<input name="x" dir="ltr" value="mystore"></label>
+        <label>سناب شات<input name="snapchat" dir="ltr" value=""></label>
+        <label>تيك توك<input name="tiktok" dir="ltr" value=""></label>
+      </div>
+      <label>اللون الرئيسي<input type="color" name="accent" value="#0f766e"></label>
+    </form>
+
+    <div class="card">
+      <h3>المعاينة والتضمين</h3>
+      <div class="row">
+        <button class="btn" type="button" id="preview">عرض النافذة</button>
+        <button class="btn ghost" type="button" id="copyCode">نسخ الكود</button>
+      </div>
+      <pre id="code"></pre>
+    </div>
+  </div>
+</main>
+
+<script src="store-popup.js"></script>
+<script>
+  var form = document.getElementById("form");
+  var socials = ["instagram", "x", "snapchat", "tiktok"];
+
+  function readConfig() {
+    var d = Object.fromEntries(new FormData(form));
+    var cfg = { social: {} };
+    Object.keys(d).forEach(function (k) {
+      var v = d[k].trim();
+      if (!v) return;
+      if (socials.indexOf(k) > -1) cfg.social[k] = v; else cfg[k] = v;
+    });
+    if (!Object.keys(cfg.social).length) delete cfg.social;
+    return cfg;
+  }
+
+  function update() {
+    var cfg = readConfig();
+    StorePopup.init(cfg);
+    document.getElementById("code").textContent =
+      "<script>\n  window.StorePopupConfig = " + JSON.stringify(cfg, null, 2).replace(/\n/g, "\n  ") +
+      ";\n<\/script>\n<script src=\"store-popup.js\" defer><\/script>";
+  }
+
+  form.addEventListener("input", update);
+  document.getElementById("preview").addEventListener("click", function () { StorePopup.open(); });
+  document.getElementById("copyCode").addEventListener("click", function (e) {
+    navigator.clipboard.writeText(document.getElementById("code").textContent).then(function () {
+      e.target.textContent = "تم النسخ ✓";
+      setTimeout(function () { e.target.textContent = "نسخ الكود"; }, 1500);
+    });
+  });
+  update();
+</script>
+</body>
+</html>
