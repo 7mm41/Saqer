@@ -25,7 +25,6 @@ final class ScanEngine {
     private(set) var result = ScanResult()
 
     // Tuning.
-    private let batchSize = 50
     private let windowSeconds: TimeInterval = 20 * 60   // cluster window
     private let heavyVideoMinBytes: Int64 = 50 * 1_024 * 1_024
     private let screenshotAgeDays = 30
@@ -101,74 +100,35 @@ final class ScanEngine {
         }
 
         progress.phase = .analyzing
-        progress.total = photos.count
 
         // 2. Separate exact bursts (free) from the Vision-analysis pool.
         let (burstGroups, singles) = splitBursts(photos)
+        let ids = singles.map(\.id)
+        let dates = singles.map(\.creationDate)
+        progress.total = ids.count
 
-        // 3. Feature-print + cluster the remaining photos in batches.
+        // 3. Feature-print the pool CONCURRENTLY across cores (the expensive part).
         await similarity.reset()
-        var openGroups: [WorkingGroup] = []
-        var finished: [WorkingGroup] = []
-
-        var index = 0
-        while index < singles.count {
-            if Task.isCancelled { progress.phase = .cancelled; return }
-            let end = min(index + batchSize, singles.count)
-            for i in index..<end {
-                let item = singles[i]
-                let ok = await similarity.computeFeaturePrint(for: item.id)
-                progress.processed = i + 1
-                guard ok, let date = item.creationDate else {
-                    // Un-analyzable photo becomes its own singleton (ignored later).
-                    continue
-                }
-                // Close groups that fall outside the time window.
-                let stillOpen = openGroups.filter {
-                    guard let repDate = $0.representativeDate else { return true }
-                    return abs(repDate.timeIntervalSince(date)) <= windowSeconds
-                }
-                finished.append(contentsOf: openGroups.filter { g in !stillOpen.contains { $0.id == g.id } })
-                openGroups = stillOpen
-
-                // Find the closest open group under the "similar" threshold.
-                var bestGroupIndex: Int? = nil
-                var bestDistance = Float.greatestFiniteMagnitude
-                let thresholds = SimilarityEngine.Thresholds()
-                for (gi, group) in openGroups.enumerated() {
-                    if let d = await similarity.distance(group.representativeID, item.id),
-                       d <= thresholds.similar, d < bestDistance {
-                        bestDistance = d
-                        bestGroupIndex = gi
-                    }
-                }
-                if let gi = bestGroupIndex {
-                    openGroups[gi].items.append(item)
-                } else {
-                    openGroups.append(WorkingGroup(representativeID: item.id,
-                                                   representativeDate: date,
-                                                   items: [item]))
-                }
-            }
-            index = end
-            await Task.yield()   // let the UI breathe between batches
+        let concurrency = min(6, max(2, ProcessInfo.processInfo.activeProcessorCount))
+        await similarity.computeFeaturePrints(for: ids, concurrency: concurrency) { [weak self] done in
+            self?.progress.processed = done
         }
-        finished.append(contentsOf: openGroups)
 
         if Task.isCancelled { progress.phase = .cancelled; return }
 
-        // 4. Classify clusters, resolve sizes, pick heroes.
+        // 4. Cluster + classify in a single actor pass over the cached prints.
         progress.phase = .grouping
+        let clusters = await similarity.clusterSimilar(
+            ids: ids, dates: dates, windowSeconds: windowSeconds, thresholds: SimilarityEngine.Thresholds()
+        )
+
         var similarGroups: [SimilarGroup] = []
         var duplicateGroups: [SimilarGroup] = burstGroups
-
-        for working in finished where working.items.count >= 2 {
-            var items = working.items
+        for cluster in clusters {
+            var items = cluster.indices.map { singles[$0] }
             resolveSizes(&items)
-            let heroID = heroID(of: items)
-            let maxDistance = await maxDistanceFromRepresentative(working)
-            let group = SimilarGroup(items: items, suggestedKeepID: heroID)
-            if let maxDistance, maxDistance < SimilarityEngine.Thresholds().duplicate {
+            let group = SimilarGroup(items: items, suggestedKeepID: heroID(of: items))
+            if cluster.isDuplicate {
                 duplicateGroups.append(group)
             } else {
                 similarGroups.append(group)
@@ -192,13 +152,6 @@ final class ScanEngine {
     }
 
     // MARK: - Helpers
-
-    private struct WorkingGroup: Identifiable {
-        let id = UUID()
-        let representativeID: String
-        let representativeDate: Date?
-        var items: [MediaItem]
-    }
 
     /// Groups shots sharing a burstIdentifier; returns the multi-photo burst
     /// groups and the leftover singles for Vision analysis.
@@ -236,16 +189,5 @@ final class ScanEngine {
         items.max {
             ($0.pixelCount, $0.byteSize) < ($1.pixelCount, $1.byteSize)
         }?.id
-    }
-
-    private func maxDistanceFromRepresentative(_ group: WorkingGroup) async -> Float? {
-        var maxD: Float = 0
-        var found = false
-        for item in group.items where item.id != group.representativeID {
-            if let d = await similarity.distance(group.representativeID, item.id) {
-                maxD = max(maxD, d); found = true
-            }
-        }
-        return found ? maxD : nil
     }
 }

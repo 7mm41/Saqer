@@ -29,6 +29,10 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>CleanSpace scans your library on this device to find duplicates and look-alike photos so you can free up space. Your photos never leave your iPhone.</string>
 
+	<!-- Needed to find and remove duplicate contacts (matched by phone number). -->
+	<key>NSContactsUsageDescription</key>
+	<string>CleanSpace scans your contacts on this device to find duplicates that share a phone number, so you can clean them up. Your contacts never leave your iPhone.</string>
+
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

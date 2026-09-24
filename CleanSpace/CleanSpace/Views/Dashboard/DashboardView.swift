@@ -31,6 +31,7 @@ struct DashboardView: View {
                         StorageRingView(storage: env.storage, reclaimable: totalReclaimable)
                         if !env.store.isPro { proBanner }
                         categorySection
+                        toolsSection
                     }
                 }
                 .padding(.vertical, 8)
@@ -67,6 +68,45 @@ struct DashboardView: View {
                     .font(.subheadline).foregroundStyle(.orange)
             }
         }
+    }
+
+    // MARK: Tools (contacts, etc.)
+
+    private var toolsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("More Tools")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 4)
+            NavigationLink {
+                ContactsCleanupView()
+            } label: {
+                HStack(spacing: 16) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .fill(Color.teal.opacity(0.16))
+                        Image(systemName: "person.2.slash")
+                            .font(.title2).foregroundStyle(.teal)
+                    }
+                    .frame(width: 52, height: 52)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Clean Duplicate Contacts").font(.headline)
+                        Text("Find contacts that share a phone number")
+                            .font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold)).foregroundStyle(.tertiary)
+                }
+                .padding(14)
+                .background(Color(.secondarySystemGroupedBackground),
+                            in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
     }
 
     // MARK: Pro banner

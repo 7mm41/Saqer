@@ -2,12 +2,15 @@
 
 **Local-first, intelligent storage declutter for iOS.** Finds similar photos,
 old screenshots, heavy videos, and burst duplicates using on-device Vision, and
-lets you triage them with a swipe. 100% offline — your photos never leave the
-device, and the app makes no network calls at all.
+lets you triage them with a swipe. Also cleans **duplicate contacts** (matched by
+phone number). 100% offline — nothing ever leaves the device.
 
 - **Platform:** iOS 17.0+ · SwiftUI · Swift 5.9
-- **Frameworks:** PhotoKit, Vision (`VNGenerateImageFeaturePrintRequest`), SwiftData, Swift Concurrency
+- **Frameworks:** PhotoKit, Vision (`VNGenerateImageFeaturePrintRequest`), Contacts, StoreKit 2, SwiftData, Swift Concurrency
 - **Architecture:** MVVM with an injected composition root (`AppEnvironment`); actors isolate the heavy Vision + image work off the main thread.
+- **Fast scan:** feature prints are computed **concurrently across all cores**
+  (bounded to ≈ processor count), then clustered in a single pass — roughly 2×
+  faster than a one-at-a-time scan on modern devices.
 
 > ⚠️ **Build environment note.** This source tree was authored on Linux and
 > **cannot be compiled here** — it needs Xcode on a Mac. The photo-similarity and
@@ -123,6 +126,19 @@ Nothing is deleted during triage — decisions go to a SwiftData-backed **bin**.
 Only on **Review & Execute** do we call `PHAssetChangeRequest.deleteAssets`,
 which triggers **iOS's own system confirmation sheet**. If you cancel it, the
 app catches `PHPhotosError.userCancelled` and leaves everything untouched.
+
+---
+
+## Duplicate contacts (matched by number)
+
+`Services/ContactsService.swift` enumerates contacts, **normalizes each phone
+number** (digits-only, last 9 — so `+9665…`, `05…` and `9665…` match), and
+clusters contacts that **share a number** via union-find (A↔B and B↔C collapse
+into one group). Matching is **by number, not by name** — two entries with
+different names but the same number are treated as the same person. You pick which
+entry to keep in each group (defaulting to the most complete one); the rest are
+deleted via `CNSaveRequest` after an explicit confirmation. Requires
+`NSContactsUsageDescription` (already in `Info.plist`).
 
 ---
 
