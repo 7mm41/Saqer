@@ -152,7 +152,7 @@ struct ContactsCleanupView: View {
                 Circle().fill(willDelete ? Color.gray.opacity(0.25) : Color.teal.opacity(0.2))
                 Text(contact.initials)
                     .font(.subheadline.weight(.bold))
-                    .foregroundStyle(willDelete ? .secondary : .teal)
+                    .foregroundStyle(willDelete ? Color.secondary : Color.teal)
             }
             .frame(width: 38, height: 38)
 
