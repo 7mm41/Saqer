@@ -45,16 +45,38 @@ final class ScanEngine {
 
     // MARK: - Public control
 
+    /// Starts a fresh scan (clears any prior results and cached prints).
     func start() {
         guard !progress.isRunning else { return }
-        task?.cancel()
         result = ScanResult()
         progress = ScanProgress(phase: .fetching)
+        startTask(resuming: false)
+    }
+
+    /// Continues a scan that was paused (e.g., by backgrounding) — it keeps the
+    /// feature prints already computed and picks up where it left off instead of
+    /// restarting from zero. Safe to call when nothing is paused (no-op).
+    func resume() {
+        guard !progress.isRunning else { return }
+        guard progress.phase == .cancelled else { return }
+        progress.phase = .fetching
+        startTask(resuming: true)
+    }
+
+    /// Resumes a paused scan, or starts a new one if none is in progress.
+    func startOrResume() {
+        if progress.phase == .cancelled { resume() }
+        else if progress.phase == .idle { start() }
+    }
+
+    private func startTask(resuming: Bool) {
+        task?.cancel()
         task = Task { [weak self] in
-            await self?.run()
+            await self?.run(resuming: resuming)
         }
     }
 
+    /// Pauses an in-progress scan, keeping computed prints so it can resume.
     func cancel() {
         task?.cancel()
         task = nil
@@ -82,7 +104,7 @@ final class ScanEngine {
 
     // MARK: - Pipeline
 
-    private func run() async {
+    private func run(resuming: Bool) async {
         // 1. Fetch — off the main actor.
         let photos = await Task.detached(priority: .userInitiated) { [library] in
             library.fetchPhotosChronologically()
@@ -108,7 +130,8 @@ final class ScanEngine {
         progress.total = ids.count
 
         // 3. Feature-print the pool CONCURRENTLY across cores (the expensive part).
-        await similarity.reset()
+        //    On resume we KEEP the cached prints and only compute what's missing.
+        if !resuming { await similarity.reset() }
         let concurrency = min(6, max(2, ProcessInfo.processInfo.activeProcessorCount))
         await similarity.computeFeaturePrints(for: ids, concurrency: concurrency) { [weak self] done in
             self?.progress.processed = done
@@ -122,6 +145,9 @@ final class ScanEngine {
             ids: ids, dates: dates, windowSeconds: windowSeconds, thresholds: SimilarityEngine.Thresholds()
         )
 
+        // Reset the running tallies — clusters are recomputed fresh each pass.
+        progress.similarFound = 0
+        progress.reclaimableBytes = 0
         var similarGroups: [SimilarGroup] = []
         var duplicateGroups: [SimilarGroup] = burstGroups
         for cluster in clusters {

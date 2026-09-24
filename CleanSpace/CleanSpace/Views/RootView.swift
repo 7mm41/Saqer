@@ -19,7 +19,7 @@ struct RootView: View {
             if !env.preferences.hasCompletedOnboarding {
                 OnboardingFlow()
             } else if env.permissions.isAuthorized {
-                DashboardView()
+                MainTabView()
             } else {
                 AccessRequiredView(isLimited: env.permissions.isLimited) {
                     env.permissions.openSettings()
@@ -32,7 +32,10 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 env.permissions.refresh()
-                if env.permissions.isAuthorized { env.refreshStorage() }
+                if env.permissions.isAuthorized {
+                    env.refreshStorage()
+                    env.scanEngine.resume()   // continue a scan paused by backgrounding
+                }
             }
         }
     }

@@ -66,17 +66,23 @@ actor SimilarityEngine {
         concurrency: Int,
         onProgress: @escaping @MainActor (Int) -> Void
     ) async {
-        guard !ids.isEmpty else { return }
+        // Resume-friendly: only compute prints we don't already have. Already
+        // cached ones count as done immediately, so a resumed scan continues from
+        // where it paused instead of starting over.
+        let missing = ids.filter { prints[$0] == nil }
+        var completed = ids.count - missing.count
+        await onProgress(completed)
+        guard !missing.isEmpty else { return }
+
         let lib = library
         let size = analysisSize
         let limit = max(1, concurrency)
         var next = 0
-        var completed = 0
 
         await withTaskGroup(of: (String, FeaturePrintBox?).self) { group in
             // Prime the pipeline.
-            while next < ids.count && next < limit {
-                let id = ids[next]; next += 1
+            while next < missing.count && next < limit {
+                let id = missing[next]; next += 1
                 group.addTask { (id, await Self.makeFeaturePrint(id: id, library: lib, targetSize: size)) }
             }
             while let (id, box) = await group.next() {
@@ -88,8 +94,8 @@ actor SimilarityEngine {
                     group.cancelAll()
                     continue   // drain remaining without scheduling more
                 }
-                if next < ids.count {
-                    let nextID = ids[next]; next += 1
+                if next < missing.count {
+                    let nextID = missing[next]; next += 1
                     group.addTask { (nextID, await Self.makeFeaturePrint(id: nextID, library: lib, targetSize: size)) }
                 }
             }
@@ -171,18 +177,22 @@ actor SimilarityEngine {
     ) async -> FeaturePrintBox? {
         if Task.isCancelled { return nil }
         guard let cgImage = await loadCGImage(id: id, library: library, targetSize: targetSize) else { return nil }
-        let request = VNGenerateImageFeaturePrintRequest()
-        request.imageCropAndScaleOption = .centerCrop
-        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-        do {
-            try handler.perform([request])
-            if let observation = request.results?.first as? VNFeaturePrintObservation {
-                return FeaturePrintBox(observation: observation)
+        // Run the blocking Vision request on a GCD queue so it never starves the
+        // Swift cooperative thread pool (which the actor + continuations share).
+        return await withCheckedContinuation { (continuation: CheckedContinuation<FeaturePrintBox?, Never>) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let request = VNGenerateImageFeaturePrintRequest()
+                request.imageCropAndScaleOption = .centerCrop
+                let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+                do {
+                    try handler.perform([request])
+                    let obs = request.results?.first as? VNFeaturePrintObservation
+                    continuation.resume(returning: obs.map { FeaturePrintBox(observation: $0) })
+                } catch {
+                    continuation.resume(returning: nil)
+                }
             }
-        } catch {
-            return nil
         }
-        return nil
     }
 
     private nonisolated static func loadCGImage(
@@ -190,8 +200,11 @@ actor SimilarityEngine {
     ) async -> CGImage? {
         guard let asset = library.asset(for: id) else { return nil }
         let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.resizeMode = .exact
+        // .fastFormat returns the best LOCAL representation in a single callback —
+        // it never blocks on iCloud (which, with network disabled, could hang a
+        // .highQualityFormat request forever) and is plenty for 256px prints.
+        options.deliveryMode = .fastFormat
+        options.resizeMode = .fast
         options.isNetworkAccessAllowed = false
         options.isSynchronous = false
 

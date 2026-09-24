@@ -16,6 +16,11 @@ import Contacts
 
 final class ContactsService: @unchecked Sendable {
 
+    /// A single retained store. Creating a throwaway `CNContactStore()` inline can
+    /// be released by ARC before `requestAccess`'s completion fires, leaving the
+    /// permission request hung forever — so we keep one alive for the app's life.
+    private let store = CNContactStore()
+
     // MARK: Authorization
 
     func authorizationStatus() -> CNAuthorizationStatus {
@@ -27,7 +32,7 @@ final class ContactsService: @unchecked Sendable {
     @discardableResult
     func requestAccess() async -> Bool {
         await withCheckedContinuation { (continuation: CheckedContinuation<Bool, Never>) in
-            CNContactStore().requestAccess(for: .contacts) { granted, _ in
+            store.requestAccess(for: .contacts) { granted, _ in
                 continuation.resume(returning: granted)
             }
         }
@@ -49,7 +54,6 @@ final class ContactsService: @unchecked Sendable {
     /// clusters them by shared number. Groups with ≥ 2 contacts are returned,
     /// largest first. Throws if enumeration fails (e.g., access revoked).
     func fetchDuplicatesByNumber() throws -> [ContactDuplicateGroup] {
-        let store = CNContactStore()
         let keys: [CNKeyDescriptor] = [
             CNContactIdentifierKey as CNKeyDescriptor,
             CNContactGivenNameKey as CNKeyDescriptor,
@@ -158,7 +162,6 @@ final class ContactsService: @unchecked Sendable {
     /// time the app deletes; errors (e.g., access revoked) are thrown to the caller.
     func delete(ids: [String]) throws {
         guard !ids.isEmpty else { return }
-        let store = CNContactStore()
         let keys = [CNContactIdentifierKey as CNKeyDescriptor]
         let save = CNSaveRequest()
         let predicate = CNContact.predicateForContacts(withIdentifiers: ids)
