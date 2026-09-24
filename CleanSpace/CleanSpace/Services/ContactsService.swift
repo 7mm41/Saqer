@@ -61,7 +61,10 @@ final class ContactsService: @unchecked Sendable {
             CNContactOrganizationNameKey as CNKeyDescriptor,
             CNContactPhoneNumbersKey as CNKeyDescriptor,
             CNContactEmailAddressesKey as CNKeyDescriptor,
-            CNContactImageDataAvailableKey as CNKeyDescriptor
+            CNContactImageDataAvailableKey as CNKeyDescriptor,
+            // CNContactFormatter needs its own set of name keys — without this the
+            // formatter throws "A property was not requested when contact was fetched".
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName)
         ]
         let request = CNContactFetchRequest(keysToFetch: keys)
         request.sortOrder = .userDefault
