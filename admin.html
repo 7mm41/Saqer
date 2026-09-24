@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة تحكم صقر ستور</title>
+<meta name="description" content="لوحة تحكم صقر ستور: إدارة التطبيقات والشهادات وطلبات التوقيع.">
+<meta name="theme-color" content="#faf9f7">
+<link rel="icon" href="icons/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  .app-shell{display:grid;grid-template-columns:264px 1fr;min-height:100dvh}
+  @media (max-width:900px){.app-shell{grid-template-columns:1fr}}
+
+  /* Sidebar */
+  .side{border-inline-end:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;
+    position:sticky;top:0;height:100dvh;padding:20px 14px}
+  @media (max-width:900px){.side{position:fixed;z-index:1200;inset-inline-start:0;top:0;width:264px;
+    transform:translateX(105%);transition:transform .3s var(--ease);box-shadow:var(--elev-lg)}
+    .side.open{transform:none}}
+  .side .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:900;font-size:18px;padding:6px 8px 18px}
+  .side .brand .mark{width:36px;height:36px;border-radius:11px;background:var(--gold-grad);display:grid;place-items:center;color:#fff}
+  .side .brand .mark svg{width:20px;height:20px}
+  .navlink{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r);color:var(--muted);
+    font-weight:600;font-size:14.5px;cursor:pointer;transition:.18s;margin-bottom:2px}
+  .navlink svg{width:20px;height:20px;flex:none}
+  .navlink:hover{background:var(--bg-2);color:var(--fg)}
+  .navlink.on{background:var(--ink);color:#fff}
+  :root[data-theme="dark"] .navlink.on{background:var(--bronze)}
+  .navlink .count{margin-inline-start:auto;font-size:12px;background:var(--bg-2);color:var(--muted);
+    padding:1px 8px;border-radius:99px}
+  .navlink.on .count{background:rgba(255,255,255,.2);color:#fff}
+  .side .foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+  .side-user{display:flex;align-items:center;gap:10px;padding:8px}
+  .side-user .av{width:38px;height:38px;border-radius:50%;background:var(--gold-grad);display:grid;place-items:center;color:#fff;font-weight:800}
+
+  /* Main */
+  .main{min-width:0;display:flex;flex-direction:column}
+  .topbar{position:sticky;top:0;z-index:800;display:flex;align-items:center;gap:12px;padding:14px 24px;
+    border-bottom:1px solid var(--line);background:var(--glass);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur)}
+  .topbar h1{font-size:20px;font-weight:800}
+  .content{padding:24px;max-width:1180px;width:100%;margin:0 auto}
+  .burger{display:none}
+  @media (max-width:900px){.burger{display:inline-flex}}
+
+  /* Stat cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+  @media (max-width:900px){.stats{grid-template-columns:1fr 1fr}}
+  @media (max-width:480px){.stats{grid-template-columns:1fr}}
+  .stat{padding:18px}
+  .stat .ic{width:44px;height:44px;border-radius:12px;background:var(--bg-2);color:var(--bronze);display:grid;place-items:center;margin-bottom:12px}
+  .stat .ic svg{width:22px;height:22px}
+  .stat .n{font-family:var(--font-display);font-weight:900;font-size:28px}
+  .stat .l{font-size:13px;color:var(--muted)}
+  .stat .d{font-size:12px;font-weight:700;margin-top:6px}
+  .stat .d.up{color:var(--ok)}
+
+  .panel{margin-bottom:22px}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .panel-head h2{font-size:18px;font-weight:800}
+
+  /* Table */
+  .tbl{width:100%;border-collapse:collapse;font-size:14px}
+  .tbl th{text-align:start;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+    padding:10px 14px;font-weight:700;border-bottom:1px solid var(--line)}
+  .tbl td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl tr:hover td{background:var(--bg-2)}
+  .cell-app{display:flex;align-items:center;gap:12px}
+  .cell-app .appicon{--s:42px}
+  .cell-app b{font-weight:700}
+  .cell-app .s{font-size:12px;color:var(--muted)}
+  .rowacts{display:flex;gap:6px;justify-content:flex-end}
+  .iconbtn{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card);
+    display:grid;place-items:center;color:var(--muted);transition:.18s}
+  .iconbtn:hover{color:var(--fg);border-color:var(--bronze)}
+  .iconbtn.danger:hover{color:var(--err);border-color:var(--err)}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card)}
+  @media (max-width:640px){.hide-sm{display:none}}
+
+  .empty{padding:40px;text-align:center;color:var(--muted)}
+  .empty svg{width:44px;height:44px;margin-bottom:10px;opacity:.5}
+
+  /* mini bar chart */
+  .bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding:10px 4px}
+  .bars .b{flex:1;background:var(--gold-grad);border-radius:8px 8px 4px 4px;position:relative;min-height:6px;
+    transition:height .6s var(--ease)}
+  .bars .b span{position:absolute;top:-20px;inset-inline:0;text-align:center;font-size:11px;font-weight:700;color:var(--muted)}
+  .bars .b em{position:absolute;bottom:-22px;inset-inline:0;text-align:center;font-size:11px;color:var(--muted);font-style:normal}
+  .two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+  @media (max-width:900px){.two-col{grid-template-columns:1fr}}
+
+  .seg{display:inline-flex;background:var(--bg-2);border-radius:var(--r-pill);padding:3px;gap:2px}
+  .seg button{padding:6px 14px;border-radius:var(--r-pill);font-size:13px;font-weight:700;color:var(--muted)}
+  .seg button.on{background:var(--card);color:var(--fg);box-shadow:var(--elev)}
+
+  /* login gate */
+  .gate{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:20px;
+    background:var(--bg)}
+  .gate::before{content:"";position:fixed;inset:0;background:
+    radial-gradient(50vw 40vw at 80% 0%,rgba(161,98,7,.12),transparent 60%)}
+  .gate .box{position:relative;width:100%;max-width:400px;text-align:center}
+  .gate .mark{width:64px;height:64px;border-radius:18px;background:var(--gold-grad);display:grid;place-items:center;
+    color:#fff;margin:0 auto 18px;box-shadow:0 10px 30px rgba(161,98,7,.4)}
+  .gate .mark svg{width:34px;height:34px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div class="gate" id="gate">
+  <div class="box">
+    <div class="mark" id="gateMark"></div>
+    <h1 style="font-size:26px;font-weight:900">لوحة تحكم صقر ستور</h1>
+    <p class="muted" style="margin:8px 0 22px">سجّل الدخول لإدارة التطبيقات والشهادات وطلبات التوقيع.</p>
+    <div class="card pad" style="text-align:start">
+      <label class="field"><span>البريد الإلكتروني</span>
+        <input class="input" id="gEmail" type="email" dir="ltr" value="admin@saqerstore.app"></label>
+      <label class="field"><span>كلمة المرور</span>
+        <input class="input" id="gPass" type="password" dir="ltr" placeholder="saqer" value="saqer"></label>
+      <button class="btn primary block" id="gBtn" style="margin-top:6px">دخول</button>
+      <p class="muted center" style="font-size:12px;margin-top:12px">تجريبي: كلمة المرور <code style="direction:ltr">saqer</code></p>
+    </div>
+    <a class="btn ghost sm" href="index.html" style="margin-top:14px">← العودة للمتجر</a>
+  </div>
+</div>
+
+<div class="app-shell hide" id="shell">
+  <!-- SIDEBAR -->
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><span class="mark" id="sMark"></span><span>صقر <span style="color:var(--bronze)">ستور</span></span></a>
+    <nav id="nav"></nav>
+    <div class="foot">
+      <div class="side-user"><div class="av">أ</div>
+        <div style="flex:1;min-width:0"><b style="font-size:14px">المدير</b><div class="s muted" style="font-size:12px">admin@saqerstore.app</div></div>
+      </div>
+      <div class="row" style="margin-top:8px;gap:8px">
+        <button class="btn sm ghost grow" id="themeBtn2"></button>
+        <button class="btn sm ghost" id="logoutBtn" title="خروج"></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <button class="btn icon ghost burger" id="burger"></button>
+      <h1 id="pageTitle">نظرة عامة</h1>
+      <div class="grow"></div>
+      <a class="btn sm ghost" href="index.html" id="viewStore"></a>
+      <button class="btn sm primary" id="quickAdd"></button>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- APP MODAL -->
+<div class="overlay" id="appOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><h3 id="appModalTitle" style="font-size:18px"></h3>
+      <button class="btn icon ghost" data-close="app"></button></div>
+    <div class="modal-body">
+      <form id="appForm">
+        <input type="hidden" name="id">
+        <div class="two">
+          <label class="field"><span>اسم التطبيق *</span><input class="input" name="name" required placeholder="مثال: وردة"></label>
+          <label class="field"><span>المطوّر</span><input class="input" name="dev" placeholder="Wardah Labs"></label>
+        </div>
+        <div class="two">
+          <label class="field"><span>التصنيف</span>
+            <select class="input" name="cat">
+              <option>أدوات</option><option>تواصل</option><option>مالية</option><option>ترفيه</option>
+              <option>صحة</option><option>تعليم</option><option>أعمال</option><option>أسلوب حياة</option><option>ألعاب</option>
+            </select></label>
+          <label class="field"><span>Bundle ID</span><input class="input" name="bundle" dir="ltr" placeholder="com.company.app"></label>
+        </div>
+        <div class="two">
+          <label class="field"><span>الإصدار</span><input class="input" name="ver" dir="ltr" placeholder="1.0.0"></label>
+          <label class="field"><span>الحجم</span><input class="input" name="size" dir="ltr" placeholder="64 MB"></label>
+        </div>
+        <label class="field"><span>عبارة قصيرة</span><input class="input" name="tagline" placeholder="محادثات أنيقة وخاصة"></label>
+        <label class="field"><span>الوصف</span><textarea class="input" name="desc" placeholder="وصف التطبيق ومزاياه…"></textarea></label>
+        <label class="field"><span>رابط ملف IPA (اختياري)</span><input class="input" name="ipa" dir="ltr" placeholder="https://…/app.ipa"></label>
+        <div class="row" style="gap:14px;margin:4px 0 6px">
+          <label class="row" style="gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" name="signed" style="width:18px;height:18px"> موقّع</label>
+          <label class="row" style="gap:8px;font-size:14px;cursor:pointer"><input type="checkbox" name="featured" style="width:18px;height:18px"> مميّز في الواجهة</label>
+        </div>
+        <div class="row" style="justify-content:flex-end;gap:10px;margin-top:14px">
+          <button type="button" class="btn ghost" data-close="app">إلغاء</button>
+          <button type="submit" class="btn primary" id="appSave"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- CERT MODAL -->
+<div class="overlay" id="certOverlay">
+  <div class="modal" style="max-width:480px" role="dialog" aria-modal="true">
+    <div class="modal-head"><h3 id="certModalTitle" style="font-size:18px"></h3>
+      <button class="btn icon ghost" data-close="cert"></button></div>
+    <div class="modal-body">
+      <form id="certForm">
+        <input type="hidden" name="id">
+        <label class="field"><span>اسم الشهادة *</span><input class="input" name="name" required placeholder="Saqer Enterprise 2026"></label>
+        <div class="two">
+          <label class="field"><span>النوع</span>
+            <select class="input" name="type"><option>Enterprise</option><option>Development</option><option>Ad-Hoc</option><option>Distribution</option></select></label>
+          <label class="field"><span>Team ID</span><input class="input" name="team" dir="ltr" placeholder="9F2KQ7XR44"></label>
+        </div>
+        <div class="two">
+          <label class="field"><span>تاريخ الانتهاء</span><input class="input" name="expires" type="date"></label>
+          <label class="field"><span>الأجهزة</span><input class="input" name="devices" placeholder="100 / 100"></label>
+        </div>
+        <label class="field"><span>الحالة</span>
+          <select class="input" name="status"><option value="active">فعّالة</option><option value="expiring">قرب الانتهاء</option><option value="expired">منتهية</option></select></label>
+        <div class="row" style="gap:8px;padding:12px;border-radius:var(--r);background:var(--info-bg);color:var(--info);font-size:12.5px;font-weight:600">
+          <span id="certNote"></span> ارفع ملف <code style="direction:ltr">.p12</code> و <code style="direction:ltr">.mobileprovision</code> إلى الخادم لتفعيل التوقيع الحقيقي.
+        </div>
+        <div class="row" style="justify-content:flex-end;gap:10px;margin-top:14px">
+          <button type="button" class="btn ghost" data-close="cert">إلغاء</button>
+          <button type="submit" class="btn primary" id="certSave"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="assets/store.js"></script>
+<script>
+(function(){
+  var S=window.Saqer, api=S.api, ic=S.icon, esc=S.esc;
+  S.initTheme();
+  var $=function(s,r){return (r||document).querySelector(s);};
+
+  // static icons
+  $("#gateMark").innerHTML=ic("store");
+  $("#sMark").innerHTML=ic("store");
+  $("#burger").innerHTML=ic("menu");
+  $("#logoutBtn").innerHTML=ic("logout");
+  $("#quickAdd").innerHTML=ic("plus")+"إضافة تطبيق";
+  $("#viewStore").innerHTML=ic("globe")+"عرض المتجر";
+  $("#certNote").innerHTML=ic("upload");
+  document.querySelectorAll('[data-close]').forEach(function(b){if(!b.innerHTML.trim())b.innerHTML=ic("x");});
+
+  function paintTheme(){var d=document.documentElement.getAttribute("data-theme")==="dark";
+    $("#themeBtn2").innerHTML=ic(d?"sun":"moon")+(d?"وضع فاتح":"وضع داكن");}
+  paintTheme();
+  $("#themeBtn2").addEventListener("click",function(){S.toggleTheme();paintTheme();});
+
+  // ---- Login gate ----
+  var GKEY="saqer.admin.session";
+  function authed(){try{return sessionStorage.getItem(GKEY)==="1";}catch(e){return false;}}
+  function enter(){try{sessionStorage.setItem(GKEY,"1");}catch(e){}$("#gate").classList.add("hide");$("#shell").classList.remove("hide");render();}
+  $("#gBtn").addEventListener("click",function(){
+    var p=$("#gPass").value.trim();
+    if(p==="saqer"||p.length>=3){enter();S.toast("مرحبًا بعودتك 👋".replace("👋",""));}
+    else S.toast("كلمة المرور غير صحيحة","err");
+  });
+  $("#gPass").addEventListener("keydown",function(e){if(e.key==="Enter")$("#gBtn").click();});
+  $("#logoutBtn").addEventListener("click",function(){try{sessionStorage.removeItem(GKEY);}catch(e){}location.reload();});
+  if(authed()){$("#gate").classList.add("hide");$("#shell").classList.remove("hide");}
+
+  // ---- Nav ----
+  var TABS=[
+    {id:"overview",t:"نظرة عامة",i:"chart"},
+    {id:"apps",t:"التطبيقات",i:"apps"},
+    {id:"certs",t:"الشهادات",i:"cert"},
+    {id:"signing",t:"طلبات التوقيع",i:"signature"}
+  ];
+  var current="overview";
+  function renderNav(){
+    var apps=api.apps().length, certs=api.certs().length, reqs=api.requests().length;
+    var counts={apps:apps,certs:certs,signing:reqs};
+    $("#nav").innerHTML=TABS.map(function(t){
+      var c=counts[t.id]!=null?'<span class="count">'+counts[t.id]+'</span>':"";
+      return '<a class="navlink '+(current===t.id?"on":"")+'" data-tab="'+t.id+'">'+ic(t.i)+'<span>'+t.t+'</span>'+c+'</a>';
+    }).join("");
+  }
+  $("#nav").addEventListener("click",function(e){var l=e.target.closest("[data-tab]");if(!l)return;
+    current=l.getAttribute("data-tab");$("#side").classList.remove("open");render();});
+  $("#burger").addEventListener("click",function(){$("#side").classList.toggle("open");});
+  $("#quickAdd").addEventListener("click",function(){openApp();});
+
+  // ---- Views ----
+  function statusBadge(s){
+    var m={active:['ok','فعّالة'],expiring:['warn','قرب الانتهاء'],expired:['err','منتهية'],
+      signed:['ok','موقّع'],signing:['info','جاري التوقيع'],queued:['warn','بالانتظار'],failed:['err','فشل']};
+    var x=m[s]||['','—'];return '<span class="badge '+x[0]+'"><span class="dot"></span>'+x[1]+'</span>';
+  }
+
+  function viewOverview(){
+    var apps=api.apps(), certs=api.certs(), reqs=api.requests();
+    var totalDl=apps.reduce(function(s,a){return s+(a.downloads||0);},0);
+    var signedPct=Math.round(apps.filter(function(a){return a.signed;}).length/Math.max(apps.length,1)*100);
+    var stats=[
+      {i:"download",n:S.nfmt(totalDl),l:"إجمالي التحميلات",d:"+12.4% هذا الشهر"},
+      {i:"apps",n:apps.length,l:"تطبيقات منشورة",d:signedPct+"% موقّعة"},
+      {i:"cert",n:certs.filter(function(c){return c.status==='active';}).length,l:"شهادات فعّالة",d:certs.length+" إجمالي"},
+      {i:"signature",n:reqs.length,l:"طلبات توقيع",d:reqs.filter(function(r){return r.status==='queued';}).length+" بالانتظار"}
+    ];
+    // top apps by downloads for chart
+    var top=apps.slice().sort(function(a,b){return (b.downloads||0)-(a.downloads||0);}).slice(0,7);
+    var max=Math.max.apply(null,top.map(function(a){return a.downloads||1;}));
+    var bars=top.map(function(a){var h=Math.max(8,Math.round((a.downloads||0)/max*100));
+      return '<div class="b" style="height:'+h+'%"><span>'+S.nfmt(a.downloads)+'</span><em>'+esc(a.name)+'</em></div>';}).join("");
+    var recent=reqs.slice(0,5).map(function(r){
+      return '<div class="row between" style="padding:11px 0;border-bottom:1px solid var(--line)">'+
+        '<div class="row" style="gap:10px"><div class="iconbtn" style="pointer-events:none">'+ic("signature")+'</div>'+
+        '<div><b style="font-size:14px">'+esc(r.app)+'</b><div class="muted" style="font-size:12px;direction:ltr;text-align:right">'+esc(r.udid)+'</div></div></div>'+
+        statusBadge(r.status)+'</div>';}).join("")||'<div class="empty">لا طلبات بعد</div>';
+
+    return '<div class="stats">'+stats.map(function(s){
+      return '<div class="stat card"><div class="ic">'+ic(s.i)+'</div><div class="n">'+s.n+'</div>'+
+        '<div class="l">'+s.l+'</div><div class="d up">'+esc(s.d)+'</div></div>';}).join("")+'</div>'+
+      '<div class="two-col">'+
+        '<div class="card pad panel"><div class="panel-head"><h2>الأكثر تحميلًا</h2>'+
+          '<span class="badge">آخر 30 يومًا</span></div><div class="bars">'+bars+'</div>'+
+          '<div style="height:14px"></div></div>'+
+        '<div class="card pad panel"><div class="panel-head"><h2>أحدث طلبات التوقيع</h2></div>'+recent+'</div>'+
+      '</div>';
+  }
+
+  function viewApps(){
+    var apps=api.apps();
+    var rows=apps.map(function(a){
+      return '<tr><td><div class="cell-app"><div class="appicon" style="background:'+a.color+'">'+esc(S.initials(a.name))+'</div>'+
+        '<div><b>'+esc(a.name)+'</b> '+(a.featured?'<span class="badge gold" style="padding:1px 8px">مميّز</span>':"")+
+        '<div class="s">'+esc(a.dev||"—")+'</div></div></div></td>'+
+        '<td class="hide-sm">'+esc(a.cat)+'</td>'+
+        '<td class="hide-sm" dir="ltr">'+esc(a.ver||"—")+'</td>'+
+        '<td>'+S.nfmt(a.downloads)+'</td>'+
+        '<td>'+(a.signed?statusBadge("signed"):'<span class="badge">غير موقّع</span>')+'</td>'+
+        '<td><div class="rowacts"><button class="iconbtn" data-edit-app="'+a.id+'" title="تعديل">'+ic("edit")+'</button>'+
+        '<button class="iconbtn danger" data-del-app="'+a.id+'" title="حذف">'+ic("trash")+'</button></div></td></tr>';
+    }).join("");
+    if(!apps.length)rows='<tr><td colspan="6"><div class="empty">'+ic("apps")+'<div>لا توجد تطبيقات بعد</div></div></td></tr>';
+    return '<div class="panel"><div class="panel-head"><h2>التطبيقات ('+apps.length+')</h2>'+
+      '<button class="btn primary sm" id="addApp">'+ic("plus")+'إضافة تطبيق</button></div>'+
+      '<div class="table-wrap"><table class="tbl"><thead><tr>'+
+      '<th>التطبيق</th><th class="hide-sm">التصنيف</th><th class="hide-sm">الإصدار</th><th>التحميلات</th><th>الحالة</th><th></th>'+
+      '</tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  }
+
+  function viewCerts(){
+    var certs=api.certs();
+    var rows=certs.map(function(c){
+      var dl=S.daysLeft(c.expires);
+      return '<tr><td><div class="cell-app"><div class="appicon" style="--s:42px;background:var(--gold-grad)">'+ic("cert")+'</div>'+
+        '<div><b>'+esc(c.name)+'</b><div class="s" dir="ltr">Team '+esc(c.team||"—")+'</div></div></div></td>'+
+        '<td class="hide-sm">'+esc(c.type)+'</td>'+
+        '<td class="hide-sm">'+esc(c.devices||"—")+'</td>'+
+        '<td>'+S.fmtDate(c.expires)+' <div class="s muted">'+(dl>0?dl+" يومًا":"منتهية")+'</div></td>'+
+        '<td>'+statusBadge(c.status)+'</td>'+
+        '<td><div class="rowacts"><button class="iconbtn" data-edit-cert="'+c.id+'" title="تعديل">'+ic("edit")+'</button>'+
+        '<button class="iconbtn danger" data-del-cert="'+c.id+'" title="حذف">'+ic("trash")+'</button></div></td></tr>';
+    }).join("");
+    if(!certs.length)rows='<tr><td colspan="6"><div class="empty">'+ic("cert")+'<div>لا توجد شهادات بعد</div></div></td></tr>';
+    return '<div class="panel"><div class="panel-head"><h2>شهادات التوقيع ('+certs.length+')</h2>'+
+      '<button class="btn primary sm" id="addCert">'+ic("plus")+'إضافة شهادة</button></div>'+
+      '<div class="table-wrap"><table class="tbl"><thead><tr>'+
+      '<th>الشهادة</th><th class="hide-sm">النوع</th><th class="hide-sm">الأجهزة</th><th>الانتهاء</th><th>الحالة</th><th></th>'+
+      '</tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  }
+
+  function viewSigning(){
+    var reqs=api.requests(), apps=api.apps(), certs=api.certs();
+    var appOpts=apps.map(function(a){return '<option>'+esc(a.name)+'</option>';}).join("");
+    var certOpts=certs.map(function(c){return '<option>'+esc(c.name)+'</option>';}).join("");
+    var rows=reqs.map(function(r){
+      var actions='';
+      if(r.status==="queued")actions='<button class="btn sm primary" data-sign="'+r.id+'">'+ic("bolt")+'توقيع</button>';
+      else if(r.status==="signing")actions='<span class="row" style="gap:6px;color:var(--info);font-size:13px;font-weight:700"><span class="spinner" style="border-color:rgba(29,78,216,.3);border-top-color:var(--info)"></span>جارٍ…</span>';
+      else if(r.status==="signed")actions='<button class="btn sm ghost" data-ota="'+r.id+'">'+ic("download")+'رابط OTA</button>';
+      return '<tr><td><b>'+esc(r.app)+'</b></td>'+
+        '<td class="hide-sm" dir="ltr" style="font-size:12.5px;color:var(--muted)">'+esc(r.udid)+'</td>'+
+        '<td class="hide-sm">'+esc(r.cert)+'</td>'+
+        '<td>'+statusBadge(r.status)+'</td>'+
+        '<td style="text-align:end"><div class="rowacts" style="align-items:center">'+actions+
+        '<button class="iconbtn danger" data-del-req="'+r.id+'" title="حذف">'+ic("trash")+'</button></div></td></tr>';
+    }).join("");
+    if(!reqs.length)rows='<tr><td colspan="5"><div class="empty">'+ic("inbox")+'<div>لا طلبات توقيع</div></div></td></tr>';
+    return '<div class="two-col"><div>'+
+      '<div class="panel"><div class="panel-head"><h2>قائمة التوقيع ('+reqs.length+')</h2></div>'+
+      '<div class="table-wrap"><table class="tbl"><thead><tr>'+
+      '<th>التطبيق</th><th class="hide-sm">UDID</th><th class="hide-sm">الشهادة</th><th>الحالة</th><th></th>'+
+      '</tr></thead><tbody>'+rows+'</tbody></table></div></div></div>'+
+      '<div class="card pad panel" style="height:fit-content"><div class="panel-head"><h2>طلب توقيع جديد</h2></div>'+
+      '<form id="reqForm">'+
+      '<label class="field"><span>التطبيق</span><select class="input" name="app">'+appOpts+'</select></label>'+
+      '<label class="field"><span>معرّف الجهاز UDID</span><input class="input" name="udid" dir="ltr" placeholder="00008120-000A1C..." required></label>'+
+      '<label class="field"><span>الشهادة</span><select class="input" name="cert">'+certOpts+'</select></label>'+
+      '<button class="btn primary block" type="submit">'+ic("plus")+'إضافة للقائمة</button>'+
+      '</form></div></div>';
+  }
+
+  function render(){
+    renderNav();
+    var v={overview:viewOverview,apps:viewApps,certs:viewCerts,signing:viewSigning}[current];
+    $("#pageTitle").textContent=(TABS.filter(function(t){return t.id===current;})[0]||{}).t;
+    $("#content").innerHTML=v();
+    bindContent();
+    S.reveals();
+  }
+
+  function bindContent(){
+    var addApp=$("#addApp");if(addApp)addApp.addEventListener("click",function(){openApp();});
+    var addCert=$("#addCert");if(addCert)addCert.addEventListener("click",function(){openCert();});
+    var rf=$("#reqForm");if(rf)rf.addEventListener("submit",function(e){e.preventDefault();
+      var d=Object.fromEntries(new FormData(rf));if(!d.udid.trim())return;
+      api.addRequest({app:d.app,udid:d.udid.trim(),cert:d.cert});S.toast("أُضيف الطلب إلى القائمة");render();});
+  }
+  function onContentClick(e){
+    var t;
+    if(t=e.target.closest("[data-edit-app]"))return openApp(api.app(t.getAttribute("data-edit-app")));
+    if(t=e.target.closest("[data-del-app]")){if(confirm("حذف هذا التطبيق؟")){api.delApp(t.getAttribute("data-del-app"));S.toast("تم الحذف");render();}return;}
+    if(t=e.target.closest("[data-edit-cert]"))return openCert(certById(t.getAttribute("data-edit-cert")));
+    if(t=e.target.closest("[data-del-cert]")){if(confirm("حذف هذه الشهادة؟")){api.delCert(t.getAttribute("data-del-cert"));S.toast("تم الحذف");render();}return;}
+    if(t=e.target.closest("[data-del-req]")){api.delRequest(t.getAttribute("data-del-req"));S.toast("حُذف الطلب");render();return;}
+    if(t=e.target.closest("[data-sign]"))return runSign(t.getAttribute("data-sign"));
+    if(t=e.target.closest("[data-ota]")){S.toast("نُسخ رابط itms-services://");return;}
+  }
+  function certById(id){return api.certs().filter(function(c){return c.id===id;})[0];}
+
+  function runSign(id){
+    api.setRequest(id,"signing");render();
+    setTimeout(function(){api.setRequest(id,"signed");S.toast("تم التوقيع وتوليد رابط OTA");render();},2200);
+  }
+
+  // ---- App modal ----
+  var appO=$("#appOverlay"), appForm=$("#appForm");
+  function openApp(a){
+    appForm.reset();appForm.id.value="";
+    $("#appModalTitle").textContent=a?"تعديل التطبيق":"إضافة تطبيق جديد";
+    $("#appSave").innerHTML=ic("check")+(a?"حفظ التغييرات":"إضافة التطبيق");
+    if(a){["id","name","dev","cat","bundle","ver","size","tagline","desc","ipa"].forEach(function(k){
+      if(appForm[k])appForm[k].value=a[k]||"";});
+      appForm.signed.checked=!!a.signed;appForm.featured.checked=!!a.featured;}
+    appO.classList.add("open");setTimeout(function(){appForm.name.focus();},60);
+  }
+  appForm.addEventListener("submit",function(e){e.preventDefault();
+    var d=Object.fromEntries(new FormData(appForm));
+    var obj={id:d.id||undefined,name:d.name.trim(),dev:d.dev.trim(),cat:d.cat,bundle:d.bundle.trim(),
+      ver:d.ver.trim(),size:d.size.trim()||"—",tagline:d.tagline.trim(),desc:d.desc.trim(),ipa:d.ipa.trim(),
+      signed:appForm.signed.checked,featured:appForm.featured.checked};
+    if(!obj.name)return;
+    api.saveApp(obj);appO.classList.remove("open");S.toast(d.id?"حُفظت التغييرات":"أُضيف التطبيق بنجاح");render();
+  });
+
+  // ---- Cert modal ----
+  var certO=$("#certOverlay"), certForm=$("#certForm");
+  function openCert(c){
+    certForm.reset();certForm.id.value="";
+    $("#certModalTitle").textContent=c?"تعديل الشهادة":"إضافة شهادة جديدة";
+    $("#certSave").innerHTML=ic("check")+(c?"حفظ التغييرات":"إضافة الشهادة");
+    if(c){["id","name","type","team","devices","status"].forEach(function(k){if(certForm[k])certForm[k].value=c[k]||"";});
+      if(c.expires)certForm.expires.value=String(c.expires).slice(0,10);}
+    else{var d=new Date(Date.now()+365*864e5);certForm.expires.value=d.toISOString().slice(0,10);}
+    certO.classList.add("open");setTimeout(function(){certForm.name.focus();},60);
+  }
+  certForm.addEventListener("submit",function(e){e.preventDefault();
+    var d=Object.fromEntries(new FormData(certForm));
+    if(!d.name.trim())return;
+    api.saveCert({id:d.id||undefined,name:d.name.trim(),type:d.type,team:d.team.trim(),
+      devices:d.devices.trim()||"—",status:d.status,expires:new Date(d.expires||Date.now()).toISOString()});
+    certO.classList.remove("open");S.toast(d.id?"حُفظت التغييرات":"أُضيفت الشهادة");render();
+  });
+
+  // close modals
+  document.body.addEventListener("click",function(e){
+    var c=e.target.closest("[data-close]");if(c){({app:appO,cert:certO})[c.getAttribute("data-close")].classList.remove("open");}
+    if(e.target===appO)appO.classList.remove("open");
+    if(e.target===certO)certO.classList.remove("open");
+  });
+  addEventListener("keydown",function(e){if(e.key==="Escape"){appO.classList.remove("open");certO.classList.remove("open");}});
+
+  // Delegated actions on the content area — bound ONCE (content innerHTML is
+  // replaced each render, but this listener lives on the stable #content node).
+  $("#content").addEventListener("click",onContentClick);
+
+  if(authed())render();
+})();
+</script>
+</body>
+</html>

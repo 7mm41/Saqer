@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>صقر ستور — التطبيق</title>
+<meta name="description" content="تطبيق صقر ستور لـ iPhone: تصفّح، وقّع، وثبّت تطبيقاتك عبر الهواء.">
+<meta name="theme-color" content="#0c0a09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="صقر ستور">
+<link rel="icon" href="icons/favicon.svg">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  body{background:#141210}
+  :root[data-theme="light"] body{background:#e9e4dc}
+  /* Device frame (desktop) */
+  .stage{min-height:100dvh;display:grid;place-items:center;padding:24px}
+  .device{width:100%;max-width:400px;height:min(860px,calc(100dvh - 48px));position:relative;
+    border-radius:52px;background:linear-gradient(160deg,#2a2521,#0c0a09);padding:13px;
+    box-shadow:0 40px 80px rgba(0,0,0,.5),inset 0 0 0 2px rgba(255,255,255,.06)}
+  @media (max-width:460px){
+    .stage{padding:0}
+    .device{max-width:none;height:100dvh;border-radius:0;padding:0;box-shadow:none;background:none}
+  }
+  .viewport{position:relative;width:100%;height:100%;border-radius:40px;overflow:hidden;background:var(--bg);
+    display:flex;flex-direction:column}
+  @media (max-width:460px){.viewport{border-radius:0}}
+  .dynamic-island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:112px;height:32px;
+    background:#000;border-radius:99px;z-index:60}
+  @media (max-width:460px){.dynamic-island{display:none}}
+
+  /* status bar */
+  .status{display:flex;align-items:center;justify-content:space-between;padding:14px 26px 6px;font-size:14px;
+    font-weight:700;z-index:50;position:relative}
+  @media (max-width:460px){.status{padding-top:max(14px,env(safe-area-inset-top))}}
+  .status .r{display:flex;gap:6px;align-items:center}
+  .status svg{width:17px;height:17px}
+
+  /* app header */
+  .app-head{padding:6px 20px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .app-head h1{font-size:30px;font-weight:900;letter-spacing:-.02em}
+  .head-btn{width:38px;height:38px;border-radius:50%;background:var(--bg-2);display:grid;place-items:center;color:var(--fg)}
+  .head-btn svg{width:20px;height:20px}
+
+  /* scroll area */
+  .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:96px}
+  .scroll::-webkit-scrollbar{width:0}
+  .view{display:none;animation:fade .35s var(--ease)}
+  .view.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .px{padding-inline:20px}
+  .sec-t{font-size:20px;font-weight:800;margin:20px 20px 12px;display:flex;justify-content:space-between;align-items:baseline}
+  .sec-t a{font-size:13px;color:var(--bronze);font-weight:700}
+
+  /* hero banner */
+  .banner-row{display:flex;gap:14px;overflow-x:auto;padding:2px 20px 6px;scroll-snap-type:x mandatory}
+  .banner-row::-webkit-scrollbar{height:0}
+  .banner{flex:none;width:84%;scroll-snap-align:center;aspect-ratio:16/11;border-radius:24px;position:relative;
+    overflow:hidden;color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer}
+  .banner::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.75))}
+  .banner .c{position:relative;z-index:2}
+  .banner .k{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+  .banner h3{font-size:24px;font-weight:900;margin:4px 0}
+  .banner p{font-size:13px;opacity:.9}
+  .banner .ai{position:absolute;top:16px;inset-inline-start:16px;z-index:2;width:46px;height:46px}
+
+  /* app rows */
+  .app-row{display:flex;align-items:center;gap:14px;padding:12px 20px;cursor:pointer;transition:background .15s}
+  .app-row:active{background:var(--bg-2)}
+  .app-row .meta{flex:1;min-width:0}
+  .app-row .meta b{font-size:16px;font-weight:700;display:flex;align-items:center;gap:5px}
+  .app-row .meta .s{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .app-row .meta .rt{font-size:12px;color:var(--muted);display:flex;gap:8px;margin-top:3px;align-items:center}
+  .app-row .meta .rt svg{width:13px;height:13px;color:var(--bronze)}
+  .getbtn{display:inline-flex;align-items:center;gap:5px;padding:8px 18px;border-radius:99px;background:var(--bg-2);
+    color:var(--bronze);font-weight:800;font-size:14px;flex:none;line-height:1;white-space:nowrap}
+  .getbtn svg{width:15px;height:15px;flex:none}
+  .getbtn.dl{background:var(--gold-grad);color:#fff}
+  .divider{height:1px;background:var(--line);margin:0 20px 0 calc(20px + 62px)}
+
+  /* chips scroll */
+  .chips-row{display:flex;gap:8px;overflow-x:auto;padding:4px 20px 8px}
+  .chips-row::-webkit-scrollbar{height:0}
+  .chips-row .chip{flex:none}
+
+  /* search */
+  .searchbar{margin:4px 20px 8px;display:flex;align-items:center;gap:10px;background:var(--bg-2);border-radius:14px;
+    padding:11px 14px}
+  .searchbar svg{width:18px;height:18px;color:var(--muted)}
+  .searchbar input{flex:1;border:0;background:none;font:inherit;font-size:15px;color:var(--fg);outline:none}
+
+  /* sign view */
+  .sign-card{margin:6px 20px 16px}
+  .field-lite{margin-bottom:14px}
+  .field-lite span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  .pick{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+  .pick::-webkit-scrollbar{height:0}
+  .pick .opt{flex:none;display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:12px;border:1px solid var(--line);
+    background:var(--card);font-size:13.5px;font-weight:700;cursor:pointer;transition:.15s}
+  .pick .opt.on{border-color:var(--bronze);background:rgba(161,98,7,.08);color:var(--bronze)}
+  .pick .opt .appicon{--s:24px;font-size:10px}
+  .pick .opt svg{width:16px;height:16px;flex:none;color:var(--bronze)}
+
+  /* download items */
+  .dl-item{display:flex;align-items:center;gap:14px;padding:14px 20px}
+  .dl-item .meta{flex:1;min-width:0}
+  .dl-item .bar{height:6px;border-radius:99px;background:var(--bg-2);overflow:hidden;margin-top:8px}
+  .dl-item .bar i{display:block;height:100%;background:var(--gold-grad);width:0;transition:width .3s var(--ease)}
+
+  /* profile */
+  .prof-hero{text-align:center;padding:14px 20px 20px}
+  .prof-hero .av{width:84px;height:84px;border-radius:50%;background:var(--gold-grad);display:grid;place-items:center;
+    color:#fff;font-size:32px;font-weight:900;margin:0 auto 12px;box-shadow:0 10px 30px rgba(161,98,7,.35)}
+  .list-group{margin:6px 20px 18px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
+  .list-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line);font-size:14.5px}
+  .list-item:first-child{border-top:0}
+  .list-item .ic{width:34px;height:34px;border-radius:9px;background:var(--bg-2);color:var(--bronze);display:grid;place-items:center}
+  .list-item .ic svg{width:18px;height:18px}
+  .list-item .v{margin-inline-start:auto;color:var(--muted);font-size:13px;direction:ltr}
+
+  /* tab bar */
+  .tabbar{position:absolute;bottom:0;inset-inline:0;z-index:70;display:flex;padding:8px 6px calc(10px + env(safe-area-inset-bottom));
+    background:var(--glass);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border-top:1px solid var(--glass-line)}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--muted);
+    font-size:10.5px;font-weight:700;cursor:pointer;transition:color .15s}
+  .tab svg{width:24px;height:24px}
+  .tab.on{color:var(--bronze)}
+
+  /* install sheet */
+  .sheet-overlay{position:absolute;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;
+    background:rgba(0,0,0,.5);opacity:0;visibility:hidden;transition:.3s}
+  .sheet-overlay.open{opacity:1;visibility:visible}
+  .sheet{width:100%;background:var(--card);border-radius:24px 24px 0 0;padding:8px 20px calc(24px + env(safe-area-inset-bottom));
+    transform:translateY(100%);transition:transform .35s var(--ease);max-height:88%;overflow-y:auto}
+  .sheet-overlay.open .sheet{transform:none}
+  .grabber{width:40px;height:5px;border-radius:99px;background:var(--line);margin:6px auto 14px}
+  .sheet-app{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+  .prog2{height:8px;border-radius:99px;background:var(--bg-2);overflow:hidden;margin:14px 0 6px}
+  .prog2 i{display:block;height:100%;width:0;background:var(--gold-grad);transition:width .3s var(--ease)}
+  .shots{display:flex;gap:10px;overflow-x:auto;padding:6px 0 4px}
+  .shots::-webkit-scrollbar{height:0}
+  .shots .s{flex:none;width:120px;aspect-ratio:9/16;border-radius:16px;color:#fff;padding:12px;
+    display:flex;flex-direction:column;justify-content:flex-end;font-size:11px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="device">
+    <div class="viewport">
+      <div class="dynamic-island"></div>
+
+      <!-- status bar -->
+      <div class="status">
+        <span id="clock">9:41</span>
+        <div class="r">
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="14" width="3" height="6" rx="1"/><rect x="7" y="10" width="3" height="10" rx="1"/><rect x="12" y="6" width="3" height="14" rx="1"/><rect x="17" y="3" width="3" height="17" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13a10 10 0 0 1 14 0M8.5 16.5a5 5 0 0 1 7 0M12 20h.01"/></svg>
+          <svg viewBox="0 0 26 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="7" width="18" height="11" rx="3"/><rect x="4" y="9" width="13" height="7" rx="1.5" fill="currentColor"/><path d="M22 11v4" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <!-- header -->
+      <div class="app-head">
+        <h1 id="viewTitle">اكتشف</h1>
+        <button class="head-btn" id="themeToggle" aria-label="الوضع"></button>
+      </div>
+
+      <div class="scroll" id="scroll">
+        <!-- DISCOVER -->
+        <section class="view on" id="v-discover">
+          <div class="banner-row" id="banners"></div>
+          <div class="sec-t">تطبيقات مميّزة <a href="#" data-go="search">الكل</a></div>
+          <div id="featList"></div>
+          <div class="sec-t">وصل حديثًا</div>
+          <div id="newList"></div>
+        </section>
+
+        <!-- SEARCH -->
+        <section class="view" id="v-search">
+          <div class="searchbar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="searchInput" type="search" placeholder="ابحث عن تطبيق أو تصنيف…">
+          </div>
+          <div class="chips-row" id="searchChips"></div>
+          <div id="searchResults"></div>
+        </section>
+
+        <!-- SIGN -->
+        <section class="view" id="v-sign">
+          <div class="px" style="margin-bottom:10px"><p class="muted" style="font-size:14px">وقّع أي تطبيق على جهازك ثم ثبّته مباشرة عبر الهواء.</p></div>
+          <div class="card pad sign-card">
+            <div class="field-lite"><span>اختر التطبيق</span><div class="pick" id="signApps"></div></div>
+            <div class="field-lite"><span>معرّف جهازك (UDID)</span>
+              <input class="input" id="signUdid" dir="ltr" value="00008120-000A1C4E0EF..." placeholder="00008120-..."></div>
+            <div class="field-lite"><span>الشهادة</span><div class="pick" id="signCerts"></div></div>
+            <button class="btn primary block" id="signBtn"></button>
+            <p class="muted center" style="font-size:12px;margin-top:12px">يستخدم صيغة <code style="direction:ltr">itms-services://</code> الرسمية للتثبيت عبر الهواء.</p>
+          </div>
+        </section>
+
+        <!-- DOWNLOADS -->
+        <section class="view" id="v-downloads">
+          <div id="dlList"></div>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="view" id="v-profile">
+          <div class="prof-hero">
+            <div class="av">ص</div>
+            <h2 style="font-size:20px;font-weight:800">حساب صقر</h2>
+            <p class="muted" style="font-size:13px">member@saqerstore.app</p>
+          </div>
+          <div class="list-group" id="deviceInfo"></div>
+          <div class="list-group">
+            <a class="list-item" href="index.html"><span class="ic" id="pi1"></span>موقع صقر ستور<span class="v">↗</span></a>
+            <a class="list-item" href="admin.html"><span class="ic" id="pi2"></span>لوحة التحكم<span class="v">↗</span></a>
+            <div class="list-item" id="resetBtn" style="cursor:pointer"><span class="ic" id="pi3"></span>إعادة تعيين البيانات التجريبية<span class="v">›</span></div>
+          </div>
+          <p class="muted center" style="font-size:12px;padding-bottom:10px">صقر ستور · الإصدار 3.2.0</p>
+        </section>
+      </div>
+
+      <!-- TAB BAR -->
+      <nav class="tabbar" id="tabbar"></nav>
+
+      <!-- INSTALL SHEET -->
+      <div class="sheet-overlay" id="sheet">
+        <div class="sheet">
+          <div class="grabber"></div>
+          <div class="sheet-app"><div class="appicon" id="shIcon" style="--s:64px"></div>
+            <div style="flex:1;min-width:0"><h3 id="shName" style="font-size:19px;font-weight:800"></h3>
+              <div class="muted" id="shDev" style="font-size:13px"></div></div>
+            <button class="getbtn dl" id="shGet"></button></div>
+          <p id="shDesc" class="muted" style="font-size:14px;line-height:1.7"></p>
+          <div class="shots" id="shShots"></div>
+          <div id="shProgWrap" class="hide">
+            <div class="prog2"><i id="shBar"></i></div>
+            <div class="muted" id="shStep" style="font-size:12px;direction:ltr;text-align:right;min-height:16px"></div>
+            <a class="btn primary block hide" id="shInstall" style="margin-top:12px"></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="assets/store.js"></script>
+<script>
+(function(){
+  var S=window.Saqer, api=S.api, ic=S.icon, esc=S.esc;
+  S.initTheme();
+  var $=function(s,r){return (r||document).querySelector(s);};
+
+  // clock
+  function tick(){var d=new Date();$("#clock").textContent=d.getHours()+":"+String(d.getMinutes()).padStart(2,"0");}
+  tick();setInterval(tick,20000);
+
+  function paintTheme(){var d=document.documentElement.getAttribute("data-theme")==="dark";
+    $("#themeToggle").innerHTML=ic(d?"sun":"moon");
+    var m=$('meta[name="theme-color"]');if(m)m.content=d?"#0c0a09":"#faf9f7";}
+  paintTheme();
+  $("#themeToggle").addEventListener("click",function(){S.toggleTheme();paintTheme();});
+
+  var apps=api.apps(), certs=api.certs();
+
+  // ---- tab bar ----
+  var TABS=[{id:"discover",t:"اكتشف",i:"store"},{id:"search",t:"بحث",i:"search"},
+    {id:"sign",t:"توقيع",i:"signature"},{id:"downloads",t:"تحميلات",i:"download"},{id:"profile",t:"حسابي",i:"users"}];
+  var TITLES={discover:"اكتشف",search:"بحث",sign:"توقيع تطبيق",downloads:"التحميلات",profile:"حسابي"};
+  function renderTabs(cur){
+    $("#tabbar").innerHTML=TABS.map(function(t){
+      return '<div class="tab '+(cur===t.id?"on":"")+'" data-tab="'+t.id+'">'+ic(t.i)+'<span>'+t.t+'</span></div>';}).join("");
+  }
+  function go(id){
+    document.querySelectorAll(".view").forEach(function(v){v.classList.remove("on");});
+    $("#v-"+id).classList.add("on");$("#viewTitle").textContent=TITLES[id];renderTabs(id);
+    $("#scroll").scrollTop=0;
+  }
+  $("#tabbar").addEventListener("click",function(e){var t=e.target.closest("[data-tab]");if(t)go(t.getAttribute("data-tab"));});
+  document.body.addEventListener("click",function(e){var g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.getAttribute("data-go"));}});
+  renderTabs("discover");
+
+  // ---- app row template ----
+  function appRow(a,installed){
+    return '<div class="app-row" data-open="'+a.id+'">'+
+      '<div class="appicon" style="--s:58px;background:'+a.color+'">'+esc(S.initials(a.name))+'</div>'+
+      '<div class="meta"><b>'+esc(a.name)+(a.signed?' '+ic("verified","")+'':"")+'</b>'+
+      '<div class="s">'+esc(a.tagline||a.cat)+'</div>'+
+      '<div class="rt">'+ic("star")+esc(a.rating)+' · '+S.nfmt(a.downloads)+' · '+esc(a.size)+'</div></div>'+
+      '<button class="getbtn '+(installed?"":"dl")+'" data-get="'+a.id+'">'+(installed?"فتح":ic("download")+"احصل")+'</button></div>';
+  }
+  // fix verified icon size in rows via inline
+  function appRows(list){return list.map(function(a){return appRow(a);}).join('<div class="divider"></div>');}
+
+  // ---- discover ----
+  var feats=apps.filter(function(a){return a.featured;});
+  $("#banners").innerHTML=(feats.length?feats:apps.slice(0,3)).map(function(a){
+    return '<div class="banner" style="background:'+a.color+'" data-open="'+a.id+'">'+
+      '<div class="appicon ai" style="background:'+a.color+'">'+esc(S.initials(a.name))+'</div>'+
+      '<div class="c"><div class="k">'+esc(a.cat)+'</div><h3>'+esc(a.name)+'</h3><p>'+esc(a.tagline)+'</p></div></div>';
+  }).join("");
+  $("#featList").innerHTML=appRows(feats.length?feats:apps.slice(0,4));
+  $("#newList").innerHTML=appRows(apps.slice(0,5));
+
+  // ---- search ----
+  var cats=api.cats(), catNames=Object.keys(cats), activeCat="all", query="";
+  function renderSearchChips(){
+    $("#searchChips").innerHTML='<button class="chip '+(activeCat==="all"?"on":"")+'" data-c="all">الكل</button>'+
+      catNames.map(function(c){return '<button class="chip '+(activeCat===c?"on":"")+'" data-c="'+esc(c)+'">'+esc(c)+'</button>';}).join("");
+  }
+  function renderSearch(){
+    var list=apps.filter(function(a){
+      var okCat=activeCat==="all"||a.cat===activeCat;
+      var okQ=!query||(a.name+a.dev+a.cat+a.tagline).toLowerCase().indexOf(query.toLowerCase())>-1;
+      return okCat&&okQ;});
+    $("#searchResults").innerHTML=list.length?appRows(list):
+      '<div class="empty" style="padding:50px 20px">'+ic("search")+'<div>لا نتائج لـ «'+esc(query)+'»</div></div>';
+  }
+  renderSearchChips();renderSearch();
+  $("#searchChips").addEventListener("click",function(e){var b=e.target.closest("[data-c]");if(!b)return;
+    activeCat=b.getAttribute("data-c");renderSearchChips();renderSearch();});
+  $("#searchInput").addEventListener("input",function(e){query=e.target.value;renderSearch();});
+
+  // ---- sign ----
+  var signApp=apps[0]?apps[0].id:null, signCert=certs[0]?certs[0].id:null;
+  function renderSignPickers(){
+    $("#signApps").innerHTML=apps.map(function(a){
+      return '<div class="opt '+(signApp===a.id?"on":"")+'" data-sapp="'+a.id+'">'+
+        '<span class="appicon" style="background:'+a.color+'">'+esc(S.initials(a.name))+'</span>'+esc(a.name)+'</div>';}).join("");
+    $("#signCerts").innerHTML=certs.map(function(c){
+      return '<div class="opt '+(signCert===c.id?"on":"")+'" data-scert="'+c.id+'">'+ic("cert")+esc(c.name)+'</div>';}).join("");
+  }
+  renderSignPickers();
+  $("#signBtn").innerHTML=ic("bolt")+"وقّع وثبّت";
+  $("#signApps").addEventListener("click",function(e){var o=e.target.closest("[data-sapp]");if(o){signApp=o.getAttribute("data-sapp");renderSignPickers();}});
+  $("#signCerts").addEventListener("click",function(e){var o=e.target.closest("[data-scert]");if(o){signCert=o.getAttribute("data-scert");renderSignPickers();}});
+  $("#signBtn").addEventListener("click",function(){
+    var a=api.app(signApp), c=certs.filter(function(x){return x.id===signCert;})[0];
+    if(!a)return;
+    api.addRequest({app:a.name,udid:$("#signUdid").value.trim()||"غير معروف",cert:c?c.name:"—",status:"signing"});
+    openSheet(a,true);
+  });
+
+  // ---- downloads ----
+  var DLK="saqer.downloads";
+  function getDL(){try{return JSON.parse(localStorage.getItem(DLK))||[];}catch(e){return [];}}
+  function setDL(a){try{localStorage.setItem(DLK,JSON.stringify(a));}catch(e){}}
+  function addDL(id){var d=getDL();if(d.indexOf(id)<0){d.unshift(id);setDL(d);}}
+  function renderDownloads(){
+    var ids=getDL();
+    if(!ids.length){$("#dlList").innerHTML='<div class="empty" style="padding:60px 20px">'+ic("download")+
+      '<div>لا تطبيقات محمّلة بعد</div><button class="btn primary sm" data-go="discover" style="margin-top:14px">تصفّح المتجر</button></div>';return;}
+    $("#dlList").innerHTML=ids.map(function(id){var a=api.app(id);if(!a)return"";
+      return '<div class="dl-item"><div class="appicon" style="--s:52px;background:'+a.color+'">'+esc(S.initials(a.name))+'</div>'+
+        '<div class="meta"><div class="row between"><b style="font-size:15px">'+esc(a.name)+'</b>'+
+        '<span class="badge ok"><span class="dot"></span>مثبّت</span></div>'+
+        '<div class="bar"><i style="width:100%"></i></div></div>'+
+        '<button class="getbtn" data-open="'+a.id+'">فتح</button></div>';}).join("");
+  }
+  renderDownloads();
+  $("#dlList").addEventListener("click",function(e){var g=e.target.closest("[data-go]");if(g)go(g.getAttribute("data-go"));});
+
+  // ---- profile ----
+  var p2cert=certs[0]||{name:"—",expires:S.nowISO()};
+  $("#deviceInfo").innerHTML=
+    row("device","الجهاز","iPhone 15 Pro")+
+    row("key","UDID","00008120…0EF")+
+    row("cert","الشهادة",p2cert.name)+
+    row("clock","تنتهي في",S.fmtDate(p2cert.expires));
+  function row(i,l,v){return '<div class="list-item"><span class="ic">'+ic(i)+'</span>'+esc(l)+'<span class="v">'+esc(v)+'</span></div>';}
+  $("#pi1").innerHTML=ic("globe");$("#pi2").innerHTML=ic("grid");$("#pi3").innerHTML=ic("refresh");
+  $("#resetBtn").addEventListener("click",function(){if(confirm("إعادة تعيين كل البيانات التجريبية؟")){api.reset();setDL([]);location.reload();}});
+
+  // ---- install sheet ----
+  var sheet=$("#sheet"), sheetTimer=null;
+  function openSheet(a,autoStart){
+    var si=$("#shIcon");si.style.background=a.color;si.textContent=S.initials(a.name);
+    $("#shName").textContent=a.name;$("#shDev").textContent=(a.dev||"")+" · "+a.cat;
+    $("#shDesc").textContent=a.desc;
+    $("#shShots").innerHTML=[0,1,2].map(function(n){return '<div class="s" style="background:'+a.color+'">'+
+      '<div style="font-family:var(--font-display);font-weight:800;font-size:14px">'+esc(a.name)+'</div>'+
+      '<div style="opacity:.85;margin-top:2px">'+esc(a.tagline)+'</div></div>';}).join("");
+    $("#shGet").innerHTML=ic("download")+"احصل";
+    $("#shProgWrap").classList.add("hide");$("#shInstall").classList.add("hide");
+    $("#shBar").style.width="0";$("#shStep").textContent="";
+    sheet.classList.add("open");
+    if(autoStart)startInstall(a);
+  }
+  function closeSheet(){clearInterval(sheetTimer);sheet.classList.remove("open");}
+  function startInstall(a){
+    $("#shProgWrap").classList.remove("hide");
+    $("#shGet").innerHTML='<span class="spinner"></span>';
+    var steps=[[15,"↳ verify certificate · "+ (certs[0]?certs[0].name:"cert")],
+      [38,"↳ inject embedded.mobileprovision"],[62,"↳ codesign · SHA-256"],
+      [82,"↳ build manifest.plist"],[100,"↳ prepare itms-services://"]], i=0;
+    clearInterval(sheetTimer);
+    sheetTimer=setInterval(function(){
+      if(i>=steps.length){clearInterval(sheetTimer);doneInstall(a);return;}
+      $("#shBar").style.width=steps[i][0]+"%";$("#shStep").textContent=steps[i][1];i++;
+    },500);
+  }
+  function doneInstall(a){
+    api.bumpDownload(a.id);addDL(a.id);
+    $("#shGet").innerHTML=ic("check")+"تم";
+    $("#shStep").textContent="↳ signed · ready to install";
+    var plist="https://sign.saqerstore.app/manifests/"+encodeURIComponent(a.bundle)+".plist";
+    var b=$("#shInstall");b.classList.remove("hide");b.innerHTML=ic("download")+"تثبيت على iPhone";
+    b.setAttribute("href","itms-services://?action=download-manifest&url="+plist);
+    S.toast("تم توقيع "+a.name);renderDownloads();
+  }
+  sheet.addEventListener("click",function(e){if(e.target===sheet)closeSheet();});
+
+  // global clicks: open detail / get
+  document.body.addEventListener("click",function(e){
+    var get=e.target.closest("[data-get]");
+    if(get){e.stopPropagation();var a=api.app(get.getAttribute("data-get"));if(a){openSheet(a,false);startInstall(a);}return;}
+    var op=e.target.closest("[data-open]");
+    if(op){var a2=api.app(op.getAttribute("data-open"));if(a2)openSheet(a2,false);}
+  });
+  $("#shGet").addEventListener("click",function(){var n=$("#shName").textContent;
+    var a=apps.filter(function(x){return x.name===n;})[0];if(a)startInstall(a);});
+
+  // fix inline verified icon sizing inside rows
+  var st=document.createElement("style");
+  st.textContent=".app-row .meta b svg{width:15px;height:15px;color:var(--info)}";
+  document.head.appendChild(st);
+
+  // register service worker (PWA)
+  if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}
+})();
+</script>
+</body>
+</html>

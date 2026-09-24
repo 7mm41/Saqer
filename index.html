@@ -2,111 +2,558 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>أداة نافذة المتجر</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>صقر ستور — متجر تطبيقات iPhone</title>
+<meta name="description" content="صقر ستور: متجر تطبيقات آيفون بتوقيع فوري وتثبيت مباشر عبر الهواء. تصفّح، وقّع، وحمّل تطبيقاتك المفضّلة بأمان.">
+<meta name="theme-color" content="#faf9f7">
+<link rel="icon" href="icons/favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css">
 <style>
-  :root{--bg:#fafaf9;--card:#fff;--fg:#1c1917;--muted:#78716c;--line:#e7e5e4;--accent:#0f766e}
-  @media (prefers-color-scheme:dark){:root{--bg:#0c0a09;--card:#1c1917;--fg:#f5f5f4;--muted:#a8a29e;--line:#34302d}}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Tajawal',system-ui,sans-serif}
-  main{max-width:960px;margin:0 auto;padding:32px 16px 96px}
-  h1{margin:0 0 6px;font-size:28px}
-  .lead{margin:0 0 24px;color:var(--muted)}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .grid>*{min-width:0}
-  @media (max-width:760px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-  .card h3{margin:0 0 14px;font-size:16px}
-  label{display:block;margin:0 0 12px;font-size:13px;color:var(--muted)}
-  input,textarea{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit;font-size:14px}
-  input[type=color]{height:42px;padding:4px}
-  textarea{min-height:70px;resize:vertical}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
-  .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
-  pre{margin:12px 0 0;padding:14px;border-radius:10px;background:#0c0a09;color:#e7e5e4;font-size:12px;line-height:1.6;overflow:auto;direction:ltr;text-align:left;max-height:340px}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
+  /* ---- Nav ---- */
+  .nav{position:sticky;top:0;z-index:900;border-bottom:1px solid transparent;transition:.3s}
+  .nav.scrolled{border-color:var(--line)}
+  .nav .bar{height:var(--nav-h);display:flex;align-items:center;gap:18px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:900;font-size:19px}
+  .brand .mark{width:38px;height:38px;border-radius:12px;background:var(--gold-grad);display:grid;place-items:center;
+    color:#fff;box-shadow:0 6px 16px rgba(161,98,7,.35)}
+  .brand .mark svg{width:22px;height:22px}
+  .nav .links{display:flex;gap:4px;margin-inline:auto}
+  .nav .links a{padding:9px 14px;border-radius:var(--r-pill);font-size:14.5px;font-weight:600;color:var(--muted);transition:.2s}
+  .nav .links a:hover{color:var(--fg);background:var(--bg-2)}
+  @media (max-width:900px){.nav .links{display:none}}
+
+  /* ---- Hero ---- */
+  .hero{position:relative;padding:64px 0 40px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+  .hero h1{font-size:clamp(38px,6vw,66px);font-weight:900;letter-spacing:-.02em;margin:16px 0}
+  .hero h1 .g{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .sub{font-size:clamp(16px,2.2vw,20px);color:var(--muted);max-width:44ch;margin-bottom:26px}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .trust{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+  .trust .n{font-family:var(--font-display);font-weight:800;font-size:26px}
+  .trust .l{font-size:12.5px;color:var(--muted)}
+
+  /* ---- Phone mockup ---- */
+  .phone{position:relative;width:290px;margin:0 auto;aspect-ratio:290/600;
+    border-radius:44px;background:linear-gradient(160deg,#26211d,#0c0a09);padding:12px;
+    box-shadow:var(--elev-lg),inset 0 0 0 2px rgba(255,255,255,.06);animation:floaty 6s var(--ease) infinite}
+  .phone .screen{width:100%;height:100%;border-radius:34px;overflow:hidden;background:var(--bg-2);position:relative}
+  .phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:98px;height:26px;
+    background:#0c0a09;border-radius:0 0 16px 16px;z-index:5}
+  .phone .sc-top{padding:34px 16px 10px;background:var(--card)}
+  .phone .sc-top h3{font-size:20px}
+  .phone .sc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 10px;padding:14px 16px}
+  .phone .sc-grid .ic{aspect-ratio:1;border-radius:22%;box-shadow:0 4px 10px rgba(0,0,0,.18);position:relative;overflow:hidden}
+  .phone .sc-grid .ic::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.3),transparent 50%)}
+  .phone .feat{margin:6px 16px;border-radius:18px;overflow:hidden;position:relative;height:150px;color:#fff;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:14px;background:var(--gold-grad)}
+  .phone .feat .t{font-family:var(--font-display);font-weight:800;font-size:18px}
+  .float-card{position:absolute;background:var(--glass);-webkit-backdrop-filter:var(--glass-blur);
+    backdrop-filter:var(--glass-blur);border:1px solid var(--glass-line);border-radius:16px;padding:11px 14px;
+    box-shadow:var(--elev-lg);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+  .float-card svg{width:18px;height:18px;color:var(--ok)}
+  .fc1{top:12%;inset-inline-start:-8%;animation:floaty 5s var(--ease) infinite}
+  .fc2{bottom:14%;inset-inline-end:-6%;animation:floaty 6.5s var(--ease) infinite .5s}
+  @media (max-width:480px){.fc1,.fc2{display:none}}
+
+  /* ---- Sections ---- */
+  section{padding:56px 0}
+  .sec-head{max-width:640px;margin-bottom:30px}
+  .sec-head h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em;margin:10px 0}
+  .sec-head p{color:var(--muted);font-size:17px}
+
+  /* stat band */
+  .band{background:var(--ink);color:#fff;border-radius:var(--r-xl);padding:34px;display:grid;
+    grid-template-columns:repeat(4,1fr);gap:20px}
+  :root[data-theme="dark"] .band{background:linear-gradient(160deg,#211c18,#0c0a09);border:1px solid var(--line)}
+  .band .n{font-family:var(--font-display);font-weight:900;font-size:clamp(28px,4vw,40px);
+    background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .band .l{color:#d6d3d1;font-size:14px;margin-top:4px}
+  @media (max-width:700px){.band{grid-template-columns:1fr 1fr;padding:26px}}
+
+  /* filters */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+
+  /* app grid */
+  .apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+  .app{display:flex;gap:14px;padding:16px;cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s,border-color .2s}
+  .app:hover{transform:translateY(-3px);box-shadow:var(--elev-lg);border-color:transparent}
+  .app .meta{min-width:0;flex:1}
+  .app .meta h4{font-size:16.5px;font-weight:800;display:flex;align-items:center;gap:6px}
+  .app .meta .dev{font-size:12.5px;color:var(--muted)}
+  .app .meta .tl{font-size:13.5px;color:var(--muted);margin-top:6px;overflow:hidden;text-overflow:ellipsis;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .app .foot{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+  .app .foot .st{display:flex;align-items:center;gap:3px}
+  .app .foot .st svg{width:14px;height:14px;color:var(--bronze)}
+  .app .get{align-self:center}
+  .verified-ic{width:16px;height:16px;color:var(--info)}
+
+  /* featured big cards */
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:820px){.feats{grid-template-columns:1fr}}
+  .feat-card{position:relative;border-radius:var(--r-xl);overflow:hidden;min-height:230px;color:#fff;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:22px;cursor:pointer;
+    box-shadow:var(--elev);transition:transform .25s var(--ease),box-shadow .25s}
+  .feat-card:hover{transform:translateY(-4px);box-shadow:var(--elev-lg)}
+  .feat-card::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.72))}
+  .feat-card .c{position:relative;z-index:2}
+  .feat-card .tag{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+  .feat-card h3{font-size:26px;font-weight:900;margin:6px 0}
+  .feat-card p{font-size:14px;opacity:.9;max-width:30ch}
+  .feat-card .ai{position:absolute;top:20px;inset-inline-start:20px;z-index:2}
+
+  /* signing */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  @media (max-width:820px){.split{grid-template-columns:1fr;gap:28px}}
+  .steps{display:flex;flex-direction:column;gap:14px}
+  .step{display:flex;gap:16px;align-items:flex-start;padding:16px;border-radius:var(--r-lg);
+    border:1px solid var(--line);background:var(--card);transition:.2s}
+  .step:hover{border-color:var(--bronze)}
+  .step .num{width:40px;height:40px;border-radius:12px;background:var(--bg-2);display:grid;place-items:center;
+    font-family:var(--font-display);font-weight:900;color:var(--bronze);flex:none}
+  .step h4{font-size:16px;margin-bottom:3px}
+  .step p{font-size:13.5px;color:var(--muted)}
+  .cert-visual{border-radius:var(--r-xl);padding:28px;background:
+    radial-gradient(120% 120% at 100% 0%,rgba(161,98,7,.14),transparent 60%),var(--card);
+    border:1px solid var(--line);box-shadow:var(--elev)}
+  .cert-chip{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r);
+    background:var(--bg-2);border:1px solid var(--line);margin-bottom:12px}
+  .cert-chip .ic{width:44px;height:44px;border-radius:12px;background:var(--gold-grad);display:grid;place-items:center;color:#fff;flex:none}
+  .cert-chip .ic svg{width:22px;height:22px}
+  .cert-chip h4{font-size:15px}
+  .cert-chip .s{font-size:12.5px;color:var(--muted)}
+
+  /* features 3col */
+  .why{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:820px){.why{grid-template-columns:1fr}}
+  .why .card{padding:24px}
+  .why .ic{width:52px;height:52px;border-radius:14px;background:var(--bg-2);color:var(--bronze);
+    display:grid;place-items:center;margin-bottom:14px}
+  .why .ic svg{width:26px;height:26px}
+  .why h4{font-size:18px;margin-bottom:6px}
+  .why p{font-size:14.5px;color:var(--muted)}
+
+  /* CTA */
+  .cta-band{position:relative;overflow:hidden;border-radius:var(--r-xl);padding:52px 32px;text-align:center;
+    background:linear-gradient(160deg,#26211d,#0c0a09);color:#fff}
+  .cta-band::before{content:"";position:absolute;inset:0;
+    background:radial-gradient(60% 80% at 50% -20%,rgba(161,98,7,.35),transparent 60%)}
+  .cta-band .c{position:relative;z-index:2}
+  .cta-band h2{font-size:clamp(26px,4vw,42px);font-weight:900;margin-bottom:12px}
+  .cta-band p{color:#d6d3d1;max-width:52ch;margin:0 auto 24px;font-size:17px}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:44px 0 30px;margin-top:20px}
+  .fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:28px}
+  @media (max-width:760px){.fgrid{grid-template-columns:1fr 1fr}}
+  footer h5{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;font-family:var(--font-body)}
+  footer a{display:block;color:var(--muted);font-size:14px;padding:5px 0;transition:.2s}
+  footer a:hover{color:var(--bronze)}
+  .fbot{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);display:flex;
+    justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+
+  /* detail modal */
+  .dt-cover{height:150px;background:var(--gold-grad);position:relative}
+  .dt-head{display:flex;gap:16px;align-items:flex-end;margin-top:-40px;padding:0 22px}
+  .dt-shots{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x mandatory}
+  .dt-shots .s{flex:none;width:150px;aspect-ratio:9/16;border-radius:18px;scroll-snap-align:start;
+    background:var(--bg-2);border:1px solid var(--line);position:relative;overflow:hidden}
+  .dt-shots .s .ph{position:absolute;inset:0;display:flex;flex-direction:column;padding:14px;color:#fff}
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:var(--r);
+    overflow:hidden;border:1px solid var(--line);margin:16px 0}
+  .metrics > div{background:var(--card);padding:14px;text-align:center}
+  .metrics .n{font-family:var(--font-display);font-weight:800;font-size:18px}
+  .metrics .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+  /* install progress */
+  .prog{height:8px;border-radius:99px;background:var(--bg-2);overflow:hidden;margin:16px 0 8px}
+  .prog .bar{height:100%;width:0;background:var(--gold-grad);transition:width .3s var(--ease)}
+  .install-app{display:flex;gap:14px;align-items:center;margin-bottom:6px}
 </style>
 </head>
 <body>
-<main>
-  <h1>أداة نافذة المتجر</h1>
-  <p class="lead">عدّل بيانات متجرك، جرّب النافذة المنبثقة، ثم انسخ كود التضمين والصقه في موقعك.</p>
 
-  <div class="grid">
-    <form class="card" id="form" autocomplete="off">
-      <h3>بيانات المتجر</h3>
-      <label>اسم المتجر<input name="name" value="متجر صقر"></label>
-      <label>عبارة قصيرة<input name="tagline" value="منتجات مختارة بعناية"></label>
-      <label>وصف<textarea name="description">نوفّر لك أفضل المنتجات بأسعار منافسة وتوصيل سريع لجميع المناطق.</textarea></label>
-      <label>رابط صورة المتجر (الغلاف)<input name="image" dir="ltr" value="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=900&q=70"></label>
-      <label>رابط الشعار (اختياري)<input name="logo" dir="ltr" value=""></label>
-      <label>رابط المتجر<input name="url" dir="ltr" value="https://example.com"></label>
-
-      <h3 style="margin-top:20px">معلومات الاتصال</h3>
-      <div class="two">
-        <label>الهاتف<input name="phone" dir="ltr" value="+966 50 000 0000"></label>
-        <label>واتساب (دولي)<input name="whatsapp" dir="ltr" value="966500000000"></label>
-      </div>
-      <label>البريد الإلكتروني<input name="email" dir="ltr" value="info@example.com"></label>
-      <label>العنوان<input name="address" value="الرياض، المملكة العربية السعودية"></label>
-      <label>ساعات العمل<input name="hours" value="يومياً 9 ص – 11 م"></label>
-      <div class="two">
-        <label>إنستغرام<input name="instagram" dir="ltr" value="mystore"></label>
-        <label>إكس<input name="x" dir="ltr" value="mystore"></label>
-        <label>سناب شات<input name="snapchat" dir="ltr" value=""></label>
-        <label>تيك توك<input name="tiktok" dir="ltr" value=""></label>
-      </div>
-      <label>اللون الرئيسي<input type="color" name="accent" value="#0f766e"></label>
-    </form>
-
-    <div class="card">
-      <h3>المعاينة والتضمين</h3>
-      <div class="row">
-        <button class="btn" type="button" id="preview">عرض النافذة</button>
-        <button class="btn ghost" type="button" id="copyCode">نسخ الكود</button>
-      </div>
-      <pre id="code"></pre>
+<!-- NAV -->
+<header class="nav glass" id="nav">
+  <div class="wrap bar">
+    <a class="brand" href="index.html">
+      <span class="mark" id="markIcon"></span>
+      <span>صقر <span style="color:var(--bronze)">ستور</span></span>
+    </a>
+    <nav class="links">
+      <a href="#store">المتجر</a>
+      <a href="#signing">التوقيع</a>
+      <a href="#why">المزايا</a>
+      <a href="app.html">التطبيق</a>
+    </nav>
+    <div class="row">
+      <button class="btn icon ghost" id="themeBtn" aria-label="تبديل الوضع الداكن"></button>
+      <a class="btn sm ghost" href="admin.html" id="adminLink"></a>
+      <a class="btn sm primary" href="app.html" id="openApp"></a>
     </div>
   </div>
-</main>
+</header>
 
-<script src="store-popup.js"></script>
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="badge gold" id="heroBadge"></span>
+      <h1>متجر تطبيقات<br><span class="g">iPhone</span> بلا حدود</h1>
+      <p class="sub">تصفّح مئات التطبيقات الموقّعة، وقّعها على جهازك بمعرّف UDID، وثبّتها مباشرة عبر الهواء — بدون كمبيوتر ولا جيلبريك.</p>
+      <div class="cta">
+        <a class="btn primary" href="#store" id="ctaBrowse"></a>
+        <a class="btn ghost" href="app.html" id="ctaApp"></a>
+      </div>
+      <div class="trust">
+        <div><div class="n" id="tApps">—</div><div class="l">تطبيق موثّق</div></div>
+        <div><div class="n">99.9%</div><div class="l">نجاح التوقيع</div></div>
+        <div><div class="n">&lt; 30s</div><div class="l">زمن التثبيت</div></div>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="phone">
+        <div class="screen">
+          <div class="notch"></div>
+          <div class="sc-top"><h3>اكتشف</h3><div class="muted" style="font-size:12px">تطبيقات مختارة لك</div></div>
+          <div class="feat"><div style="font-size:11px;opacity:.85;font-weight:700">تطبيق اليوم</div><div class="t">وردة — محادثات خاصة</div></div>
+          <div class="sc-grid" id="phoneGrid"></div>
+        </div>
+      </div>
+      <div class="float-card fc1" id="fcSign"></div>
+      <div class="float-card fc2" id="fcInstall"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<div class="wrap"><div class="band reveal">
+  <div><div class="n" id="bDl">—</div><div class="l">عملية تحميل</div></div>
+  <div><div class="n" id="bApps">—</div><div class="l">تطبيق في المتجر</div></div>
+  <div><div class="n" id="bCerts">—</div><div class="l">شهادة توقيع فعّالة</div></div>
+  <div><div class="n">24/7</div><div class="l">دعم فني عربي</div></div>
+</div></div>
+
+<!-- STORE -->
+<section id="store">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">المتجر</span>
+      <h2>تطبيقات مختارة بعناية</h2>
+      <p>مكتبة تنمو يوميًا من التطبيقات الموقّعة والجاهزة للتثبيت الفوري.</p>
+    </div>
+    <div class="feats reveal" id="featCards"></div>
+    <div class="filters reveal" id="filters" style="margin-top:34px"></div>
+    <div class="apps reveal" id="appGrid"></div>
+  </div>
+</section>
+
+<!-- SIGNING -->
+<section id="signing" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="split">
+      <div class="reveal">
+        <span class="eyebrow">التوقيع عبر الموقع</span>
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:800;margin:10px 0 8px">وقّع أي تطبيق في ثلاث خطوات</h2>
+        <p class="muted" style="margin-bottom:22px;font-size:16px">نستخدم شهادات مؤسسية و Ad-Hoc موثّقة لتوقيع التطبيقات على جهازك، فتعمل بثبات دون رسائل "مطوّر غير موثوق".</p>
+        <div class="steps">
+          <div class="step"><div class="num">١</div><div><h4>سجّل جهازك</h4><p>أدخل معرّف UDID الخاص بجهازك مرة واحدة عبر ملف تعريف سريع.</p></div></div>
+          <div class="step"><div class="num">٢</div><div><h4>اختر التطبيق والشهادة</h4><p>حدّد التطبيق المطلوب والشهادة المناسبة (مؤسسية / تطوير / Ad-Hoc).</p></div></div>
+          <div class="step"><div class="num">٣</div><div><h4>ثبّت عبر الهواء</h4><p>يوقّع الخادم الحزمة ويولّد رابط <code style="direction:ltr;font-size:12px">itms-services</code> للتثبيت المباشر.</p></div></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="cert-visual">
+          <div class="row between" style="margin-bottom:16px">
+            <div class="row"><span class="badge gold">شهادات صقر</span></div>
+            <a class="btn sm ghost" href="admin.html">إدارة الشهادات</a>
+          </div>
+          <div id="certList"></div>
+          <div class="row" style="gap:8px;margin-top:14px;padding:12px;border-radius:var(--r);background:var(--ok-bg);color:var(--ok);font-size:13px;font-weight:700">
+            <span id="okIc"></span> جميع الشهادات مراقَبة تلقائيًا قبل انتهائها بـ 30 يومًا.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">لماذا صقر</span>
+      <h2>كل ما يحتاجه متجرك في مكان واحد</h2>
+    </div>
+    <div class="why" id="whyGrid"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap"><div class="cta-band reveal"><div class="c">
+    <h2>حمّل تطبيق صقر ستور الآن</h2>
+    <p>ثبّت المتجر على شاشتك الرئيسية واحصل على تطبيقاتك الموقّعة وتحديثاتها تلقائيًا عبر الهواء.</p>
+    <div class="row" style="justify-content:center;gap:12px">
+      <a class="btn primary" href="app.html" id="ctaGet"></a>
+      <a class="btn ghost" href="admin.html" style="color:#fff;border-color:rgba(255,255,255,.25)">لوحة التحكم</a>
+    </div>
+  </div></div></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="brand" href="index.html" style="margin-bottom:14px"><span class="mark" id="fMark"></span><span>صقر <span style="color:var(--bronze)">ستور</span></span></a>
+        <p class="muted" style="font-size:14px;max-width:34ch">متجر تطبيقات iPhone عربي بتوقيع فوري وتثبيت مباشر عبر الهواء.</p>
+      </div>
+      <div><h5>المنتج</h5><a href="#store">المتجر</a><a href="#signing">التوقيع</a><a href="app.html">التطبيق</a><a href="admin.html">لوحة التحكم</a></div>
+      <div><h5>المطوّرون</h5><a href="admin.html">إضافة تطبيق</a><a href="admin.html">الشهادات</a><a href="#signing">واجهة التوقيع</a></div>
+      <div><h5>الدعم</h5><a href="#">مركز المساعدة</a><a href="#">سياسة الخصوصية</a><a href="#">تواصل معنا</a></div>
+    </div>
+    <div class="fbot">
+      <span>© 2026 صقر ستور — جميع الحقوق محفوظة.</span>
+      <span>صُمّم بعناية · لا ألوان نيون</span>
+    </div>
+  </div>
+</footer>
+
+<!-- APP DETAIL MODAL -->
+<div class="overlay" id="dtOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dtName">
+    <div class="dt-cover" id="dtCover">
+      <button class="btn icon glass" id="dtClose" aria-label="إغلاق" style="position:absolute;top:14px;inset-inline-end:14px;z-index:3"></button>
+    </div>
+    <div class="dt-head">
+      <div class="appicon" id="dtIcon" style="--s:82px"></div>
+      <div style="flex:1;padding-bottom:6px">
+        <h2 id="dtName" style="font-size:22px"></h2>
+        <div class="muted" id="dtDev" style="font-size:13px"></div>
+      </div>
+      <button class="btn primary" id="dtGet" style="margin-bottom:6px"></button>
+    </div>
+    <div class="modal-body">
+      <div class="metrics" id="dtMetrics"></div>
+      <p id="dtDesc" style="color:var(--fg);font-size:15px;line-height:1.75"></p>
+      <div style="font-weight:800;margin:18px 0 10px">لقطات الشاشة</div>
+      <div class="dt-shots" id="dtShots"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL MODAL -->
+<div class="overlay" id="inOverlay">
+  <div class="modal" style="max-width:440px" role="dialog" aria-modal="true">
+    <div class="modal-head"><h3 style="font-size:18px">التثبيت عبر الهواء</h3>
+      <button class="btn icon ghost" id="inClose" aria-label="إغلاق"></button></div>
+    <div class="modal-body">
+      <div class="install-app"><div class="appicon" id="inIcon" style="--s:56px"></div>
+        <div><h4 id="inName" style="font-size:16px"></h4><div class="muted" id="inState" style="font-size:13px">جاري التحضير…</div></div></div>
+      <div class="prog"><div class="bar" id="inBar"></div></div>
+      <div class="muted" id="inStep" style="font-size:12.5px;direction:ltr;text-align:right"></div>
+      <div id="inDone" class="hide" style="margin-top:14px">
+        <div class="row" style="gap:8px;padding:12px;border-radius:var(--r);background:var(--ok-bg);color:var(--ok);font-weight:700;font-size:13.5px" id="inDoneMsg"></div>
+        <a class="btn primary block" id="inInstallBtn" style="margin-top:12px" href="#"></a>
+        <p class="muted center" style="font-size:12px;margin-top:10px">سيطلب النظام تأكيد التثبيت. تعمل الروابط الحقيقية بصيغة <code style="direction:ltr">itms-services://</code>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/store.js"></script>
 <script>
-  var form = document.getElementById("form");
-  var socials = ["instagram", "x", "snapchat", "tiktok"];
+(function(){
+  var S=window.Saqer, api=S.api, ic=S.icon, esc=S.esc;
+  S.initTheme();
 
-  function readConfig() {
-    var d = Object.fromEntries(new FormData(form));
-    var cfg = { social: {} };
-    Object.keys(d).forEach(function (k) {
-      var v = d[k].trim();
-      if (!v) return;
-      if (socials.indexOf(k) > -1) cfg.social[k] = v; else cfg[k] = v;
-    });
-    if (!Object.keys(cfg.social).length) delete cfg.social;
-    return cfg;
+  // nav + brand icons
+  document.getElementById("markIcon").innerHTML=ic("store");
+  document.getElementById("fMark").innerHTML=ic("store");
+  document.getElementById("openApp").innerHTML=ic("download")+"افتح التطبيق";
+  document.getElementById("adminLink").innerHTML=ic("grid")+"لوحة التحكم";
+  document.getElementById("heroBadge").innerHTML='<span class="dot"></span> توقيع فوري · تثبيت عبر الهواء';
+  document.getElementById("ctaBrowse").innerHTML=ic("store")+"تصفّح المتجر";
+  document.getElementById("ctaApp").innerHTML=ic("download")+"حمّل تطبيق صقر";
+  document.getElementById("ctaGet").innerHTML=ic("download")+"احصل على التطبيق";
+  document.getElementById("okIc").innerHTML=ic("shield");
+  document.getElementById("dtClose").innerHTML=ic("x");
+  document.getElementById("inClose").innerHTML=ic("x");
+  document.getElementById("fcSign").innerHTML=ic("checkCircle")+"<span>تم التوقيع بنجاح</span>";
+  document.getElementById("fcInstall").innerHTML=ic("download")+"<span>جارٍ التثبيت 84%</span>";
+
+  var themeBtn=document.getElementById("themeBtn");
+  function paintTheme(){var d=document.documentElement.getAttribute("data-theme")==="dark";
+    themeBtn.innerHTML=ic(d?"sun":"moon");}
+  paintTheme();themeBtn.addEventListener("click",function(){S.toggleTheme();paintTheme();});
+
+  // nav scroll
+  var nav=document.getElementById("nav");
+  addEventListener("scroll",function(){nav.classList.toggle("scrolled",scrollY>10);},{passive:true});
+
+  var apps=api.apps(), certs=api.certs();
+  var totalDl=apps.reduce(function(s,a){return s+(a.downloads||0);},0);
+
+  // hero stats
+  document.getElementById("tApps").textContent=apps.length;
+  document.getElementById("bDl").textContent="+"+S.nfmt(totalDl);
+  document.getElementById("bApps").textContent=apps.length;
+  document.getElementById("bCerts").textContent=certs.filter(function(c){return c.status!=="expired";}).length;
+
+  // phone grid
+  document.getElementById("phoneGrid").innerHTML=apps.slice(0,8).map(function(a){
+    return '<div class="ic" style="background:'+a.color+'"></div>';}).join("");
+
+  // featured
+  var feats=apps.filter(function(a){return a.featured;}).slice(0,3);
+  document.getElementById("featCards").innerHTML=feats.map(function(a){
+    return '<div class="feat-card" data-id="'+a.id+'" style="background:'+a.color+'">'+
+      '<div class="appicon ai" style="--s:52px;background:'+a.color+'">'+esc(S.initials(a.name))+'</div>'+
+      '<div class="c"><div class="tag">'+esc(a.cat)+'</div><h3>'+esc(a.name)+'</h3><p>'+esc(a.tagline)+'</p></div></div>';
+  }).join("");
+
+  // filters
+  var cats=api.cats(), catNames=Object.keys(cats), active="all";
+  function renderFilters(){
+    var html='<button class="chip '+(active==="all"?"on":"")+'" data-c="all">'+ic("apps")+'الكل</button>';
+    html+=catNames.map(function(c){return '<button class="chip '+(active===c?"on":"")+'" data-c="'+esc(c)+'">'+esc(c)+' <span class="muted">'+cats[c]+'</span></button>';}).join("");
+    document.getElementById("filters").innerHTML=html;
   }
+  renderFilters();
 
-  function update() {
-    var cfg = readConfig();
-    StorePopup.init(cfg);
-    document.getElementById("code").textContent =
-      "<script>\n  window.StorePopupConfig = " + JSON.stringify(cfg, null, 2).replace(/\n/g, "\n  ") +
-      ";\n<\/script>\n<script src=\"store-popup.js\" defer><\/script>";
+  // app grid
+  function appCard(a){
+    return '<article class="app card" data-id="'+a.id+'">'+
+      '<div class="appicon" style="--s:60px;background:'+a.color+'">'+esc(S.initials(a.name))+'</div>'+
+      '<div class="meta"><h4>'+esc(a.name)+(a.signed?' '+ic("verified","verified-ic"):"")+'</h4>'+
+      '<div class="dev">'+esc(a.dev)+' · '+esc(a.cat)+'</div>'+
+      '<div class="tl">'+esc(a.desc)+'</div>'+
+      '<div class="foot"><span class="st">'+ic("star")+esc(a.rating)+'</span>'+
+      '<span class="st">'+ic("download")+S.nfmt(a.downloads)+'</span>'+
+      '<span class="st">'+esc(a.size)+'</span></div></div>'+
+      '<button class="btn sm primary get" data-get="'+a.id+'">'+ic("download")+'احصل</button></article>';
   }
+  function renderApps(){
+    var list=active==="all"?apps:apps.filter(function(a){return a.cat===active;});
+    document.getElementById("appGrid").innerHTML=list.map(appCard).join("");
+  }
+  renderApps();
 
-  form.addEventListener("input", update);
-  document.getElementById("preview").addEventListener("click", function () { StorePopup.open(); });
-  document.getElementById("copyCode").addEventListener("click", function (e) {
-    navigator.clipboard.writeText(document.getElementById("code").textContent).then(function () {
-      e.target.textContent = "تم النسخ ✓";
-      setTimeout(function () { e.target.textContent = "نسخ الكود"; }, 1500);
-    });
+  // certs (signing section)
+  document.getElementById("certList").innerHTML=certs.slice(0,3).map(function(c){
+    var b=c.status==="active"?'<span class="badge ok"><span class="dot"></span>فعّالة</span>':
+      c.status==="expiring"?'<span class="badge warn"><span class="dot"></span>قرب الانتهاء</span>':
+      '<span class="badge err">منتهية</span>';
+    return '<div class="cert-chip"><div class="ic">'+ic("cert")+'</div>'+
+      '<div style="flex:1"><h4>'+esc(c.name)+'</h4><div class="s">'+esc(c.type)+' · تنتهي '+S.fmtDate(c.expires)+'</div></div>'+b+'</div>';
+  }).join("");
+
+  // why
+  var why=[
+    {i:"bolt",t:"توقيع فوري",d:"يوقّع الخادم الحزمة خلال ثوانٍ ويُنشئ رابط تثبيت مباشر عبر الهواء."},
+    {i:"shield",t:"شهادات موثّقة",d:"شهادات مؤسسية و Ad-Hoc مُدارة، مع مراقبة تلقائية لتاريخ الانتهاء."},
+    {i:"device",t:"بدون كمبيوتر",d:"سجّل UDID مرة واحدة وثبّت أي تطبيق مباشرة من جهازك دون أدوات."},
+    {i:"refresh",t:"تحديثات تلقائية",d:"إشعار فوري بأي إصدار جديد وإعادة توقيع بنقرة واحدة."},
+    {i:"grid",t:"لوحة تحكم كاملة",d:"أضِف التطبيقات والشهادات وتابع طلبات التوقيع من مكان واحد."},
+    {i:"lock",t:"خصوصية وأمان",d:"لا نخزّن بياناتك خارج جهازك؛ كل شيء يبدأ محليًا وجاهز للربط بخادمك."}
+  ];
+  document.getElementById("whyGrid").innerHTML=why.map(function(w){
+    return '<div class="card"><div class="ic">'+ic(w.i)+'</div><h4>'+esc(w.t)+'</h4><p>'+esc(w.d)+'</p></div>';
+  }).join("");
+
+  // ---- interactions ----
+  document.getElementById("filters").addEventListener("click",function(e){
+    var b=e.target.closest("[data-c]");if(!b)return;active=b.getAttribute("data-c");renderFilters();renderApps();});
+
+  document.body.addEventListener("click",function(e){
+    var get=e.target.closest("[data-get]");
+    if(get){e.stopPropagation();openInstall(get.getAttribute("data-get"));return;}
+    var card=e.target.closest("[data-id]");
+    if(card){openDetail(card.getAttribute("data-id"));}
   });
-  update();
+
+  // detail modal
+  var dtO=document.getElementById("dtOverlay"), curDetail=null;
+  function openDetail(id){
+    var a=api.app(id);if(!a)return;curDetail=a;
+    document.getElementById("dtCover").style.background=a.color;
+    var di=document.getElementById("dtIcon");di.style.background=a.color;di.textContent=S.initials(a.name);
+    document.getElementById("dtName").innerHTML=esc(a.name)+(a.signed?' '+ic("verified","verified-ic"):"");
+    document.getElementById("dtDev").textContent=a.dev+" · "+a.cat;
+    document.getElementById("dtGet").innerHTML=ic("download")+"احصل ("+a.size+")";
+    document.getElementById("dtMetrics").innerHTML=
+      '<div><div class="n">'+ic("star")+' '+a.rating+'</div><div class="l">التقييم</div></div>'+
+      '<div><div class="n">'+S.nfmt(a.downloads)+'</div><div class="l">تحميل</div></div>'+
+      '<div><div class="n">'+esc(a.ver)+'</div><div class="l">الإصدار</div></div>';
+    document.getElementById("dtDesc").textContent=a.desc;
+    document.getElementById("dtShots").innerHTML=[0,1,2].map(function(n){
+      return '<div class="s"><div class="ph" style="background:'+a.color+'">'+
+        '<div style="font-family:var(--font-display);font-weight:800;font-size:15px">'+esc(a.name)+'</div>'+
+        '<div style="font-size:11px;opacity:.85;margin-top:4px">'+esc(a.tagline)+'</div>'+
+        '<div style="margin-top:auto;font-size:10px;opacity:.7">شاشة '+(n+1)+'</div></div></div>';}).join("");
+    dtO.classList.add("open");
+  }
+  function closeDetail(){dtO.classList.remove("open");}
+  document.getElementById("dtClose").addEventListener("click",closeDetail);
+  dtO.addEventListener("click",function(e){if(e.target===dtO)closeDetail();});
+  document.getElementById("dtGet").addEventListener("click",function(){if(curDetail){closeDetail();openInstall(curDetail.id);}});
+
+  // install modal (OTA pipeline)
+  var inO=document.getElementById("inOverlay"), inTimer=null;
+  function openInstall(id){
+    var a=api.app(id);if(!a)return;
+    var ii=document.getElementById("inIcon");ii.style.background=a.color;ii.textContent=S.initials(a.name);
+    document.getElementById("inName").textContent=a.name;
+    document.getElementById("inState").textContent="جاري تجهيز التوقيع…";
+    document.getElementById("inDone").classList.add("hide");
+    var bar=document.getElementById("inBar");bar.style.width="0";
+    inO.classList.add("open");
+    var steps=[
+      [12,"↳ التحقق من الشهادة: Saqer Enterprise 2026"],
+      [34,"↳ حقن ملف التعريف (embedded.mobileprovision)"],
+      [58,"↳ توقيع الحزمة (CodeSign · SHA-256)"],
+      [80,"↳ توليد manifest.plist"],
+      [100,"↳ تجهيز رابط itms-services://"]
+    ], i=0;
+    clearInterval(inTimer);
+    inTimer=setInterval(function(){
+      if(i>=steps.length){clearInterval(inTimer);finishInstall(a);return;}
+      bar.style.width=steps[i][0]+"%";
+      document.getElementById("inStep").textContent=steps[i][1];
+      document.getElementById("inState").textContent=steps[i][0]<100?"جاري التوقيع…":"اكتمل التوقيع";
+      i++;
+    },520);
+  }
+  function finishInstall(a){
+    api.bumpDownload(a.id);
+    document.getElementById("inState").textContent="جاهز للتثبيت";
+    var done=document.getElementById("inDone");done.classList.remove("hide");
+    document.getElementById("inDoneMsg").innerHTML=ic("checkCircle")+"تم توقيع «"+esc(a.name)+"» بنجاح على الشهادة المؤسسية.";
+    var plist="https://sign.saqerstore.app/manifests/"+encodeURIComponent(a.bundle)+".plist";
+    var btn=document.getElementById("inInstallBtn");
+    btn.innerHTML=ic("download")+"تثبيت على الجهاز";
+    btn.setAttribute("href","itms-services://?action=download-manifest&url="+plist);
+    S.toast("تم توقيع "+a.name+" بنجاح");
+  }
+  function closeInstall(){clearInterval(inTimer);inO.classList.remove("open");}
+  document.getElementById("inClose").addEventListener("click",closeInstall);
+  inO.addEventListener("click",function(e){if(e.target===inO)closeInstall();});
+  addEventListener("keydown",function(e){if(e.key==="Escape"){closeDetail();closeInstall();}});
+
+  // smooth anchor
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener("click",function(e){var t=document.querySelector(a.getAttribute("href"));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:"smooth",block:"start"});}});});
+
+  S.reveals();
+})();
 </script>
 </body>
 </html>
