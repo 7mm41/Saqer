@@ -43,7 +43,7 @@ struct SwipeCardView: View {
             .shadow(color: .black.opacity(0.18), radius: 14, y: 8)
             .offset(offset)
             .rotationEffect(.degrees(Double(offset.width / 22)))
-            .gesture(isTop ? dragGesture : nil)
+            .gesture(dragGesture, including: isTop ? .all : .subviews)
             .animation(.interactiveSpring(response: 0.35, dampingFraction: 0.8), value: offset)
         }
     }

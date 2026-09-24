@@ -90,15 +90,13 @@ final class PhotoLibraryService: @unchecked Sendable {
     /// Best-effort total bytes used by all photos + videos. O(n) over the
     /// library and can take a moment on very large collections, so callers run it
     /// off the main actor and update the UI when it resolves.
-    func totalMediaBytes(isCancelled: () -> Bool = { false }) -> Int64 {
+    func totalMediaBytes(isCancelled: @escaping () -> Bool = { false }) -> Int64 {
         let result = PHAsset.fetchAssets(with: nil)
         var total: Int64 = 0
-        var stop = false
         result.enumerateObjects { asset, _, stopPtr in
-            if isCancelled() { stop = true; stopPtr.pointee = true; return }
+            if isCancelled() { stopPtr.pointee = true; return }
             total += self.fileSize(for: asset)
         }
-        _ = stop
         return total
     }
 
