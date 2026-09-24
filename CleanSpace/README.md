@@ -21,12 +21,14 @@ device, and the app makes no network calls at all.
 
 ```
 CleanSpace/
-├── project.yml                     # XcodeGen spec (one-command project generation)
+├── CleanSpace.xcodeproj/           # ← open THIS in Xcode (with a shared scheme)
+├── project.yml                     # optional XcodeGen spec (regenerate the project)
 └── CleanSpace/
     ├── App/
     │   └── CleanSpaceApp.swift      # @main · builds ModelContainer + AppEnvironment
     ├── Resources/
-    │   └── Info.plist               # NSPhotoLibraryUsageDescription lives here
+    │   ├── Info.plist               # NSPhotoLibraryUsageDescription lives here
+    │   └── Assets.xcassets/         # AppIcon (1024, indigo/violet)
     ├── Models/
     │   ├── MediaItem.swift          # Sendable value-type view over PHAsset
     │   ├── SimilarGroup.swift       # a cluster + its reclaimable-bytes math
@@ -63,29 +65,37 @@ CleanSpace/
 
 ## Getting it into Xcode
 
-### Option A — XcodeGen (recommended)
+### Just open it (recommended)
 
 ```bash
-brew install xcodegen         # once
-cd CleanSpace
-xcodegen generate
-open CleanSpace.xcodeproj
+open CleanSpace/CleanSpace.xcodeproj
 ```
 
-### Option B — no tooling
+The project (`objectVersion 56`, Xcode 14+) already lists every source file, the
+`Info.plist`, and the app-icon asset catalog, and ships a shared **CleanSpace**
+scheme — so it's ready to build immediately. Then:
 
-1. In Xcode: **File → New → Project → iOS → App**. Name it `CleanSpace`,
-   interface **SwiftUI**, language **Swift**, storage **None**.
-2. Delete the generated `ContentView.swift` and the default `App` file.
-3. Drag the `CleanSpace/CleanSpace/` folder (App, Models, Services, …) into the
-   project ("Create groups", add to the CleanSpace target).
-4. Set the target's **Info.plist** to `Resources/Info.plist`, or add the
-   `NSPhotoLibraryUsageDescription` key to the auto-generated one.
+1. Select the **CleanSpace** target → **Signing & Capabilities** → pick your Team.
+2. Choose your connected **iPhone** as the run destination.
+3. **⌘R**.
 
-### Then, for both options
-- Select the **CleanSpace** target → **Signing & Capabilities** → pick your Team.
-- Set **Minimum Deployments = iOS 17.0**.
-- Build & run on a **real iPhone** with photos on it.
+That's it — no dependencies, no `pod install`, no Swift packages to resolve.
+
+### Optional: regenerate the project with XcodeGen
+
+The `project.yml` spec is kept for anyone who prefers to regenerate the
+`.xcodeproj` from scratch (e.g. after adding files):
+
+```bash
+brew install xcodegen && cd CleanSpace && xcodegen generate
+```
+
+### Notes
+- **Minimum deployment is iOS 17.0**; a free personal team is enough to run it
+  on your own device.
+- Run on a **real iPhone** with photos — the Simulator's library is empty and
+  can't exercise `PHAssetChangeRequest` deletion prompts.
+- No special capabilities (App Groups, CallKit, background modes) are required.
 
 No Apple Developer capabilities (App Groups, CallKit, etc.) are required — the
 app is self-contained and offline. A free personal team is enough to run it on
