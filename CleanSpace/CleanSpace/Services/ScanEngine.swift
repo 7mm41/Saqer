@@ -33,7 +33,6 @@ final class ScanEngine {
     private let library: PhotoLibraryService
     private let similarity: SimilarityEngine
     private var task: Task<Void, Never>?
-    private var backgroundObserver: NSObjectProtocol?
 
     init(library: PhotoLibraryService = PhotoLibraryService()) {
         self.library = library
@@ -41,11 +40,9 @@ final class ScanEngine {
         observeBackgrounding()
     }
 
-    deinit {
-        if let backgroundObserver {
-            NotificationCenter.default.removeObserver(backgroundObserver)
-        }
-    }
+    // No deinit cleanup needed: ScanEngine lives for the app's lifetime and the
+    // observer captures `self` weakly, so there is no retain cycle or dangling
+    // callback to tear down.
 
     // MARK: - Public control
 
@@ -71,13 +68,15 @@ final class ScanEngine {
 
     private func observeBackgrounding() {
         #if canImport(UIKit)
-        backgroundObserver = NotificationCenter.default.addObserver(
+        NotificationCenter.default.addObserver(
             forName: UIApplication.didEnterBackgroundNotification,
             object: nil, queue: .main
         ) { [weak self] _ in
             // Vision work can't reliably continue in the background; pause cleanly
-            // so the user can resume when they return.
-            MainActor.assumeIsolated { self?.cancel() }
+            // so the user can resume when they return. Hop to the main actor
+            // instead of assuming isolation, which is robust regardless of the
+            // delivery thread.
+            Task { @MainActor in self?.cancel() }
         }
         #endif
     }
