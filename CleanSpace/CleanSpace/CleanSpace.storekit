@@ -1,0 +1,41 @@
+{
+  "identifier" : "5E9C3F2A",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "20981649",
+      "localizations" : [],
+      "name" : "CleanSpace Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "67281937",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited photo cleanups — remove the free per-cleanup limit.",
+              "displayName" : "CleanSpace Pro",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.cleanspace.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "CleanSpace Pro Monthly",
+          "subscriptionGroupID" : "20981649",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

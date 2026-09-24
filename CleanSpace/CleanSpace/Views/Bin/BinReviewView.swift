@@ -13,8 +13,14 @@ struct BinReviewView: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(\.dismiss) private var dismiss
     @State private var model: BinViewModel?
+    @State private var showPaywall = false
 
     private let columns = [GridItem(.adaptive(minimum: 96), spacing: 8)]
+
+    /// Free tier can delete up to `freeDeleteLimit` per cleanup; Pro is unlimited.
+    private var isOverFreeLimit: Bool {
+        !env.store.isPro && env.bin.count > StoreService.freeDeleteLimit
+    }
 
     var body: some View {
         NavigationStack {
@@ -47,6 +53,7 @@ struct BinReviewView: View {
                 }
             }
             .overlay { resultOverlay }
+            .sheet(isPresented: $showPaywall) { PaywallView() }
         }
     }
 
@@ -105,23 +112,48 @@ struct BinReviewView: View {
                 Text("\(env.bin.count) item\(env.bin.count == 1 ? "" : "s")")
                     .font(.subheadline).foregroundStyle(.secondary)
             }
-            Button {
-                Task { await model?.execute() }   // outcome handled by resultOverlay
-            } label: {
-                HStack {
-                    if model?.isDeleting == true { ProgressView().tint(.white) }
-                    Text(model?.isDeleting == true ? "Deleting…" : "Free Up Space")
+
+            if isOverFreeLimit {
+                // Free tier is over its per-cleanup limit — steer to Pro.
+                Button {
+                    showPaywall = true
+                } label: {
+                    HStack {
+                        Image(systemName: "sparkles")
+                        Text("Unlock unlimited — \(env.store.priceText)")
+                    }
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
                 }
-                .font(.headline)
-                .frame(maxWidth: .infinity)
+                .buttonStyle(.borderedProminent)
+                .tint(.indigo)
+                .controlSize(.large)
+                Text("Free plan deletes up to \(StoreService.freeDeleteLimit) photos per cleanup. You have \(env.bin.count) in the bin.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            } else {
+                Button {
+                    Task { await model?.execute() }   // outcome handled by resultOverlay
+                } label: {
+                    HStack {
+                        if model?.isDeleting == true { ProgressView().tint(.white) }
+                        Text(model?.isDeleting == true ? "Deleting…" : "Free Up Space")
+                    }
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
+                .controlSize(.large)
+                .disabled(model?.isDeleting == true)
+                Text(env.store.isPro
+                     ? "Pro · unlimited. iOS will ask you to confirm before anything is deleted."
+                     : "iOS will ask you to confirm before anything is deleted.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.red)
-            .controlSize(.large)
-            .disabled(model?.isDeleting == true)
-            Text("iOS will ask you to confirm before anything is deleted.")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
         }
         .padding(16)
         .background(.bar)

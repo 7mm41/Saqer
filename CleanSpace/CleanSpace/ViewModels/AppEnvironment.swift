@@ -18,6 +18,7 @@ final class AppEnvironment {
     let scanEngine: ScanEngine
     let bin: BinStore
     let library: PhotoLibraryService
+    let store: StoreService
 
     /// Filled in after the first scan / storage read; drives the dashboard ring.
     var storage = StorageInfo()
@@ -29,6 +30,7 @@ final class AppEnvironment {
         self.permissions = PermissionsManager()
         self.scanEngine = ScanEngine(library: library)
         self.bin = BinStore(context: modelContext)
+        self.store = StoreService()
     }
 
     /// Reads device capacity immediately, then fills in the media total in the

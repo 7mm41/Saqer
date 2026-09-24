@@ -11,6 +11,7 @@ import SwiftUI
 struct DashboardView: View {
     @Environment(AppEnvironment.self) private var env
     @State private var showBin = false
+    @State private var showPaywall = false
 
     private var scan: ScanEngine { env.scanEngine }
     private var totalReclaimable: Int64 {
@@ -28,6 +29,7 @@ struct DashboardView: View {
                             .padding(.horizontal)
                     } else {
                         StorageRingView(storage: env.storage, reclaimable: totalReclaimable)
+                        if !env.store.isPro { proBanner }
                         categorySection
                     }
                 }
@@ -43,6 +45,9 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showBin) {
                 BinReviewView()
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView()
             }
             .onAppear {
                 env.refreshStorage()
@@ -62,6 +67,43 @@ struct DashboardView: View {
                     .font(.subheadline).foregroundStyle(.orange)
             }
         }
+    }
+
+    // MARK: Pro banner
+
+    private var proBanner: some View {
+        Button {
+            showPaywall = true
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "sparkles")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 44, height: 44)
+                    .background(
+                        LinearGradient(colors: [.indigo, .purple],
+                                       startPoint: .topLeading, endPoint: .bottomTrailing),
+                        in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    )
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Go Pro — unlimited cleanups")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                    Text("Remove the \(StoreService.freeDeleteLimit)-photo limit · \(env.store.priceText)/mo")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(14)
+            .background(Color(.secondarySystemGroupedBackground),
+                        in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal)
     }
 
     // MARK: Categories

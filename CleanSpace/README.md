@@ -126,6 +126,26 @@ app catches `PHPhotosError.userCancelled` and leaves everything untouched.
 
 ---
 
+## Monetization — CleanSpace Pro (StoreKit 2)
+
+- **Free:** delete up to **10 photos per cleanup**.
+- **Pro:** **unlimited** cleanups — an auto-renewing **$0.99 / month** subscription
+  (`com.cleanspace.pro.monthly`) billed through the App Store.
+
+Implemented with **StoreKit 2** in `Services/StoreService.swift` (load product,
+`purchase()`, `restore()` via `AppStore.sync()`, and entitlement checks over
+`Transaction.currentEntitlements` + a `Transaction.updates` listener for
+renewals). The upgrade UI is `Views/Paywall/PaywallView.swift`; the free limit is
+enforced in `BinReviewView` and surfaced by a dashboard banner.
+
+**Testing locally:** the scheme references `CleanSpace/CleanSpace.storekit`, a
+StoreKit configuration with the $0.99 subscription, so purchase/restore work in
+the Simulator with **no App Store Connect setup**. To go live: create the same
+product id in App Store Connect, and replace the placeholder Terms/Privacy URLs
+in `PaywallView` with your hosted policies (required by App Review).
+
+---
+
 ## Honest caveats & tuning notes
 
 - **Similarity thresholds are empirical.** Vision feature-print distances live on
