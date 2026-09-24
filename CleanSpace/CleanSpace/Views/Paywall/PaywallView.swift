@@ -22,7 +22,7 @@ struct PaywallView: View {
 
     private let benefits: [(String, String)] = [
         ("infinity", "Unlimited cleanups — delete as many photos as you like"),
-        ("bolt.fill", "No 10-photo limit per cleanup"),
+        ("bolt.fill", "No 500-photo free-tier limit"),
         ("lock.shield.fill", "Still 100% on-device — nothing ever leaves your iPhone"),
         ("heart.fill", "Support a small, ad-free indie app")
     ]

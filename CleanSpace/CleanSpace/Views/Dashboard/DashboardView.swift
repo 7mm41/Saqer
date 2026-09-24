@@ -93,7 +93,7 @@ struct DashboardView: View {
                     Text("Go Pro — unlimited cleanups")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.primary)
-                    Text("Remove the \(StoreService.freeDeleteLimit)-photo limit · \(env.store.priceText)/mo")
+                    Text("Beyond the \(StoreService.freePhotoQuota) free photos · \(env.store.priceText)/mo")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

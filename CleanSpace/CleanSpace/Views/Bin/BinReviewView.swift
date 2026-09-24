@@ -17,9 +17,9 @@ struct BinReviewView: View {
 
     private let columns = [GridItem(.adaptive(minimum: 96), spacing: 8)]
 
-    /// Free tier can delete up to `freeDeleteLimit` per cleanup; Pro is unlimited.
+    /// Free tier has a per-account quota of photos; Pro is unlimited.
     private var isOverFreeLimit: Bool {
-        !env.store.isPro && env.bin.count > StoreService.freeDeleteLimit
+        !env.store.isPro && env.bin.count > env.store.freePhotosRemaining
     }
 
     var body: some View {
@@ -49,7 +49,7 @@ struct BinReviewView: View {
             }
             .onAppear {
                 if model == nil {
-                    model = BinViewModel(bin: env.bin, library: env.library)
+                    model = BinViewModel(bin: env.bin, library: env.library, store: env.store)
                 }
             }
             .overlay { resultOverlay }
@@ -114,7 +114,7 @@ struct BinReviewView: View {
             }
 
             if isOverFreeLimit {
-                // Free tier is over its per-cleanup limit — steer to Pro.
+                // Free tier is over its remaining per-account quota — steer to Pro.
                 Button {
                     showPaywall = true
                 } label: {
@@ -128,7 +128,7 @@ struct BinReviewView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(.indigo)
                 .controlSize(.large)
-                Text("Free plan deletes up to \(StoreService.freeDeleteLimit) photos per cleanup. You have \(env.bin.count) in the bin.")
+                Text("Free plan includes \(StoreService.freePhotoQuota) photos per Apple account — \(env.store.freePhotosRemaining) left, but \(env.bin.count) are in the bin.")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -149,7 +149,7 @@ struct BinReviewView: View {
                 .disabled(model?.isDeleting == true)
                 Text(env.store.isPro
                      ? "Pro · unlimited. iOS will ask you to confirm before anything is deleted."
-                     : "iOS will ask you to confirm before anything is deleted.")
+                     : "Free: \(env.store.freePhotosRemaining) of \(StoreService.freePhotoQuota) photos left. iOS will confirm before anything is deleted.")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

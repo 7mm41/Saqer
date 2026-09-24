@@ -4,7 +4,8 @@
 //
 //  StoreKit 2 in-app purchase layer for the CleanSpace Pro subscription
 //  (com.cleanspace.pro.monthly, $0.99 / month, auto-renewing). Unlocks unlimited
-//  photo cleanups; the free tier is capped at `freeDeleteLimit` per cleanup.
+//  photo cleanups; the free tier allows up to `freePhotoQuota` deletions total,
+//  tracked per Apple account via iCloud key-value storage.
 //
 //  Everything is on-device / App Store; no custom server or receipt validation
 //  endpoint is needed — StoreKit 2 verifies transactions with the App Store.
@@ -20,8 +21,8 @@ final class StoreService {
 
     /// Product identifier configured in App Store Connect and in CleanSpace.storekit.
     static let proProductID = "com.cleanspace.pro.monthly"
-    /// Free tier: how many photos can be deleted in a single cleanup.
-    static let freeDeleteLimit = 10
+    /// Free tier: total photos that can be deleted for free per Apple account.
+    static let freePhotoQuota = 500
 
     private(set) var product: Product?
     private(set) var isPro = false
@@ -29,7 +30,28 @@ final class StoreService {
     private(set) var isPurchasing = false
     var lastError: String?
 
+    /// Cumulative photos deleted on the free tier. Tracked in iCloud key-value
+    /// storage so the quota follows the Apple account across devices/reinstalls,
+    /// mirrored to UserDefaults so it also works with no iCloud entitlement.
+    private(set) var freePhotosUsed = 0
+
+    private let quotaKey = "cleanspace.freePhotosUsed"
+    private let kvs = NSUbiquitousKeyValueStore.default
+
+    /// Photos still deletable for free (effectively unlimited once Pro).
+    var freePhotosRemaining: Int {
+        isPro ? .max : max(0, Self.freePhotoQuota - freePhotosUsed)
+    }
+
     init() {
+        loadQuota()
+        // Update the local mirror when iCloud reports a change from another device.
+        NotificationCenter.default.addObserver(
+            forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: kvs, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated { self?.loadQuota() }
+        }
         // Listen for transactions that arrive outside an explicit purchase
         // (renewals, purchases made on another device, Ask-to-Buy approvals).
         listenForTransactions()
@@ -41,6 +63,24 @@ final class StoreService {
 
     // No deinit: StoreService lives for the app's lifetime, and the transaction
     // listener holds `self` weakly, so there is nothing to tear down.
+
+    // MARK: - Free quota
+
+    private func loadQuota() {
+        kvs.synchronize()
+        let cloud = Int(kvs.longLong(forKey: quotaKey))
+        let local = UserDefaults.standard.integer(forKey: quotaKey)
+        freePhotosUsed = max(cloud, local)
+    }
+
+    /// Records `count` free deletions against the per-account quota (no-op for Pro).
+    func recordFreeDeletions(_ count: Int) {
+        guard !isPro, count > 0 else { return }
+        freePhotosUsed += count
+        kvs.set(Int64(freePhotosUsed), forKey: quotaKey)
+        UserDefaults.standard.set(freePhotosUsed, forKey: quotaKey)
+        kvs.synchronize()
+    }
 
     var priceText: String { product?.displayPrice ?? "$0.99" }
 

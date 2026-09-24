@@ -24,11 +24,13 @@ final class BinViewModel {
 
     private let bin: BinStore
     private let library: PhotoLibraryService
+    private let store: StoreService
     private(set) var state: State = .idle
 
-    init(bin: BinStore, library: PhotoLibraryService) {
+    init(bin: BinStore, library: PhotoLibraryService, store: StoreService) {
         self.bin = bin
         self.library = library
+        self.store = store
     }
 
     var isDeleting: Bool { state == .deleting }
@@ -45,6 +47,7 @@ final class BinViewModel {
         do {
             try await library.delete(ids: ids)
             bin.clear(ids: ids)
+            store.recordFreeDeletions(ids.count)   // counts against the free quota (no-op for Pro)
             state = .done(freed: bytes, count: ids.count)
             HapticsManager.shared.success()
         } catch let error as PHPhotosError where error.code == .userCancelled {
