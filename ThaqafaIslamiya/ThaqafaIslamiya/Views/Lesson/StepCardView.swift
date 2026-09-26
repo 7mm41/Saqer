@@ -27,15 +27,17 @@ struct StepCardView: View {
             header
 
             // مساحة الصورة التوضيحية (تُستبدل تلقائيًا بالصورة المضافة إلى Assets باسم step.image)
+            // رسم متحرك لشخص يؤدي الحركة (Assets/Animations/<step.image>.mp4)
             IllustrationView(
                 imageName: step.image,
                 symbol: step.symbol,
                 colors: colors,
                 symbolSize: 78,
-                bounceTrigger: bounce
+                bounceTrigger: bounce,
+                isPlaying: isActive
             )
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 120, maxHeight: 220)
+            .frame(minHeight: 160, maxHeight: 320)
             .scaleEffect(appeared ? 1 : 0.7)
             .onTapGesture { bounce += 1 }
 

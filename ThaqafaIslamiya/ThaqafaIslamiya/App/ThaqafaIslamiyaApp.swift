@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 @main
 struct ThaqafaIslamiyaApp: App {
@@ -14,6 +15,11 @@ struct ThaqafaIslamiyaApp: App {
     @State private var progress = ProgressStore()
     @State private var router = AppRouter()
     @State private var speech = SpeechReader()
+
+    init() {
+        // الرسوم المتحركة صامتة ولا توقف صوت التطبيقات الأخرى، وقراءة الأدعية تُسمع حتى في الوضع الصامت.
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [.mixWithOthers])
+    }
 
     var body: some Scene {
         WindowGroup {

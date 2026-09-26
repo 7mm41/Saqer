@@ -17,9 +17,10 @@ struct LessonCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             ZStack(alignment: .topLeading) {
-                IllustrationView(imageName: lesson.imageName, symbol: lesson.symbol, colors: [.white, .white.opacity(0.8)], symbolSize: 44)
+                IllustrationView(imageName: lesson.imageName, symbol: lesson.symbol, colors: [.white, .white.opacity(0.8)],
+                                 symbolSize: 44, cornerRadius: 20)
                     .frame(maxWidth: .infinity)
-                    .frame(height: isWide ? 130 : 110)
+                    .frame(height: isWide ? 150 : 120)
 
                 if isCompleted {
                     Image(systemName: "checkmark.seal.fill")

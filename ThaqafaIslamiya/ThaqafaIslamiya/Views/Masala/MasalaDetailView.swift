@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct MasalaDetailView: View {
     let masala: Masala
@@ -23,6 +24,17 @@ struct MasalaDetailView: View {
 
     private var colors: [Color] { chapter.colors.themeColors }
     private var isLearned: Bool { progress.isLearned(masala) }
+
+    /// صورة المسألة الخاصة إن وُجدت، وإلا الرسم المتحرك لدرسها التفاعلي المرتبط (مثل الوضوء).
+    private var heroImageName: String {
+        if UIImage(named: masala.imageName) != nil || AnimationLibrary.hasAnimation(masala.imageName) {
+            return masala.imageName
+        }
+        if let lessonId = masala.lessonId { return "lesson_\(lessonId)" }
+        return masala.imageName
+    }
+
+    private var heroHasAnimation: Bool { AnimationLibrary.hasAnimation(heroImageName) }
 
     var body: some View {
         ZStack {
@@ -89,8 +101,8 @@ struct MasalaDetailView: View {
 
     private var hero: some View {
         VStack(spacing: 14) {
-            IllustrationView(imageName: masala.imageName, symbol: masala.symbol, colors: colors, symbolSize: 56, bounceTrigger: revealed)
-                .frame(width: 130, height: 130)
+            IllustrationView(imageName: heroImageName, symbol: masala.symbol, colors: colors, symbolSize: 56, bounceTrigger: revealed)
+                .frame(width: heroHasAnimation ? 220 : 130, height: heroHasAnimation ? 220 : 130)
 
             Text(masala.title)
                 .font(.title.weight(.heavy))
