@@ -3,7 +3,7 @@
 //  ثقافة إسلامية
 //
 //  القراءة الصوتية دون إنترنت:
-//  ١. مقاطع صوتية طبيعية مدمجة (أصوات عصبية مولَّدة مسبقًا ومشكولة للعربية) بصيغة m4a:
+//  ١. مقاطع صوتية طبيعية مدمجة بصيغة m4a — العربية بصوت رجل دافئ هادئ بالفصحى، بإيقاع تعليمي متأنٍّ:
 //       voice_<lang>_step_<stepId>  — الخطوات
 //       voice_<lang>_m_<masalaId>   — المسائل
 //       voice_dua_<stepId>          — الأدعية بالعربية
@@ -88,7 +88,8 @@ final class VoicePlayer: NSObject {
         let candidates = AVSpeechSynthesisVoice.speechVoices().filter {
             $0.language == language.speechCode || $0.language.hasPrefix(prefix + "-") || $0.language == prefix
         }
-        let voice = candidates.max { rank($0) < rank($1) }
+        // الجودة أولًا، ثم صوت رجل (الراوي المعتمد في التطبيق رجل بصوت دافئ هادئ)
+        let voice = candidates.max { (rank($0), $0.gender == .male ? 1 : 0) < (rank($1), $1.gender == .male ? 1 : 0) }
             ?? AVSpeechSynthesisVoice(language: language.speechCode)
         if let voice { voiceCache[language.rawValue] = voice }
         return voice

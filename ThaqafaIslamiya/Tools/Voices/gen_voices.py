@@ -9,7 +9,6 @@ usage: python3 gen_voices.py OUT_DIR [lang ...] [--only steps|masail|dua]
 """
 import json, os, re, subprocess, sys, tempfile, wave
 
-from piper import PiperVoice, SynthesisConfig
 import imageio_ffmpeg
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +25,7 @@ VOICES = {
 }
 
 # Slightly slower than default and with clear pauses between sentences — for children.
-CONFIG = SynthesisConfig(length_scale=1.08, noise_scale=0.6, noise_w_scale=0.75)
+PIPER_CONFIG = dict(length_scale=1.08, noise_scale=0.6, noise_w_scale=0.75)
 
 DUAS = {
     "wudu_05": "اللَّهُمَّ اسْقِنِي مِنَ الْمَاءِ الرَّحِيقِ الْمَخْتُومِ",
@@ -79,7 +78,8 @@ def synth(voice, text, out_path):
         wav_path = tmp.name
     try:
         with wave.open(wav_path, "wb") as wf:
-            voice.synthesize_wav(text, wf, syn_config=CONFIG)
+            from piper import SynthesisConfig
+            voice.synthesize_wav(text, wf, syn_config=SynthesisConfig(**PIPER_CONFIG))
         subprocess.run(
             [FFMPEG, "-y", "-loglevel", "error", "-i", wav_path,
              "-af", "highpass=f=70,loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:d=0.03",
@@ -100,6 +100,8 @@ def main():
     out_dir = args[0]
     langs = args[1:] or list(VOICES)
     os.makedirs(out_dir, exist_ok=True)
+
+    from piper import PiperVoice
 
     for lang in langs:
         voice = PiperVoice.load(os.path.join(os.environ.get("PIPER_VOICES", os.path.join(HERE, "voices")), VOICES[lang] + ".onnx"))
