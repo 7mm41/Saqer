@@ -14,6 +14,8 @@ Providers (pick one; the key is read from the environment, never from the comman
                                     python3 gen_voices_cloud.py --provider elevenlabs --list-voices
   google      GOOGLE_TTS_API_KEY   Google Cloud TTS, Chirp 3 HD (default ar-XA-Chirp3-HD-Charon)
   azure       AZURE_SPEECH_KEY + AZURE_SPEECH_REGION   (default ar-OM-AbdullahNeural)
+  edge        no key — Microsoft Edge neural voices via edge-tts (default ar-SA-HamedNeural).
+              Behind a TLS-inspecting proxy set EDGE_TTS_CAFILE to the proxy CA bundle.
 
 usage:
   python3 gen_voices_cloud.py OUT_DIR --provider elevenlabs --voice <voice_id> [--only steps|masail|dua] [--force]
@@ -32,6 +34,7 @@ from gen_voices import DATA, DUAS, clean  # noqa: E402  (shared texts & hand-dia
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 
 DEFAULT_VOICE = {
+    "edge": "ar-SA-HamedNeural",
     "elevenlabs": None,                        # must be chosen (see --list-voices)
     "google": "ar-XA-Chirp3-HD-Charon",
     "azure": "ar-OM-AbdullahNeural",
@@ -120,7 +123,37 @@ def azure(voice, parts, pace):
     )
 
 
-PROVIDERS = {"elevenlabs": elevenlabs, "google": google, "azure": azure}
+def edge(voice, parts, pace):
+    import asyncio, ssl
+    import edge_tts
+    import edge_tts.communicate as communicate
+    cafile = os.environ.get("EDGE_TTS_CAFILE")
+    if cafile:
+        communicate._SSL_CTX = ssl.create_default_context(cafile=cafile)
+    # A full stop + line break gives a clear, natural pause between title / sentences / points.
+    text = "\n".join(p if p.endswith((".", "؟", "!")) else p + "." for p in parts)
+    rate = f"{round((pace - 1) * 100):+d}%"
+
+    async def run():
+        chunks = []
+        async for msg in edge_tts.Communicate(text, voice, rate=rate, pitch="-3Hz").stream():
+            if msg["type"] == "audio":
+                chunks.append(msg["data"])
+        return b"".join(chunks)
+
+    for attempt in range(5):
+        try:
+            audio = asyncio.run(run())
+            if audio:
+                return audio
+        except Exception as e:  # network hiccups / throttling
+            if attempt == 4:
+                raise SystemExit(f"edge-tts failed: {e}")
+        time.sleep(2 ** attempt)
+    raise SystemExit("edge-tts returned no audio")
+
+
+PROVIDERS = {"elevenlabs": elevenlabs, "google": google, "azure": azure, "edge": edge}
 
 
 def list_elevenlabs_voices():
