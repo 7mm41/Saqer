@@ -79,6 +79,30 @@
   "hi": "इस्लामी संस्कृति",
   "tr": "İslami Kültür"
  },
+ "appearance.dark": {
+  "ar": "ليلي",
+  "bn": "গাঢ়",
+  "en": "Dark",
+  "fa": "تیره",
+  "hi": "गहरा",
+  "tr": "Koyu"
+ },
+ "appearance.light": {
+  "ar": "نهاري",
+  "bn": "হালকা",
+  "en": "Light",
+  "fa": "روشن",
+  "hi": "हल्का",
+  "tr": "Açık"
+ },
+ "appearance.system": {
+  "ar": "تلقائي",
+  "bn": "স্বয়ংক্রিয়",
+  "en": "Automatic",
+  "fa": "خودکار",
+  "hi": "अपने आप",
+  "tr": "Otomatik"
+ },
  "audio.stop": {
   "ar": "إيقاف القراءة",
   "bn": "পড়া থামাও",
@@ -86,6 +110,190 @@
   "fa": "توقف خواندن",
   "hi": "पढ़ना रोकें",
   "tr": "Okumayı durdur"
+ },
+ "bank.allChapters": {
+  "ar": "كل الأقسام",
+  "bn": "সব অধ্যায়",
+  "en": "All chapters",
+  "fa": "همهٔ بخش‌ها",
+  "hi": "सभी अध्याय",
+  "tr": "Tüm bölümler"
+ },
+ "bank.anotherRound": {
+  "ar": "جولة أخرى",
+  "bn": "আরেক রাউন্ড",
+  "en": "Another round",
+  "fa": "دور دیگر",
+  "hi": "एक और दौर",
+  "tr": "Bir tur daha"
+ },
+ "bank.chapter": {
+  "ar": "القسم",
+  "bn": "অধ্যায়",
+  "en": "Chapter",
+  "fa": "بخش",
+  "hi": "अध्याय",
+  "tr": "Bölüm"
+ },
+ "bank.check": {
+  "ar": "تحقّق",
+  "bn": "যাচাই করো",
+  "en": "Check",
+  "fa": "بررسی",
+  "hi": "जाँचें",
+  "tr": "Kontrol et"
+ },
+ "bank.correctAnswer": {
+  "ar": "الإجابة الصحيحة: {0}",
+  "bn": "সঠিক উত্তর: {0}",
+  "en": "Correct answer: {0}",
+  "fa": "پاسخ درست: {0}",
+  "hi": "सही जवाब: {0}",
+  "tr": "Doğru cevap: {0}"
+ },
+ "bank.daily": {
+  "ar": "سؤال اليوم",
+  "bn": "আজকের প্রশ্ন",
+  "en": "Question of the day",
+  "fa": "پرسش امروز",
+  "hi": "आज का सवाल",
+  "tr": "Günün sorusu"
+ },
+ "bank.dontKnow": {
+  "ar": "لا أعرف",
+  "bn": "জানি না",
+  "en": "I don’t know",
+  "fa": "نمی‌دانم",
+  "hi": "मुझे नहीं पता",
+  "tr": "Bilmiyorum"
+ },
+ "bank.filter.all": {
+  "ar": "الكل",
+  "bn": "সব",
+  "en": "All",
+  "fa": "همه",
+  "hi": "सभी",
+  "tr": "Tümü"
+ },
+ "bank.filter.choice": {
+  "ar": "اختيار من متعدد",
+  "bn": "বহুনির্বাচনী",
+  "en": "Multiple choice",
+  "fa": "چندگزینه‌ای",
+  "hi": "बहुविकल्पी",
+  "tr": "Çoktan seçmeli"
+ },
+ "bank.filter.written": {
+  "ar": "كتابة",
+  "bn": "লিখিত",
+  "en": "Written",
+  "fa": "نوشتاری",
+  "hi": "लिखित",
+  "tr": "Yazılı"
+ },
+ "bank.hint": {
+  "ar": "تلميح",
+  "bn": "ইঙ্গিত",
+  "en": "Hint",
+  "fa": "راهنما",
+  "hi": "संकेत",
+  "tr": "İpucu"
+ },
+ "bank.kind.choice": {
+  "ar": "اختيار من متعدد",
+  "bn": "বহুনির্বাচনী",
+  "en": "Multiple choice",
+  "fa": "چندگزینه‌ای",
+  "hi": "बहुविकल्पी",
+  "tr": "Çoktan seçmeli"
+ },
+ "bank.kind.written": {
+  "ar": "اكتب الإجابة",
+  "bn": "উত্তর লেখো",
+  "en": "Write the answer",
+  "fa": "پاسخ را بنویس",
+  "hi": "जवाब लिखें",
+  "tr": "Cevabı yaz"
+ },
+ "bank.loading": {
+  "ar": "جارٍ تجهيز الأسئلة…",
+  "bn": "প্রশ্ন প্রস্তুত হচ্ছে…",
+  "en": "Preparing questions…",
+  "fa": "در حال آماده‌سازی پرسش‌ها…",
+  "hi": "सवाल तैयार हो रहे हैं…",
+  "tr": "Sorular hazırlanıyor…"
+ },
+ "bank.newRound": {
+  "ar": "جولة جديدة",
+  "bn": "নতুন রাউন্ড",
+  "en": "New round",
+  "fa": "دور جدید",
+  "hi": "नया दौर",
+  "tr": "Yeni tur"
+ },
+ "bank.newRoundSubtitle": {
+  "ar": "اختر النوع والقسم وعدد الأسئلة",
+  "bn": "ধরন, অধ্যায় ও প্রশ্নের সংখ্যা বেছে নাও",
+  "en": "Pick the type, chapter and number of questions",
+  "fa": "نوع، بخش و تعداد پرسش‌ها را انتخاب کن",
+  "hi": "प्रकार, अध्याय और सवालों की संख्या चुनें",
+  "tr": "Türü, bölümü ve soru sayısını seç"
+ },
+ "bank.roundLength": {
+  "ar": "عدد الأسئلة",
+  "bn": "প্রশ্নের সংখ্যা",
+  "en": "Questions",
+  "fa": "تعداد پرسش",
+  "hi": "सवालों की संख्या",
+  "tr": "Soru sayısı"
+ },
+ "bank.start": {
+  "ar": "ابدأ ({0} سؤالًا متاحًا)",
+  "bn": "শুরু করো ({0}টি আছে)",
+  "en": "Start ({0} available)",
+  "fa": "شروع ({0} پرسش)",
+  "hi": "शुरू करें ({0} उपलब्ध)",
+  "tr": "Başla ({0} soru)"
+ },
+ "bank.subtitle": {
+  "ar": "{0} سؤالًا من الكتاب تظهر عشوائيًا",
+  "bn": "বই থেকে {0}টি প্রশ্ন, এলোমেলো ক্রমে",
+  "en": "{0} questions from the book, in random order",
+  "fa": "{0} پرسش از کتاب، به‌صورت تصادفی",
+  "hi": "किताब से {0} सवाल, बेतरतीब क्रम में",
+  "tr": "Kitaptan rastgele {0} soru"
+ },
+ "bank.title": {
+  "ar": "بنك الأسئلة",
+  "bn": "প্রশ্ন ভান্ডার",
+  "en": "Question bank",
+  "fa": "بانک پرسش‌ها",
+  "hi": "सवालों का बैंक",
+  "tr": "Soru bankası"
+ },
+ "bank.typeAnswer": {
+  "ar": "اكتب الكلمة هنا…",
+  "bn": "শব্দটি এখানে লেখো…",
+  "en": "Type the word here…",
+  "fa": "کلمه را اینجا بنویس…",
+  "hi": "शब्द यहाँ लिखें…",
+  "tr": "Kelimeyi buraya yaz…"
+ },
+ "brand.developedBy": {
+  "ar": "تم تطويره بواسطة {0} © {1}",
+  "bn": "Saqer Store দ্বারা নির্মিত © {1}",
+  "en": "Developed by Saqer Store © {1}",
+  "fa": "توسعه‌یافته توسط Saqer Store © {1}",
+  "hi": "Saqer Store द्वारा विकसित © {1}",
+  "tr": "Saqer Store tarafından geliştirildi © {1}"
+ },
+ "brand.tagline": {
+  "ar": "تعلّم دينك خطوة بخطوة",
+  "bn": "তোমার দ্বীন ধাপে ধাপে শেখো",
+  "en": "Learn your faith step by step",
+  "fa": "دینت را قدم‌به‌قدم بیاموز",
+  "hi": "अपना दीन क़दम-ब-क़दम सीखें",
+  "tr": "Dinini adım adım öğren"
  },
  "chapter.learnInteractive": {
   "ar": "تعلّم بالتفاعل",
@@ -134,6 +342,14 @@
   "fa": "لغو",
   "hi": "रद्द करें",
   "tr": "İptal"
+ },
+ "common.close": {
+  "ar": "إغلاق",
+  "bn": "বন্ধ করো",
+  "en": "Close",
+  "fa": "بستن",
+  "hi": "बंद करें",
+  "tr": "Kapat"
  },
  "common.done": {
   "ar": "تم",
@@ -270,6 +486,46 @@
   "fa": "پیشرفت شما و درباره کتاب",
   "hi": "आपकी प्रगति और किताब के बारे में",
   "tr": "İlerlemen ve kitap hakkında"
+ },
+ "icon.classic": {
+  "ar": "الأساسية",
+  "bn": "ক্লাসিক",
+  "en": "Classic",
+  "fa": "کلاسیک",
+  "hi": "क्लासिक",
+  "tr": "Klasik"
+ },
+ "icon.desert": {
+  "ar": "صحراء",
+  "bn": "মরুভূমি",
+  "en": "Desert",
+  "fa": "صحرا",
+  "hi": "रेगिस्तान",
+  "tr": "Çöl"
+ },
+ "icon.emerald": {
+  "ar": "زمرّد",
+  "bn": "পান্না",
+  "en": "Emerald",
+  "fa": "زمرد",
+  "hi": "पन्ना",
+  "tr": "Zümrüt"
+ },
+ "icon.night": {
+  "ar": "ليل",
+  "bn": "রাত",
+  "en": "Night",
+  "fa": "شب",
+  "hi": "रात",
+  "tr": "Gece"
+ },
+ "icon.rose": {
+  "ar": "ورد",
+  "bn": "গোলাপ",
+  "en": "Rose",
+  "fa": "گل سرخ",
+  "hi": "गुलाब",
+  "tr": "Gül"
  },
  "lesson.close": {
   "ar": "إغلاق الدرس",
@@ -519,6 +775,22 @@
   "hi": "कोई बात नहीं, हमने कुछ नया सीखा",
   "tr": "Sorun değil, yeni bir şey öğrendik"
  },
+ "reminder.body": {
+  "ar": "حان وقت درسك اليومي — سؤال واحد يكفي لتبدأ ✨",
+  "bn": "আজকের পাঠের সময় — শুরু করতে একটি প্রশ্নই যথেষ্ট ✨",
+  "en": "Time for today’s lesson — one question is enough to start ✨",
+  "fa": "وقت درس امروز است — یک پرسش برای شروع کافی است ✨",
+  "hi": "आज के पाठ का समय — शुरू करने के लिए एक सवाल काफ़ी है ✨",
+  "tr": "Günlük ders zamanı — başlamak için bir soru yeter ✨"
+ },
+ "reminder.title": {
+  "ar": "ثقافة إسلامية 🌙",
+  "bn": "ইসলামী সংস্কৃতি 🌙",
+  "en": "Islamic Culture 🌙",
+  "fa": "فرهنگ اسلامی 🌙",
+  "hi": "इस्लामी संस्कृति 🌙",
+  "tr": "İslami Kültür 🌙"
+ },
  "repeat.done": {
   "ar": "رائع! أكملت {0} مرات 🎉",
   "bn": "দারুণ! {0} বার সম্পন্ন করেছ 🎉",
@@ -591,6 +863,22 @@
   "hi": "सेटिंग्स और भाषा",
   "tr": "Ayarlar ve dil"
  },
+ "settings.appIcon": {
+  "ar": "أيقونة التطبيق",
+  "bn": "অ্যাপ আইকন",
+  "en": "App icon",
+  "fa": "آیکون برنامه",
+  "hi": "ऐप आइकन",
+  "tr": "Uygulama simgesi"
+ },
+ "settings.appearance": {
+  "ar": "المظهر",
+  "bn": "চেহারা",
+  "en": "Appearance",
+  "fa": "ظاهر",
+  "hi": "रूप",
+  "tr": "Görünüm"
+ },
  "settings.audio": {
   "ar": "الصوت",
   "bn": "অডিও",
@@ -615,6 +903,54 @@
   "hi": "प्राकृतिक आवाज़ें ऐप में ही हैं और बिना इंटरनेट चलती हैं।",
   "tr": "Doğal sesler uygulamanın içindedir ve internetsiz çalışır."
  },
+ "settings.background": {
+  "ar": "خلفية التطبيق",
+  "bn": "অ্যাপের পটভূমি",
+  "en": "App background",
+  "fa": "پس‌زمینهٔ برنامه",
+  "hi": "ऐप का बैकग्राउंड",
+  "tr": "Uygulama arka planı"
+ },
+ "settings.contactSupport": {
+  "ar": "راسل الدعم الفني",
+  "bn": "সহায়তায় যোগাযোগ করো",
+  "en": "Contact support",
+  "fa": "تماس با پشتیبانی",
+  "hi": "सहायता से संपर्क करें",
+  "tr": "Destekle iletişim"
+ },
+ "settings.copied": {
+  "ar": "تم النسخ ✓",
+  "bn": "কপি হয়েছে ✓",
+  "en": "Copied ✓",
+  "fa": "کپی شد ✓",
+  "hi": "कॉपी हो गया ✓",
+  "tr": "Kopyalandı ✓"
+ },
+ "settings.copyEmail": {
+  "ar": "نسخ البريد الإلكتروني",
+  "bn": "ইমেইল ঠিকানা কপি করো",
+  "en": "Copy email address",
+  "fa": "کپی نشانی ایمیل",
+  "hi": "ईमेल पता कॉपी करें",
+  "tr": "E-posta adresini kopyala"
+ },
+ "settings.general": {
+  "ar": "عام",
+  "bn": "সাধারণ",
+  "en": "General",
+  "fa": "عمومی",
+  "hi": "सामान्य",
+  "tr": "Genel"
+ },
+ "settings.haptics": {
+  "ar": "الاهتزاز عند اللمس",
+  "bn": "স্পর্শে কম্পন",
+  "en": "Haptic feedback",
+  "fa": "لرزش هنگام لمس",
+  "hi": "छूने पर कंपन",
+  "tr": "Dokunsal geri bildirim"
+ },
  "settings.language": {
   "ar": "اللغة",
   "bn": "ভাষা",
@@ -623,6 +959,118 @@
   "hi": "भाषा",
   "tr": "Dil"
  },
+ "settings.progress": {
+  "ar": "التقدّم",
+  "bn": "অগ্রগতি",
+  "en": "Progress",
+  "fa": "پیشرفت",
+  "hi": "प्रगति",
+  "tr": "İlerleme"
+ },
+ "settings.progressDetails": {
+  "ar": "تفاصيل تقدّمي",
+  "bn": "আমার অগ্রগতির বিবরণ",
+  "en": "My progress details",
+  "fa": "جزئیات پیشرفت من",
+  "hi": "मेरी प्रगति का विवरण",
+  "tr": "İlerleme ayrıntıları"
+ },
+ "settings.reminder": {
+  "ar": "تذكير يومي بالتعلّم",
+  "bn": "প্রতিদিন শেখার রিমাইন্ডার",
+  "en": "Daily learning reminder",
+  "fa": "یادآور روزانهٔ یادگیری",
+  "hi": "रोज़ाना सीखने की याद",
+  "tr": "Günlük öğrenme hatırlatıcısı"
+ },
+ "settings.reminderDenied": {
+  "ar": "فعّل الإشعارات للتطبيق من إعدادات الجهاز أولًا.",
+  "bn": "আগে ডিভাইসের সেটিংসে নোটিফিকেশন চালু করো।",
+  "en": "Allow notifications for the app in the device Settings first.",
+  "fa": "ابتدا اعلان‌ها را در تنظیمات دستگاه فعال کن.",
+  "hi": "पहले डिवाइस सेटिंग्स में सूचनाएँ चालू करें।",
+  "tr": "Önce cihaz ayarlarından bildirimlere izin ver."
+ },
+ "settings.reminderFooter": {
+  "ar": "إشعار لطيف كل يوم في الوقت الذي تختاره.",
+  "bn": "তোমার বেছে নেওয়া সময়ে প্রতিদিন একটি নোটিফিকেশন।",
+  "en": "A gentle notification every day at your chosen time.",
+  "fa": "هر روز در زمان دلخواه یک اعلان ملایم.",
+  "hi": "आपके चुने समय पर रोज़ एक हल्की सूचना।",
+  "tr": "Seçtiğin saatte her gün nazik bir bildirim."
+ },
+ "settings.reminderTime": {
+  "ar": "وقت التذكير",
+  "bn": "রিমাইন্ডারের সময়",
+  "en": "Reminder time",
+  "fa": "زمان یادآوری",
+  "hi": "याद दिलाने का समय",
+  "tr": "Hatırlatma saati"
+ },
+ "settings.share": {
+  "ar": "شارك التطبيق",
+  "bn": "অ্যাপটি শেয়ার করো",
+  "en": "Share the app",
+  "fa": "اشتراک‌گذاری برنامه",
+  "hi": "ऐप साझा करें",
+  "tr": "Uygulamayı paylaş"
+ },
+ "settings.shareText": {
+  "ar": "تطبيق «{0}» — تعلّم الوضوء والصلاة وأحكام الدين خطوة بخطوة من كتاب «تلقين الصبيان»، دون إنترنت. من تطوير {1}.",
+  "bn": "“{0}” — “তালকীনুস সিবইয়ান” বই থেকে অজু, নামাজ ও দ্বীনের মৌলিক বিষয় ধাপে ধাপে, ইন্টারনেট ছাড়াই শেখো। নির্মাতা: {1}।",
+  "en": "“{0}” — learn wudu, prayer and the basics of the faith step by step from the book “Talqeen al-Sibyan”, fully offline. Developed by {1}.",
+  "fa": "«{0}» — وضو، نماز و احکام دین را قدم‌به‌قدم از کتاب «تلقین الصبیان» بدون اینترنت بیاموز. ساختهٔ {1}.",
+  "hi": "“{0}” — “तल्क़ीनुस-सिब्यान” किताब से वुज़ू, नमाज़ और दीन की बुनियादी बातें क़दम-ब-क़दम, बिना इंटरनेट सीखें। विकसित: {1}.",
+  "tr": "“{0}” — abdest, namaz ve dinin temellerini “Talkinü’s-Sıbyan” kitabından adım adım, internetsiz öğren. Geliştiren: {1}."
+ },
+ "settings.speed": {
+  "ar": "سرعة القراءة",
+  "bn": "পড়ার গতি",
+  "en": "Reading speed",
+  "fa": "سرعت خواندن",
+  "hi": "पढ़ने की रफ़्तार",
+  "tr": "Okuma hızı"
+ },
+ "settings.speedReset": {
+  "ar": "٠٪",
+  "bn": "০%",
+  "en": "0%",
+  "fa": "۰٪",
+  "hi": "0%",
+  "tr": "%0"
+ },
+ "settings.support": {
+  "ar": "الدعم والمشاركة",
+  "bn": "সহায়তা ও শেয়ার",
+  "en": "Support & sharing",
+  "fa": "پشتیبانی و اشتراک‌گذاری",
+  "hi": "सहायता और साझा करें",
+  "tr": "Destek ve paylaşım"
+ },
+ "settings.supportSubject": {
+  "ar": "دعم تطبيق ثقافة إسلامية",
+  "bn": "ইসলামী সংস্কৃতি অ্যাপ সহায়তা",
+  "en": "Islamic Culture app support",
+  "fa": "پشتیبانی برنامهٔ فرهنگ اسلامی",
+  "hi": "इस्लामी संस्कृति ऐप सहायता",
+  "tr": "İslami Kültür uygulama desteği"
+ },
+ "settings.tashkeel": {
+  "ar": "إظهار التشكيل",
+  "bn": "হরকত দেখাও",
+  "en": "Show diacritics",
+  "fa": "نمایش اعراب",
+  "hi": "हरकात दिखाएँ",
+  "tr": "Harekeleri göster"
+ },
+ "settings.tashkeelFooter": {
+  "ar": "تشكيل كامل لنصوص المسائل والخطوات يساعد على القراءة الصحيحة.",
+  "bn": "সঠিক পড়ার জন্য পূর্ণ হরকত।",
+  "en": "Full vowel marks on topics and steps for correct reading.",
+  "fa": "اعراب کامل متن‌ها برای خواندن درست.",
+  "hi": "सही पढ़ने के लिए पूरी हरकात।",
+  "tr": "Doğru okuma için tam hareke."
+ },
  "settings.title": {
   "ar": "الإعدادات",
   "bn": "সেটিংস",
@@ -630,6 +1078,54 @@
   "fa": "تنظیمات",
   "hi": "सेटिंग्स",
   "tr": "Ayarlar"
+ },
+ "settings.version": {
+  "ar": "الإصدار {0}",
+  "bn": "সংস্করণ {0}",
+  "en": "Version {0}",
+  "fa": "نسخهٔ {0}",
+  "hi": "संस्करण {0}",
+  "tr": "Sürüm {0}"
+ },
+ "stats.accuracy": {
+  "ar": "الدقّة",
+  "bn": "নির্ভুলতা",
+  "en": "Accuracy",
+  "fa": "دقت",
+  "hi": "सटीकता",
+  "tr": "Doğruluk"
+ },
+ "stats.answered": {
+  "ar": "إجابة",
+  "bn": "উত্তর দেওয়া",
+  "en": "Answered",
+  "fa": "پاسخ",
+  "hi": "जवाब दिए",
+  "tr": "Cevaplanan"
+ },
+ "stats.bestStreak": {
+  "ar": "أفضل سلسلة",
+  "bn": "সেরা ধারাবাহিকতা",
+  "en": "Best streak",
+  "fa": "بهترین زنجیره",
+  "hi": "सबसे लंबी लड़ी",
+  "tr": "En iyi seri"
+ },
+ "stats.days": {
+  "ar": "أيام متتالية",
+  "bn": "টানা দিন",
+  "en": "Day streak",
+  "fa": "روزهای پیاپی",
+  "hi": "लगातार दिन",
+  "tr": "Gün serisi"
+ },
+ "stats.roundStreak": {
+  "ar": "أطول سلسلة",
+  "bn": "দীর্ঘতম ধারাবাহিকতা",
+  "en": "Longest streak",
+  "fa": "بلندترین زنجیره",
+  "hi": "सबसे लंबी लड़ी",
+  "tr": "En uzun seri"
  },
  "step.fromBook": {
   "ar": "من الكتاب",
@@ -662,5 +1158,69 @@
   "fa": "آفرین",
   "hi": "शाबाश",
   "tr": "Aferin"
+ },
+ "tab.home": {
+  "ar": "الرئيسية",
+  "bn": "হোম",
+  "en": "Home",
+  "fa": "خانه",
+  "hi": "होम",
+  "tr": "Ana Sayfa"
+ },
+ "tab.questions": {
+  "ar": "الأسئلة",
+  "bn": "প্রশ্ন",
+  "en": "Questions",
+  "fa": "پرسش‌ها",
+  "hi": "सवाल",
+  "tr": "Sorular"
+ },
+ "tab.settings": {
+  "ar": "الإعدادات",
+  "bn": "সেটিংস",
+  "en": "Settings",
+  "fa": "تنظیمات",
+  "hi": "सेटिंग्स",
+  "tr": "Ayarlar"
+ },
+ "theme.classic": {
+  "ar": "كلاسيكي",
+  "bn": "ক্লাসিক",
+  "en": "Classic",
+  "fa": "کلاسیک",
+  "hi": "क्लासिक",
+  "tr": "Klasik"
+ },
+ "theme.emerald": {
+  "ar": "زمرّد",
+  "bn": "পান্না",
+  "en": "Emerald",
+  "fa": "زمرد",
+  "hi": "पन्ना",
+  "tr": "Zümrüt"
+ },
+ "theme.ocean": {
+  "ar": "محيط",
+  "bn": "সমুদ্র",
+  "en": "Ocean",
+  "fa": "اقیانوس",
+  "hi": "सागर",
+  "tr": "Okyanus"
+ },
+ "theme.royal": {
+  "ar": "ملكي",
+  "bn": "রাজকীয়",
+  "en": "Royal",
+  "fa": "سلطنتی",
+  "hi": "शाही",
+  "tr": "Kraliyet"
+ },
+ "theme.sunset": {
+  "ar": "غروب",
+  "bn": "সূর্যাস্ত",
+  "en": "Sunset",
+  "fa": "غروب",
+  "hi": "सूर्यास्त",
+  "tr": "Gün batımı"
  }
 }

@@ -22,7 +22,7 @@ struct ChapterView: View {
 
     var body: some View {
         ZStack {
-            LiquidBackground(colors: colors + [.indigo, .pink])
+            LiquidBackground(colors: colors)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {

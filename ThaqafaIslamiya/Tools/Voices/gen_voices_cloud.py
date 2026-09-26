@@ -30,6 +30,8 @@ import imageio_ffmpeg
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_voices import DATA, DUAS, clean  # noqa: E402  (shared texts & hand-diacritized duas)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tashkeel"))
+from build_tashkeel_json import tashkeel_table, strip  # noqa: E402  (hand-diacritized book text)
 
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 
@@ -40,8 +42,8 @@ DEFAULT_VOICE = {
     "azure": "ar-OM-AbdullahNeural",
 }
 
-PACE = 0.95       # measured teaching pace (heavier slowing sounds robotic)
-DUA_PACE = 0.90   # supplications slower and more deliberate
+PACE = 1.0        # natural speed (0%)
+DUA_PACE = 1.0    # natural speed (0%)
 
 
 # MARK: - HTTP
@@ -136,7 +138,7 @@ def edge(voice, parts, pace):
 
     async def run():
         chunks = []
-        async for msg in edge_tts.Communicate(text, voice, rate=rate, pitch="-2Hz").stream():
+        async for msg in edge_tts.Communicate(text, voice, rate=rate, pitch="+0Hz").stream():
             if msg["type"] == "audio":
                 chunks.append(msg["data"])
         return b"".join(chunks)
@@ -209,15 +211,28 @@ def main():
     os.makedirs(a.out, exist_ok=True)
     data = json.load(open(os.path.join(DATA, "TalqeenData.json"), encoding="utf-8"))
 
+    # Fully diacritized text (so every word is pronounced correctly, e.g. الْبَسْمَلَة، الْقِبْلَة);
+    # it is the on-screen text letter for letter once the diacritics are removed.
+    vocal = tashkeel_table()
+
+    def v(mid, key, plain):
+        text = vocal.get((mid, key))
+        if text is None or strip(text) != strip(plain):
+            raise SystemExit(f"missing/mismatched tashkeel for {mid}|{key}")
+        return text
+
     jobs = []
     if a.only in (None, "steps"):
         for lesson in data["lessons"]:
             for s in lesson["steps"]:
-                jobs.append((f"voice_ar_step_{s['id']}", [s["title"], s["text"]], PACE))
+                jobs.append((f"voice_ar_step_{s['id']}",
+                             [v(s["id"], "t", s["title"]), v(s["id"], "x", s["text"])], PACE))
     if a.only in (None, "masail"):
         for c in data["chapters"]:
             for m in c["masail"]:
-                jobs.append((f"voice_ar_m_{m['id']}", [m["title"], m["summary"], *m["points"]], PACE))
+                parts = [v(m["id"], "t", m["title"]), v(m["id"], "s", m["summary"])]
+                parts += [v(m["id"], str(i), p) for i, p in enumerate(m["points"])]
+                jobs.append((f"voice_ar_m_{m['id']}", parts, PACE))
     if a.only in (None, "dua"):
         for sid, dua in DUAS.items():
             jobs.append((f"voice_dua_{sid}", re.split(r"(?<=\.)\s+", dua), DUA_PACE))

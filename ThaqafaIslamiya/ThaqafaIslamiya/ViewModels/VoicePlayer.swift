@@ -17,6 +17,8 @@ import Observation
 final class VoicePlayer: NSObject {
     /// مفتاح المقطع الذي يُقرأ الآن (لإظهار زر الإيقاف على العنصر الصحيح فقط).
     private(set) var activeKey: String?
+    /// سرعة القراءة (1.0 = الطبيعية، ٠٪) — تُطبَّق على المقاطع المسجّلة وعلى صوت النظام.
+    @ObservationIgnored var rate: Double = 1.0
 
     @ObservationIgnored private var player: AVAudioPlayer?
     private let synthesizer = AVSpeechSynthesizer()
@@ -44,6 +46,8 @@ final class VoicePlayer: NSObject {
         activeKey = clip
         if let url = url(for: clip), let player = try? AVAudioPlayer(contentsOf: url) {
             player.delegate = self
+            player.enableRate = true
+            player.rate = Float(rate)
             player.prepareToPlay()
             player.play()
             self.player = player
@@ -75,7 +79,7 @@ final class VoicePlayer: NSObject {
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = bestVoice(for: language)
         // سرعة النظام الطبيعية: الإبطاء الزائد هو ما يجعل الكلمات تبدو متقطّعة.
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.rate = min(AVSpeechUtteranceMaximumSpeechRate, AVSpeechUtteranceDefaultSpeechRate * Float(rate))
         utterance.pitchMultiplier = 1.0
         utterance.postUtteranceDelay = 0.1
         synthesizer.speak(utterance)

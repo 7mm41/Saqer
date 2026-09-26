@@ -38,7 +38,7 @@ struct MasalaDetailView: View {
 
     var body: some View {
         ZStack {
-            LiquidBackground(colors: colors + [.pink, .indigo])
+            LiquidBackground(colors: colors)
 
             ScrollView {
                 VStack(spacing: 18) {
@@ -96,7 +96,7 @@ struct MasalaDetailView: View {
                 .accessibilityLabel(playing ? L10n.t("audio.stop") : L10n.t("masala.listen"))
             }
         }
-        .sensoryFeedback(.success, trigger: isLearned) { _, learned in learned }
+        .appHaptic(.success, trigger: isLearned) { _, learned in learned }
         .onAppear(perform: revealPoints)
         .onDisappear { voice.stop() }
     }

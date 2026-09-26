@@ -199,7 +199,7 @@ struct RepeatCounterView: View {
                 }
             }
         }
-        .sensoryFeedback(.impact(flexibility: .soft), trigger: taps)
+        .appHaptic(.impact(flexibility: .soft), trigger: taps)
         .padding(.vertical, 6)
     }
 }

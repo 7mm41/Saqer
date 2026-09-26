@@ -2,7 +2,7 @@
 //  LiquidBackground.swift
 //  ثقافة إسلامية
 //
-//  خلفية «سائلة» ملوّنة خلف الزجاج:
+//  خلفية «سائلة» ملوّنة خلف الزجاج، بألوان الخلفية التي يختارها المستخدم من الإعدادات:
 //  - iOS 18+: تدرّج شبكي (MeshGradient) ينساب مرة واحدة عند الظهور ثم يثبت.
 //  - iOS 17: بقع لونية ضبابية مرسومة مرة واحدة (drawingGroup).
 //  الخلفية ثابتة بعد الظهور عمدًا: الحركة المستمرة خلف الزجاج تجبر النظام على إعادة حساب
@@ -12,8 +12,10 @@
 import SwiftUI
 
 struct LiquidBackground: View {
-    var colors: [Color] = Color.liquidPalette
+    /// ألوان الشاشة نفسها (مثل ألوان القسم أو الدرس) — يُمزج أول لونين منها مع خلفية المستخدم المختارة.
+    var colors: [Color] = []
 
+    @Environment(AppSettings.self) private var settings: AppSettings?
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var settled = false
@@ -44,7 +46,8 @@ struct LiquidBackground: View {
     }
 
     private var palette: [Color] {
-        let base = colors.isEmpty ? Color.liquidPalette : colors
+        let theme = settings?.theme.colors ?? Color.liquidPalette
+        let base = Array(colors.prefix(2)) + theme
         return (0..<4).map { base[$0 % base.count] }
     }
 

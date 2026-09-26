@@ -13,6 +13,7 @@ struct HomeView: View {
     @Environment(ProgressStore.self) private var progress
     @Environment(AppRouter.self) private var router
     @Environment(AppSettings.self) private var settings
+    @Environment(QuestionBankViewModel.self) private var bank
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var appeared = false
@@ -36,7 +37,13 @@ struct HomeView: View {
                         searchResults
                     } else {
                         lessonsSection
+                        if let daily = bank.dailyQuestion {
+                            DailyQuestionCard(question: daily) {
+                                router.present(QuizSessionConfig(questions: [daily], mode: .daily))
+                            }
+                        }
                         chaptersSection
+                        DeveloperFooter()
                     }
                 }
                 .padding(.horizontal, isWide ? 40 : 18)
@@ -77,7 +84,7 @@ struct HomeView: View {
                 .buttonStyle(PressableCardStyle())
                 .accessibilityLabel(L10n.t("home.progressA11y"))
 
-                Button { router.showsSettings = true } label: {
+                Button { router.tab = .settings } label: {
                     Label(settings.language.nativeName, systemImage: "globe")
                         .font(.caption.weight(.bold))
                         .padding(.horizontal, 12)
@@ -254,8 +261,6 @@ struct SectionHeader: View {
 }
 
 #Preview {
-    let settings = AppSettings()
-    return NavigationStack { HomeView() }
-        .withAppEnvironment(settings: settings, library: LibraryViewModel(language: settings.language),
-                            progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer())
+    NavigationStack { HomeView() }
+        .withAppEnvironment(.preview())
 }

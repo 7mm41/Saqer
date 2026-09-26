@@ -23,7 +23,7 @@ struct QuizView: View {
 
     var body: some View {
         ZStack {
-            LiquidBackground(colors: colors + [.indigo, .mint])
+            LiquidBackground(colors: colors)
 
             VStack(spacing: 20) {
                 GlassProgressBar(progress: model.progress, colors: colors)
@@ -46,7 +46,7 @@ struct QuizView: View {
         .navigationTitle(L10n.t("quiz.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .sensoryFeedback(trigger: model.selectedOption) { _, newValue in
+        .appHaptic(trigger: model.selectedOption) { _, newValue in
             guard newValue != nil else { return nil }
             return model.isCorrect ? .success : .error
         }

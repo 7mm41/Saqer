@@ -52,7 +52,7 @@ DUAS = {
 
 def clean(text: str, lang: str) -> str:
     """Make text friendlier to the phonemizer (symbols, brackets, page refs)."""
-    t = text.replace("ﷺ", " صلى الله عليه وسلم ")
+    t = text.replace("ﷺ", " صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ ")
     t = t.replace("«", "").replace("»", "").replace("“", "").replace("”", "").replace('"', "")
     t = re.sub(r"[()\[\]{}]", ", ", t)
     t = t.replace("…", ", ").replace("—", ", ").replace("–", ", ")

@@ -32,7 +32,7 @@ struct InteractiveLessonView: View {
 
     var body: some View {
         ZStack {
-            LiquidBackground(colors: model.tint + [.pink, .mint])
+            LiquidBackground(colors: model.tint)
 
             VStack(spacing: 18) {
                 topBar
@@ -62,8 +62,8 @@ struct InteractiveLessonView: View {
                 .zIndex(10)
             }
         }
-        .sensoryFeedback(.selection, trigger: model.currentIndex)
-        .sensoryFeedback(.success, trigger: model.isFinished) { _, finished in finished }
+        .appHaptic(.selection, trigger: model.currentIndex)
+        .appHaptic(.success, trigger: model.isFinished) { _, finished in finished }
         .onChange(of: model.isFinished) { _, finished in
             if finished {
                 voice.stop()
@@ -301,12 +301,11 @@ struct StepsTimeline: View {
 }
 
 #Preview("الوضوء") {
-    let settings = AppSettings()
-    let library = LibraryViewModel(language: settings.language)
+    let env = AppEnvironment.preview()
     return Group {
-        if let lesson = library.lesson(id: "wudu") {
+        if let lesson = env.library.lesson(id: "wudu") {
             InteractiveLessonView(lesson: lesson)
         }
     }
-    .withAppEnvironment(settings: settings, library: library, progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer())
+    .withAppEnvironment(env)
 }

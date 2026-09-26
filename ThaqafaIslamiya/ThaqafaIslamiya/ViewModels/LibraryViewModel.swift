@@ -33,13 +33,14 @@ final class LibraryViewModel {
     /// نص كل مسألة مطبَّعًا للبحث (العنوان + الملخّص + النقاط).
     @ObservationIgnored private var searchHaystack: [(result: SearchResult, text: String)] = []
 
-    init(language: AppLanguage = L10n.language, bundle: Bundle = .main) {
-        load(language: language, bundle: bundle)
+    init(fileName: String? = nil, language: AppLanguage = L10n.language, bundle: Bundle = .main) {
+        load(fileName: fileName ?? language.dataFileName, language: language, bundle: bundle)
     }
 
-    func load(language: AppLanguage, bundle: Bundle = .main) {
+    /// يحمّل ملف المحتوى (مثل `TalqeenData.en` أو `TalqeenData.tashkeel` للعربية المشكولة).
+    func load(fileName: String, language: AppLanguage, bundle: Bundle = .main) {
         do {
-            let library = try bundle.decode(TalqeenLibrary.self, from: language.dataFileName)
+            let library = try bundle.decode(TalqeenLibrary.self, from: fileName)
             self.language = language
             book = library.book
             chapters = library.chapters
