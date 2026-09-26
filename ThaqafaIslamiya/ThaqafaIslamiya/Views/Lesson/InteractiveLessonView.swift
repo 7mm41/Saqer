@@ -3,7 +3,8 @@
 //  ثقافة إسلامية
 //
 //  الشاشة التفاعلية القابلة لإعادة الاستخدام لأي درس (الوضوء، الاغتسال، الصلاة، التيمم…):
-//  - مجموعة بطاقات مكدّسة قابلة للسحب (Swipeable Cards).
+//  - مجموعة بطاقات مكدّسة قابلة للسحب (Swipeable Cards)؛ اتجاه السحب يتبع اتجاه اللغة.
+//  - قراءة كل خطوة تلقائيًا بصوت طبيعي (قابلة للإيقاف من الإعدادات).
 //  - أزرار «التالي / السابق» مع حركات نابضة ناعمة.
 //  - شريط تقدّم، وخط زمني جانبي للخطوات على الآيباد.
 //  - شاشة احتفال عند الإتمام، وحفظ الإنجاز محليًا.
@@ -20,7 +21,8 @@ struct InteractiveLessonView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(ProgressStore.self) private var progressStore
-    @Environment(SpeechReader.self) private var speech
+    @Environment(VoicePlayer.self) private var voice
+    @Environment(AppSettings.self) private var settings
 
     init(lesson: InteractiveLesson) {
         _model = State(initialValue: LessonViewModel(lesson: lesson))
@@ -63,12 +65,29 @@ struct InteractiveLessonView: View {
         .sensoryFeedback(.selection, trigger: model.currentIndex)
         .sensoryFeedback(.success, trigger: model.isFinished) { _, finished in finished }
         .onChange(of: model.isFinished) { _, finished in
-            if finished { progressStore.markCompleted(model.lesson) }
+            if finished {
+                voice.stop()
+                progressStore.markCompleted(model.lesson)
+            } else {
+                narrateCurrentStep()
+            }
         }
         .onChange(of: model.currentIndex) {
-            speech.stop()
+            narrateCurrentStep()
         }
-        .onDisappear { speech.stop() }
+        .task {
+            // ننتظر انتهاء حركة فتح الدرس ثم نقرأ الخطوة الأولى
+            try? await Task.sleep(for: .milliseconds(600))
+            narrateCurrentStep()
+        }
+        .onDisappear { voice.stop() }
+    }
+
+    private func narrateCurrentStep() {
+        voice.stop()
+        guard settings.autoNarrate, !model.isFinished else { return }
+        let step = model.currentStep
+        voice.play(clip: step.narrationClip(for: settings.language), text: step.narrationText, language: settings.language)
     }
 
     // MARK: - Top bar
@@ -79,17 +98,17 @@ struct InteractiveLessonView: View {
                 Image(systemName: "xmark")
                     .font(.headline.weight(.bold))
                     .frame(width: 44, height: 44)
-                    .glassCapsule()
+                    .glassCircle()
             }
             .buttonStyle(PressableCardStyle())
-            .accessibilityLabel("إغلاق الدرس")
+            .accessibilityLabel(L10n.t("lesson.close"))
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
                     Label(model.lesson.title, systemImage: model.lesson.symbol)
                         .font(.headline)
                     Spacer()
-                    Text("\((model.currentIndex + 1).arabicDigits) / \(model.steps.count.arabicDigits)")
+                    Text("\((model.currentIndex + 1).digits) / \(model.steps.count.digits)")
                         .font(.subheadline.monospacedDigit().weight(.semibold))
                         .foregroundStyle(.secondary)
                         .contentTransition(.numericText())
@@ -98,7 +117,7 @@ struct InteractiveLessonView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .glassCard(cornerRadius: 22)
+            .glassCard(cornerRadius: 22, elevated: false)
         }
     }
 
@@ -108,7 +127,7 @@ struct InteractiveLessonView: View {
         VStack(spacing: 16) {
             StepDeck(model: model)
 
-            Text("اسحب البطاقة إلى اليمين للخطوة التالية 👉")
+            Text(L10n.t(settings.language.isRightToLeft ? "lesson.swipeHintRTL" : "lesson.swipeHintLTR"))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .opacity(model.currentIndex == 0 ? 1 : 0)
@@ -119,26 +138,28 @@ struct InteractiveLessonView: View {
     }
 
     private var controls: some View {
-        HStack(spacing: 14) {
-            Button { model.previous() } label: {
-                Label("السابق", systemImage: "chevron.backward")
-                    .font(.headline)
-            }
-            .buttonStyle(GlassButtonStyle())
-            .disabled(model.isFirst)
-            .opacity(model.isFirst ? 0.4 : 1)
-
-            Spacer()
-
-            Button { model.next() } label: {
-                HStack(spacing: 8) {
-                    Text(model.isLast ? "أتممتُ الدرس" : "التالي")
-                    Image(systemName: model.isLast ? "checkmark.circle.fill" : "chevron.forward")
-                        .contentTransition(.symbolEffect(.replace))
+        GlassGroup(spacing: 20) {
+            HStack(spacing: 14) {
+                Button { model.previous() } label: {
+                    Label(L10n.t("lesson.previous"), systemImage: "chevron.backward")
+                        .font(.headline)
                 }
+                .buttonStyle(GlassButtonStyle())
+                .disabled(model.isFirst)
+                .opacity(model.isFirst ? 0.4 : 1)
+
+                Spacer()
+
+                Button { model.next() } label: {
+                    HStack(spacing: 8) {
+                        Text(model.isLast ? L10n.t("lesson.finish") : L10n.t("lesson.next"))
+                        Image(systemName: model.isLast ? "checkmark.circle.fill" : "chevron.forward")
+                            .contentTransition(.symbolEffect(.replace))
+                    }
+                }
+                .buttonStyle(ProminentGlassButtonStyle(colors: model.tint))
+                .keyboardShortcut(.defaultAction)
             }
-            .buttonStyle(ProminentGlassButtonStyle(colors: model.tint))
-            .keyboardShortcut(.defaultAction)
         }
     }
 }
@@ -146,10 +167,15 @@ struct InteractiveLessonView: View {
 // MARK: - Swipeable card deck
 
 /// مكدّس البطاقات: البطاقة العليا تُسحب، وخلفها بطاقتان تظهران بعمق.
-/// يعمل المكدّس داخل اتجاه LTR لضمان صحة حساب السحب، بينما محتوى البطاقة نفسه RTL.
+/// يعمل المكدّس داخل اتجاه LTR لضمان صحة حساب السحب، بينما محتوى البطاقة بلغة الواجهة واتجاهها.
+/// العربية والفارسية: السحب لليمين = التالي (كتقليب صفحة كتاب عربي)؛ بقية اللغات: السحب لليسار = التالي.
 struct StepDeck: View {
     let model: LessonViewModel
+    @Environment(AppSettings.self) private var settings
     @State private var dragX: CGFloat = 0
+
+    /// +1 إن كان «التالي» سحبًا لليمين، و-1 إن كان لليسار.
+    private var forward: CGFloat { settings.language.isRightToLeft ? 1 : -1 }
 
     var body: some View {
         GeometryReader { proxy in
@@ -167,20 +193,19 @@ struct StepDeck: View {
                         model: model,
                         isActive: depth == 0
                     )
-                    .environment(\.layoutDirection, .rightToLeft)
+                    .environment(\.layoutDirection, settings.layoutDirection)
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .scaleEffect(1 - CGFloat(depth) * 0.06, anchor: .top)
                     .offset(y: CGFloat(depth) * 20)
                     .offset(x: depth == 0 ? dragX : 0)
                     .rotationEffect(.degrees(depth == 0 ? Double(dragX / 24) : 0), anchor: .bottom)
-                    .opacity(depth == 0 ? 1 : 1 - Double(depth) * 0.25)
-                    .blur(radius: CGFloat(depth) * 1.5)
+                    .opacity(depth == 0 ? 1 : 1 - Double(depth) * 0.3)
                     .zIndex(Double(-index))
                     .allowsHitTesting(depth == 0)
                     .transition(
                         .asymmetric(
                             insertion: .opacity.combined(with: .scale(scale: 0.92)),
-                            removal: .move(edge: .trailing).combined(with: .opacity)
+                            removal: .move(edge: forward > 0 ? .trailing : .leading).combined(with: .opacity)
                         )
                     )
                 }
@@ -189,8 +214,8 @@ struct StepDeck: View {
         }
         .environment(\.layoutDirection, .leftToRight)
         .accessibilityElement(children: .contain)
-        .accessibilityAction(named: "الخطوة التالية") { model.next() }
-        .accessibilityAction(named: "الخطوة السابقة") { model.previous() }
+        .accessibilityAction(named: L10n.t("lesson.nextA11y")) { model.next() }
+        .accessibilityAction(named: L10n.t("lesson.previousA11y")) { model.previous() }
     }
 
     private func dragGesture(width: CGFloat) -> some Gesture {
@@ -201,12 +226,11 @@ struct StepDeck: View {
                 dragX = value.translation.width
             }
             .onEnded { value in
-                let distance = value.translation.width
-                let predicted = value.predictedEndTranslation.width
+                let distance = value.translation.width * forward
+                let predicted = value.predictedEndTranslation.width * forward
                 let isHorizontal = abs(value.translation.width) > abs(value.translation.height)
 
                 if isHorizontal && (distance > width * 0.25 || predicted > width * 0.7) {
-                    // سحب إلى اليمين = الخطوة التالية (كتقليب صفحة كتاب عربي)
                     model.next()
                 } else if isHorizontal && (distance < -width * 0.25 || predicted < -width * 0.7) {
                     model.previous()
@@ -226,7 +250,7 @@ struct StepsTimeline: View {
         ScrollViewReader { reader in
             ScrollView {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("خطوات الدرس")
+                    Text(L10n.t("lesson.timeline"))
                         .font(.headline)
                         .padding(.bottom, 6)
 
@@ -242,7 +266,7 @@ struct StepsTimeline: View {
                                     if index < model.currentIndex {
                                         Image(systemName: "checkmark").font(.caption.weight(.heavy)).foregroundStyle(.white)
                                     } else {
-                                        Text((index + 1).arabicDigits)
+                                        Text((index + 1).digits)
                                             .font(.caption.weight(.bold))
                                             .foregroundStyle(index == model.currentIndex ? .white : .primary)
                                     }
@@ -268,7 +292,7 @@ struct StepsTimeline: View {
                 }
                 .padding(18)
             }
-            .glassCard(cornerRadius: 30)
+            .glassCard(cornerRadius: 30, elevated: false)
             .onChange(of: model.currentIndex) { _, newIndex in
                 withAnimation { reader.scrollTo(newIndex, anchor: .center) }
             }
@@ -277,13 +301,12 @@ struct StepsTimeline: View {
 }
 
 #Preview("الوضوء") {
-    let library = LibraryViewModel()
+    let settings = AppSettings()
+    let library = LibraryViewModel(language: settings.language)
     return Group {
         if let lesson = library.lesson(id: "wudu") {
             InteractiveLessonView(lesson: lesson)
         }
     }
-    .environment(ProgressStore())
-    .environment(SpeechReader())
-    .environment(\.layoutDirection, .rightToLeft)
+    .withAppEnvironment(settings: settings, library: library, progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer())
 }

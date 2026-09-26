@@ -2,7 +2,9 @@
 //  LibraryViewModel.swift
 //  ثقافة إسلامية
 //
-//  يحمّل محتوى الكتاب من الملف المحلي `TalqeenData.json` ويوفّر البحث والوصول للأقسام والمسائل والدروس.
+//  يحمّل محتوى الكتاب باللغة المختارة من الملف المحلي (`TalqeenData.json` أو `TalqeenData.<lang>.json`)
+//  ويوفّر البحث والوصول للأقسام والمسائل والدروس.
+//  كل الفهارس ونصوص البحث المطبّعة تُحسب مرة واحدة عند التحميل، فيبقى البحث فوريًا أثناء الكتابة.
 //
 
 import Foundation
@@ -10,30 +12,41 @@ import Observation
 
 @Observable
 final class LibraryViewModel {
+    private(set) var language: AppLanguage = .arabic
     private(set) var book: BookInfo?
     private(set) var chapters: [Chapter] = []
     private(set) var lessons: [InteractiveLesson] = []
+    private(set) var parts: [String] = []
+    private(set) var totalMasailCount = 0
     private(set) var loadError: String?
 
-    var searchText: String = ""
+    var searchText: String = "" {
+        didSet { updateSearch() }
+    }
+    private(set) var searchResults: [SearchResult] = []
 
     // فهارس سريعة للبحث بالمعرّف
-    private var chapterIndex: [String: Chapter] = [:]
-    private var masalaIndex: [String: (masala: Masala, chapterId: String)] = [:]
-    private var lessonIndex: [String: InteractiveLesson] = [:]
+    @ObservationIgnored private var chapterIndex: [String: Chapter] = [:]
+    @ObservationIgnored private var masalaIndex: [String: (masala: Masala, chapterId: String)] = [:]
+    @ObservationIgnored private var lessonIndex: [String: InteractiveLesson] = [:]
+    @ObservationIgnored private var chaptersByPart: [String: [Chapter]] = [:]
+    /// نص كل مسألة مطبَّعًا للبحث (العنوان + الملخّص + النقاط).
+    @ObservationIgnored private var searchHaystack: [(result: SearchResult, text: String)] = []
 
-    init(bundle: Bundle = .main, fileName: String = "TalqeenData") {
-        load(from: bundle, fileName: fileName)
+    init(language: AppLanguage = L10n.language, bundle: Bundle = .main) {
+        load(language: language, bundle: bundle)
     }
 
-    func load(from bundle: Bundle, fileName: String) {
+    func load(language: AppLanguage, bundle: Bundle = .main) {
         do {
-            let library = try bundle.decode(TalqeenLibrary.self, from: fileName)
+            let library = try bundle.decode(TalqeenLibrary.self, from: language.dataFileName)
+            self.language = language
             book = library.book
             chapters = library.chapters
             lessons = library.lessons
             buildIndexes()
             loadError = nil
+            updateSearch()
         } catch {
             loadError = error.localizedDescription
         }
@@ -42,13 +55,25 @@ final class LibraryViewModel {
     private func buildIndexes() {
         chapterIndex = Dictionary(uniqueKeysWithValues: chapters.map { ($0.id, $0) })
         lessonIndex = Dictionary(uniqueKeysWithValues: lessons.map { ($0.id, $0) })
-        var masail: [String: (Masala, String)] = [:]
+
+        var masail: [String: (masala: Masala, chapterId: String)] = [:]
+        var haystack: [(result: SearchResult, text: String)] = []
+        var byPart: [String: [Chapter]] = [:]
+        var orderedParts: [String] = []
         for chapter in chapters {
+            if byPart[chapter.part] == nil { orderedParts.append(chapter.part) }
+            byPart[chapter.part, default: []].append(chapter)
             for masala in chapter.masail {
                 masail[masala.id] = (masala, chapter.id)
+                let text = ([masala.title, masala.summary] + masala.points).joined(separator: "\n").searchNormalized
+                haystack.append((result: SearchResult(masala: masala, chapter: chapter), text: text))
             }
         }
-        masalaIndex = masail.mapValues { (masala: $0.0, chapterId: $0.1) }
+        masalaIndex = masail
+        searchHaystack = haystack
+        chaptersByPart = byPart
+        parts = orderedParts
+        totalMasailCount = masail.count
     }
 
     // MARK: - Lookup
@@ -65,17 +90,7 @@ final class LibraryViewModel {
         (chapter.lessonIds ?? []).compactMap { lessonIndex[$0] }
     }
 
-    var totalMasailCount: Int { chapters.reduce(0) { $0 + $1.masail.count } }
-
-    /// الأجزاء الأربعة للكتاب بترتيبها (المقدمة، المقصد الأول، المقصد الثاني، الخاتمة).
-    var parts: [String] {
-        var seen = Set<String>()
-        return chapters.map(\.part).filter { seen.insert($0).inserted }
-    }
-
-    func chapters(inPart part: String) -> [Chapter] {
-        chapters.filter { $0.part == part }
-    }
+    func chapters(inPart part: String) -> [Chapter] { chaptersByPart[part] ?? [] }
 
     // MARK: - Search
 
@@ -89,16 +104,12 @@ final class LibraryViewModel {
         !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    var searchResults: [SearchResult] {
-        guard isSearching else { return [] }
-        return chapters.flatMap { chapter in
-            chapter.masail
-                .filter { masala in
-                    masala.title.arabicContains(searchText)
-                        || masala.summary.arabicContains(searchText)
-                        || masala.points.contains { $0.arabicContains(searchText) }
-                }
-                .map { SearchResult(masala: $0, chapter: chapter) }
+    private func updateSearch() {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines).searchNormalized
+        guard !query.isEmpty else {
+            if !searchResults.isEmpty { searchResults = [] }
+            return
         }
+        searchResults = searchHaystack.filter { $0.text.contains(query) }.map { $0.result }
     }
 }

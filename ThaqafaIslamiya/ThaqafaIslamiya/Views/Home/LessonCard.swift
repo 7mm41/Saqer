@@ -17,8 +17,9 @@ struct LessonCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             ZStack(alignment: .topLeading) {
+                // صورة ملصق ثابتة بدل مشغّل فيديو لكل بطاقة: أسرع بكثير في الشاشة الرئيسية
                 IllustrationView(imageName: lesson.imageName, symbol: lesson.symbol, colors: [.white, .white.opacity(0.8)],
-                                 symbolSize: 44, cornerRadius: 20)
+                                 symbolSize: 44, playsVideo: false, cornerRadius: 20)
                     .frame(maxWidth: .infinity)
                     .frame(height: isWide ? 150 : 120)
 
@@ -42,7 +43,7 @@ struct LessonCard: View {
 
             HStack(spacing: 6) {
                 Image(systemName: "rectangle.stack.fill")
-                Text("\(lesson.steps.count.arabicDigits) خطوة")
+                Text(L10n.t("lesson.stepsCount", lesson.steps.count.digits))
                 Spacer()
                 Image(systemName: "play.circle.fill").font(.title2)
             }
@@ -55,9 +56,15 @@ struct LessonCard: View {
             LinearGradient.diagonal(colors.map { $0.opacity(0.85) }),
             in: RoundedRectangle(cornerRadius: 30, style: .continuous)
         )
-        .glassCard(cornerRadius: 30, tint: colors.first ?? .teal, interactive: true)
-        .shadow(color: (colors.first ?? .teal).opacity(0.35), radius: 18, y: 10)
+        .glassCard(cornerRadius: 30, tint: colors.first ?? .teal, interactive: true, elevated: false)
+        .background(
+            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                .fill(colors.first ?? .teal)
+                .opacity(0.35)
+                .blur(radius: 14)
+                .offset(y: 10)
+        )
         .accessibilityElement(children: .combine)
-        .accessibilityHint("ابدأ الدرس التفاعلي")
+        .accessibilityHint(L10n.t("lesson.startHint"))
     }
 }

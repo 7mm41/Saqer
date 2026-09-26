@@ -30,7 +30,7 @@ struct ChapterView: View {
 
                     let lessons = library.lessons(for: chapter)
                     if !lessons.isEmpty {
-                        SectionHeader(title: "تعلّم بالتفاعل", symbol: "hand.tap.fill")
+                        SectionHeader(title: L10n.t("chapter.learnInteractive"), symbol: "hand.tap.fill")
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: isWide ? 260 : 150), spacing: 14)], spacing: 14) {
                             ForEach(lessons) { lesson in
                                 Button { router.present(lesson) } label: {
@@ -41,7 +41,7 @@ struct ChapterView: View {
                         }
                     }
 
-                    SectionHeader(title: "المسائل", subtitle: "اختر مسألة لتتعلّمها", symbol: "list.bullet.rectangle.fill")
+                    SectionHeader(title: L10n.t("chapter.masail"), subtitle: L10n.t("chapter.masailSubtitle"), symbol: "list.bullet.rectangle.fill")
 
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: isWide ? 420 : 300), spacing: 14)], spacing: 12) {
                         ForEach(Array(chapter.masail.enumerated()), id: \.element.id) { index, masala in
@@ -76,7 +76,7 @@ struct ChapterView: View {
 
     private var header: some View {
         HStack(spacing: 18) {
-            IllustrationView(imageName: chapter.imageName, symbol: chapter.symbol, colors: colors, symbolSize: 40)
+            IllustrationView(imageName: chapter.imageName, symbol: chapter.symbol, colors: colors, symbolSize: 40, playsVideo: false)
                 .frame(width: 96, height: 96)
 
             VStack(alignment: .leading, spacing: 8) {
@@ -91,7 +91,7 @@ struct ChapterView: View {
 
                 HStack(spacing: 10) {
                     GlassProgressBar(progress: progress.progress(for: chapter), colors: colors, height: 8)
-                    Text("\(progress.learnedCount(in: chapter).arabicDigits)/\(chapter.masail.count.arabicDigits)")
+                    Text("\(progress.learnedCount(in: chapter).digits)/\(chapter.masail.count.digits)")
                         .font(.caption.weight(.bold))
                         .foregroundStyle(.secondary)
                 }
@@ -112,7 +112,7 @@ struct ChapterView: View {
                 .background(LinearGradient.diagonal(lessonColors), in: Circle())
             VStack(alignment: .leading, spacing: 2) {
                 Text(lesson.title).font(.headline).foregroundStyle(.primary)
-                Text("\(lesson.steps.count.arabicDigits) خطوة").font(.caption).foregroundStyle(.secondary)
+                Text(L10n.t("lesson.stepsCount", lesson.steps.count.digits)).font(.caption).foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
             Image(systemName: progress.isCompleted(lesson) ? "checkmark.seal.fill" : "play.fill")
@@ -129,14 +129,14 @@ struct ChapterView: View {
                     .font(.title)
                     .foregroundStyle(LinearGradient.diagonal(colors))
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("اختبر نفسك")
+                    Text(L10n.t("quiz.title"))
                         .font(.title3.weight(.bold))
                         .foregroundStyle(.primary)
                     if let best = progress.bestScore(for: chapter) {
-                        Text("أفضل نتيجة: \(best.arabicDigits) من \(chapter.quiz.count.arabicDigits)")
+                        Text(L10n.t("quiz.best", best.digits, chapter.quiz.count.digits))
                             .font(.caption).foregroundStyle(.secondary)
                     } else {
-                        Text("\(chapter.quiz.count.arabicDigits) أسئلة من القسم")
+                        Text(L10n.t("quiz.count", chapter.quiz.count.digits))
                             .font(.caption).foregroundStyle(.secondary)
                     }
                 }

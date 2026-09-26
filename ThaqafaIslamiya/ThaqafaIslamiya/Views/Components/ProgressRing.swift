@@ -39,7 +39,6 @@ struct GlassProgressBar: View {
                 Capsule()
                     .fill(LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing))
                     .frame(width: max(height, proxy.size.width * progress))
-                    .shadow(color: (colors.first ?? .teal).opacity(0.5), radius: 6)
             }
         }
         .frame(height: height)

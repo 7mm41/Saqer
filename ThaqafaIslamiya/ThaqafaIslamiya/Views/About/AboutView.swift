@@ -10,6 +10,7 @@ import SwiftUI
 struct AboutView: View {
     @Environment(LibraryViewModel.self) private var library
     @Environment(ProgressStore.self) private var progress
+    @Environment(AppSettings.self) private var settings
     @State private var confirmReset = false
 
     var body: some View {
@@ -20,10 +21,10 @@ struct AboutView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     if let book = library.book {
                         VStack(alignment: .leading, spacing: 10) {
-                            Label("عن الكتاب", systemImage: "book.closed.fill")
+                            Label(L10n.t("about.book"), systemImage: "book.closed.fill")
                                 .font(.title2.weight(.bold))
                             Text(book.title).font(.title3.weight(.heavy))
-                            Text("تأليف: \(book.author)").foregroundStyle(.secondary)
+                            Text(L10n.t("about.author", book.author)).foregroundStyle(.secondary)
                             Text(book.about).lineSpacing(5)
                             Divider()
                             ForEach(book.structure, id: \.self) { item in
@@ -36,26 +37,26 @@ struct AboutView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Label("تقدّمي", systemImage: "chart.bar.fill")
+                        Label(L10n.t("home.myProgress"), systemImage: "chart.bar.fill")
                             .font(.title2.weight(.bold))
                         ForEach(library.chapters) { chapter in
                             HStack {
                                 Text(chapter.title).font(.subheadline.weight(.semibold))
                                 Spacer()
-                                Text("\(progress.learnedCount(in: chapter).arabicDigits)/\(chapter.masail.count.arabicDigits)")
+                                Text("\(progress.learnedCount(in: chapter).digits)/\(chapter.masail.count.digits)")
                                     .font(.caption.weight(.bold))
                                     .foregroundStyle(.secondary)
                             }
                             GlassProgressBar(progress: progress.progress(for: chapter),
                                              colors: chapter.colors.themeColors, height: 8)
                         }
-                        Text("الدروس المكتملة: \(progress.completedLessons.count.arabicDigits) من \(library.lessons.count.arabicDigits)")
+                        Text(L10n.t("about.lessonsDone", progress.completedLessons.count.digits, library.lessons.count.digits))
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                             .padding(.top, 4)
 
                         Button(role: .destructive) { confirmReset = true } label: {
-                            Label("البدء من جديد", systemImage: "arrow.counterclockwise")
+                            Label(L10n.t("about.reset"), systemImage: "arrow.counterclockwise")
                         }
                         .buttonStyle(GlassButtonStyle(tint: .red))
                         .padding(.top, 6)
@@ -63,7 +64,7 @@ struct AboutView: View {
                     .padding(22)
                     .glassCard(cornerRadius: 30, tint: .indigo)
 
-                    Text("يعمل التطبيق دون إنترنت بالكامل، وكل المحتوى مأخوذ من الكتاب مع تبسيط يسير للأطفال.")
+                    Text(settings.language == .arabic ? L10n.t("about.offline") : L10n.t("about.offline") + "\n" + L10n.t("about.translationNote"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity)
@@ -74,12 +75,12 @@ struct AboutView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .navigationTitle("عن التطبيق")
+        .navigationTitle(L10n.t("about.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .confirmationDialog("هل تريد مسح كل التقدّم؟", isPresented: $confirmReset, titleVisibility: .visible) {
-            Button("مسح التقدّم", role: .destructive) { progress.resetAll() }
-            Button("إلغاء", role: .cancel) {}
+        .confirmationDialog(L10n.t("about.resetConfirm"), isPresented: $confirmReset, titleVisibility: .visible) {
+            Button(L10n.t("about.resetAction"), role: .destructive) { progress.resetAll() }
+            Button(L10n.t("common.cancel"), role: .cancel) {}
         }
     }
 }

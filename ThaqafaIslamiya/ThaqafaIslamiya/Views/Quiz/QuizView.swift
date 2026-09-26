@@ -43,7 +43,7 @@ struct QuizView: View {
             .padding(.horizontal, 20)
             .frame(maxWidth: 700)
         }
-        .navigationTitle("اختبر نفسك")
+        .navigationTitle(L10n.t("quiz.title"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
         .sensoryFeedback(trigger: model.selectedOption) { _, newValue in
@@ -58,7 +58,7 @@ struct QuizView: View {
     private var questionCard: some View {
         let question = model.current
         return VStack(spacing: 16) {
-            Text("سؤال \((model.index + 1).arabicDigits) من \(model.questions.count.arabicDigits)")
+            Text(L10n.t("quiz.questionOf", (model.index + 1).digits, model.questions.count.digits))
                 .font(.caption.weight(.bold))
                 .padding(.horizontal, 12).padding(.vertical, 6)
                 .glassCapsule(tint: colors.first ?? .teal, interactive: false)
@@ -84,7 +84,7 @@ struct QuizView: View {
                             }
                         }
                         .padding(16)
-                        .glassCard(cornerRadius: 20, tint: optionTint(index, question), interactive: !model.hasAnswered)
+                        .glassCard(cornerRadius: 20, tint: optionTint(index, question), interactive: !model.hasAnswered, elevated: false)
                     }
                     .buttonStyle(PressableCardStyle())
                     .disabled(model.hasAnswered)
@@ -93,7 +93,7 @@ struct QuizView: View {
 
             if model.hasAnswered {
                 VStack(spacing: 12) {
-                    Label(model.isCorrect ? "إجابة صحيحة! أحسنت 🌟" : "لا بأس، تعلّمنا شيئًا جديدًا",
+                    Label(model.isCorrect ? L10n.t("quiz.correct") : L10n.t("quiz.wrong"),
                           systemImage: model.isCorrect ? "hands.clap.fill" : "lightbulb.fill")
                         .font(.headline)
                         .foregroundStyle(model.isCorrect ? .green : .orange)
@@ -102,7 +102,7 @@ struct QuizView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                     Button { model.next() } label: {
-                        Text(model.index + 1 < model.questions.count ? "السؤال التالي" : "النتيجة")
+                        Text(model.index + 1 < model.questions.count ? L10n.t("quiz.next") : L10n.t("quiz.result"))
                     }
                     .buttonStyle(ProminentGlassButtonStyle(colors: colors))
                 }
@@ -128,16 +128,16 @@ struct QuizView: View {
                 .font(.system(size: 90))
                 .foregroundStyle(LinearGradient.diagonal([.yellow, .orange]))
                 .symbolEffect(.bounce, value: model.isFinished)
-            Text(perfect ? "ممتاز! علامة كاملة" : "أحسنت المحاولة!")
+            Text(perfect ? L10n.t("quiz.perfect") : L10n.t("quiz.goodTry"))
                 .font(.largeTitle.weight(.heavy))
-            Text("نتيجتك: \(model.score.arabicDigits) من \(total.arabicDigits)")
+            Text(L10n.t("quiz.score", model.score.digits, total.digits))
                 .font(.title2.weight(.semibold))
             HStack(spacing: 14) {
                 Button { model.restart() } label: {
-                    Label("أعد الاختبار", systemImage: "arrow.counterclockwise").font(.headline)
+                    Label(L10n.t("quiz.retry"), systemImage: "arrow.counterclockwise").font(.headline)
                 }
                 .buttonStyle(GlassButtonStyle())
-                Button { dismiss() } label: { Text("العودة للقسم") }
+                Button { dismiss() } label: { Text(L10n.t("quiz.back")) }
                     .buttonStyle(ProminentGlassButtonStyle(colors: colors))
             }
         }

@@ -21,7 +21,7 @@ struct MasalaRow: View {
                     .fill(LinearGradient.diagonal(colors))
                     .frame(width: 46, height: 46)
                 if let number {
-                    Text(number.arabicDigits)
+                    Text(number.digits)
                         .font(.headline.weight(.heavy))
                         .foregroundStyle(.white)
                 } else {
@@ -29,7 +29,6 @@ struct MasalaRow: View {
                         .foregroundStyle(.white)
                 }
             }
-            .shadow(color: (colors.first ?? .teal).opacity(0.4), radius: 8, y: 4)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(masala.title)
@@ -48,7 +47,7 @@ struct MasalaRow: View {
             if masala.lessonId != nil {
                 Image(systemName: "play.rectangle.fill")
                     .foregroundStyle(colors.first ?? .teal)
-                    .accessibilityLabel("فيها درس تفاعلي")
+                    .accessibilityLabel(L10n.t("masala.hasLesson"))
             }
 
             Image(systemName: isLearned ? "checkmark.circle.fill" : "chevron.forward")
@@ -57,8 +56,8 @@ struct MasalaRow: View {
                 .contentTransition(.symbolEffect(.replace))
         }
         .padding(14)
-        .glassCard(cornerRadius: 22, tint: colors.first ?? .teal)
+        .glassCard(cornerRadius: 22, tint: colors.first ?? .teal, elevated: false)
         .accessibilityElement(children: .combine)
-        .accessibilityValue(isLearned ? "تم تعلّمها" : "")
+        .accessibilityValue(isLearned ? L10n.t("masala.learnedA11y") : "")
     }
 }

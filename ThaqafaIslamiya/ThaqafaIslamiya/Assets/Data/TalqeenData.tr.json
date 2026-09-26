@@ -1,0 +1,2606 @@
+{
+ "book": {
+  "title": "Telkînü’s-Sıbyân — Her İnsanın Bilmesi Gerekenler",
+  "author": "Nûreddin Abdullah b. Humeyd es-Sâlimî",
+  "about": "İnsanın mükellef olduğu ilk anda üzerine düşen ilk görevler ve kendisine emredilen bazı şeyler hakkında kısa ve kolay bir risale. Yazar onu bir giriş, iki bölüm ve bir sonuç olarak düzenlemiştir; “zeki olanın da zayıf olanın da anlayabileceği açık bir ifadeyle.”",
+  "source": "https://alsaidia.com/sites/default/files/تلقين الصبيان ما يلزم الإنسان.pdf",
+  "structure": [
+   "Giriş: Çocuğun velisinin, çocuğu ergenliğe kadar gözetip yetiştirmesi hakkında emrolunduğu şeyler.",
+   "Birinci bölüm: İnsanın kalbiyle inanması gereken ilk şeyler.",
+   "İkinci bölüm: İnsanın organlarıyla yapması gereken ilk ameller.",
+   "Sonuç: İnsanın sakınması gereken bedenî işler ve nefsânî huylar."
+  ]
+ },
+ "chapters": [
+  {
+   "id": "intro",
+   "part": "Giriş",
+   "title": "Çocuğa Özen",
+   "subtitle": "Velinin, çocuk büyüyene kadar yaptıkları",
+   "symbol": "figure.and.child.holdhands",
+   "colors": [
+    "mint",
+    "teal"
+   ],
+   "masail": [
+    {
+     "id": "intro-1",
+     "title": "Çocuğun velisinin görevi",
+     "page": 13,
+     "summary": "Veli çocuğu korur ve onun için en iyisini seçer.",
+     "points": [
+      "Çocuğa bakmak, onu yetiştirmek ve bedenine, ahlakına veya malına zarar verecek şeylerden korumak.",
+      "Her işinde onun için en iyisini gözetmek; onu uygun olmayan şeylerden alıkoymak ve hoş olmayan işlerden men etmek.",
+      "Terbiye, yalnızca çocuğu düzeltecek ölçüdedir; dövülmeden itaat ederse dövülmesi yasaktır.",
+      "Ona, gücü yettiği İslam hasletlerini emretmek: pisliklerden kaçınmak, onlardan temizlenmek ve kirlerden temiz kalmak."
+     ],
+     "symbol": "hand.raised.fill"
+    },
+    {
+     "id": "intro-2",
+     "title": "Çocuğa ergenlikten önce İslam’ı öğretmek",
+     "page": 15,
+     "summary": "Yedi yaşında namazı öğrenir, gücümüz yetince oruç tutarız.",
+     "points": [
+      "Veli, çocuğa yedi yaşında namazı ve onun şartlarını, görevlerini öğretir.",
+      "On yaşına kadar namazı bırakması sebebiyle onu dövmez; rivayet edildiğine göre: “Onlara yedi yaşında namazı emredin, on yaşında onun için terbiye edin.”",
+      "Gücü yetiyorsa Ramazan orucunu emreder ki İslam’ın şiarlarını terk etmeye alışmasın.",
+      "Ona Kur’an-ı Kerim’i, Arap şiiri ve siyerinden edebi ve aklının alacağı hikmetleri öğretir.",
+      "Çocuğun malını korur ve olgunluğa erişene kadar onun için en iyisini yapar."
+     ],
+     "symbol": "graduationcap.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Veli çocuğa namazı ne zaman öğretir?",
+     "options": [
+      "Üç yaşında",
+      "Yedi yaşında",
+      "On beş yaşında"
+     ],
+     "answerIndex": 1,
+     "explanation": "Veli, çocuğa yedi yaşında namazı öğretmekle emrolunmuştur."
+    },
+    {
+     "question": "Veli çocuğa başka ne öğretir?",
+     "options": [
+      "Kur’an-ı Kerim ve edep",
+      "Ergenlikten önce hiçbir şey",
+      "Yalnızca oruç"
+     ],
+     "answerIndex": 0,
+     "explanation": "Kur’an’ı, edebi ve çocuğun anlayacağı hikmetleri öğretir."
+    }
+   ]
+  },
+  {
+   "id": "aqeedah",
+   "part": "Birinci Bölüm",
+   "title": "İnanç (Akîde)",
+   "subtitle": "İnsanın kalbiyle inanması gerekenler",
+   "symbol": "heart.fill",
+   "colors": [
+    "indigo",
+    "purple"
+   ],
+   "masail": [
+    {
+     "id": "aq-1",
+     "title": "Çocuğun mükellef olmaması",
+     "page": 17,
+     "summary": "Ergenliğe kadar çocuğa hiçbir şey farz değildir.",
+     "points": [
+      "Çocuk olduğu sürece ona ne bir inanç ne de bir amel farzdır.",
+      "Bazı şeyler ona farz olduğu için değil, terbiye amacıyla emredilir."
+     ],
+     "symbol": "figure.child"
+    },
+    {
+     "id": "aq-2",
+     "title": "Ergenlik belirtileri",
+     "page": 17,
+     "summary": "Ergenlik belirtilerinden biri görülünce insan mükellef olur.",
+     "points": [
+      "Ergenlik belirtilerinden: ihtilam olmak veya alışılmış yerlerde kıl bitmesi.",
+      "Ya da en doğru görüşe göre on beş yaşına ulaşmak; on yedi yaş da denmiştir.",
+      "Kız için ayrıca: hayız, gebelik veya göğüslerin belirginleşmesi.",
+      "Bu belirtilerden biri görülünce ona ergenin hükümleri uygulanır; ibadetlerle ve haramları terk etmekle yükümlü olur."
+     ],
+     "symbol": "person.fill.checkmark"
+    },
+    {
+     "id": "aq-3",
+     "title": "Ergenlikten sonraki ilk görev",
+     "page": 18,
+     "summary": "İlk görev: Allah’ın seni ve her şeyi yaratan olduğunu bilmek.",
+     "points": [
+      "Onu yapan bir yapıcının ve yaratan bir yaratıcının olduğunu, onu yokluktan varlığa çıkardığını bilmek.",
+      "Bu yaratıcının her şeyi var eden ve her varlığı yaratan olduğunu bilmek.",
+      "Bütün yaratılmışların O’na muhtaç olduğunu, O’nun ise onlardan müstağni olduğunu bilmek.",
+      "O’nun kemal sıfatlarıyla nitelendiğini; özünde, hallerinde ve fiillerinde her şeyden farklı olduğunu bilmek.",
+      "Onu ve her şeyi yaratanın adının “Allah” olduğunu bilmek."
+     ],
+     "symbol": "sparkles"
+    },
+    {
+     "id": "aq-4",
+     "title": "Allah hakkında imkânsız olanlar",
+     "page": 18,
+     "summary": "Allah her türlü eksiklikten münezzehtir.",
+     "points": [
+      "Allah hiçbir eksiklik sıfatıyla nitelenemez.",
+      "Cehalet, acizlik, körlük, sağırlık, mekânlara yerleşmek ve zaman içinde sonradan olmak O’nun hakkında imkânsızdır.",
+      "Şeylerin O’na yerleşmesi imkânsız olduğu gibi O’nun da onlara yerleşmesi imkânsızdır.",
+      "O’nun gözle görülmesi, zatının göz, kalp veya diğer duyularla kavranması imkânsızdır; bunların hepsi eksikliktir ve Rabbimiz bundan çok yücedir."
+     ],
+     "symbol": "xmark.shield.fill"
+    },
+    {
+     "id": "aq-5",
+     "title": "Allah’ın nitelenmesi gerekenler",
+     "page": 19,
+     "summary": "Allah ezelî, diri, bilen, güçlü, işiten, gören ve bakidir.",
+     "points": [
+      "Kemal ile nitelenmesi gerekir: ezelî, diri, bilen, güç yetiren, dileyen, işiten, gören ve yok olmayan baki.",
+      "O, zatıyla bilen, zatıyla güç yetiren, zatıyla dileyen, zatıyla gören ve zatıyla diridir.",
+      "Yani zatı bu kemal sıfatlarıyla nitelenmiştir; başkasına muhtaç olmaması için ilave sıfatlara ihtiyacı yoktur.",
+      "O münezzehtir: kendi kendine yeterli ve zatında kâmildir."
+     ],
+     "symbol": "star.fill"
+    },
+    {
+     "id": "aq-6",
+     "title": "Allah hakkında caiz olanlar",
+     "page": 20,
+     "summary": "Allah’ın lütfuyla peygamberler gönderildi ve kitaplar indirildi.",
+     "points": [
+      "Peygamber göndermek, kitap indirmek, yaratmak, öldürmek, diriltmek, toplamak, hesaba çekmek, ödüllendirmek ve cezalandırmak O’nun hakkında caizdir.",
+      "Allah peygamberler gönderip kitaplar indirerek bize lütufta bulundu ve hüccet ulaştıktan sonra lütfuyla bizi mükellef kıldı."
+     ],
+     "symbol": "gift.fill"
+    },
+    {
+     "id": "aq-7",
+     "title": "Nebiler, resuller ve kitaplar",
+     "page": 20,
+     "summary": "İlk resul Âdem, son resul Muhammed ﷺ’dir.",
+     "points": [
+      "Resullerin sayısı üç yüz on üçtür.",
+      "İlki Âdem aleyhisselamdır; çocuklarına gönderilmiş bir resuldür.",
+      "Sonuncusu Muhammed ﷺ’dir; Araplara ve Arap olmayanlara, insanlara ve cinlere, herkese gönderilmiştir.",
+      "Nebilerin sayısı yüz yirmi dört bindir; üç yüz on üç resul de onlardandır.",
+      "Kitapların sayısı yüz dörttür: elli Şît’e, otuz İdris’e, on İbrahim’e (sahifeleri) ve on da Tevrat’tan önce Musa’ya.",
+      "Sonra Tevrat Musa’ya, İncil İsa’ya, Zebur Davud’a ve Kur’an Muhammed’e indirilmiştir; Allah’ın salat ve selamı hepsinin üzerine olsun."
+     ],
+     "symbol": "books.vertical.fill"
+    },
+    {
+     "id": "aq-8",
+     "title": "Peygamberlere ve kitaplara iman",
+     "page": 21,
+     "summary": "Bütün resullere ve kitaplara, özellikle de Muhammed ﷺ’e ve Kur’an’a iman ederiz.",
+     "points": [
+      "Bütün resullere ve bütün kitaplara toptan iman etmek farzdır.",
+      "Muhammed ﷺ ve Kur’an-ı Kerim dışında toptan iman yeterlidir.",
+      "Her mükellefin Muhammed ﷺ’e ve ona indirilene özel olarak iman etmesi farzdır.",
+      "Hücceti kendisine ulaşan her resule ve kitaba da özel olarak iman etmesi farzdır."
+     ],
+     "symbol": "checkmark.seal.fill"
+    },
+    {
+     "id": "aq-9",
+     "title": "Resullerin sıfatları",
+     "page": 21,
+     "summary": "Resullerin vacip, imkânsız ve caiz sıfatları vardır.",
+     "points": [
+      "Hüccet ulaştıktan sonra mükellef, resullerin kendileri için vacip olan sıfatları olduğunu bilmelidir.",
+      "Ve kendileri için imkânsız olan sıfatları.",
+      "Ve diğer insanlar gibi kendileri için caiz olan sıfatları."
+     ],
+     "symbol": "person.3.fill"
+    },
+    {
+     "id": "aq-10",
+     "title": "Resuller için vacip sıfatlar",
+     "page": 22,
+     "summary": "Doğruluk, emanet, tebliğ ve zekâ.",
+     "points": [
+      "Haber verdiklerinde doğruluk.",
+      "Emanet (güvenilirlik).",
+      "Rablerinin tebliğ etmelerini emrettiğini tebliğ etmek.",
+      "Korumakla emrolundukları şeyi tam olarak korumak.",
+      "Konuşmalarında ve hallerinde zekâ ve uyanıklık."
+     ],
+     "symbol": "checkmark.circle.fill"
+    },
+    {
+     "id": "aq-11",
+     "title": "Resuller için imkânsız sıfatlar",
+     "page": 22,
+     "summary": "Resuller yalan söylemez ve ihanet etmez.",
+     "points": [
+      "Yalan ve ihanet.",
+      "Rablerinin emirlerini önemsememek.",
+      "Konuşmada acizlik ve anlayış kıtlığı.",
+      "Bunların hiçbiri onlar hakkında caiz değildir."
+     ],
+     "symbol": "xmark.circle.fill"
+    },
+    {
+     "id": "aq-12",
+     "title": "Resuller için caiz sıfatlar",
+     "page": 22,
+     "summary": "Resuller insandır: yer, içer ve çarşılarda yürürler.",
+     "points": [
+      "Yemek ve içmek.",
+      "İnsanlarla kaynaşmak ve çarşılarda yürümek.",
+      "Eş ve arkadaş edinmek, çocuk sahibi olmak ve benzerleri."
+     ],
+     "symbol": "person.2.fill"
+    },
+    {
+     "id": "aq-13",
+     "title": "Melekler",
+     "page": 22,
+     "summary": "Melekler Allah’ın emrine karşı gelmez.",
+     "points": [
+      "Allah’ın melekleri olduğunu ve onların insanlardan ve cinlerden ayrı bir tür olduğunu bilmelidir.",
+      "Allah’ın kendilerine emrettiğine karşı gelmezler ve emrolunduklarını yaparlar.",
+      "Yemez ve içmezler; erkeklik veya dişilikle nitelenmezler.",
+      "Onlar, Allah’ın kendisine ibadet etmeleri ve emirlerini yerine getirmeleri için yarattığı varlıklardır."
+     ],
+     "symbol": "cloud.fill"
+    },
+    {
+     "id": "aq-14",
+     "title": "Ölüm ve sonrası",
+     "page": 23,
+     "summary": "Ölüm haktır ve Allah’tan başka her şey yok olacaktır.",
+     "points": [
+      "Ölümün hak olduğunu ve ruhun bedenden ayrılması olduğunu bilmelidir.",
+      "Ve Allah Teâlâ’dan başka her şeyin yok olacağını bilmelidir."
+     ],
+     "symbol": "hourglass"
+    },
+    {
+     "id": "aq-15",
+     "title": "Diriliş, hesap ve karşılık",
+     "page": 23,
+     "summary": "İnsanlar kıyamet günü diriltilir, sonra cennet ya da cehennem.",
+     "points": [
+      "Her insanın kıyamet günü diriltileceğini ve bunun kıyametin kopması olduğunu bilmelidir.",
+      "Rablerinin huzurunda toplanacaklarını ve Rabbimiz nasıl dilerse öyle hesaba çekileceklerini bilmelidir.",
+      "Allah’ın, kendisine itaat edenler için hazırladığı cennet adında bir ödülü olduğunu; onun benzeri bir ödül olmadığını, oraya girenin çıkmayacağını, ölmeyeceğini ve hastalanmayacağını bilmelidir.",
+      "Allah’ın, büyük günah işleyenler için hazırladığı cehennem adında bir cezası olduğunu bilmelidir; Allah bizi ondan ve ona yaklaştıran şeylerden korusun."
+     ],
+     "symbol": "sunrise.fill"
+    },
+    {
+     "id": "aq-16",
+     "title": "Korku ve ümit",
+     "page": 24,
+     "summary": "Allah’ın mükâfatını umar, azabından korkarız.",
+     "points": [
+      "Mükellef, Allah’ın sevabını ummalı ve azabından korkmalıdır.",
+      "Korku ile ümidin eşit tutulması gerektiği söylenmiştir; korku artarsa ümitsizlikten, ümit artarsa kendini güvende görmekten endişe edilir.",
+      "Açık olan görüş eşitliğin şart olmadığıdır; haram olan ümitsizliğe veya yasak olan emniyete varmadıkça sakıncası yoktur."
+     ],
+     "symbol": "scale.3d"
+    },
+    {
+     "id": "aq-17",
+     "title": "Kaza ve kader",
+     "page": 25,
+     "summary": "Hiçbir şey Allah’ın dilemesi olmadan hareket etmez ve durmaz.",
+     "points": [
+      "Bütün varlıklarda hiçbir hareket edenin hareket etmediğini ve hiçbir durağanın durmadığını, ancak Allah’ın dilemesi ve takdiriyle olduğunu bilmelidir."
+     ],
+     "symbol": "circle.hexagongrid.fill"
+    },
+    {
+     "id": "aq-18",
+     "title": "Nimetler ve “Cümle”",
+     "page": 25,
+     "summary": "Üzerimizdeki en büyük nimet İslam nimetidir.",
+     "points": [
+      "Allah’ın kendisine verdiği nimetleri bilmelidir: yokluktan sonra var olmak, hastalıktan sonra sağlık ve en büyüğü İslam nimeti.",
+      "Bunların hepsi “Cümle”nin altına girer: “Allah’tan başka ilah yoktur, Muhammed Allah’ın Resulüdür ve Muhammed’in Rabbinden getirdiği haktır.”",
+      "Mükellef bu cümleye şahitlik edince, onun bir kısmını inkâr etmek, bilmemek veya ondan şüphe etmekle bozmadıkça Allah katında ve insanlar nezdinde mümin ve Müslüman olur."
+     ],
+     "symbol": "gift.circle.fill"
+    },
+    {
+     "id": "aq-19",
+     "title": "Velayet, beraet ve vakıf",
+     "page": 26,
+     "summary": "Allah’ın dostlarını sever, düşmanlarından uzak dururuz.",
+     "points": [
+      "İlkinden sonuncusuna kadar Allah’ın bütün dostlarını dost edinmeli ve Allah’ın bütün düşmanlarından uzak durmalıdır; bu “genel velayet ve genel beraet”tir.",
+      "Sonra Müslümanların önderlerinden ve seçkinlerinden dostluğunu bildiklerini dost edinir; zalim önderlerden düşmanlığını bildiklerinden uzak durur.",
+      "Durumunu bilmediği kimse hakkında, dostluğu veya uzak durmayı gerektiren bir şey bilinceye kadar hüküm vermez (vakıf)."
+     ],
+     "symbol": "hands.clap.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Kitaba göre resullerin sayısı kaçtır?",
+     "options": [
+      "Yüz dört",
+      "Üç yüz on üç",
+      "Yirmi beş"
+     ],
+     "answerIndex": 1,
+     "explanation": "Allah’ın gönderdiği resullerin sayısı üç yüz on üçtür."
+    },
+    {
+     "question": "İlk resul kimdir?",
+     "options": [
+      "Nuh aleyhisselam",
+      "İbrahim aleyhisselam",
+      "Âdem aleyhisselam"
+     ],
+     "answerIndex": 2,
+     "explanation": "İlki Âdem aleyhisselamdır; çocuklarına gönderilmiştir."
+    },
+    {
+     "question": "Zebur kime indirildi?",
+     "options": [
+      "Davud aleyhisselam",
+      "Musa aleyhisselam",
+      "İsa aleyhisselam"
+     ],
+     "answerIndex": 0,
+     "explanation": "Zebur Davud’a, Tevrat Musa’ya, İncil İsa’ya indirildi."
+    },
+    {
+     "question": "Allah’ın bize verdiği en büyük nimet nedir?",
+     "options": [
+      "Sağlık",
+      "İslam nimeti",
+      "Mal"
+     ],
+     "answerIndex": 1,
+     "explanation": "Allah’ın nimetlerinden: varlık, sağlık ve en büyüğü İslam nimeti."
+    }
+   ]
+  },
+  {
+   "id": "salah",
+   "part": "İkinci Bölüm",
+   "title": "Namaz",
+   "subtitle": "İnancı öğrendikten sonraki ilk görev",
+   "symbol": "moon.stars.fill",
+   "colors": [
+    "blue",
+    "cyan"
+   ],
+   "lessonIds": [
+    "salah"
+   ],
+   "masail": [
+    {
+     "id": "sl-0",
+     "title": "Amelî ibadet çeşitleri",
+     "page": 27,
+     "summary": "İbadet bedenî, malî ya da her ikisidir.",
+     "points": [
+      "Organlarla yapılan amel iki çeşittir: bedenî ibadet ve malî ibadet.",
+      "Malî ibadet: zekât ve hakları sahiplerine vermek; borçlar, misafir hakkı ve komşu hakkı gibi.",
+      "Salt bedenî ibadet: namaz ve görevleri, oruç, akrabayı ziyaret ve komşuyla ilişkiyi sürdürmek.",
+      "Hem bedenî hem malî ibadet: mal harcamayı gerektirenler, hac ve cihad gibi."
+     ],
+     "symbol": "square.grid.2x2.fill"
+    },
+    {
+     "id": "sl-1",
+     "title": "Namaz",
+     "page": 28,
+     "summary": "Bir gün ve gecede beş namaz.",
+     "points": [
+      "Namaz, mükellefe bir gün ve gecede beş kez farz olan salt bedenî bir ibadettir.",
+      "İnancı öğrendikten sonraki farzların ilkidir."
+     ],
+     "symbol": "moon.stars.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-2",
+     "title": "Öğle namazı",
+     "page": 28,
+     "summary": "Gizlice Fâtiha okunan dört rekât.",
+     "points": [
+      "Öğle vaktinde dört rekât farzdır; her rekâtta Fâtiha gizlice okunur ve Kur’an’dan başka bir şey eklenmez.",
+      "Sonra ardından Fâtiha ve bir sure ile iki rekât kılması tavsiye edilir.",
+      "Sonra Fâtiha ve bir sure ile iki rekât nafile kılması müstehaptır.",
+      "Bunların hepsinde okuma gizlidir."
+     ],
+     "symbol": "sun.max.fill"
+    },
+    {
+     "id": "sl-3",
+     "title": "İkindi namazı",
+     "page": 28,
+     "summary": "Yalnızca Fâtiha okunan dört rekât, gizlice.",
+     "points": [
+      "İkindi vaktinde dört rekât farzdır: “ikindinin farzı”.",
+      "Her rekâtta yalnızca Fâtiha okunur ve okuma gizlidir."
+     ],
+     "symbol": "sun.haze.fill"
+    },
+    {
+     "id": "sl-4",
+     "title": "Akşam namazı",
+     "page": 29,
+     "summary": "Üç rekât, sonra iki rekât sünnet.",
+     "points": [
+      "Akşam vaktinde üç rekât farzdır: ilk ikisinde Fâtiha ve bir sure, üçüncüsünde yalnızca Fâtiha.",
+      "İmam ilk ikisinde açıktan, üçüncüde gizli okur; cemaat ve yalnız kılan üçünde de gizli okur.",
+      "İmamın arkasındaki cemaat yalnızca Fâtiha’yı gizlice okur.",
+      "Akşamın farzından sonra iki rekât müekked sünnettir; ardından iki rekât nafile müstehaptır."
+     ],
+     "symbol": "sunset.fill"
+    },
+    {
+     "id": "sl-5",
+     "title": "Yatsı namazı",
+     "page": 29,
+     "summary": "Dört rekât, sonra iki rekât.",
+     "points": [
+      "Yatsı vaktinde dört rekât farzdır.",
+      "İlk ikisinde Fâtiha ve bir sure: imam için açıktan, yalnız kılan için gizli.",
+      "Son ikisinde yalnızca Fâtiha, gizlice.",
+      "Bu farzdan sonra Fâtiha ve bir sure ile iki rekât kılması tavsiye edilir."
+     ],
+     "symbol": "moon.fill"
+    },
+    {
+     "id": "sl-6",
+     "title": "Vitir namazı",
+     "page": 30,
+     "summary": "Yatsı ile sabah arasında üç rekât.",
+     "points": [
+      "Yatsı ile fecir arasında üç rekât vardır, bunlara “vitir” denir; hepsinde Fâtiha ve bir sure okunur.",
+      "Yazar onu vacip saymıştır; Ebû İshak Atfeyyiş ise doğru görüşün, akşam ve sabah sünnetleri gibi müekked sünnet olduğu şeklinde açıklama yapmıştır."
+     ],
+     "symbol": "moon.haze.fill"
+    },
+    {
+     "id": "sl-7",
+     "title": "Sabah namazı",
+     "page": 30,
+     "summary": "İki rekât sünnet, sonra iki rekât farz.",
+     "points": [
+      "Fecir doğunca iki rekât sünnettir: “sabahın sünneti”, Fâtiha ve bir sure ile.",
+      "Sonra iki rekât farzdır: “sabahın farzı”, her rekâtta Fâtiha ve bir sure ile.",
+      "İmam için açıktan, yalnız kılan için gizli; cemaat yalnızca Fâtiha’yı gizlice okur."
+     ],
+     "symbol": "sunrise.fill"
+    },
+    {
+     "id": "sl-8",
+     "title": "Namaz vakitleri",
+     "page": 31,
+     "summary": "Her namazın bir başlangıç ve bir bitiş vakti vardır.",
+     "points": [
+      "Öğle: başlangıcı güneşin zevalidir; sonu, zeval gölgesinden sonra her şeyin gölgesinin kendisi kadar olmasıdır.",
+      "İkindi: başlangıcı gölgenin öğlenin sonundan biraz fazla olması; sonu güneşin bir kısmının batmasıdır; güneşin sararması da denmiştir.",
+      "Akşam: başlangıcı güneşin tamamen batması, sonu kızıl şafağın kaybolmasıdır; beyaz şafak da denmiştir.",
+      "Yatsı: başlangıcı şafağın tamamen kaybolması, sonu gecenin üçte biridir; gecenin yarısı da denmiştir.",
+      "Sabah: başlangıcı ikinci fecrin doğması, sonu güneşin bir kısmının doğmasıdır."
+     ],
+     "symbol": "clock.fill"
+    },
+    {
+     "id": "sl-9",
+     "title": "Namazın caiz olmadığı vakitler",
+     "page": 32,
+     "summary": "Üç vakitte namaz yasaklanmıştır.",
+     "points": [
+      "Güneşin bir kısmı doğduğunda: namaz güneş tamamen doğana kadar ertelenir.",
+      "Güneşin bir kısmı battığında: güneş tamamen batana kadar namaz caiz değildir.",
+      "Şiddetli sıcakta güneş göğün ortasında durduğunda: zeval olana kadar namaz kılınmaz.",
+      "Sabah namazından sonra güneş doğana kadar ve ikindiden sonra güneş batana kadar nafile yasaktır; fecirden sonra sabahın iki rekâtı dışında nafile mekruhtur."
+     ],
+     "symbol": "exclamationmark.triangle.fill"
+    },
+    {
+     "id": "sl-10",
+     "title": "Namazın kılınışı",
+     "page": 33,
+     "summary": "Temizlik, sonra kıble, sonra Allah için halis niyet.",
+     "points": [
+      "Bedeni ve elbisesi temiz, bütün hadeslerden arınmış olarak temiz bir yerde dimdik durur.",
+      "Yüzüyle Kâbe’ye yönelir, kalbiyle o farzın kendisine niyet eder, rekâtlarını gözetir ve Rabbine ihlaslı olur.",
+      "Niyeti dille pekiştirmesi uygundur; örneğin şöyle der: “Tebârek ve Teâlâ olan Allah için, şu yerimde, öğle namazının farzını, dört rekât, Kâbe-i Şerife’ye yönelerek, farzı eda etmek üzere, Allah’a ve Resulü Muhammed ﷺ’e itaat olarak kılıyorum.”"
+     ],
+     "symbol": "figure.stand",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-11",
+     "title": "Ezan ve sonrası",
+     "page": 33,
+     "summary": "Kamet, sonra tevcih, sonra niyeti pekiştirmek.",
+     "points": [
+      "Sonra kadınlar için değil erkekler için kamet; ezan da erkekler içindir.",
+      "Sonra Peygamberimiz ﷺ’in tevcihini okur: “Allah’ım, seni hamdinle tesbih ederim; adın mübarek, şanın yüce, övgün büyüktür ve senden başka ilah yoktur.”",
+      "Sonra atamız İbrahim’in tevcihini ekler: “Ben hanîf olarak yüzümü gökleri ve yeri yaratana çevirdim ve ben müşriklerden değilim.” [En‘âm: 79]",
+      "Sonra niyeti pekiştirir: “Allah Teâlâ için öğle namazının farzını dört rekât kılıyorum ve Kâbe kıblemdir.”"
+     ],
+     "symbol": "speaker.wave.2.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-12",
+     "title": "İftitah tekbiri ve birinci rekât",
+     "page": 34,
+     "summary": "Allahu ekber… sonra Fâtiha, rükû ve secde.",
+     "points": [
+      "İftitah tekbirini alır: “Allahu ekber”, sonra kısa bir süre susar.",
+      "Gizlice istiâze eder: “Kovulmuş şeytandan Allah’a sığınırım”, sonra besmele çekip Fâtiha’yı okur.",
+      "Tekbirle rükûa gider, avuçları dizlerde sırtı düzleşir ve üç kez “Yüce Rabbimi tenzih ederim” der.",
+      "“Allah kendisine hamd edeni işitir” diyerek kalkar; dikilince “Rabbimiz, hamd sanadır” der.",
+      "Tekbirle secdeye gider; önce dizlerini, sonra ellerini, sonra burnunu ve alnını koyar, yedi uzuv üzerine: alın, eller, dizler ve ayaklar; üç kez “En yüce Rabbimi tenzih ederim” der.",
+      "Tekbirle başını kaldırır, her eklem yerine oturana kadar oturur, sonra birincisi gibi bir secde daha yapar."
+     ],
+     "symbol": "figure.mind.and.body",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-13",
+     "title": "İkinci rekât",
+     "page": 36,
+     "summary": "Tekbirle kalkar ve Fâtiha okuruz.",
+     "points": [
+      "Tam doğrulmadan önce bitirdiği bir tekbirle ikinci rekâta kalkar; önce alnını, sonra ellerini, sonra dizlerini kaldırır.",
+      "Besmele çekip Fâtiha’yı okur, sonra kısa bir süre susar.",
+      "Sonra birinci rekâttaki gibi rükû ve secde eder."
+     ],
+     "symbol": "2.circle.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-14",
+     "title": "İlk teşehhüd",
+     "page": 36,
+     "summary": "İkinci rekâttan sonra tahiyyat için otururuz.",
+     "points": [
+      "İkinci secdeden kalkıp tahiyyat, yani “ilk teşehhüd” için oturur ve şöyle der:",
+      "“Mübarek selamlar Allah’a aittir, dualar ve güzel şeyler de; Peygamber’e selam, Allah’ın rahmeti ve bereketleri olsun; bize ve Allah’ın salih kullarına selam olsun. Şahitlik ederim ki Allah’tan başka ilah yoktur, O tektir, ortağı yoktur; ve şahitlik ederim ki Muhammed O’nun kulu ve Resulüdür.”"
+     ],
+     "symbol": "quote.bubble.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-15",
+     "title": "Üçüncü rekât",
+     "page": 36,
+     "summary": "Yalnızca Fâtiha, sonra rükû ve secde.",
+     "points": [
+      "Dimdik durmadan önce bitirdiği bir tekbirle üçüncü rekâta kalkar.",
+      "Ayakta yalnızca “Elhamdü” (Fâtiha) okur.",
+      "Sonra önceki gibi rükû eder, kalkar ve secde eder."
+     ],
+     "symbol": "3.circle.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-16",
+     "title": "Dördüncü rekât",
+     "page": 37,
+     "summary": "Yalnızca Fâtiha, sonra rükû ve secde.",
+     "points": [
+      "Tekbirle dördüncü rekâta kalkar ve yalnızca Fâtiha okur.",
+      "Sonra önceki gibi rükû ve secde eder."
+     ],
+     "symbol": "4.circle.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-17",
+     "title": "Son teşehhüd ve selam",
+     "page": 37,
+     "summary": "Teşehhüd okur, selam veririz ve namaz tamamlanır.",
+     "points": [
+      "Tahiyyat, yani “son teşehhüd” için oturur ve onu önceki gibi okur.",
+      "“Ve şahitlik ederim ki Muhammed O’nun kulu ve Resulüdür”e gelince dilerse selam verir ve namazı tamamlanır.",
+      "Dilerse şunu ekler: “ﷺ, onu hidayetle ve hak dinle, müşrikler hoşlanmasa da onu bütün dinlere üstün kılmak için gönderdi. Rabbimiz, bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru”, sonra selam verir."
+     ],
+     "symbol": "hand.wave.fill",
+     "lessonId": "salah"
+    },
+    {
+     "id": "sl-18",
+     "title": "Akşam namazının kılınışı",
+     "page": 38,
+     "summary": "İki rekât sonra teşehhüd, sonra yalnızca Fâtiha ile üçüncü rekât.",
+     "points": [
+      "İlk iki rekâtı Fâtiha ve bir sure ile kılar, sonra oturup teşehhüdü “kulu ve Resulüdür”e kadar okur.",
+      "Sonra üçüncüye kalkar, yalnızca Fâtiha okur, rükû ve secde eder, son teşehhüdü okur ve selam verir."
+     ],
+     "symbol": "sunset.fill"
+    },
+    {
+     "id": "sl-19",
+     "title": "İmamın arkasında namaz",
+     "page": 38,
+     "summary": "Hiçbir şeyde imamın önüne geçmeyiz.",
+     "points": [
+      "Cemaatin, bütün namazlarda ve bütün rekâtlarda yalnızca Fâtiha okuması gerekir.",
+      "İmamın arkasında “Allah kendisine hamd edeni işitir” demez; imam dedikten sonra “Rabbimiz, hamd sanadır” der.",
+      "Hiçbir şeyde imamın önüne geçmemelidir: ne tekbirde, ne okumada, ne rükûda, ne kalkışta; önüne geçerse namazı bozulur.",
+      "Aynı şekilde imamdan çok geride kalırsa namazı bozulur; ondan biraz sonra hareket etmelidir."
+     ],
+     "symbol": "person.2.wave.2.fill"
+    },
+    {
+     "id": "sl-20",
+     "title": "Namaza geç yetişmek",
+     "page": 39,
+     "summary": "İmamla kaçırdığını, onun selamından sonra kaza edersin.",
+     "points": [
+      "Cemaat, imam namaza başladıktan sonra gelirse ona katılır, yetiştiğini kılar, imamın selamından sonra kalkıp kaçırdığını kaza eder.",
+      "Yalnızca Fâtiha’yı kaçırdıysa kalkar, onu okur, sonra tekbirsiz oturup selam verir.",
+      "Bir rekâtın tamamını kaçırdıysa tekbirsiz kalkar, istiâze edip okur, rükû ve secde eder, tekbirle kalkar, sonra oturup selam verir.",
+      "Kural: kaçırılan, eksiksiz ve fazlasız kaza edilir."
+     ],
+     "symbol": "arrow.uturn.backward.circle.fill"
+    },
+    {
+     "id": "sl-21",
+     "title": "Yolculuk namazı",
+     "page": 40,
+     "summary": "Yolcu dört rekâtlı namazları iki rekât kılar.",
+     "points": [
+      "Yolcu olduğunda öğle, ikindi ve yatsıyı ikişer rekât kısaltarak kılman farzdır.",
+      "Her birini kendi vaktinde kılarsan şöyle dersin: “Allah için öğlenin farzını iki rekât, kasr olarak, yolculuk namazı olarak kılıyorum.”",
+      "Evde kıldığın sünnet ve nafileleri kılman müstehaptır; terk edersen sakıncası yoktur, akşamın sünneti hariç."
+     ],
+     "symbol": "airplane"
+    },
+    {
+     "id": "sl-22",
+     "title": "İki namazı birleştirmek (cem)",
+     "page": 41,
+     "summary": "Yolculukta öğleyi ikindiyle, akşamı yatsıyla birleştiririz.",
+     "points": [
+      "Öğle ile ikindiyi bir vakitte, akşam ile yatsıyı bir vakitte, öne alarak veya erteleyerek birleştirebilirsin.",
+      "Şöyle dersin: “Allah Teâlâ için öğlenin farzını iki rekât ve ikindinin farzını iki rekât, cem ederek, yolculuk namazı olarak kılıyorum.”",
+      "Birincinin selamından sonra kamet, tevcih ve iftitah tekbiriyle ikinciye kalkarsın.",
+      "Vitri iki gece namazıyla birleştirebilirsin; sünnetler ve nafileler kamet gerektirmez."
+     ],
+     "symbol": "arrow.triangle.merge"
+    },
+    {
+     "id": "sl-23",
+     "title": "Kısaltılmayanlar ve korku namazı",
+     "page": 43,
+     "summary": "Akşam ve sabah ancak korku veya hastalık için kısaltılır.",
+     "points": [
+      "Akşam ve sabah namazından hiçbir şey kısaltılmaz; ancak tamamlamaya engel olan korku veya hastalık hali müstesna.",
+      "Düşmanla karşı karşıya kalma namazı: ordu iki gruba ayrılır, her grup imamla bir rekât kılar, sonra hepsi onunla selam verir.",
+      "Göğüs göğse savaş namazı: fiil veya işaretle kılamıyorsa her farz için beş tekbir alır.",
+      "Genel korku namazı: yaya veya binekli, nasıl mümkünse öyle kılarlar."
+     ],
+     "symbol": "shield.lefthalf.filled"
+    },
+    {
+     "id": "sl-24",
+     "title": "Hastanın namazı",
+     "page": 44,
+     "summary": "Hasta gücü yettiği kadar namaz kılar.",
+     "points": [
+      "Hasta, namazdan ve görevlerinden yapamadığını kısaltır.",
+      "Su ile temizlenemiyorsa teyemmüm eder; ayakta duramıyorsa oturarak kılar.",
+      "Oturamıyorsa sağ yanı üzerine kıbleye dönük yatarak kılar; rükû ve secde için başıyla işaret eder.",
+      "Buna da gücü yetmezse farz için beş tekbir alır; onu da yapamazsa mazurdur, çünkü Allah hiç kimseyi gücünün üstünde yükümlü tutmaz."
+     ],
+     "symbol": "cross.case.fill"
+    },
+    {
+     "id": "sl-25",
+     "title": "Cuma namazı ve kılınışı",
+     "page": 45,
+     "summary": "Ezan, hutbe ve kametle cemaatle iki rekât.",
+     "points": [
+      "Cuma günü öğle namazı kısaltılır ve imamla iki rekât kılınır: “Cuma namazı”.",
+      "Ancak cemaatle, ezan, hutbe ve kametle kılınır.",
+      "Müezzin zevalden sonra ezan okur, sonra imam hutbe okur: Allah’a hamd eder, Peygamberine salavat getirir ve uzatmadan insanlara öğüt verir.",
+      "Sonra müezzin kamet getirir ve imam açıktan okuyarak iki rekât kıldırır.",
+      "İmam hutbe okurken kimse konuşmaz; herkes hutbeyi dinler."
+     ],
+     "symbol": "building.columns.fill"
+    },
+    {
+     "id": "sl-26",
+     "title": "Cumanın sünnetleri",
+     "page": 46,
+     "summary": "Gusül, en güzel elbise ve güzel koku.",
+     "points": [
+      "Cumaya katılmak isteyen için cuma günü cünüplükten yıkanır gibi gusletmek sünnettir.",
+      "En güzel elbisesini giymek ve sahip olduğu en güzel kokuyu sürünmek sünnettir.",
+      "İnsanların omuzlarının üzerinden atlamak mekruhtur; yer bulduğu yere oturur."
+     ],
+     "symbol": "sparkles"
+    },
+    {
+     "id": "sl-27",
+     "title": "Bayram namazları",
+     "page": 47,
+     "summary": "On üç tekbirle iki rekât.",
+     "points": [
+      "Ramazan ve Kurban bayramı namazı farz-ı kifayedir: imamın açıktan okuduğu, cemaatle kılınan iki rekât.",
+      "Namaz kılan şöyle der: “Allah Teâlâ için Ramazan (veya Kurban) bayramı sünnetini, on üç tekbirle iki rekât, Kâbe-i Şerife’ye yönelerek kılıyorum.”",
+      "İftitah tekbirinden sonra beş tekbir, sonra kıraat, sonra rükû ve secde.",
+      "İkincide: kıraat, sonra beş tekbir, sonra rükû, sonra rükûdan kalktıktan sonra üç tekbir, sonra secde, teşehhüd ve selam.",
+      "Şehir dışındaki namazgâhta kılınır; cuma ise ulu camide kılınır."
+     ],
+     "symbol": "party.popper.fill"
+    },
+    {
+     "id": "sl-28",
+     "title": "Bayram hutbesi",
+     "page": 48,
+     "summary": "İmam onu tekbirle başlatır.",
+     "points": [
+      "İmam namazdan sonra tekbirle başlayan bir hutbe okur; insanlar dinler.",
+      "Onlara Allah’tan korkmayı tavsiye eder, o gün kendilerine gerekenleri söyler ve güzel öğütlerle nasihat eder."
+     ],
+     "symbol": "megaphone.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Akşam namazının farzı kaç rekâttır?",
+     "options": [
+      "İki",
+      "Üç",
+      "Dört"
+     ],
+     "answerIndex": 1,
+     "explanation": "Akşam namazının farzı üç rekâttır."
+    },
+    {
+     "question": "Rükûda ne deriz?",
+     "options": [
+      "Sübhâne rabbiyel-a‘lâ",
+      "Sübhâne rabbiyel-azîm",
+      "Rabbenâ ve lekel-hamd"
+     ],
+     "answerIndex": 1,
+     "explanation": "Rükûda üç kez “Sübhâne rabbiyel-azîm” denir."
+    },
+    {
+     "question": "Secde kaç uzuv üzerine yapılır?",
+     "options": [
+      "Beş",
+      "Yedi",
+      "Üç"
+     ],
+     "answerIndex": 1,
+     "explanation": "Secde yedi uzuv üzerine yapılır: alın, eller, dizler ve ayaklar."
+    },
+    {
+     "question": "Yolcu öğle namazını nasıl kılar?",
+     "options": [
+      "Dört rekât",
+      "İki rekât kısaltarak",
+      "Kılmaz"
+     ],
+     "answerIndex": 1,
+     "explanation": "Yolcu öğle, ikindi ve yatsıyı ikişer rekât kılar."
+    },
+    {
+     "question": "Bayram namazında namazın kendi tekbirleri dışında kaç tekbir vardır?",
+     "options": [
+      "Yedi",
+      "On üç",
+      "Dört"
+     ],
+     "answerIndex": 1,
+     "explanation": "Namazın tekbirleri dışında on üç tekbir vardır."
+    }
+   ]
+  },
+  {
+   "id": "taharah",
+   "part": "İkinci Bölüm",
+   "title": "Temizlik ve Namazın Şartları",
+   "subtitle": "Abdest, gusül, teyemmüm ve namazın sekiz şartı",
+   "symbol": "drop.fill",
+   "colors": [
+    "cyan",
+    "teal"
+   ],
+   "lessonIds": [
+    "wudu",
+    "ghusl",
+    "tayammum"
+   ],
+   "masail": [
+    {
+     "id": "th-1",
+     "title": "Namazın şartları",
+     "page": 57,
+     "summary": "Namazın, onlarsız tamam olmadığı sekiz şartı vardır.",
+     "points": [
+      "Birinci: tuvalet ihtiyacını tutarak namaz kılmamak.",
+      "İkinci: istincâ ve bedenden pislikleri yıkamak.",
+      "Üçüncü: temiz su ile abdest.",
+      "Dördüncü: cünüplükten gusül.",
+      "Beşinci: atamız İbrahim’e emredilen fıtrat hasletleri.",
+      "Altıncı: temiz yer. Yedinci: temiz ve örten elbise. Sekizinci: kıbleye yönelmek."
+     ],
+     "symbol": "list.number"
+    },
+    {
+     "id": "th-2",
+     "title": "Tuvalet âdabı",
+     "page": 57,
+     "summary": "Örtünür, sol ayakla girer, sağ ayakla çıkarız.",
+     "points": [
+      "Tuvalet ihtiyacı varken namaz kılmaz; önce gidip ihtiyacını giderir.",
+      "Uzaklaşır ve insanlardan gizlenir; bevl ve gaitada kıbleye yönelmez ve arkasını da dönmez.",
+      "İnsanların oturduğu yerlerde, gölgeliklerinde, meyve ağaçlarının altında ve suda ihtiyacını gidermez.",
+      "Girerken sol ayağını öne atar ve der: “Pis, murdar, habis, kovulmuş şeytandan Allah’a sığınırım.”",
+      "Çıkarken sağ ayağını öne atar ve der: “Benden eziyeti gideren Allah’a hamd olsun.”",
+      "Tuvalet camiin tersidir: camiye sağ ayakla girilip sol ayakla çıkılır; eve ise giriş ve çıkış sağ ayakladır."
+     ],
+     "symbol": "door.left.hand.open"
+    },
+    {
+     "id": "th-3",
+     "title": "İstincâ",
+     "page": 60,
+     "summary": "Pislik gidene kadar su ile temizlik.",
+     "points": [
+      "Bedendeki pislikleri nerede olursa olsun yıkamalıdır; buna gücü yetiyorsa su ile istincâ da dahildir.",
+      "Gücü yettiği halde su ile istincâ yapmazsa ne abdesti ne de namazı tamam olur.",
+      "Belirli bir sayı yoktur; amaç temizlik ve pisliği gidermektir, ovuşturma sayısı değil."
+     ],
+     "symbol": "drop.fill"
+    },
+    {
+     "id": "th-4",
+     "title": "Pislik çeşitleri",
+     "page": 60,
+     "summary": "Pislikleri bedenden ve elbiseden yıkarız.",
+     "points": [
+      "Pisliklerden: idrar, dışkı, akan kan ve kusmuk.",
+      "Yırtıcı hayvanların dışkısı ve idrarı ile bütün hayvanların idrarı.",
+      "Leş, domuz ve köpek.",
+      "Bunlardan kaçınmak ve bedene ve elbiseye bulaşanı yıkamak gerekir."
+     ],
+     "symbol": "exclamationmark.octagon.fill"
+    },
+    {
+     "id": "th-5",
+     "title": "Abdest ve alınışı",
+     "page": 61,
+     "summary": "Ağız, burun, yüz, kollar, baş, kulaklar, ayaklar.",
+     "points": [
+      "Temiz su ile abdest alır ve başında Allah’ın adını anar.",
+      "Oruçlu değilse ağzına üç kez su verip iyice çalkalar.",
+      "Sonra burnuna su verip sümkürür, sonra yüzünü üç kez yıkar.",
+      "Sonra sağ kolunu dirsekle birlikte üç kez, sonra sol kolunu aynı şekilde yıkar.",
+      "Sonra başını meshedir, sonra kulaklarını içinden ve dışından meshedir.",
+      "Sonra sağ ayağını topuklara kadar üç kez, sonra sol ayağını aynı şekilde yıkar."
+     ],
+     "symbol": "drop.circle.fill",
+     "lessonId": "wudu"
+    },
+    {
+     "id": "th-6",
+     "title": "Abdestin bazı sünnetleri ve duaları",
+     "page": 63,
+     "summary": "Misvak ve her organ için güzel dualar.",
+     "points": [
+      "Abdestten önce misvak kullanmak sünnettir; uykudan kalkmışsa ellerini kaba sokmadan önce üç kez yıkar.",
+      "Ağza su verirken: “Allah’ım, bana mühürlü saf içecekten içir.”",
+      "Yüzü yıkarken: “Allah’ım, salih kullarının yüzlerinin ağaracağı gün yüzümü nurunla ağart.”",
+      "Sağ kolu yıkarken: “Allah’ım, kitabımı sağ elimden ver ve hesabımı kolay eyle.”",
+      "Başı meshederken: “Allah’ım, senin gölgenden başka gölgenin olmadığı gün beni arşının gölgesinde gölgelendir.”",
+      "Ayakları yıkarken: “Allah’ım, ayaklarımı hak ve din üzere sabit kıl, rahmetinle ey merhametlilerin en merhametlisi.”"
+     ],
+     "symbol": "text.bubble.fill",
+     "lessonId": "wudu"
+    },
+    {
+     "id": "th-7",
+     "title": "Teyemmüm",
+     "page": 64,
+     "summary": "Su bulamazsak temiz toprakla teyemmüm ederiz.",
+     "points": [
+      "Su bulamazsa ya da bulup da abdest için kullanamazsa temiz toprakla teyemmüm eder.",
+      "Avuçlarını yere vurur, sonra onlarla yüzünü meshedir.",
+      "Sonra ikinci kez vurur ve iki elinin üstünü ve içini bileklere kadar meshedir.",
+      "Allah’ın adını anar ve hadesi kaldırmaya ve namazı mubah kılmaya niyet eder."
+     ],
+     "symbol": "hand.raised.fingers.spread.fill",
+     "lessonId": "tayammum"
+    },
+    {
+     "id": "th-8",
+     "title": "Teyemmümün caiz olduğu ve olmadığı şeyler",
+     "page": 64,
+     "summary": "Teyemmüm tozlu toprakla olur.",
+     "points": [
+      "Kül, alçı, kireç harcı, kireç, çorak tuzlu toprak, kum ve ıslak çamurla teyemmüm olmaz.",
+      "Yalnızca tozu olan toprakla teyemmüm edilir.",
+      "Onu bulamazsa toprağa en çok benzeyen şeyle teyemmüm eder."
+     ],
+     "symbol": "leaf.fill",
+     "lessonId": "tayammum"
+    },
+    {
+     "id": "th-9",
+     "title": "Cünüplükten gusül",
+     "page": 65,
+     "summary": "Gusül cünübe ve hayızdan temizlenen kadına farzdır.",
+     "points": [
+      "Cünüp olana, erkek veya kadın, gusül farzdır.",
+      "Aynı gusül hayızdan temizlenen kadına da farzdır.",
+      "Su varsa namaz onsuz tamam olmaz; yoksa namaz için teyemmüm eder gibi toprakla teyemmüm eder."
+     ],
+     "symbol": "shower.fill",
+     "lessonId": "ghusl"
+    },
+    {
+     "id": "th-10",
+     "title": "Guslün alınışı",
+     "page": 65,
+     "summary": "Sağdan başlarız ve suyu bütün bedene ulaştırırız.",
+     "points": [
+      "Ellerini yıkar, pisliği yerinden giderir, sonra ağzına ve burnuna su verir.",
+      "Sonra yüzünü ve diğer abdest organlarını yıkar; yapmazsa sakıncası yoktur, ama ağza ve burna su vermek gereklidir.",
+      "Başına üç avuç su döker, sonra başın sağını sonra solunu, boynun sağını sonra solunu yıkar.",
+      "Sonra bedenin sağını sonra solunu, sonra sağ bacağı sonra solu yıkar ve suyla birlikte elini bedeninde gezdirir.",
+      "Sıra gözetmeden suyu bütün bedene ulaştırırsa yeterlidir; ancak su, el gezdirilerek bütün bedene ulaşmalıdır."
+     ],
+     "symbol": "drop.triangle.fill",
+     "lessonId": "ghusl"
+    },
+    {
+     "id": "th-11",
+     "title": "Atamız İbrahim’in bazı sünnetleri",
+     "page": 66,
+     "summary": "Fıtrat hasletleri ve temizlik.",
+     "points": [
+      "Kasık kılları uzayınca onları tıraş etmesi emredilir; ayda bir ya da kırk günde bir denmiştir.",
+      "Koltuk altı kıllarını yolması, bıyığını kısaltması, tırnaklarını kesmesi ve uzunsa saçını ayırması emredilir.",
+      "Bu hasletler, atamız İbrahim aleyhisselamın emrolunduğu şeylerdendir."
+     ],
+     "symbol": "scissors"
+    },
+    {
+     "id": "th-12",
+     "title": "Namaz kılınabilen yerler",
+     "page": 67,
+     "summary": "Namazımız için temiz bir yer seçeriz.",
+     "points": [
+      "Namazı için temiz bir yer seçer.",
+      "Yolun ortasında ve develerin yattığı yerde namaz kılmaz.",
+      "Gasbedilmiş arazide ve alçı, kireç, kül gibi ateşin yaktığı şeyler üzerinde namaz caiz değildir.",
+      "Kâbe’nin damında da caiz değildir; çünkü orada namaz kılan kıbleye yönelmiş olmaz."
+     ],
+     "symbol": "square.dashed"
+    },
+    {
+     "id": "th-13",
+     "title": "Namaz elbisesi",
+     "page": 67,
+     "summary": "Avreti örten temiz elbise.",
+     "points": [
+      "Temiz ve örten elbise şarttır.",
+      "Avretini örtecek bir şey bulamazsa oturarak ve işaretle kılar.",
+      "Temiz elbise varken necis elbiseyle namaz kılmaz.",
+      "Başka bir şey bulamadıkça ipek elbiseyle namaz kılmaz."
+     ],
+     "symbol": "tshirt.fill"
+    },
+    {
+     "id": "th-14",
+     "title": "Kıbleye yönelmek",
+     "page": 68,
+     "summary": "Kıble, yüce Kâbe’dir.",
+     "points": [
+      "Kıble yüce Kâbe’dir; namaz ancak ona yönelmekle tamam olur.",
+      "Namaz kılan, güneşin ve ayın doğup batması ve yönleri bilmek gibi kıbleyi gösteren işaretleri bilmelidir.",
+      "Doğruluğuna gönlü kanan birinin kıble yönü hakkındaki sözüne güvenebilir.",
+      "Şaşırır ve haber verecek kimse bulamazsa yönünü araştırır ve o yöne doğru kılar."
+     ],
+     "symbol": "location.north.circle.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Abdestte yüz kaç kez yıkanır?",
+     "options": [
+      "Bir kez",
+      "Üç kez",
+      "Beş kez"
+     ],
+     "answerIndex": 1,
+     "explanation": "Yüz üç kez yıkanır."
+    },
+    {
+     "question": "Tuvalete hangi ayakla gireriz?",
+     "options": [
+      "Sağ",
+      "Sol",
+      "Fark etmez"
+     ],
+     "answerIndex": 1,
+     "explanation": "Sol ayakla girilir, sağ ayakla çıkılır."
+    },
+    {
+     "question": "Su bulamazsak ne yaparız?",
+     "options": [
+      "Namazı bırakırız",
+      "Temiz toprakla teyemmüm ederiz",
+      "Namazı yarına bırakırız"
+     ],
+     "answerIndex": 1,
+     "explanation": "Su yoksa temiz toprakla teyemmüm edilir."
+    },
+    {
+     "question": "Namazda yöneldiğimiz kıble nedir?",
+     "options": [
+      "Mescid-i Aksâ",
+      "Yüce Kâbe",
+      "Herhangi bir yön"
+     ],
+     "answerIndex": 1,
+     "explanation": "Kıble yüce Kâbe’dir; namaz ancak ona yönelmekle tamam olur."
+    }
+   ]
+  },
+  {
+   "id": "janaiz",
+   "part": "İkinci Bölüm",
+   "title": "Cenazeler",
+   "subtitle": "Cenaze namazı ve vefat eden Müslümanın hakkı",
+   "symbol": "leaf.fill",
+   "colors": [
+    "green",
+    "mint"
+   ],
+   "masail": [
+    {
+     "id": "jn-1",
+     "title": "Cenaze namazı",
+     "page": 49,
+     "summary": "Rükûsuz ve secdesiz, dört tekbirli bir namaz.",
+     "points": [
+      "Cenaze namazı farz-ı kifayedir; rükû ve secdesi yoktur.",
+      "Namaz kılan der ki: “Allah Teâlâ için bu ölü üzerine, Resulullah ﷺ’in emrettiği sünneti dört tekbirle, Allah’a ve Resulüne itaat olarak kılıyorum.”",
+      "Birinci tekbiri alır, istiâze eder ve Fâtiha okur; sonra ikinci tekbiri alır ve Fâtiha okur.",
+      "Sonra üçüncü tekbir: Allah’a hamd eder, Resulüne ﷺ salavat getirir, kendi günahı ve müminler için bağışlanma diler ve dua eder.",
+      "Sonra dördüncü tekbir, ardından hafif bir selam."
+     ],
+     "symbol": "person.3.sequence.fill"
+    },
+    {
+     "id": "jn-2",
+     "title": "Cenaze namazında dua",
+     "page": 49,
+     "summary": "Ölü için rahmet dileriz.",
+     "points": [
+      "Ölü salih biriyse şöyle der: “Allah’ım, falan senin kulun, kulunun oğlu, cariyenin oğludur; onu vefat ettirdin, bizi ondan sonra bıraktın. Allah’ım, ona evinden daha hayırlı bir ev, ailesinden daha hayırlı bir aile ver…”",
+      "Ayırt edemeyen şöyle der: “Dirileri öldüren, ölüleri dirilten ve kabirdekileri dirilten Allah’a hamd olsun… Rabbimiz, rahmetin ve ilmin her şeyi kuşatmıştır; tövbe edip yoluna uyanları bağışla ve onları cehennem azabından koru.”",
+      "Sonra Peygamber ﷺ’e, âline ve ashabına salavat getirir, tekbir alır ve selam verir."
+     ],
+     "symbol": "hands.sparkles.fill"
+    },
+    {
+     "id": "jn-3",
+     "title": "Ölünün yıkanması",
+     "page": 51,
+     "summary": "Ölü nazikçe yıkanır, sağdan başlanır.",
+     "points": [
+      "Ölüye namaz abdesti gibi abdest aldırılır; doğru görüşe göre bu, ölüyü yıkamada sünnettir.",
+      "Sonra varsa su ve sidr (çiriş) veya benzeriyle yıkanır; yoksa sakıncası yoktur.",
+      "Başın sağından başlanır, sonra solu, sonra boyun, kollar, sağ yan sonra sol yan, sonra bacaklar.",
+      "Sonra suyla bütün bedeni yıkanır ve olabildiğince nazik davranılır."
+     ],
+     "symbol": "drop.fill"
+    },
+    {
+     "id": "jn-4",
+     "title": "Ölüye teyemmüm",
+     "page": 52,
+     "summary": "Yıkamak mümkün değilse temiz toprakla teyemmüm ettirilir.",
+     "points": [
+      "Su yoksa veya ölünün bedeni yıkanamayacak durumdaysa, yıkamanın yerine temiz toprakla teyemmüm ettirilir.",
+      "Ellerini toprağa koyar ve ölünün yüzünü meshedir, sonra tekrar koyar ve ellerini meshedir.",
+      "Kalbiyle vazifeyi yerine getirmeye niyet eder ve yaptığı işe Allah’ın adını anar."
+     ],
+     "symbol": "hand.raised.fill"
+    },
+    {
+     "id": "jn-5",
+     "title": "Ölüyü yıkamanın sünneti",
+     "page": 54,
+     "summary": "Ölüyü örter ve saygınlığını koruruz.",
+     "points": [
+      "Yıkanırken ölüyü örten bir örtü gerekir; bunu yıkayandan başkası tutar.",
+      "Avretinden hiçbir yere bakmak caiz değildir."
+     ],
+     "symbol": "eye.slash.fill"
+    },
+    {
+     "id": "jn-6",
+     "title": "Kefenleme ve hanût",
+     "page": 54,
+     "summary": "Ölü temiz bezle kefenlenir ve güzel kokulanır.",
+     "points": [
+      "Ölü, namazın caiz olduğu elbiselerden bir veya daha fazlasıyla kefenlenir.",
+      "Bedeni sudan kurulanır ve kefenlerine sarılır.",
+      "Hanût sürülür; yani kâfur ve zaferan gibi güzel koku konur.",
+      "Sonra teneşire/tabuta konur, örtülür, kokulanır ve buhurlanır."
+     ],
+     "symbol": "wind"
+    },
+    {
+     "id": "jn-7",
+     "title": "Ölünün taşınması",
+     "page": 56,
+     "summary": "Cenazeyle ağır ağır yürürüz.",
+     "points": [
+      "Onu tabutuna koyunca onunla yumuşak bir yürüyüşle yürürler.",
+      "Namaz yerine veya kabre götürürken başını öne alırlar."
+     ],
+     "symbol": "figure.walk"
+    },
+    {
+     "id": "jn-8",
+     "title": "Ölünün defnedilmesi",
+     "page": 56,
+     "summary": "Sağ yanı üzerine, kıbleye dönük konur.",
+     "points": [
+      "Ölü lahdine sağ yanı üzerine, kıbleye dönük olarak yatırılır.",
+      "Sonra üzerine kerpiç konur, sonra toprakla gömülür.",
+      "Cenazeyi uğurlamak emredilmiştir ve büyük fazileti vardır.",
+      "Arkasından çokça Allah’ı anmak uygundur; “Allah’tan başka ilah yoktur, ölmeyen diridir” demek müstehaptır da denmiştir."
+     ],
+     "symbol": "leaf.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Cenaze namazında kaç tekbir vardır?",
+     "options": [
+      "Üç",
+      "Dört",
+      "Beş"
+     ],
+     "answerIndex": 1,
+     "explanation": "Cenaze namazı dört tekbirlidir."
+    },
+    {
+     "question": "Ölü kabre hangi yanı üzerine konur?",
+     "options": [
+      "Sağ yanı, kıbleye dönük",
+      "Sol yanı",
+      "Sırtüstü"
+     ],
+     "answerIndex": 0,
+     "explanation": "Sağ yanı üzerine, kıbleye dönük konur."
+    }
+   ]
+  },
+  {
+   "id": "sawm",
+   "part": "İkinci Bölüm",
+   "title": "Oruç",
+   "subtitle": "Mübarek Ramazan ayının orucu",
+   "symbol": "moon.circle.fill",
+   "colors": [
+    "purple",
+    "pink"
+   ],
+   "masail": [
+    {
+     "id": "sw-1",
+     "title": "Oruç ve tutuluşu",
+     "page": 69,
+     "summary": "Fecirden gün batımına kadar kendimizi tutarız.",
+     "points": [
+      "Oruç salt bedenî bir ibadettir; farz olanı her yıl mübarek Ramazan ayını oruçla geçirmektir.",
+      "Fecrin doğuşundan gün batımına kadar yemekten ve içmekten uzak durmaktır.",
+      "Çirkin sözden, gıybetten ve söz taşımaktan sakınmak ve bütün günahlardan kaçınmaktır; çünkü günahlar orucu bozar.",
+      "Unutarak yiyen veya içen hakkında iki görüş vardır: orucu bozulur ve kazası gerekir denmiştir; unutmak affedildiği için bir şey gerekmez de denmiştir."
+     ],
+     "symbol": "moon.circle.fill"
+    },
+    {
+     "id": "sw-2",
+     "title": "Orucun sıhhat şartı",
+     "page": 69,
+     "summary": "Geceden niyet etmek.",
+     "points": [
+      "Geceden, sabaha Ramazan farzı oruçlu olarak, Allah’a ve Resulü Muhammed ﷺ’e itaat için gireceğine niyet etmek.",
+      "Geceden oruca niyet etmeyenin orucu yoktur.",
+      "Cünüp olarak sabaha girmemelidir; cünüp olan fecirden önce gusletmelidir.",
+      "Gündüz ihtilam olan hemen gusleder ve ona bir şey gerekmez."
+     ],
+     "symbol": "moon.zzz.fill"
+    },
+    {
+     "id": "sw-3",
+     "title": "Ramazan gecelerini ihya",
+     "page": 70,
+     "summary": "Ramazan gecelerinde Allah’ın dilediği kadar namaz kılarız.",
+     "points": [
+      "Ramazan gecesinde yatsı ile fecir arasında Allah’ın dilediği kadar namaz kılması tavsiye edilir.",
+      "Her gece yirmi rekât kılması uygundur; on iki rekâtla yetinirse yeterlidir.",
+      "Ramazan gecelerinde vitir namazı da gereklidir."
+     ],
+     "symbol": "star.circle.fill"
+    },
+    {
+     "id": "sw-4",
+     "title": "Haram ve mekruh oruçlar",
+     "page": 70,
+     "summary": "Bayram günü oruç tutmayız.",
+     "points": [
+      "İki bayram günü oruç tutmak haramdır.",
+      "Teşrik günlerinde oruç tutmak mekruhtur.",
+      "Şek gününde oruç tutmak mekruhtur; haram olduğu da söylenmiştir."
+     ],
+     "symbol": "nosign"
+    },
+    {
+     "id": "sw-5",
+     "title": "Müstehap oruçlar",
+     "page": 71,
+     "summary": "Eyyâm-ı bîd, Âşûrâ ve Şevval’in altı günü.",
+     "points": [
+      "Her ayın on üç, on dört ve on beşinci günleri olan eyyâm-ı bîd orucu müstehaptır.",
+      "Bayramdan önceki Zilhiccenin dokuz günü, Muharrem’deki Âşûrâ ve Şevval’den altı gün müstehaptır.",
+      "Zilkade’den bir gün (yirmi beşinci), Recep’ten bir gün (yirmi yedinci) ve Şaban’dan bir gün (on beşinci) de müstehaptır."
+     ],
+     "symbol": "calendar"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Ramazan orucunun niyeti ne zaman yapılır?",
+     "options": [
+      "Geceden",
+      "Öğleden sonra",
+      "Niyet gerekmez"
+     ],
+     "answerIndex": 0,
+     "explanation": "Geceden niyet edilir; etmeyenin orucu yoktur."
+    },
+    {
+     "question": "Bayram günü oruç tutmanın hükmü nedir?",
+     "options": [
+      "Müstehap",
+      "Haram",
+      "Farz"
+     ],
+     "answerIndex": 1,
+     "explanation": "İki bayram günü oruç tutmak haramdır."
+    },
+    {
+     "question": "Eyyâm-ı bîd hangi günlerdir?",
+     "options": [
+      "1, 2 ve 3",
+      "13, 14 ve 15",
+      "Son üç gün"
+     ],
+     "answerIndex": 1,
+     "explanation": "Eyyâm-ı bîd ayın 13, 14 ve 15. günleridir."
+    }
+   ]
+  },
+  {
+   "id": "huquq",
+   "part": "İkinci Bölüm",
+   "title": "Haklar",
+   "subtitle": "Anne baba, akrabalar, komşu, arkadaş ve misafir",
+   "symbol": "person.3.fill",
+   "colors": [
+    "orange",
+    "pink"
+   ],
+   "masail": [
+    {
+     "id": "hq-1",
+     "title": "Anne babanın hakları",
+     "page": 72,
+     "summary": "Anne babanın rızası cennete açılan bir kapıdır.",
+     "points": [
+      "Akrabalık bağının en büyüğü anne babanın hakkıdır; Peygamber ﷺ buyurdu: “Kim anne babası kendisinden razı olarak sabahlarsa, ona cennetten bir kapı açılmış olur.”",
+      "Onları azarlamaz, sözle incitmez, sert konuşmaz; aksine sözünde onlara karşı alçak gönüllü ve yumuşak olur.",
+      "Yollarından eziyeti kaldırmak dışında önlerinde yürümez ve onlara adlarıyla seslenmez, “babacığım” der.",
+      "Anne babanın emrettiği her itaat veya mubah şeyi, gücü yetiyorsa yerine getirmesi gerekir.",
+      "Allah’a isyanı emretmedikçe onlara karşı gelmez; çünkü “Yaradana isyanda yaratılmışa itaat olmaz.”"
+     ],
+     "symbol": "heart.circle.fill"
+    },
+    {
+     "id": "hq-2",
+     "title": "Çocukların hakları",
+     "page": 73,
+     "summary": "Çocuğun anne babası üzerinde güzel terbiye ve öğretim hakkı vardır.",
+     "points": [
+      "Anne babanın üzerindeki haklar, çocuğun onlara karşı olan hakları gibidir.",
+      "Onu güzelce terbiye etmek ve ona Kur’an’ı, hesabı, namazı, farzları ve ihtiyaç duyduğu her şeyi öğretmek.",
+      "Büyüyüp geçimini kazanabilir hale gelene kadar nafakasını vermek ve onu giydirmek.",
+      "Ona isimlerin en güzelini seçmek: peygamberlerin ve salihlerin isimleri."
+     ],
+     "symbol": "figure.2.and.child.holdinghands"
+    },
+    {
+     "id": "hq-3",
+     "title": "Akrabaların hakları",
+     "page": 74,
+     "summary": "Sıla-i rahim farzdır; en güzeli hediyeyle olanıdır.",
+     "points": [
+      "Akrabalar, seninle ortak bir dedede birleşenlerdir; onlarla bağı sürdürmek farzdır.",
+      "Sıla, malıyla ve bedeniyle gücü yetene düşer.",
+      "Meşguliyeti sebebiyle onlara ulaşamayan, ziyaret niyetini sürdürdüğü sürece mazurdur.",
+      "Sılanın en güzeli hediye göndermek, en zayıfı selam göndermektir."
+     ],
+     "symbol": "gift.fill"
+    },
+    {
+     "id": "hq-4",
+     "title": "Komşunun hakları",
+     "page": 75,
+     "summary": "Komşumuza eziyet etmez, sevincini ve üzüntüsünü paylaşırız.",
+     "points": [
+      "Komşuyla iyi ilişki sabit bir haktır; yakın da olsa uzak da olsa.",
+      "Peygamber ﷺ buyurdu: “Cebrail bana komşu hakkında o kadar tavsiyede bulundu ki onu mirasçı kılacağını sandım.”",
+      "Komşunun hakkından biri ondan eziyeti uzak tutmaktır; komşuya eziyet etmek caiz değildir.",
+      "Sevinçli anında ve musibet anında onu ziyaret eder.",
+      "Onda olmayıp kendisinde olan şeyleri bildiği zaman onunla paylaşır."
+     ],
+     "symbol": "house.fill"
+    },
+    {
+     "id": "hq-5",
+     "title": "Yol arkadaşının hakları",
+     "page": 76,
+     "summary": "Yol arkadaşının yardım ve paylaşma hakkı vardır.",
+     "points": [
+      "“Yanındaki arkadaş” yol arkadaşıdır ve onun bir hakkı vardır.",
+      "Ona iyilikle ve güzel ahlakla arkadaşlık eder, eziyeti uzak tutar, yiyecek ve içecekte onu kendine ortak eder, hiçbir şeyi yalnız kendine ayırmaz.",
+      "Onun yanında başkasıyla fısıldaşmaz.",
+      "Hastalanırsa ona bakar; bir işi varsa bitirene kadar onu bekler."
+     ],
+     "symbol": "figure.2.arms.open"
+    },
+    {
+     "id": "hq-6",
+     "title": "İlim yolundaki arkadaşın hakları",
+     "page": 78,
+     "summary": "İlim tahsilinde yardımlaşır ve birbirimize öğüt veririz.",
+     "points": [
+      "Dünya ve ahiret işlerinde ona öğüt verir.",
+      "Edep ve ilimden anlamadığı şeyleri ona anlatır.",
+      "Bir hatasını görürse onu uyarır ve örter; unuttuğunda hatırlatır ve çalışmaya teşvik eder.",
+      "Onu dışarıda bırakarak fısıldaşmak gibi kalbini kıracak şeyler yapmaz."
+     ],
+     "symbol": "book.and.wrench.fill"
+    },
+    {
+     "id": "hq-7",
+     "title": "Misafirin hakları",
+     "page": 78,
+     "summary": "Allah’a ve ahiret gününe iman eden misafirine ikram etsin.",
+     "points": [
+      "Misafire ikram sabit bir haktır; Peygamber ﷺ buyurdu: “Allah’a ve ahiret gününe iman eden misafirine ikram etsin.”",
+      "Misafirlik üç gündür; ötesi sadakadır; misafir ev sahibini bıktıracak kadar kalmamalıdır.",
+      "Evlerindeki en iyi şeyi ona ikram etmeleri, yemeğini çabuk hazırlamaları ve namaz vakitlerini gözetmeleri gerekir.",
+      "Yanında su olmadan yemek ikram etme."
+     ],
+     "symbol": "cup.and.saucer.fill"
+    },
+    {
+     "id": "hq-8",
+     "title": "Misafire karşı hoş olmayanlar",
+     "page": 79,
+     "summary": "Misafiri yalnız ve rahatsız bırakmayız.",
+     "points": [
+      "Misafirlerinin bazısına verip bazısına verme, bazısıyla fısıldaşıp diğerlerini dışlama.",
+      "Misafirlerinin yanında çok susma ki onları sıkıntıya sokmayasın.",
+      "Misafire iş yaptırma; bu mertliğe yakışmaz.",
+      "Misafirlerinin yanında kimseye kızma ki senden rahatsız olmasınlar."
+     ],
+     "symbol": "hand.thumbsdown.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Babamıza nasıl sesleniriz?",
+     "options": [
+      "Adıyla",
+      "“Babacığım” deriz",
+      "Seslenmeyiz"
+     ],
+     "answerIndex": 1,
+     "explanation": "Babaya adıyla seslenmek saygısızlıktır; “babacığım” denir."
+    },
+    {
+     "question": "Misafirlik kaç gündür?",
+     "options": [
+      "Bir gün",
+      "Üç gün",
+      "Bir hafta"
+     ],
+     "answerIndex": 1,
+     "explanation": "Misafirlik üç gündür; ötesi sadakadır."
+    },
+    {
+     "question": "Akrabayı ziyaretin en güzeli nedir?",
+     "options": [
+      "Hediye göndermek",
+      "Selam göndermek",
+      "Hiçbir şey"
+     ],
+     "answerIndex": 0,
+     "explanation": "En güzeli hediye, en zayıfı selam göndermektir."
+    }
+   ]
+  },
+  {
+   "id": "zakah",
+   "part": "İkinci Bölüm",
+   "title": "Zekât",
+   "subtitle": "Tamamen malî bir ibadet",
+   "symbol": "banknote.fill",
+   "colors": [
+    "yellow",
+    "orange"
+   ],
+   "masail": [
+    {
+     "id": "zk-1",
+     "title": "Zekât",
+     "page": 80,
+     "summary": "Maldan belirli kişilere verilen bir hak.",
+     "points": [
+      "Zekât tamamen malî bir ibadettir.",
+      "Allah her Müslümanın malında, mal belirli bir miktara ulaşınca belirli sınıflara verilmek üzere bir hak farz kılmıştır."
+     ],
+     "symbol": "banknote.fill"
+    },
+    {
+     "id": "zk-2",
+     "title": "Zekâtın farz olduğu mallar",
+     "page": 80,
+     "summary": "Altın, gümüş, tahıl, hayvanlar ve ticaret.",
+     "points": [
+      "Zekât altın ve gümüşte farzdır.",
+      "Hurma, kuru üzüm ve buğday, arpa, darı gibi gıda olarak tüketilen tahıllarda.",
+      "Deve, sığır ve koyunda.",
+      "Ve ticaret mallarında."
+     ],
+     "symbol": "checkmark.circle.fill"
+    },
+    {
+     "id": "zk-3",
+     "title": "Zekâtın farz olmadığı mallar",
+     "page": 80,
+     "summary": "Eşek, at ve bakırda zekât yoktur; ticaret için olursa başka.",
+     "points": [
+      "Eşekte, atta, bakırda ve altın ile gümüş dışındaki madenlerde zekât yoktur.",
+      "Ancak ticaret için edinilmişse ticaret zekâtı gerekir."
+     ],
+     "symbol": "xmark.circle.fill"
+    },
+    {
+     "id": "zk-4",
+     "title": "Altının zekâtı",
+     "page": 80,
+     "summary": "Nisabı yirmi dinardır, zekâtı yarım dinardır.",
+     "points": [
+      "Altın yirmi dinar veya fazlasına ulaşır ve üzerinden bir yıl geçerse zekât farzdır.",
+      "Ondan yarım dinar verilir.",
+      "Her dört dinar fazlalık için dinarın onda biri verilir ve bu böyle devam eder.",
+      "Altın nisaba ulaşmazsa sahip olduğu gümüşle birleştirilir."
+     ],
+     "symbol": "circle.fill"
+    },
+    {
+     "id": "zk-5",
+     "title": "Gümüşün zekâtı",
+     "page": 81,
+     "summary": "Nisabı iki yüz dirhemdir, zekâtı beş dirhemdir.",
+     "points": [
+      "Gümüş iki yüz dirheme ulaşır ve üzerinden bir yıl geçerse zekât farzdır.",
+      "Ondan beş dirhem verilir.",
+      "Her kırk dirhem fazlalık için bir dirhem verilir ve bu böyle devam eder.",
+      "Altın ve gümüş birleştirilir ve tek bir zekât verilir."
+     ],
+     "symbol": "circle.lefthalf.filled"
+    },
+    {
+     "id": "zk-6",
+     "title": "Tahıl ve meyvelerin zekâtı",
+     "page": 82,
+     "summary": "Hasatta onda bir veya yirmide bir.",
+     "points": [
+      "Hurma, kuru üzüm ve bütün tahıllar üç yüz sâ‘a ulaşınca farzdır.",
+      "Yıl şartı yoktur; hasat edilince zekâtı verilir.",
+      "Yağmur, nehir veya pınarla sulanıyor ya da sulama gerektirmiyorsa onda bir verilir.",
+      "Kuyudan çekilerek veya taşınarak sulanıyorsa yirmide bir verilir."
+     ],
+     "symbol": "leaf.fill"
+    },
+    {
+     "id": "zk-7",
+     "title": "Devenin zekâtı",
+     "page": 83,
+     "summary": "Nisabı beş devedir.",
+     "points": [
+      "Beş otlak devesine sahip olup üzerinden bir yıl geçerse zekât farzdır.",
+      "Beşte bir koyun, onda iki, on beşte üç, yirmide dört koyun.",
+      "Yirmi beşte bir yaşında dişi deve; otuz altıda iki yaşında; kırk altıda üç yaşında; altmış birde dört yaşında dişi deve.",
+      "Sonra her kırkta iki yaşında bir dişi deve, her ellide üç yaşında bir dişi deve."
+     ],
+     "symbol": "pawprint.fill"
+    },
+    {
+     "id": "zk-8",
+     "title": "Sığırın zekâtı",
+     "page": 84,
+     "summary": "Hükmü devenin hükmü gibidir.",
+     "points": [
+      "Sığırın zekât hükmü deve gibidir; yalnızca adlandırmada farklıdır.",
+      "Nisap ve verilecek miktar aynıdır."
+     ],
+     "symbol": "pawprint.circle.fill"
+    },
+    {
+     "id": "zk-9",
+     "title": "Koyunun zekâtı",
+     "page": 85,
+     "summary": "Nisabı kırk koyundur.",
+     "points": [
+      "Kırka ulaşır ve bir yıl geçerse farzdır.",
+      "Kırktan yüz yirmiye kadar bir koyun; bir fazla olursa iki yüze kadar iki koyun.",
+      "Bir fazla olursa üç yüz doksan dokuza kadar üç koyun.",
+      "Dört yüze ulaşınca her yüz koyunda bir koyun."
+     ],
+     "symbol": "hare.fill"
+    },
+    {
+     "id": "zk-10",
+     "title": "Ticaret malının zekâtı",
+     "page": 85,
+     "summary": "Ticaret malı değerinin kırkta biri.",
+     "points": [
+      "Ticaret malının değeri altın veya gümüş nisabına ulaşır ve bir yıl geçerse zekât farzdır.",
+      "Altın ve gümüş zekâtı gibi değerinin kırkta biri (%2,5) verilir."
+     ],
+     "symbol": "cart.fill"
+    },
+    {
+     "id": "zk-11",
+     "title": "Fıtır sadakası ve vakti",
+     "page": 86,
+     "summary": "Bayram namazından önce kişi başı bir sâ‘ yiyecek.",
+     "points": [
+      "Fıtır sadakası zengin Müslümana farzdır.",
+      "Kişi başına bir sâ‘ buğday, darı, hurma veya kuru üzümdür.",
+      "Kendisi, çocuğu ve nafakasını üstlendiği herkes için verir; eş hakkında iki görüş vardır.",
+      "Vakti Ramazan bayramı günü fecirden namazgâha çıkışa kadardır; fakirlere ve yoksullara verilir."
+     ],
+     "symbol": "basket.fill"
+    },
+    {
+     "id": "zk-12",
+     "title": "Sekiz sınıf",
+     "page": 87,
+     "summary": "Zekâta kimler hak sahibidir?",
+     "points": [
+      "Fakirler: bir yıllık azığı olmayanlar; ve miskinler: durumu onlardan daha kötü olanlar.",
+      "Zekât toplamakla görevliler ve kalpleri İslam’a ısındırılacaklar.",
+      "Kölelikten kurtulmak isteyenler ve günah ya da israf olmayan bir sebeple borçlananlar.",
+      "Allah yolunda olanlar ve ailesinden parasız kalmış yolcu."
+     ],
+     "symbol": "person.3.sequence.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Gümüşün nisabı nedir?",
+     "options": [
+      "Yüz dirhem",
+      "İki yüz dirhem",
+      "Kırk dirhem"
+     ],
+     "answerIndex": 1,
+     "explanation": "Gümüş iki yüz dirheme ulaşınca zekât farz olur."
+    },
+    {
+     "question": "Fıtır sadakası ne zaman verilir?",
+     "options": [
+      "Ramazan’dan önce",
+      "Bayram günü namaza çıkmadan önce",
+      "Bayramdan bir ay sonra"
+     ],
+     "answerIndex": 1,
+     "explanation": "Vakti bayram günü fecirden namaza çıkışa kadardır."
+    },
+    {
+     "question": "Zekâta hak sahibi kaç sınıf vardır?",
+     "options": [
+      "Dört",
+      "Sekiz",
+      "On"
+     ],
+     "answerIndex": 1,
+     "explanation": "Zekâta hak sahibi sınıflar sekizdir."
+    }
+   ]
+  },
+  {
+   "id": "hajj",
+   "part": "İkinci Bölüm",
+   "title": "Hac ve Umre",
+   "subtitle": "Allah’ın Beyt-i Harâm’ına bir yolculuk",
+   "symbol": "building.2.fill",
+   "colors": [
+    "brown",
+    "orange"
+   ],
+   "masail": [
+    {
+     "id": "hj-1",
+     "title": "Hac ve farz oluşunun şartları",
+     "page": 89,
+     "summary": "Gücü yetene ömürde bir kez.",
+     "points": [
+      "Hac, ergen muvahhide canı ve malıyla gereken bir ibadettir.",
+      "Sağlıklı olur, gidiş dönüş azığı bulunur ve ailesine yetecek nafaka bırakırsa farzdır.",
+      "Yol güvenli olur ve bineği bulunur ya da zorlanmadan yürüyebilirse.",
+      "Ömürde bir kez farzdır; fazlası nafiledir."
+     ],
+     "symbol": "building.2.fill"
+    },
+    {
+     "id": "hj-2",
+     "title": "Hacca niyet edenin yapacakları",
+     "page": 89,
+     "summary": "Yolculuktan önce borçları öder, akrabayı ziyaret ederiz.",
+     "points": [
+      "Borçlarını öde, yeminlerinin keffaretini ver ve adağını yerine getir.",
+      "Akrabalarını ziyaret et ve sana gücenen komşunun gönlünü al.",
+      "Azığını bol tut ki gönlün geniş olsun.",
+      "Evinde iki rekât namaz kıl, niyetini halis kıl, sonra ailenle vedalaş."
+     ],
+     "symbol": "suitcase.fill"
+    },
+    {
+     "id": "hj-3",
+     "title": "Hacca çıkış",
+     "page": 90,
+     "summary": "Bineğe binerken yolculuk duası.",
+     "points": [
+      "Bineğine binince üç kez tekbir getir ve de ki: “Bunu bizim hizmetimize veren Allah’ı tenzih ederiz; yoksa biz buna güç yetiremezdik; şüphesiz biz Rabbimize döneceğiz.”",
+      "“Allah’ım, yolculukta arkadaş sensin; aile ve malda vekil de sensin.”",
+      "Yükseğe çıkınca tekbir getir, inince tesbih et."
+     ],
+     "symbol": "car.fill"
+    },
+    {
+     "id": "hj-4",
+     "title": "Mîkat ve haccın vakti",
+     "page": 92,
+     "summary": "Mîkatı ancak ihramlı geçeriz.",
+     "points": [
+      "Hacı mîkata varınca onu ancak ihramlı olarak geçmelidir.",
+      "Hac ayları: Şevval, Zilkade ve Zilhiccenin ilk on günüdür.",
+      "Hac aylarından önce hac için ihrama giren kimseye bu hac yerine geçmez, umre olur."
+     ],
+     "symbol": "mappin.and.ellipse"
+    },
+    {
+     "id": "hj-5",
+     "title": "Umre",
+     "page": 92,
+     "summary": "İhram, sonra tavaf, sonra sa‘y.",
+     "points": [
+      "Umre, hac için ihrama girer gibi ihrama girmek, sonra Beyt’e gelip tavaf ve sa‘y yapmaktır.",
+      "Her ayda yapılabilir.",
+      "İhrama girerken umre olduğuna niyet etmek gerekir."
+     ],
+     "symbol": "arrow.clockwise.circle.fill"
+    },
+    {
+     "id": "hj-6",
+     "title": "İhrama girişin şekli",
+     "page": 93,
+     "summary": "Gusül, sonra iki parça elbise, sonra iki rekât.",
+     "points": [
+      "İhramın başında gusleder; abdestin yeterli olduğu da söylenmiştir.",
+      "İki parça elbise giyer; yeni veya yıkanmış olması müstehaptır.",
+      "İhram için iki rekât namaz kılar."
+     ],
+     "symbol": "tshirt.fill"
+    },
+    {
+     "id": "hj-7",
+     "title": "Telbiye",
+     "page": 93,
+     "summary": "Lebbeyk Allahümme lebbeyk.",
+     "points": [
+      "Niyet ettikten sonra der ki: “Buyur Allah’ım buyur; buyur, senin ortağın yoktur, buyur; hamd, nimet ve mülk senindir; senin ortağın yoktur, buyur.”",
+      "Bineği yürüdükçe, yükseğe çıktıkça veya vadiye indikçe telbiye getirmesi müstehaptır.",
+      "Sesini yükseltmesi müstehaptır; ne kadar çok olursa o kadar faziletlidir."
+     ],
+     "symbol": "speaker.wave.3.fill"
+    },
+    {
+     "id": "hj-8",
+     "title": "İhramlıya caiz olmayanlar",
+     "page": 94,
+     "summary": "Koku yok, av yok, saç ve tırnak kesmek yok.",
+     "points": [
+      "İhramlı dikişli elbise giyemez; zaruret dışında başını ve yüzünü örtemez.",
+      "Kadın başını örter, yüzünü açar ve dikişli elbise giyebilir.",
+      "İhramlı güzel koku kullanamaz ve avlanamaz.",
+      "İhramlı olduğu sürece saçından ve tırnaklarından bir şey almaz."
+     ],
+     "symbol": "nosign"
+    },
+    {
+     "id": "hj-9",
+     "title": "Mekke’ye giriş",
+     "page": 94,
+     "summary": "Telbiye getirerek gireriz.",
+     "points": [
+      "Mekke’ye gelince telbiye getirerek girer ve mescidin kapısında durana kadar telbiyeyi kesmez.",
+      "Kâbe’yi görünce der ki: “Allahu ekber (üç kez); Allah’ım sen Rabbimsin, ben kulunum; bu ev senin evindir; rızanı istemeye geldim.”",
+      "Girince der ki: “Allah’ım, sen Selâm’sın, esenlik sendendir; Rabbimiz bizi esenlikle yaşat ve bizi esenlik yurduna koy.”"
+     ],
+     "symbol": "door.right.hand.open"
+    },
+    {
+     "id": "hj-10",
+     "title": "Tavaf",
+     "page": 95,
+     "summary": "Kâbe’nin etrafında yedi şavt.",
+     "points": [
+      "Hacerü’l-Esved’den başlar ve Beyt’i soluna alır.",
+      "Tavafta çokça şöyle der: “Sübhânallah, velhamdülillah, ve lâ ilâhe illallah, vallahu ekber, ve lâ havle ve lâ kuvvete illâ billâhil aliyyil azîm.”",
+      "Rükn-i Yemânî’de der ki: “Rabbimiz, bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru”; kimseye eziyet etmez.",
+      "Yedi şavtı tamamlar, sonra Makâm-ı İbrahim’in arkasında veya mümkün olan yerde iki rekât namaz kılar."
+     ],
+     "symbol": "arrow.triangle.2.circlepath"
+    },
+    {
+     "id": "hj-11",
+     "title": "Zemzem",
+     "page": 97,
+     "summary": "Zemzem suyundan içer ve dua ederiz.",
+     "points": [
+      "Zemzem’e gelir, suyundan içer ve başına döker.",
+      "Der ki: “Allah’ım, senden tam bir iman, sağlam bir yakîn, dosdoğru bir din, salih amel, ilim, helal, temiz ve geniş rızık ve her hastalıktan şifa isterim.”"
+     ],
+     "symbol": "drop.fill"
+    },
+    {
+     "id": "hj-12",
+     "title": "Safa ile Merve arasında sa‘y",
+     "page": 98,
+     "summary": "Safa’dan başlayıp Merve’de biten yedi şavt.",
+     "points": [
+      "Beyt’e yöneleceği kadar Safa’ya çıkar, tekbir ve tehlil getirir ve dua eder.",
+      "Merve’ye doğru iner; iki işaret arasında hızlı yürür ve der ki: “Rabbim, bağışla, merhamet et ve bildiklerini affet.”",
+      "Merve’ye gelince Beyt’e yöneleceği kadar çıkar ve Safa’daki gibi dua eder.",
+      "Yedi şavtı tamamlar: Safa’dan başlar, Merve’de bitirir."
+     ],
+     "symbol": "figure.walk.motion"
+    },
+    {
+     "id": "hj-13",
+     "title": "Umreden çıkış",
+     "page": 100,
+     "summary": "Sa‘yden sonra tıraş olmak.",
+     "points": [
+      "Sa‘yi bitirince Merve’den iner ve başını tıraş eder; umreden çıkmış olur.",
+      "Harem’de avlanmak dışında her şey ona helal olur; Harem’de av herkese haramdır.",
+      "Bu temettu hacceden içindir; kıran hacceden, hac bitene kadar ihramdan çıkmaz."
+     ],
+     "symbol": "scissors"
+    },
+    {
+     "id": "hj-14",
+     "title": "Hac için ihram ve Mina’ya çıkış",
+     "page": 101,
+     "summary": "Terviye günü: Zilhiccenin sekizi.",
+     "points": [
+      "Terviye akşamı, yani Zilhiccenin sekizinde hac için ihrama girer.",
+      "Telbiye getirir: “Hac için buyur; onu tamamlamak ve ulaştırmak sana aittir, ey Allah.”",
+      "Sonra Mina’ya gider, orada beş vakit namaz kılar, geceyi insanlarla geçirir ve Allah’ı çokça anar."
+     ],
+     "symbol": "tent.fill"
+    },
+    {
+     "id": "hj-15",
+     "title": "Arafat",
+     "page": 102,
+     "summary": "Arafat’ta vakfe haccın rüknüdür.",
+     "points": [
+      "Güneş doğduktan sonra telbiye getirerek Arafat’a gider.",
+      "Öğle namazını insanlarla kılar ve güneş batana kadar duada gayret eder.",
+      "Çokça şöyle der: “Allah’tan başka ilah yoktur, O tektir, ortağı yoktur; mülk O’nundur, hamd O’nadır; diriltir ve öldürür; O ölmeyen diridir; hayır O’nun elindedir ve O her şeye kadirdir.”"
+     ],
+     "symbol": "mountain.2.fill"
+    },
+    {
+     "id": "hj-16",
+     "title": "Arafat’tan ayrılış ve Meş‘ar-i Haram",
+     "page": 103,
+     "summary": "Müzdelife’de gece ve taş toplamak.",
+     "points": [
+      "Sonra Arafat’tan Meş‘ar-i Haram’a (Cem‘) doğru ayrılır.",
+      "Akşam ve yatsıyı birlikte kılar ve geceyi insanlarla geçirir.",
+      "Oradan yetmiş küçük taş hazırlar ve yıkar.",
+      "Fecir doğunca namaz kılar, Meş‘ar-i Haram’da durup dua eder, sonra güneş doğmadan ayrılır."
+     ],
+     "symbol": "moon.stars.fill"
+    },
+    {
+     "id": "hj-17",
+     "title": "Şeytan taşlama",
+     "page": 104,
+     "summary": "Her biriyle bir tekbir, yedi taş.",
+     "points": [
+      "Akabe cemresine gelince telbiyeyi keser.",
+      "Sonra ona yedi taş atar, her biriyle tekbir getirir ve her tekbirden sonra “Hamd Allah’a mahsustur” der.",
+      "Teşrik günlerinde zevalden sonra üç cemreyi taşlar: ilki, sonra ortadaki, sonra Akabe cemresi."
+     ],
+     "symbol": "circle.grid.cross.fill"
+    },
+    {
+     "id": "hj-18",
+     "title": "Kurban, tıraş ve haccın rükünleri",
+     "page": 105,
+     "summary": "Haccın rükünleri: ihram, Arafat vakfesi ve Beyt’i ziyaret.",
+     "points": [
+      "Sonra kurban keser ve tıraş olur; der ki: “Allah’ım, saçımı kısaltmamı bereketli kıl ve günahımı bağışla.”",
+      "Tıraştan sonra Beyt’i ziyaret edene kadar kadınlar ve av dışında her şey ona helal olur.",
+      "Haccın üzerinde ittifak edilen rükünleri: ihram, Arafat vakfesi ve Beyt’i ziyarettir."
+     ],
+     "symbol": "checkmark.seal.fill"
+    },
+    {
+     "id": "hj-19",
+     "title": "Beyt’i ziyaret",
+     "page": 106,
+     "summary": "Umredeki gibi tavaf ve sa‘y.",
+     "points": [
+      "Ziyaretinde umrede yaptığı her şeyi yapar: tavaf, sa‘y ve dua.",
+      "Sonra Mina’ya döner, Mekke’de gecelemez ve teşrik günlerini orada geçirir."
+     ],
+     "symbol": "building.2.crop.circle.fill"
+    },
+    {
+     "id": "hj-20",
+     "title": "Veda tavafı",
+     "page": 107,
+     "summary": "Beyt ile son buluşma.",
+     "points": [
+      "Mekke’den çıkmak isteyince Beyt’e gelir, yedi şavt tavaf eder, sonra iki rekât namaz kılar.",
+      "Sonra Zemzem’e gelip ondan içer, sonra Allah’ın gönlüne açtığı dualarla dua eder.",
+      "Dualarından: “Allah’ım, bunu Beyt-i Harâm’ınla son buluşmam kılma.”",
+      "Sonra çıkar; vedadan sonra alışveriş yapmaz."
+     ],
+     "symbol": "hand.wave.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Hac ömürde kaç kez farzdır?",
+     "options": [
+      "Her yıl",
+      "Bir kez",
+      "İki kez"
+     ],
+     "answerIndex": 1,
+     "explanation": "Hac ömürde bir kez farzdır; fazlası nafiledir."
+    },
+    {
+     "question": "Tavaf kaç şavttır?",
+     "options": [
+      "Beş",
+      "Yedi",
+      "Üç"
+     ],
+     "answerIndex": 1,
+     "explanation": "Tavaf yedi şavttır."
+    },
+    {
+     "question": "Sa‘y nereden başlar?",
+     "options": [
+      "Merve’den",
+      "Safa’dan",
+      "Zemzem’den"
+     ],
+     "answerIndex": 1,
+     "explanation": "Safa’dan başlar, Merve’de biter."
+    }
+   ]
+  },
+  {
+   "id": "jihad",
+   "part": "İkinci Bölüm",
+   "title": "Cihad",
+   "subtitle": "Can ve malla yapılan bir ibadet",
+   "symbol": "shield.fill",
+   "colors": [
+    "red",
+    "orange"
+   ],
+   "masail": [
+    {
+     "id": "jh-1",
+     "title": "Cihadın anlamı ve fazileti",
+     "page": 109,
+     "summary": "Allah yolunda can ve malı feda etmek.",
+     "points": [
+      "Cihad, can ve malla meşru kılınmış bir ibadettir.",
+      "Allah Teâlâ buyurdu: “Müminler ancak Allah’a ve Resulüne iman eden, sonra şüpheye düşmeyen ve Allah yolunda mallarıyla ve canlarıyla cihad edenlerdir; işte onlar sadıklardır.” [Hucurât: 15]",
+      "Allah, önceki ümmetlerin salihlerini sebat, sabır ve cihadla övmüştür."
+     ],
+     "symbol": "shield.fill"
+    },
+    {
+     "id": "jh-2",
+     "title": "Cihadın kısımları",
+     "page": 109,
+     "summary": "Nefis ve heva ile mücadele de buna dahildir.",
+     "points": [
+      "Farz-ı ayn: yurda ve cemaate saldıran düşmanı püskürtmek gibi.",
+      "Farz-ı kifaye: sınırları korumak ve İslam davetini himaye etmek gibi.",
+      "Cihad, dini öğrenip onunla amel etmek ve ilmi yaymak için nefisle mücadeleye, şeytan ve hevaya karşı mücadeleye de denir. (Ebû İshak’ın açıklamasından)"
+     ],
+     "symbol": "figure.mind.and.body"
+    },
+    {
+     "id": "jh-3",
+     "title": "Cihadın hikmeti",
+     "page": 111,
+     "summary": "Zulmü defetmek ve hak davetini korumak.",
+     "points": [
+      "Cihad, İslam’ı üstün kılmak ve korumak, saldırganlığı bastırmak ve batılı yok etmek için meşru kılındı.",
+      "Yeryüzündeki zulmü ve fesadı defetmek ve hak davetini korumak için meşru kılındı; İslam’ın getirdiği rahmete ve Allah’ın emrettiği adalete aykırı değildir.",
+      "Bâğîler, imama zulmen isyan eden tevhid ehlinden bir topluluktur; imam, hüccet ulaştıktan sonra onlar itaate dönene kadar onlarla savaşır ve malları ganimet alınmaz."
+     ],
+     "symbol": "scalemass.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Cihad ne ile meşru kılınmıştır?",
+     "options": [
+      "Can ve malla",
+      "Yalnızca malla",
+      "Yalnızca sözle"
+     ],
+     "answerIndex": 0,
+     "explanation": "Cihad can ve malla meşru kılınmış bir ibadettir."
+    }
+   ]
+  },
+  {
+   "id": "khatimah",
+   "part": "Sonuç",
+   "title": "Terk Edilmesi Gerekenler",
+   "subtitle": "Sakınılması gereken bedenî işler ve iç huylar",
+   "symbol": "hand.raised.slash.fill",
+   "colors": [
+    "pink",
+    "red"
+   ],
+   "masail": [
+    {
+     "id": "kh-1",
+     "title": "Allah’ı inkâr (şirk)",
+     "page": 113,
+     "summary": "Terk edilmesi gereken en büyük şey.",
+     "points": [
+      "Terk edilmesi gereken ilk şey Allah’ı inkâr etmektir; bu da Allah’a ortak koşmaktır.",
+      "Allah’ın kitaplarından birini veya peygamberlerinden birini yalanlamak gibi.",
+      "Ya da Allah’ın varlığından şüphe etmek, Allah’ı ve Resulü Muhammed ﷺ’i tanımamak.",
+      "Ya da ölümü, dirilişi, hesabı, cenneti veya cehennemi inkâr etmek ya da Allah’ın açık hükümlerinden birini inkâr etmek."
+     ],
+     "symbol": "exclamationmark.shield.fill"
+    },
+    {
+     "id": "kh-2",
+     "title": "Nimete nankörlük (küfrân-ı nimet)",
+     "page": 114,
+     "summary": "Büyük günahlar işlemek.",
+     "points": [
+      "Nimete nankörlük, açık veya gizli büyük günahlardan birini işlemektir.",
+      "Gizli günahlar: ucub (kendini beğenmişlik), kibir, haset, riya ve bunlardan doğan kötü huylar."
+     ],
+     "symbol": "heart.slash.fill"
+    },
+    {
+     "id": "kh-3",
+     "title": "Ucub ve tedavisi",
+     "page": 114,
+     "summary": "Her nimet Allah’ın lütfundandır.",
+     "points": [
+      "Ucub, insanın içinde bulunduğu nimeti büyük görüp onu verene bakmadan kendini ona layık görmesidir.",
+      "Sebebi: güzellik, ilim, cesaret veya cömertlik gibi görünüşte, sıfatlarda veya malda bir üstünlüğe sahip olmak.",
+      "Tedavisi: kendisine verileni yalnızca Allah’ın lütfettiğini ve nefsinin bunda hiçbir payı olmadığını bilmek."
+     ],
+     "symbol": "person.fill.questionmark"
+    },
+    {
+     "id": "kh-4",
+     "title": "Kibir ve tedavisi",
+     "page": 114,
+     "summary": "Kimseyi küçük görmez, hakkı kabul ederiz.",
+     "points": [
+      "Kibir, insanları küçük görmek ve hakkı reddetmektir.",
+      "Sebebi: kendini büyük ve ayrıcalıklı görmesi.",
+      "Tedavisi: yaratıldığı asla ve döneceği sona bakmak."
+     ],
+     "symbol": "arrow.down.to.line"
+    },
+    {
+     "id": "kh-5",
+     "title": "Riya ve tedavisi",
+     "page": 114,
+     "summary": "Yalnızca Allah için amel ederiz.",
+     "points": [
+      "Riya, insanlar için amel etmektir; amelinde Allah’tan başkasını gözeten riyakârdır.",
+      "İnsanları bir kenara bırakıp yalnızca Rabbinin rızasını gözetmelidir.",
+      "Tedavisi: insanların ona fayda veya zarar veremeyeceğini, bunların hepsini yapanın bir ve tek olan Allah olduğunu bilmek."
+     ],
+     "symbol": "eye.fill"
+    },
+    {
+     "id": "kh-6",
+     "title": "Haset ve gıpta",
+     "page": 115,
+     "summary": "Aynı hayrı başkasından gitmesini istemeden kendimiz için dileriz.",
+     "points": [
+      "Haset, Allah’ın başkasına verdiği nimetin yok olmasını istemektir; büyük bir günahtır.",
+      "Onu terk etmeli ve bunun Allah’ın dilediğine verdiği lütfu olduğunu bilmelidir.",
+      "Tedavisi: hasedinin başkasının nimetini yok etmediğini, aksine dünyada ve ahirette yalnızca kendisine zarar verdiğini bilmek.",
+      "Başkasınınki gibi bir nimet dilemek caizdir; buna “gıpta” denir."
+     ],
+     "symbol": "heart.text.square.fill"
+    },
+    {
+     "id": "kh-7",
+     "title": "Açık büyük günahlar",
+     "page": 116,
+     "summary": "Allah’ın haram kıldığı her şeyden uzak dururuz.",
+     "points": [
+      "Açık büyük günahlardan: faiz, leş, kan ve domuz eti yemek ve öldürülmesi haram olan cana kıymak.",
+      "Yol kesmek, kullara zulmetmek, hırsızlık, Müslümanlara eziyet edip onları korkutmak ve yeryüzünde fesat çıkarmak.",
+      "Batılı desteklemek, hakka direnmek ve şarap ile bütün sarhoş edicileri içmek.",
+      "Ve Kur’an, Sünnet ve ümmetin icmaıyla haram kılınan diğer fiiller."
+     ],
+     "symbol": "xmark.octagon.fill"
+    }
+   ],
+   "quiz": [
+    {
+     "question": "Kibir nedir?",
+     "options": [
+      "İnsanları küçük görmek ve hakkı reddetmek",
+      "İnsanlar için iyilik istemek",
+      "Allah için amel etmek"
+     ],
+     "answerIndex": 0,
+     "explanation": "Kibir, insanları küçük görmek ve hakkı reddetmektir."
+    },
+    {
+     "question": "Haset ile gıpta arasındaki fark nedir?",
+     "options": [
+      "Fark yoktur",
+      "Gıpta, başkasındaki nimetin benzerini ondan gitmesini istemeden dilemektir",
+      "Gıpta haram, haset caizdir"
+     ],
+     "answerIndex": 1,
+     "explanation": "Başkasınınki gibi bir nimet dilemek caizdir ve buna gıpta denir."
+    },
+    {
+     "question": "Riyanın tedavisi nedir?",
+     "options": [
+      "İnsanların fayda ve zarar veremeyeceğini bilmek",
+      "İnsanların önünde daha çok amel etmek",
+      "İyilikleri bırakmak"
+     ],
+     "answerIndex": 0,
+     "explanation": "Tedavisi, insanların fayda veya zarar veremeyeceğini, bunun yalnızca Allah’tan olduğunu bilmektir."
+    }
+   ]
+  }
+ ],
+ "lessons": [
+  {
+   "id": "wudu",
+   "title": "Abdest",
+   "subtitle": "Abdesti adım adım öğren",
+   "symbol": "drop.fill",
+   "colors": [
+    "cyan",
+    "blue"
+   ],
+   "reference": "Telkînü’s-Sıbyân, s. 61–64",
+   "steps": [
+    {
+     "id": "wudu_01",
+     "image": "wudu_01",
+     "title": "Temiz su",
+     "text": "Abdesti temiz ve temizleyici su ile alırız.",
+     "symbol": "drop.fill",
+     "detail": "Abdest namazın şartıdır ve yalnızca temiz su ile alınır."
+    },
+    {
+     "id": "wudu_02",
+     "image": "wudu_02",
+     "title": "Besmele",
+     "text": "Abdestin başında “Bismillah” deriz.",
+     "symbol": "text.bubble.fill",
+     "detail": "Abdestin başında Allah’ın adı anılır; rivayet edildiğine göre: “Üzerine Allah’ın adını anmayanın abdesti yoktur.”"
+    },
+    {
+     "id": "wudu_03",
+     "image": "wudu_03",
+     "title": "Misvak",
+     "text": "Abdestten önce misvak kullanmak sünnettir.",
+     "symbol": "mouth.fill",
+     "detail": "Abdestten önce dişleri misvakla temizlemek sünnettir."
+    },
+    {
+     "id": "wudu_04",
+     "image": "wudu_04",
+     "title": "Elleri yıkamak",
+     "text": "Uykudan kalkınca ellerimizi kaba sokmadan önce üç kez yıkarız.",
+     "symbol": "hands.sparkles.fill",
+     "repeatCount": 3
+    },
+    {
+     "id": "wudu_05",
+     "image": "wudu_05",
+     "title": "Ağza su vermek",
+     "text": "Ağzımıza üç kez su verip iyice çalkalarız.",
+     "symbol": "mouth.fill",
+     "detail": "Sağ elin parmağını ağza sokar, suyu boğazın hemen önüne kadar ulaştırır; oruçlu olan fazla gargara yapmaz.",
+     "dua": "اللهم اسقني من الماء الرحيق المختوم",
+     "repeatCount": 3,
+     "duaMeaning": "Allah’ım, bana cennetin mühürlü saf içeceğinden içir."
+    },
+    {
+     "id": "wudu_06",
+     "image": "wudu_06",
+     "title": "Burna su vermek",
+     "text": "Sağ elimizle burnumuza su çeker, sonra dışarı atarız.",
+     "symbol": "nose.fill",
+     "dua": "اللهم لا تحرمني من روائح جنتك، برحمتك يا أرحم الراحمين",
+     "duaMeaning": "Allah’ım, beni cennetinin kokularından mahrum etme, rahmetinle ey merhametlilerin en merhametlisi."
+    },
+    {
+     "id": "wudu_07",
+     "image": "wudu_07",
+     "title": "Yüzü yıkamak",
+     "text": "Yüzümüzü üç kez yıkarız.",
+     "symbol": "face.smiling.inverse",
+     "dua": "اللهم بيّض وجهي بنورك يوم تبيض وجوه عبادك الصالحين، يا أرحم الراحمين",
+     "repeatCount": 3,
+     "duaMeaning": "Allah’ım, salih kullarının yüzlerinin ağaracağı gün yüzümü nurunla ağart, ey merhametlilerin en merhametlisi."
+    },
+    {
+     "id": "wudu_08",
+     "image": "wudu_08",
+     "title": "Sağ kol",
+     "text": "Sağ kolu dirsekle birlikte üç kez yıkarız.",
+     "symbol": "hand.raised.fill",
+     "dua": "اللهم أعطني كتابي بيميني، وحاسبني حسابًا يسيرًا",
+     "repeatCount": 3,
+     "duaMeaning": "Allah’ım, kitabımı sağ elimden ver ve hesabımı kolay eyle."
+    },
+    {
+     "id": "wudu_09",
+     "image": "wudu_09",
+     "title": "Sol kol",
+     "text": "Sonra sol kolu dirsekle birlikte üç kez yıkarız.",
+     "symbol": "hand.raised.fill",
+     "dua": "اللهم إني أعوذ بك أن تعطيني كتابي بشمالي، أو من وراء ظهري",
+     "repeatCount": 3,
+     "duaMeaning": "Allah’ım, kitabımın sol elimden veya arkamdan verilmesinden sana sığınırım."
+    },
+    {
+     "id": "wudu_10",
+     "image": "wudu_10",
+     "title": "Başı meshetmek",
+     "text": "Başımızı ıslak elle meshederiz.",
+     "symbol": "person.crop.circle.fill",
+     "dua": "اللهم أظلني بظل عرشك يوم لا ظل إلا ظلك",
+     "duaMeaning": "Allah’ım, senin gölgenden başka gölgenin olmadığı gün beni arşının gölgesinde gölgelendir."
+    },
+    {
+     "id": "wudu_11",
+     "image": "wudu_11",
+     "title": "Kulakları meshetmek",
+     "text": "Kulakları içinden ve dışından meshederiz.",
+     "symbol": "ear.fill",
+     "detail": "Bazı âlimler kulaklardan sonra enseyi meshetmeyi müstehap görmüştür.",
+     "dua": "اللهم اجعلني من الذين يستمعون القول فيتبعون أحسنه",
+     "duaMeaning": "Allah’ım, beni sözü dinleyip en güzeline uyanlardan eyle."
+    },
+    {
+     "id": "wudu_12",
+     "image": "wudu_12",
+     "title": "Sağ ayak",
+     "text": "Sağ ayağı topuklarla birlikte üç kez yıkarız.",
+     "symbol": "figure.walk",
+     "dua": "اللهم ثبّت قدمي على الحق والدين، برحمتك يا أرحم الراحمين",
+     "repeatCount": 3,
+     "duaMeaning": "Allah’ım, ayaklarımı hak ve din üzere sabit kıl, rahmetinle ey merhametlilerin en merhametlisi."
+    },
+    {
+     "id": "wudu_13",
+     "image": "wudu_13",
+     "title": "Sol ayak",
+     "text": "Sonra sol ayağı topuklarla birlikte üç kez yıkarız.",
+     "symbol": "figure.walk",
+     "detail": "Böylece abdest tamamlanır ve namaza hazırsın!",
+     "repeatCount": 3
+    }
+   ]
+  },
+  {
+   "id": "ghusl",
+   "title": "Gusül (Boy Abdesti)",
+   "subtitle": "Gusül nasıl alınır",
+   "symbol": "shower.fill",
+   "colors": [
+    "teal",
+    "mint"
+   ],
+   "reference": "Telkînü’s-Sıbyân, s. 65–66",
+   "steps": [
+    {
+     "id": "ghusl_01",
+     "image": "ghusl_01",
+     "title": "Elleri yıkamak",
+     "text": "Elleri yıkayarak başlarız.",
+     "symbol": "hands.sparkles.fill",
+     "detail": "Cünüplükten gusül erkeğe ve kadına farzdır; aynı gusül hayızdan temizlenen kadına da farzdır."
+    },
+    {
+     "id": "ghusl_02",
+     "image": "ghusl_02",
+     "title": "Pisliği gidermek",
+     "text": "Pisliği bulunduğu yerden gideririz.",
+     "symbol": "sparkles"
+    },
+    {
+     "id": "ghusl_03",
+     "image": "ghusl_03",
+     "title": "Ağız ve burun",
+     "text": "Ağza ve burna su veririz; bunlar her durumda gereklidir.",
+     "symbol": "mouth.fill"
+    },
+    {
+     "id": "ghusl_04",
+     "image": "ghusl_04",
+     "title": "Abdest organları",
+     "text": "Yüzü ve diğer abdest organlarını namaz abdestindeki gibi yıkarız.",
+     "symbol": "drop.circle.fill",
+     "detail": "Bunu yapmazsa sakıncası yoktur; ancak ağza ve burna su vermek gereklidir."
+    },
+    {
+     "id": "ghusl_05",
+     "image": "ghusl_05",
+     "title": "Üç avuç su",
+     "text": "Başımıza üç avuç su dökeriz.",
+     "symbol": "cloud.rain.fill",
+     "repeatCount": 3
+    },
+    {
+     "id": "ghusl_06",
+     "image": "ghusl_06",
+     "title": "Baş",
+     "text": "Başın sağ tarafını, sonra sol tarafını yıkarız.",
+     "symbol": "person.crop.circle.fill"
+    },
+    {
+     "id": "ghusl_07",
+     "image": "ghusl_07",
+     "title": "Boyun",
+     "text": "Boynun sağ tarafını, sonra sol tarafını yıkarız.",
+     "symbol": "person.bust.fill"
+    },
+    {
+     "id": "ghusl_08",
+     "image": "ghusl_08",
+     "title": "Beden",
+     "text": "Bedenin sağ tarafını, sonra sol tarafını yıkarız.",
+     "symbol": "figure.stand"
+    },
+    {
+     "id": "ghusl_09",
+     "image": "ghusl_09",
+     "title": "Bacaklar",
+     "text": "Sağ bacağı, sonra sol bacağı yıkarız.",
+     "symbol": "figure.walk"
+    },
+    {
+     "id": "ghusl_10",
+     "image": "ghusl_10",
+     "title": "Bütün beden",
+     "text": "Suyla birlikte elimizi bedenimizde gezdiririz, su her yere ulaşsın.",
+     "symbol": "checkmark.seal.fill",
+     "detail": "Sıra gözetmeden bütün bedene su ulaştırırsa yeterlidir; ancak su, el gezdirilerek bütün bedene ulaşmalıdır."
+    }
+   ]
+  },
+  {
+   "id": "salah",
+   "title": "Namaz",
+   "subtitle": "Öğle namazı adım adım",
+   "symbol": "moon.stars.fill",
+   "colors": [
+    "indigo",
+    "blue"
+   ],
+   "reference": "Telkînü’s-Sıbyân, s. 33–38",
+   "steps": [
+    {
+     "id": "salah_01",
+     "image": "salah_01",
+     "title": "Hazırlık",
+     "text": "Bedenimiz ve elbisemiz temiz, abdestliyiz ve temiz bir yerdeyiz.",
+     "symbol": "sparkles",
+     "detail": "Bedeni ve elbisesi temiz, bütün hadeslerden arınmış olarak namaza elverişli temiz bir yerde dimdik durur."
+    },
+    {
+     "id": "salah_02",
+     "image": "salah_02",
+     "title": "Kıble ve niyet",
+     "text": "Kâbe’ye yönelir, kalbimizle öğle namazına ihlasla, Allah için niyet ederiz.",
+     "symbol": "location.north.circle.fill",
+     "detail": "Kalbiyle o farz namazın kendisine niyet eder, rekât sayısını gözetir ve ibadetini Rabbine halis kılar."
+    },
+    {
+     "id": "salah_03",
+     "image": "salah_03",
+     "title": "Niyeti dille söylemek",
+     "text": "Niyeti dilimizle de pekiştiririz.",
+     "symbol": "text.bubble.fill",
+     "dua": "أصلي لله تبارك وتعالى في مقامي هذا فريضة الظهر، أربع ركعات، متوجهًا إلى الكعبة الشريفة، أداءً للفرض، طاعةً لله ولرسوله محمد ﷺ",
+     "duaMeaning": "Tebârek ve Teâlâ olan Allah için, şu yerimde, öğle namazının farzını, dört rekât, Kâbe-i Şerife’ye yönelerek, farzı eda etmek üzere, Allah’a ve Resulü Muhammed ﷺ’e itaat olarak kılıyorum."
+    },
+    {
+     "id": "salah_04",
+     "image": "salah_04",
+     "title": "Kamet",
+     "text": "Sonra kamet getirilir; bu kadınlar için değil erkekler içindir.",
+     "symbol": "speaker.wave.2.fill"
+    },
+    {
+     "id": "salah_05",
+     "image": "salah_05",
+     "title": "Tevcih",
+     "text": "Peygamberimiz Muhammed ﷺ’in tevcihini okuruz.",
+     "symbol": "quote.bubble.fill",
+     "dua": "سبحانك اللهم وبحمدك، تبارك اسمك، وتعالى جدك، وجل ثناؤك، ولا إله غيرك",
+     "duaMeaning": "Allah’ım, seni hamdinle tesbih ederim; adın mübarek, şanın yüce, övgün büyüktür ve senden başka ilah yoktur."
+    },
+    {
+     "id": "salah_06",
+     "image": "salah_06",
+     "title": "İbrahim’in tevcihi",
+     "text": "Sonra atamız İbrahim aleyhisselamın tevcihini okuruz.",
+     "symbol": "quote.bubble.fill",
+     "dua": "إني وجهت وجهي للذي فطر السماوات والأرض حنيفًا وما أنا من المشركين",
+     "duaMeaning": "Ben hanîf olarak yüzümü gökleri ve yeri yaratana çevirdim ve ben müşriklerden değilim."
+    },
+    {
+     "id": "salah_07",
+     "image": "salah_07",
+     "title": "Niyeti pekiştirmek",
+     "text": "Niyeti bir kez daha pekiştiririz.",
+     "symbol": "checkmark.circle.fill",
+     "dua": "أصلي لله تعالى فريضة الظهر، أربع ركعات، وأن الكعبة قبلتي",
+     "duaMeaning": "Allah Teâlâ için öğle namazının farzını dört rekât kılıyorum ve Kâbe kıblemdir."
+    },
+    {
+     "id": "salah_08",
+     "image": "salah_08",
+     "title": "İftitah tekbiri",
+     "text": "İftitah tekbirini alır, sonra kısa bir süre susarız.",
+     "symbol": "figure.stand",
+     "dua": "الله أكبر",
+     "duaMeaning": "Allah en büyüktür."
+    },
+    {
+     "id": "salah_09",
+     "image": "salah_09",
+     "title": "İstiâze",
+     "text": "Kalp huzuruyla gizlice Allah’a sığınırız.",
+     "symbol": "shield.fill",
+     "dua": "أعوذ بالله من الشيطان الرجيم",
+     "duaMeaning": "Kovulmuş şeytandan Allah’a sığınırım."
+    },
+    {
+     "id": "salah_10",
+     "image": "salah_10",
+     "title": "Fâtiha",
+     "text": "Besmele çekip Fâtiha suresini sonuna kadar okur, sonra kısa bir süre susarız.",
+     "symbol": "book.fill",
+     "detail": "Öğle namazında yalnızca Fâtiha gizlice okunur."
+    },
+    {
+     "id": "salah_11",
+     "image": "salah_11",
+     "title": "Rükû",
+     "text": "Tekbirle rükûa gideriz: avuçlar dizlerde, sırt dümdüz.",
+     "symbol": "figure.cooldown",
+     "detail": "Kollarını dik tutar, sırtı düzleşene kadar eğilir; başını ne kaldırır ne de sarkıtır.",
+     "dua": "سبحان ربي العظيم",
+     "repeatCount": 3,
+     "duaMeaning": "Yüce Rabbimi tüm noksanlıklardan tenzih ederim."
+    },
+    {
+     "id": "salah_12",
+     "image": "salah_12",
+     "title": "Rükûdan kalkış",
+     "text": "Başımızı kaldırıp doğruluruz.",
+     "symbol": "figure.stand",
+     "detail": "Kalkarken “Allah kendisine hamd edeni işitir” der; dikilince “Rabbimiz, hamd sanadır” der.",
+     "dua": "سمع الله لمن حمده… ربنا ولك الحمد",
+     "duaMeaning": "Allah kendisine hamd edeni işitir… Rabbimiz, hamd sanadır."
+    },
+    {
+     "id": "salah_13",
+     "image": "salah_13",
+     "title": "Secde",
+     "text": "Tekbirle secdeye gideriz: önce dizler, sonra eller, sonra burun ve alın.",
+     "symbol": "figure.mind.and.body",
+     "detail": "Yedi uzuv üzerine secde eder: alın, iki el, iki diz ve iki ayak; kollarını yanlarından uzak tutar.",
+     "dua": "سبحان ربي الأعلى",
+     "repeatCount": 3,
+     "duaMeaning": "En yüce Rabbimi tüm noksanlıklardan tenzih ederim."
+    },
+    {
+     "id": "salah_14",
+     "image": "salah_14",
+     "title": "İki secde arası oturuş",
+     "text": "Tekbirle başımızı kaldırır, her eklem yerine oturana kadar otururuz.",
+     "symbol": "figure.seated.side"
+    },
+    {
+     "id": "salah_15",
+     "image": "salah_15",
+     "title": "İkinci secde",
+     "text": "Birincisi gibi bir secde daha yaparız.",
+     "symbol": "figure.mind.and.body",
+     "dua": "سبحان ربي الأعلى",
+     "repeatCount": 3,
+     "duaMeaning": "En yüce Rabbimi tüm noksanlıklardan tenzih ederim."
+    },
+    {
+     "id": "salah_16",
+     "image": "salah_16",
+     "title": "İkinci rekât",
+     "text": "Tekbirle kalkarız: alın, sonra eller, sonra dizler; Fâtiha okur, sonra rükû ve secde ederiz.",
+     "symbol": "2.circle.fill"
+    },
+    {
+     "id": "salah_17",
+     "image": "salah_17",
+     "title": "İlk teşehhüd",
+     "text": "İkinci secdeden sonra oturup tahiyyatı okuruz.",
+     "symbol": "quote.bubble.fill",
+     "dua": "التحيات المباركات لله، والصلوات والطيبات، السلام على النبي ورحمة الله وبركاته، السلام علينا وعلى عباد الله الصالحين، أشهد أن لا إله إلا الله وحده لا شريك له، وأشهد أن محمدًا عبده ورسوله",
+     "duaMeaning": "Mübarek selamlar Allah’a aittir, dualar ve güzel şeyler de; Peygamber’e selam, Allah’ın rahmeti ve bereketleri olsun; bize ve Allah’ın salih kullarına selam olsun. Şahitlik ederim ki Allah’tan başka ilah yoktur, O tektir, ortağı yoktur; ve şahitlik ederim ki Muhammed O’nun kulu ve Resulüdür."
+    },
+    {
+     "id": "salah_18",
+     "image": "salah_18",
+     "title": "Üçüncü rekât",
+     "text": "Tekbirle kalkar, yalnızca Fâtiha okur, sonra rükû ve secde ederiz.",
+     "symbol": "3.circle.fill"
+    },
+    {
+     "id": "salah_19",
+     "image": "salah_19",
+     "title": "Dördüncü rekât",
+     "text": "Tekbirle kalkar, yalnızca Fâtiha okur, sonra rükû ve secde ederiz.",
+     "symbol": "4.circle.fill"
+    },
+    {
+     "id": "salah_20",
+     "image": "salah_20",
+     "title": "Son teşehhüd",
+     "text": "Oturur ve tahiyyatı önceki gibi okuruz.",
+     "symbol": "quote.bubble.fill",
+     "detail": "“Kulu ve Resulüdür”den sonra şunu ekleyebilir: “ﷺ, onu hidayetle ve hak dinle, müşrikler hoşlanmasa da onu bütün dinlere üstün kılmak için gönderdi. Rabbimiz, bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.”"
+    },
+    {
+     "id": "salah_21",
+     "image": "salah_21",
+     "title": "Selam",
+     "text": "Sonra selam veririz ve namaz tamamlanır. Aferin!",
+     "symbol": "hand.wave.fill"
+    }
+   ]
+  },
+  {
+   "id": "tayammum",
+   "title": "Teyemmüm",
+   "subtitle": "Su bulamadığımızda",
+   "symbol": "hand.raised.fingers.spread.fill",
+   "colors": [
+    "orange",
+    "yellow"
+   ],
+   "reference": "Telkînü’s-Sıbyân, s. 64–65",
+   "steps": [
+    {
+     "id": "tayammum_01",
+     "image": "tayammum_01",
+     "title": "Ne zaman teyemmüm?",
+     "text": "Su bulamadığımızda ya da bulup da abdest için kullanamadığımızda.",
+     "symbol": "questionmark.circle.fill"
+    },
+    {
+     "id": "tayammum_02",
+     "image": "tayammum_02",
+     "title": "Temiz toprak",
+     "text": "Tozlu, temiz toprakla teyemmüm ederiz.",
+     "symbol": "leaf.fill",
+     "detail": "Kül, alçı, kireç harcı, kireç, çorak tuzlu toprak, kum ve ıslak çamurla teyemmüm olmaz."
+    },
+    {
+     "id": "tayammum_03",
+     "image": "tayammum_03",
+     "title": "Besmele ve niyet",
+     "text": "Allah’ın adını anar, hadesi kaldırmaya ve namazı mubah kılmaya niyet ederiz.",
+     "symbol": "heart.text.square.fill"
+    },
+    {
+     "id": "tayammum_04",
+     "image": "tayammum_04",
+     "title": "Birinci vuruş",
+     "text": "Avuçlarımızı toprağa vururuz.",
+     "symbol": "hand.raised.fingers.spread.fill"
+    },
+    {
+     "id": "tayammum_05",
+     "image": "tayammum_05",
+     "title": "Yüzü meshetmek",
+     "text": "Avuçlarımızla yüzümüzü meshederiz.",
+     "symbol": "face.smiling.inverse"
+    },
+    {
+     "id": "tayammum_06",
+     "image": "tayammum_06",
+     "title": "İkinci vuruş",
+     "text": "Toprağa ikinci kez vururuz.",
+     "symbol": "hand.raised.fingers.spread.fill"
+    },
+    {
+     "id": "tayammum_07",
+     "image": "tayammum_07",
+     "title": "Elleri meshetmek",
+     "text": "İki elin üstünü ve içini bileklere kadar meshederiz.",
+     "symbol": "hands.sparkles.fill",
+     "detail": "Böylece teyemmüm tamamlanır."
+    }
+   ]
+  }
+ ]
+}

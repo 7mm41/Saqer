@@ -32,10 +32,10 @@ struct LessonCompletionView: View {
                     .scaleEffect(pop ? 1 : 0.3)
                     .shadow(color: (colors.first ?? .teal).opacity(0.5), radius: 20, y: 10)
 
-                Text("أحسنت! 🌟")
+                Text(L10n.t("done.title"))
                     .font(.largeTitle.weight(.heavy))
 
-                Text("أتممت درس «\(lesson.title)» خطوة بخطوة.\nبارك الله فيك!")
+                Text(L10n.t("done.message", lesson.title))
                     .font(.title3)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
@@ -49,13 +49,13 @@ struct LessonCompletionView: View {
 
                 HStack(spacing: 14) {
                     Button(action: onRestart) {
-                        Label("أعد الدرس", systemImage: "arrow.counterclockwise")
+                        Label(L10n.t("done.restart"), systemImage: "arrow.counterclockwise")
                             .font(.headline)
                     }
                     .buttonStyle(GlassButtonStyle())
 
                     Button(action: onClose) {
-                        Label("العودة", systemImage: "house.fill")
+                        Label(L10n.t("done.back"), systemImage: "house.fill")
                     }
                     .buttonStyle(ProminentGlassButtonStyle(colors: colors))
                 }

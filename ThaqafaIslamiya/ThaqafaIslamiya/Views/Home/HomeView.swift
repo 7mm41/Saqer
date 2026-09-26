@@ -12,6 +12,7 @@ struct HomeView: View {
     @Environment(LibraryViewModel.self) private var library
     @Environment(ProgressStore.self) private var progress
     @Environment(AppRouter.self) private var router
+    @Environment(AppSettings.self) private var settings
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var appeared = false
@@ -56,24 +57,36 @@ struct HomeView: View {
     private var header: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("السلام عليكم 👋")
+                Text(L10n.t("home.greeting"))
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(.secondary)
-                Text("ثقافة إسلامية")
+                Text(L10n.t("app.name"))
                     .font(.system(size: isWide ? 44 : 34, weight: .heavy, design: .rounded))
                     .foregroundStyle(LinearGradient.diagonal([.teal, .indigo]))
-                Text(library.book?.title ?? "تلقين الصبيان ما يلزم الإنسان")
+                Text(library.book?.title ?? "")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
             }
 
             Spacer(minLength: 8)
 
-            Button { router.open(.about) } label: {
-                overallProgress
+            VStack(spacing: 10) {
+                Button { router.open(.about) } label: {
+                    overallProgress
+                }
+                .buttonStyle(PressableCardStyle())
+                .accessibilityLabel(L10n.t("home.progressA11y"))
+
+                Button { router.showsSettings = true } label: {
+                    Label(settings.language.nativeName, systemImage: "globe")
+                        .font(.caption.weight(.bold))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 7)
+                        .glassCapsule(tint: .teal)
+                }
+                .buttonStyle(PressableCardStyle())
+                .accessibilityLabel(L10n.t("settings.a11y"))
             }
-            .buttonStyle(PressableCardStyle())
-            .accessibilityLabel("تقدّمك وعن الكتاب")
         }
         .padding(20)
         .glassCard(cornerRadius: 32, tint: .teal)
@@ -86,9 +99,9 @@ struct HomeView: View {
         return ZStack {
             ProgressRing(progress: value, colors: [.teal, .indigo, .pink], lineWidth: 9)
             VStack(spacing: 0) {
-                Text("\(Int(value * 100).arabicDigits)٪")
+                Text(L10n.t("common.percent", Int(value * 100).digits))
                     .font(.headline.weight(.bold))
-                Text("تقدّمي")
+                Text(L10n.t("home.myProgress"))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -100,10 +113,10 @@ struct HomeView: View {
 
     private var lessonsSection: some View {
         VStack(alignment: .leading, spacing: 14) {
-            SectionHeader(title: "رحلات تفاعلية", subtitle: "تعلّم خطوة بخطوة بالبطاقات", symbol: "sparkles")
+            SectionHeader(title: L10n.t("home.lessons.title"), subtitle: L10n.t("home.lessons.subtitle"), symbol: "sparkles")
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
+                LazyHStack(spacing: 16) {
                     ForEach(Array(library.lessons.enumerated()), id: \.element.id) { index, lesson in
                         Button { router.present(lesson) } label: {
                             LessonCard(lesson: lesson, isCompleted: progress.isCompleted(lesson), isWide: isWide)
@@ -129,7 +142,9 @@ struct HomeView: View {
 
     private var chaptersSection: some View {
         VStack(alignment: .leading, spacing: 22) {
-            SectionHeader(title: "أقسام الكتاب", subtitle: "\(library.totalMasailCount.arabicDigits) مسألة في \(library.chapters.count.arabicDigits) قسمًا", symbol: "books.vertical.fill")
+            SectionHeader(title: L10n.t("home.chapters.title"),
+                          subtitle: L10n.t("home.chapters.subtitle", library.totalMasailCount.digits, library.chapters.count.digits),
+                          symbol: "books.vertical.fill")
 
             ForEach(library.parts, id: \.self) { part in
                 VStack(alignment: .leading, spacing: 12) {
@@ -158,10 +173,10 @@ struct HomeView: View {
 
     private var searchResults: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeader(title: "نتائج البحث", subtitle: "\(library.searchResults.count.arabicDigits) نتيجة", symbol: "magnifyingglass")
+            SectionHeader(title: L10n.t("search.title"), subtitle: L10n.t("search.count", library.searchResults.count.digits), symbol: "magnifyingglass")
 
             if library.searchResults.isEmpty {
-                Text("لم نجد مسألة بهذا الاسم، جرّب كلمة أخرى 🌱")
+                Text(L10n.t("search.empty"))
                     .frame(maxWidth: .infinity)
                     .padding(30)
                     .glassCard()
@@ -196,7 +211,7 @@ struct SearchField: View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
-            TextField("ابحث عن مسألة… (الوضوء، الزكاة، الجار)", text: $text)
+            TextField(L10n.t("search.placeholder"), text: $text)
                 .focused($focused)
                 .submitLabel(.search)
             if !text.isEmpty {
@@ -205,7 +220,7 @@ struct SearchField: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
                 }
-                .accessibilityLabel("مسح البحث")
+                .accessibilityLabel(L10n.t("search.clear"))
             }
         }
         .padding(.horizontal, 18)
@@ -239,9 +254,8 @@ struct SectionHeader: View {
 }
 
 #Preview {
-    NavigationStack { HomeView() }
-        .environment(LibraryViewModel())
-        .environment(ProgressStore())
-        .environment(AppRouter())
-        .environment(\.layoutDirection, .rightToLeft)
+    let settings = AppSettings()
+    return NavigationStack { HomeView() }
+        .withAppEnvironment(settings: settings, library: LibraryViewModel(language: settings.language),
+                            progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer())
 }

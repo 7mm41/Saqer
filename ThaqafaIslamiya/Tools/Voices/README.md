@@ -1,0 +1,23 @@
+# الأصوات الطبيعية
+
+`gen_voices.py` يولّد مقاطع صوتية طبيعية واضحة بمحرك [Piper](https://github.com/OHF-Voice/piper1-gpl) العصبي (يعمل محليًا)،
+ثم يطبّع مستوى الصوت ويضغطه AAC أحادي 28kbps. المقاطع تُدمج في التطبيق فلا تحتاج إنترنت.
+
+| اللغة | الصوت |
+|---|---|
+| العربية | `ar_JO-kareem-medium` (مع تشكيل تلقائي للنصوص، وتشكيل يدوي كامل للأدعية) |
+| English | `en_US-lessac-high` |
+| فارسی | `fa_IR-gyro-medium` |
+| Türkçe | `tr_TR-dfki-medium` |
+| हिन्दी | `hi_IN-priyamvada-medium` |
+| বাংলা | `bn_BD-google-medium` |
+
+```bash
+pip install piper-tts imageio-ffmpeg
+python3 -m piper.download_voices ar_JO-kareem-medium en_US-lessac-high fa_IR-gyro-medium \
+    tr_TR-dfki-medium hi_IN-priyamvada-medium bn_BD-google-medium --data-dir voices
+python3 gen_voices.py ../../ThaqafaIslamiya/Assets/Voices              # كل اللغات
+python3 gen_voices.py ../../ThaqafaIslamiya/Assets/Voices ar --only dua # الأدعية فقط
+```
+
+المقاطع الموجودة لا يُعاد توليدها؛ احذف المقطع لإعادة توليده بعد تعديل نصه.

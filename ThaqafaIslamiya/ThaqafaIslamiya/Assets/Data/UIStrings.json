@@ -1,0 +1,666 @@
+{
+ "about.author": {
+  "ar": "تأليف: {0}",
+  "bn": "লেখক: {0}",
+  "en": "Author: {0}",
+  "fa": "نویسنده: {0}",
+  "hi": "लेखक: {0}",
+  "tr": "Yazar: {0}"
+ },
+ "about.book": {
+  "ar": "عن الكتاب",
+  "bn": "বই সম্পর্কে",
+  "en": "About the book",
+  "fa": "دربارهٔ کتاب",
+  "hi": "किताब के बारे में",
+  "tr": "Kitap hakkında"
+ },
+ "about.lessonsDone": {
+  "ar": "الدروس المكتملة: {0} من {1}",
+  "bn": "সম্পন্ন পাঠ: {0} / {1}",
+  "en": "Lessons completed: {0} of {1}",
+  "fa": "درس‌های کامل‌شده: {0} از {1}",
+  "hi": "पूरे हुए पाठ: {0} / {1}",
+  "tr": "Tamamlanan dersler: {0} / {1}"
+ },
+ "about.offline": {
+  "ar": "يعمل التطبيق دون إنترنت بالكامل، وكل المحتوى مأخوذ من الكتاب مع تبسيط يسير للأطفال.",
+  "bn": "অ্যাপটি সম্পূর্ণ ইন্টারনেট ছাড়া চলে। সব বিষয়বস্তু বই থেকে নেওয়া, শিশুদের জন্য সামান্য সহজ করা।",
+  "en": "The app works fully offline. All content comes from the book, lightly simplified for children.",
+  "fa": "برنامه کاملاً بدون اینترنت کار می‌کند و همهٔ محتوا از کتاب گرفته شده و برای کودکان کمی ساده شده است.",
+  "hi": "ऐप पूरी तरह बिना इंटरनेट चलता है। सारी सामग्री किताब से ली गई है और बच्चों के लिए थोड़ी सरल की गई है।",
+  "tr": "Uygulama tamamen internetsiz çalışır; tüm içerik kitaptan alınmış ve çocuklar için biraz sadeleştirilmiştir."
+ },
+ "about.reset": {
+  "ar": "البدء من جديد",
+  "bn": "নতুন করে শুরু করো",
+  "en": "Start over",
+  "fa": "شروع دوباره",
+  "hi": "फिर से शुरू करें",
+  "tr": "Baştan başla"
+ },
+ "about.resetAction": {
+  "ar": "مسح التقدّم",
+  "bn": "অগ্রগতি মুছো",
+  "en": "Erase progress",
+  "fa": "پاک کردن پیشرفت",
+  "hi": "प्रगति मिटाएँ",
+  "tr": "İlerlemeyi sil"
+ },
+ "about.resetConfirm": {
+  "ar": "هل تريد مسح كل التقدّم؟",
+  "bn": "সব অগ্রগতি মুছে ফেলবে?",
+  "en": "Erase all progress?",
+  "fa": "همهٔ پیشرفت پاک شود؟",
+  "hi": "क्या सारी प्रगति मिटा दें?",
+  "tr": "Tüm ilerleme silinsin mi?"
+ },
+ "about.title": {
+  "ar": "عن التطبيق",
+  "bn": "অ্যাপ সম্পর্কে",
+  "en": "About",
+  "fa": "دربارهٔ برنامه",
+  "hi": "ऐप के बारे में",
+  "tr": "Hakkında"
+ },
+ "about.translationNote": {
+  "ar": "الترجمات لمعاني النصوص، والأدعية تبقى بالعربية كما وردت في الكتاب.",
+  "bn": "অনুবাদে অর্থ তুলে ধরা হয়েছে; দোয়াগুলো বইয়ের মতো আরবিতেই রয়েছে।",
+  "en": "Translations convey the meaning; supplications stay in Arabic as in the book.",
+  "fa": "ترجمه‌ها معنای متن را می‌رسانند و دعاها همان‌طور که در کتاب آمده به عربی می‌مانند.",
+  "hi": "अनुवाद अर्थ बताते हैं; दुआएँ किताब की तरह अरबी में ही रहती हैं।",
+  "tr": "Çeviriler anlamı aktarır; dualar kitaptaki gibi Arapça kalır."
+ },
+ "app.name": {
+  "ar": "ثقافة إسلامية",
+  "bn": "ইসলামী সংস্কৃতি",
+  "en": "Islamic Culture",
+  "fa": "فرهنگ اسلامی",
+  "hi": "इस्लामी संस्कृति",
+  "tr": "İslami Kültür"
+ },
+ "audio.stop": {
+  "ar": "إيقاف القراءة",
+  "bn": "পড়া থামাও",
+  "en": "Stop reading",
+  "fa": "توقف خواندن",
+  "hi": "पढ़ना रोकें",
+  "tr": "Okumayı durdur"
+ },
+ "chapter.learnInteractive": {
+  "ar": "تعلّم بالتفاعل",
+  "bn": "করে করে শেখো",
+  "en": "Learn by doing",
+  "fa": "یادگیری تعاملی",
+  "hi": "करके सीखें",
+  "tr": "Yaparak öğren"
+ },
+ "chapter.masail": {
+  "ar": "المسائل",
+  "bn": "মাসআলাসমূহ",
+  "en": "Topics",
+  "fa": "مسائل",
+  "hi": "मसले",
+  "tr": "Meseleler"
+ },
+ "chapter.masailCount": {
+  "ar": "{0} مسألة",
+  "bn": "{0}টি মাসআলা",
+  "en": "{0} topics",
+  "fa": "{0} مسئله",
+  "hi": "{0} मसले",
+  "tr": "{0} mesele"
+ },
+ "chapter.masailSubtitle": {
+  "ar": "اختر مسألة لتتعلّمها",
+  "bn": "শেখার জন্য একটি মাসআলা বেছে নাও",
+  "en": "Choose a topic to learn",
+  "fa": "یک مسئله برای یادگیری انتخاب کن",
+  "hi": "सीखने के लिए एक मसला चुनें",
+  "tr": "Öğrenmek için bir mesele seç"
+ },
+ "chapter.openHint": {
+  "ar": "افتح القسم",
+  "bn": "অধ্যায় খোলো",
+  "en": "Open chapter",
+  "fa": "باز کردن بخش",
+  "hi": "अध्याय खोलें",
+  "tr": "Bölümü aç"
+ },
+ "common.cancel": {
+  "ar": "إلغاء",
+  "bn": "বাতিল",
+  "en": "Cancel",
+  "fa": "لغو",
+  "hi": "रद्द करें",
+  "tr": "İptal"
+ },
+ "common.done": {
+  "ar": "تم",
+  "bn": "সম্পন্ন",
+  "en": "Done",
+  "fa": "تمام",
+  "hi": "हो गया",
+  "tr": "Tamam"
+ },
+ "common.percent": {
+  "ar": "{0}٪",
+  "bn": "{0}%",
+  "en": "{0}%",
+  "fa": "{0}٪",
+  "hi": "{0}%",
+  "tr": "%{0}"
+ },
+ "done.back": {
+  "ar": "العودة",
+  "bn": "ফিরে যাও",
+  "en": "Home",
+  "fa": "بازگشت",
+  "hi": "वापस",
+  "tr": "Geri dön"
+ },
+ "done.message": {
+  "ar": "أتممت درس «{0}» خطوة بخطوة.\nبارك الله فيك!",
+  "bn": "তুমি “{0}” পাঠটি ধাপে ধাপে শেষ করেছ।\nআল্লাহ তোমাকে বরকত দিন!",
+  "en": "You completed “{0}” step by step.\nMay Allah bless you!",
+  "fa": "درس «{0}» را قدم‌به‌قدم تمام کردی.\nخدا به تو برکت دهد!",
+  "hi": "आपने “{0}” पाठ क़दम-ब-क़दम पूरा किया।\nअल्लाह आपको बरकत दे!",
+  "tr": "“{0}” dersini adım adım tamamladın.\nAllah seni mübarek kılsın!"
+ },
+ "done.restart": {
+  "ar": "أعد الدرس",
+  "bn": "পাঠ আবার করো",
+  "en": "Repeat lesson",
+  "fa": "تکرار درس",
+  "hi": "पाठ दोहराएँ",
+  "tr": "Dersi tekrarla"
+ },
+ "done.title": {
+  "ar": "أحسنت! 🌟",
+  "bn": "সাবাশ! 🌟",
+  "en": "Well done! 🌟",
+  "fa": "آفرین! 🌟",
+  "hi": "शाबाश! 🌟",
+  "tr": "Aferin! 🌟"
+ },
+ "dua.listen": {
+  "ar": "استمع للدعاء",
+  "bn": "দোয়াটি শোনো",
+  "en": "Listen to the supplication",
+  "fa": "به دعا گوش کن",
+  "hi": "दुआ सुनें",
+  "tr": "Duayı dinle"
+ },
+ "dua.meaning": {
+  "ar": "المعنى",
+  "bn": "অর্থ",
+  "en": "Meaning",
+  "fa": "معنا",
+  "hi": "अर्थ",
+  "tr": "Anlamı"
+ },
+ "dua.say": {
+  "ar": "قُل",
+  "bn": "বলো",
+  "en": "Say",
+  "fa": "بگو",
+  "hi": "कहें",
+  "tr": "Söyle"
+ },
+ "error.fileNotFound": {
+  "ar": "لم يُعثر على الملف «{0}» داخل التطبيق.",
+  "bn": "অ্যাপে “{0}” ফাইলটি পাওয়া যায়নি।",
+  "en": "The file “{0}” was not found in the app.",
+  "fa": "فایل «{0}» در برنامه پیدا نشد.",
+  "hi": "ऐप में “{0}” फ़ाइल नहीं मिली।",
+  "tr": "“{0}” dosyası uygulamada bulunamadı."
+ },
+ "home.chapters.subtitle": {
+  "ar": "{0} مسألة في {1} قسمًا",
+  "bn": "{1}টি অধ্যায়ে {0}টি মাসআলা",
+  "en": "{0} topics in {1} chapters",
+  "fa": "{0} مسئله در {1} بخش",
+  "hi": "{1} अध्यायों में {0} मसले",
+  "tr": "{1} bölümde {0} mesele"
+ },
+ "home.chapters.title": {
+  "ar": "أقسام الكتاب",
+  "bn": "বইয়ের অধ্যায়সমূহ",
+  "en": "Book chapters",
+  "fa": "بخش‌های کتاب",
+  "hi": "किताब के अध्याय",
+  "tr": "Kitabın bölümleri"
+ },
+ "home.greeting": {
+  "ar": "السلام عليكم 👋",
+  "bn": "আসসালামু আলাইকুম 👋",
+  "en": "Assalamu alaikum 👋",
+  "fa": "السلام علیکم 👋",
+  "hi": "अस्सलामु अलैकुम 👋",
+  "tr": "Esselâmu aleyküm 👋"
+ },
+ "home.lessons.subtitle": {
+  "ar": "تعلّم خطوة بخطوة بالبطاقات",
+  "bn": "কার্ডে ধাপে ধাপে শেখো",
+  "en": "Learn step by step with cards",
+  "fa": "با کارت‌ها قدم‌به‌قدم بیاموز",
+  "hi": "कार्ड के साथ क़दम-ब-क़दम सीखें",
+  "tr": "Kartlarla adım adım öğren"
+ },
+ "home.lessons.title": {
+  "ar": "رحلات تفاعلية",
+  "bn": "ইন্টারঅ্যাকটিভ যাত্রা",
+  "en": "Interactive journeys",
+  "fa": "سفرهای تعاملی",
+  "hi": "इंटरैक्टिव सफ़र",
+  "tr": "Etkileşimli yolculuklar"
+ },
+ "home.myProgress": {
+  "ar": "تقدّمي",
+  "bn": "আমার অগ্রগতি",
+  "en": "My progress",
+  "fa": "پیشرفت من",
+  "hi": "मेरी प्रगति",
+  "tr": "İlerlemem"
+ },
+ "home.progressA11y": {
+  "ar": "تقدّمك وعن الكتاب",
+  "bn": "তোমার অগ্রগতি ও বই সম্পর্কে",
+  "en": "Your progress and about the book",
+  "fa": "پیشرفت شما و درباره کتاب",
+  "hi": "आपकी प्रगति और किताब के बारे में",
+  "tr": "İlerlemen ve kitap hakkında"
+ },
+ "lesson.close": {
+  "ar": "إغلاق الدرس",
+  "bn": "পাঠ বন্ধ করো",
+  "en": "Close lesson",
+  "fa": "بستن درس",
+  "hi": "पाठ बंद करें",
+  "tr": "Dersi kapat"
+ },
+ "lesson.finish": {
+  "ar": "أتممتُ الدرس",
+  "bn": "পাঠ শেষ করেছি",
+  "en": "I finished!",
+  "fa": "درس را تمام کردم",
+  "hi": "पाठ पूरा किया",
+  "tr": "Dersi bitirdim"
+ },
+ "lesson.next": {
+  "ar": "التالي",
+  "bn": "পরের",
+  "en": "Next",
+  "fa": "بعدی",
+  "hi": "अगला",
+  "tr": "İleri"
+ },
+ "lesson.nextA11y": {
+  "ar": "الخطوة التالية",
+  "bn": "পরের ধাপ",
+  "en": "Next step",
+  "fa": "مرحلهٔ بعد",
+  "hi": "अगला क़दम",
+  "tr": "Sonraki adım"
+ },
+ "lesson.previous": {
+  "ar": "السابق",
+  "bn": "আগের",
+  "en": "Back",
+  "fa": "قبلی",
+  "hi": "पिछला",
+  "tr": "Geri"
+ },
+ "lesson.previousA11y": {
+  "ar": "الخطوة السابقة",
+  "bn": "আগের ধাপ",
+  "en": "Previous step",
+  "fa": "مرحلهٔ قبل",
+  "hi": "पिछला क़दम",
+  "tr": "Önceki adım"
+ },
+ "lesson.startHint": {
+  "ar": "ابدأ الدرس التفاعلي",
+  "bn": "ইন্টারঅ্যাকটিভ পাঠ শুরু করো",
+  "en": "Start the interactive lesson",
+  "fa": "شروع درس تعاملی",
+  "hi": "इंटरैक्टिव पाठ शुरू करें",
+  "tr": "Etkileşimli dersi başlat"
+ },
+ "lesson.stepsCount": {
+  "ar": "{0} خطوة",
+  "bn": "{0}টি ধাপ",
+  "en": "{0} steps",
+  "fa": "{0} مرحله",
+  "hi": "{0} क़दम",
+  "tr": "{0} adım"
+ },
+ "lesson.swipeHintLTR": {
+  "ar": "اسحب البطاقة إلى اليسار للخطوة التالية 👈",
+  "bn": "পরের ধাপের জন্য কার্ডটি বাঁয়ে সরাও 👈",
+  "en": "Swipe the card left for the next step 👈",
+  "fa": "کارت را به چپ بکش تا مرحلهٔ بعد بیاید 👈",
+  "hi": "अगले क़दम के लिए कार्ड को बाईं ओर खींचें 👈",
+  "tr": "Sonraki adım için kartı sola kaydır 👈"
+ },
+ "lesson.swipeHintRTL": {
+  "ar": "اسحب البطاقة إلى اليمين للخطوة التالية 👉",
+  "bn": "পরের ধাপের জন্য কার্ডটি ডানে সরাও 👉",
+  "en": "Swipe the card right for the next step 👉",
+  "fa": "کارت را به راست بکش تا مرحلهٔ بعد بیاید 👉",
+  "hi": "अगले क़दम के लिए कार्ड को दाईं ओर खींचें 👉",
+  "tr": "Sonraki adım için kartı sağa kaydır 👉"
+ },
+ "lesson.timeline": {
+  "ar": "خطوات الدرس",
+  "bn": "পাঠের ধাপসমূহ",
+  "en": "Lesson steps",
+  "fa": "مراحل درس",
+  "hi": "पाठ के क़दम",
+  "tr": "Dersin adımları"
+ },
+ "masala.hasLesson": {
+  "ar": "فيها درس تفاعلي",
+  "bn": "এতে ইন্টারঅ্যাকটিভ পাঠ আছে",
+  "en": "Has an interactive lesson",
+  "fa": "درس تعاملی دارد",
+  "hi": "इसमें इंटरैक्टिव पाठ है",
+  "tr": "Etkileşimli dersi var"
+ },
+ "masala.learned": {
+  "ar": "تعلّمتُها ✓",
+  "bn": "শিখেছি ✓",
+  "en": "Learned ✓",
+  "fa": "یاد گرفتم ✓",
+  "hi": "सीख लिया ✓",
+  "tr": "Öğrendim ✓"
+ },
+ "masala.learnedA11y": {
+  "ar": "تم تعلّمها",
+  "bn": "শেখা হয়েছে",
+  "en": "Learned",
+  "fa": "یاد گرفته شد",
+  "hi": "सीखा गया",
+  "tr": "Öğrenildi"
+ },
+ "masala.listen": {
+  "ar": "استمع للمسألة",
+  "bn": "এই মাসআলাটি শোনো",
+  "en": "Listen to this topic",
+  "fa": "به این مسئله گوش کن",
+  "hi": "यह मसला सुनें",
+  "tr": "Bu meseleyi dinle"
+ },
+ "masala.markLearned": {
+  "ar": "تعلّمتُ هذه المسألة",
+  "bn": "আমি এই মাসআলাটি শিখেছি",
+  "en": "I learned this",
+  "fa": "این مسئله را یاد گرفتم",
+  "hi": "मैंने यह मसला सीख लिया",
+  "tr": "Bu meseleyi öğrendim"
+ },
+ "masala.source": {
+  "ar": "المصدر: {0} — ص {1}",
+  "bn": "সূত্র: {0} — পৃ. {1}",
+  "en": "Source: {0} — p. {1}",
+  "fa": "منبع: {0} — ص {1}",
+  "hi": "स्रोत: {0} — पृ. {1}",
+  "tr": "Kaynak: {0} — s. {1}"
+ },
+ "masala.startLesson": {
+  "ar": "ابدأ درس «{0}» التفاعلي",
+  "bn": "“{0}” পাঠ শুরু করো",
+  "en": "Start the “{0}” lesson",
+  "fa": "شروع درس تعاملی «{0}»",
+  "hi": "“{0}” पाठ शुरू करें",
+  "tr": "“{0}” dersini başlat"
+ },
+ "quiz.back": {
+  "ar": "العودة للقسم",
+  "bn": "অধ্যায়ে ফিরে যাও",
+  "en": "Back to chapter",
+  "fa": "بازگشت به بخش",
+  "hi": "अध्याय पर वापस",
+  "tr": "Bölüme dön"
+ },
+ "quiz.best": {
+  "ar": "أفضل نتيجة: {0} من {1}",
+  "bn": "সেরা ফল: {0} / {1}",
+  "en": "Best score: {0} of {1}",
+  "fa": "بهترین نتیجه: {0} از {1}",
+  "hi": "सबसे अच्छा स्कोर: {0} / {1}",
+  "tr": "En iyi sonuç: {0} / {1}"
+ },
+ "quiz.correct": {
+  "ar": "إجابة صحيحة! أحسنت 🌟",
+  "bn": "সঠিক উত্তর! সাবাশ 🌟",
+  "en": "Correct! Well done 🌟",
+  "fa": "پاسخ درست! آفرین 🌟",
+  "hi": "सही जवाब! शाबाश 🌟",
+  "tr": "Doğru cevap! Aferin 🌟"
+ },
+ "quiz.count": {
+  "ar": "{0} أسئلة من القسم",
+  "bn": "এই অধ্যায় থেকে {0}টি প্রশ্ন",
+  "en": "{0} questions from this chapter",
+  "fa": "{0} پرسش از این بخش",
+  "hi": "इस अध्याय से {0} सवाल",
+  "tr": "Bu bölümden {0} soru"
+ },
+ "quiz.goodTry": {
+  "ar": "أحسنت المحاولة!",
+  "bn": "ভালো চেষ্টা!",
+  "en": "Good try!",
+  "fa": "تلاش خوبی بود!",
+  "hi": "अच्छी कोशिश!",
+  "tr": "Güzel deneme!"
+ },
+ "quiz.next": {
+  "ar": "السؤال التالي",
+  "bn": "পরের প্রশ্ন",
+  "en": "Next question",
+  "fa": "پرسش بعدی",
+  "hi": "अगला सवाल",
+  "tr": "Sonraki soru"
+ },
+ "quiz.perfect": {
+  "ar": "ممتاز! علامة كاملة",
+  "bn": "চমৎকার! পূর্ণ নম্বর",
+  "en": "Excellent! Full marks",
+  "fa": "عالی! نمرهٔ کامل",
+  "hi": "बेहतरीन! पूरे अंक",
+  "tr": "Mükemmel! Tam puan"
+ },
+ "quiz.questionOf": {
+  "ar": "سؤال {0} من {1}",
+  "bn": "প্রশ্ন {0} / {1}",
+  "en": "Question {0} of {1}",
+  "fa": "پرسش {0} از {1}",
+  "hi": "सवाल {0} / {1}",
+  "tr": "Soru {0} / {1}"
+ },
+ "quiz.result": {
+  "ar": "النتيجة",
+  "bn": "ফলাফল",
+  "en": "See result",
+  "fa": "نتیجه",
+  "hi": "परिणाम",
+  "tr": "Sonuç"
+ },
+ "quiz.retry": {
+  "ar": "أعد الاختبار",
+  "bn": "আবার চেষ্টা করো",
+  "en": "Try again",
+  "fa": "دوباره امتحان کن",
+  "hi": "फिर से करें",
+  "tr": "Tekrar dene"
+ },
+ "quiz.score": {
+  "ar": "نتيجتك: {0} من {1}",
+  "bn": "তোমার ফল: {0} / {1}",
+  "en": "Your score: {0} of {1}",
+  "fa": "نتیجهٔ تو: {0} از {1}",
+  "hi": "आपका स्कोर: {0} / {1}",
+  "tr": "Puanın: {0} / {1}"
+ },
+ "quiz.title": {
+  "ar": "اختبر نفسك",
+  "bn": "নিজেকে যাচাই করো",
+  "en": "Test yourself",
+  "fa": "خودت را بسنج",
+  "hi": "ख़ुद को परखें",
+  "tr": "Kendini dene"
+ },
+ "quiz.wrong": {
+  "ar": "لا بأس، تعلّمنا شيئًا جديدًا",
+  "bn": "সমস্যা নেই, আমরা নতুন কিছু শিখলাম",
+  "en": "No problem — we learned something new",
+  "fa": "اشکالی ندارد، چیز تازه‌ای یاد گرفتیم",
+  "hi": "कोई बात नहीं, हमने कुछ नया सीखा",
+  "tr": "Sorun değil, yeni bir şey öğrendik"
+ },
+ "repeat.done": {
+  "ar": "رائع! أكملت {0} مرات 🎉",
+  "bn": "দারুণ! {0} বার সম্পন্ন করেছ 🎉",
+  "en": "Great! You did it {0} times 🎉",
+  "fa": "عالی! {0} بار انجام دادی 🎉",
+  "hi": "बहुत बढ़िया! {0} बार पूरा किया 🎉",
+  "tr": "Harika! {0} kez yaptın 🎉"
+ },
+ "repeat.progress": {
+  "ar": "المس القطرات: {0} من {1}",
+  "bn": "ফোঁটাগুলো ছোঁও: {0} / {1}",
+  "en": "Tap the drops: {0} of {1}",
+  "fa": "قطره‌ها را لمس کن: {0} از {1}",
+  "hi": "बूँदों को छुएँ: {0} / {1}",
+  "tr": "Damlalara dokun: {0} / {1}"
+ },
+ "repeat.time": {
+  "ar": "المرة {0}",
+  "bn": "{0} নম্বর বার",
+  "en": "Time {0}",
+  "fa": "بار {0}",
+  "hi": "{0}वीं बार",
+  "tr": "{0}. kez"
+ },
+ "search.clear": {
+  "ar": "مسح البحث",
+  "bn": "খোঁজ মুছে ফেলো",
+  "en": "Clear search",
+  "fa": "پاک کردن جستجو",
+  "hi": "खोज साफ़ करें",
+  "tr": "Aramayı temizle"
+ },
+ "search.count": {
+  "ar": "{0} نتيجة",
+  "bn": "{0}টি ফলাফল",
+  "en": "{0} results",
+  "fa": "{0} نتیجه",
+  "hi": "{0} परिणाम",
+  "tr": "{0} sonuç"
+ },
+ "search.empty": {
+  "ar": "لم نجد مسألة بهذا الاسم، جرّب كلمة أخرى 🌱",
+  "bn": "এই নামে কোনো মাসআলা পাওয়া যায়নি, অন্য শব্দ চেষ্টা করো 🌱",
+  "en": "No topic found — try another word 🌱",
+  "fa": "مسئله‌ای با این نام پیدا نشد، کلمهٔ دیگری امتحان کن 🌱",
+  "hi": "इस नाम का कोई मसला नहीं मिला, दूसरा शब्द आज़माएँ 🌱",
+  "tr": "Bu adla mesele bulunamadı, başka bir kelime dene 🌱"
+ },
+ "search.placeholder": {
+  "ar": "ابحث عن مسألة… (الوضوء، الزكاة، الجار)",
+  "bn": "মাসআলা খোঁজো… (অজু, যাকাত, প্রতিবেশী)",
+  "en": "Search a topic… (wudu, zakat, neighbour)",
+  "fa": "جستجوی مسئله… (وضو، زکات، همسایه)",
+  "hi": "मसला खोजें… (वुज़ू, ज़कात, पड़ोसी)",
+  "tr": "Mesele ara… (abdest, zekât, komşu)"
+ },
+ "search.title": {
+  "ar": "نتائج البحث",
+  "bn": "খোঁজের ফলাফল",
+  "en": "Search results",
+  "fa": "نتایج جستجو",
+  "hi": "खोज परिणाम",
+  "tr": "Arama sonuçları"
+ },
+ "settings.a11y": {
+  "ar": "الإعدادات واللغة",
+  "bn": "সেটিংস ও ভাষা",
+  "en": "Settings and language",
+  "fa": "تنظیمات و زبان",
+  "hi": "सेटिंग्स और भाषा",
+  "tr": "Ayarlar ve dil"
+ },
+ "settings.audio": {
+  "ar": "الصوت",
+  "bn": "অডিও",
+  "en": "Audio",
+  "fa": "صدا",
+  "hi": "आवाज़",
+  "tr": "Ses"
+ },
+ "settings.autoNarrate": {
+  "ar": "قراءة كل خطوة تلقائيًا",
+  "bn": "প্রতিটি ধাপ স্বয়ংক্রিয়ভাবে পড়ো",
+  "en": "Read each step aloud automatically",
+  "fa": "خواندن خودکار هر مرحله",
+  "hi": "हर क़दम अपने आप पढ़ें",
+  "tr": "Her adımı otomatik oku"
+ },
+ "settings.autoNarrateFooter": {
+  "ar": "أصوات طبيعية مسجّلة داخل التطبيق وتعمل دون إنترنت.",
+  "bn": "স্বাভাবিক কণ্ঠগুলো অ্যাপের ভেতরেই আছে এবং ইন্টারনেট ছাড়া চলে।",
+  "en": "Natural voices are bundled in the app and work offline.",
+  "fa": "صداهای طبیعی درون برنامه‌اند و بدون اینترنت کار می‌کنند.",
+  "hi": "प्राकृतिक आवाज़ें ऐप में ही हैं और बिना इंटरनेट चलती हैं।",
+  "tr": "Doğal sesler uygulamanın içindedir ve internetsiz çalışır."
+ },
+ "settings.language": {
+  "ar": "اللغة",
+  "bn": "ভাষা",
+  "en": "Language",
+  "fa": "زبان",
+  "hi": "भाषा",
+  "tr": "Dil"
+ },
+ "settings.title": {
+  "ar": "الإعدادات",
+  "bn": "সেটিংস",
+  "en": "Settings",
+  "fa": "تنظیمات",
+  "hi": "सेटिंग्स",
+  "tr": "Ayarlar"
+ },
+ "step.fromBook": {
+  "ar": "من الكتاب",
+  "bn": "বই থেকে",
+  "en": "From the book",
+  "fa": "از کتاب",
+  "hi": "किताब से",
+  "tr": "Kitaptan"
+ },
+ "step.listen": {
+  "ar": "استمع للخطوة",
+  "bn": "এই ধাপটি শোনো",
+  "en": "Listen to this step",
+  "fa": "به این مرحله گوش کن",
+  "hi": "यह क़दम सुनें",
+  "tr": "Bu adımı dinle"
+ },
+ "step.of": {
+  "ar": "الخطوة {0} من {1}",
+  "bn": "ধাপ {0} / {1}",
+  "en": "Step {0} of {1}",
+  "fa": "مرحلهٔ {0} از {1}",
+  "hi": "क़दम {0} / {1}",
+  "tr": "Adım {0} / {1}"
+ },
+ "step.wellDone": {
+  "ar": "أحسنت",
+  "bn": "সাবাশ",
+  "en": "Well done",
+  "fa": "آفرین",
+  "hi": "शाबाश",
+  "tr": "Aferin"
+ }
+}

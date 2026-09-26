@@ -37,6 +37,15 @@ struct LessonStep: Codable, Identifiable, Hashable {
     let detail: String?
     /// دعاء أو ذكر يُقال في هذه الخطوة (اختياري).
     let dua: String?
+    /// معنى الدعاء بلغة الواجهة (في الترجمات فقط؛ يبقى الدعاء نفسه بالعربية).
+    let duaMeaning: String?
     /// عدد مرات التكرار (مثل ٣ لغسل الوجه) — يظهر كقطرات يلمسها الطفل.
     let repeatCount: Int?
+
+    /// مقطع صوتي مدمج لقراءة الخطوة: `voice_<lang>_step_<id>.m4a`.
+    func narrationClip(for language: AppLanguage) -> String { "voice_\(language.rawValue)_step_\(id)" }
+    /// مقطع الدعاء بالعربية (مشكول ومشترك بين كل اللغات): `voice_dua_<id>.m4a`.
+    var duaClip: String { "voice_dua_\(id)" }
+    /// النص الذي يُقرأ للخطوة.
+    var narrationText: String { "\(title). \(text)" }
 }

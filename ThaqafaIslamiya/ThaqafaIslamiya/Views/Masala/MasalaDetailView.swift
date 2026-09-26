@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import UIKit
 
 struct MasalaDetailView: View {
     let masala: Masala
@@ -16,7 +15,8 @@ struct MasalaDetailView: View {
     @Environment(LibraryViewModel.self) private var library
     @Environment(ProgressStore.self) private var progress
     @Environment(AppRouter.self) private var router
-    @Environment(SpeechReader.self) private var speech
+    @Environment(VoicePlayer.self) private var voice
+    @Environment(AppSettings.self) private var settings
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var revealed = 0
@@ -27,7 +27,7 @@ struct MasalaDetailView: View {
 
     /// صورة المسألة الخاصة إن وُجدت، وإلا الرسم المتحرك لدرسها التفاعلي المرتبط (مثل الوضوء).
     private var heroImageName: String {
-        if UIImage(named: masala.imageName) != nil || AnimationLibrary.hasAnimation(masala.imageName) {
+        if AnimationLibrary.hasIllustration(masala.imageName) {
             return masala.imageName
         }
         if let lessonId = masala.lessonId { return "lesson_\(lessonId)" }
@@ -54,7 +54,7 @@ struct MasalaDetailView: View {
 
                     if let lessonId = masala.lessonId, let lesson = library.lesson(id: lessonId) {
                         Button { router.present(lesson) } label: {
-                            Label("ابدأ درس «\(lesson.title)» التفاعلي", systemImage: "play.circle.fill")
+                            Label(L10n.t("masala.startLesson", lesson.title), systemImage: "play.circle.fill")
                         }
                         .buttonStyle(ProminentGlassButtonStyle(colors: lesson.colors.themeColors))
                         .padding(.top, 4)
@@ -63,7 +63,7 @@ struct MasalaDetailView: View {
                     learnedButton
                         .padding(.top, 6)
 
-                    Text("المصدر: \(library.book?.title ?? "تلقين الصبيان") — ص \(masala.page.arabicDigits)")
+                    Text(L10n.t("masala.source", library.book?.title ?? "", masala.page.digits))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .padding(.top, 4)
@@ -84,17 +84,21 @@ struct MasalaDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                let clip = masala.narrationClip(for: settings.language)
+                let playing = voice.isPlaying(clip)
                 Button {
-                    speech.toggle(([masala.title] + masala.points).joined(separator: ". "))
+                    voice.toggle(clip: clip, text: masala.narrationText, language: settings.language)
                 } label: {
-                    Image(systemName: speech.isSpeaking ? "stop.circle.fill" : "speaker.wave.2.fill")
+                    Image(systemName: playing ? "stop.circle.fill" : "speaker.wave.2.fill")
+                        .symbolEffect(.variableColor.iterative, isActive: playing)
+                        .contentTransition(.symbolEffect(.replace))
                 }
-                .accessibilityLabel("استمع للمسألة")
+                .accessibilityLabel(playing ? L10n.t("audio.stop") : L10n.t("masala.listen"))
             }
         }
         .sensoryFeedback(.success, trigger: isLearned) { _, learned in learned }
         .onAppear(perform: revealPoints)
-        .onDisappear { speech.stop() }
+        .onDisappear { voice.stop() }
     }
 
     // MARK: - Parts
@@ -127,7 +131,7 @@ struct MasalaDetailView: View {
 
     private func pointCard(index: Int, text: String) -> some View {
         HStack(alignment: .top, spacing: 14) {
-            Text((index + 1).arabicDigits)
+            Text((index + 1).digits)
                 .font(.headline.weight(.heavy))
                 .foregroundStyle(.white)
                 .frame(width: 36, height: 36)
@@ -141,7 +145,7 @@ struct MasalaDetailView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
-        .glassCard(cornerRadius: 24, tint: colors.first ?? .teal)
+        .glassCard(cornerRadius: 24, tint: colors.first ?? .teal, elevated: false)
     }
 
     private var learnedButton: some View {
@@ -154,7 +158,7 @@ struct MasalaDetailView: View {
                 }
             }
         } label: {
-            Label(isLearned ? "تعلّمتُها ✓" : "تعلّمتُ هذه المسألة",
+            Label(isLearned ? L10n.t("masala.learned") : L10n.t("masala.markLearned"),
                   systemImage: isLearned ? "star.fill" : "star")
                 .font(.headline)
                 .contentTransition(.symbolEffect(.replace))

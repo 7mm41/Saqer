@@ -27,6 +27,10 @@ struct Masala: Codable, Identifiable, Hashable {
 
     /// اسم الصورة الاختيارية في Assets.xcassets.
     var imageName: String { "masala_\(id)" }
+
+    /// مقطع صوتي مدمج لقراءة المسألة: `voice_<lang>_m_<id>.m4a`.
+    func narrationClip(for language: AppLanguage) -> String { "voice_\(language.rawValue)_m_\(id)" }
+    var narrationText: String { ([title, summary] + points).joined(separator: ". ") }
 }
 
 /// قسم (باب) من أبواب الكتاب يضم مجموعة مسائل.

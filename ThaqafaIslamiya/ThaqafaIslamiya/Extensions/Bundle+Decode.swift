@@ -13,7 +13,7 @@ enum BundleDecodingError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .fileNotFound(let name):
-            return "لم يُعثر على الملف «\(name)» داخل التطبيق."
+            return L10n.t("error.fileNotFound", name)
         }
     }
 }
@@ -24,7 +24,7 @@ extension Bundle {
         guard let url = url(forResource: fileName, withExtension: ext) else {
             throw BundleDecodingError.fileNotFound("\(fileName).\(ext)")
         }
-        let data = try Data(contentsOf: url)
+        let data = try Data(contentsOf: url, options: .mappedIfSafe)
         return try JSONDecoder().decode(T.self, from: data)
     }
 }

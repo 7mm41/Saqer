@@ -2,7 +2,7 @@
 //  AppRouter.swift
 //  ثقافة إسلامية
 //
-//  يدير مسار التنقّل وعرض الدرس التفاعلي بملء الشاشة من أي مكان في التطبيق.
+//  يدير مسار التنقّل وعرض الدرس التفاعلي بملء الشاشة وورقة الإعدادات من أي مكان في التطبيق.
 //
 
 import SwiftUI
@@ -13,6 +13,7 @@ final class AppRouter {
     var path: [Route] = []
     /// الدرس المعروض حاليًا بملء الشاشة.
     var presentedLesson: InteractiveLesson?
+    var showsSettings = false
 
     func open(_ route: Route) { path.append(route) }
     func present(_ lesson: InteractiveLesson) { presentedLesson = lesson }
