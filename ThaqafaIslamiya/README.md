@@ -140,7 +140,7 @@ Text("مرحبًا")
 ## الأصوات
 
 المقاطع في `Assets/Voices` مولّدة مسبقًا ومضغوطة AAC، فلا تحتاج إنترنت:
-- **العربية**: صوت رجل واقعي دافئ بالفصحى (`ar-SA-HamedNeural`، Microsoft Neural) بإيقاع تعليمي هادئ — `Tools/Voices/gen_voices_cloud.py --provider edge`.
+- **العربية**: صوت رجل عُماني واقعي دافئ بالفصحى (`ar-OM-AbdullahNeural`، Microsoft Neural) بإيقاع تعليمي هادئ — `Tools/Voices/gen_voices_cloud.py --provider edge`.
 - **بقية اللغات**: محرك [Piper](https://github.com/OHF-Voice/piper1-gpl) العصبي — `Tools/Voices/gen_voices.py`.
 
 | الاسم | المحتوى |

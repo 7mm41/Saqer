@@ -29,7 +29,7 @@ python3 gen_voices.py ../../ThaqafaIslamiya/Assets/Voices ar --only dua # الأ
 
 | الخدمة | متغيّر المفتاح | الصوت الافتراضي |
 |---|---|---|
-| Microsoft Edge Neural (المستخدم حاليًا) | لا يحتاج مفتاحًا | `ar-SA-HamedNeural` — `--provider edge` (خلف بروكسي فحص TLS: `EDGE_TTS_CAFILE=<ca.pem>`) |
+| Microsoft Edge Neural (المستخدم حاليًا) | لا يحتاج مفتاحًا | `ar-OM-AbdullahNeural` (عُماني) — `--provider edge` (خلف بروكسي فحص TLS: `EDGE_TTS_CAFILE=<ca.pem>`) |
 | ElevenLabs (الأكثر واقعية) | `ELEVENLABS_API_KEY` | تختاره بنفسك: `--list-voices` يعرض أصوات الرجال العربية |
 | Google Cloud TTS (Chirp 3 HD) | `GOOGLE_TTS_API_KEY` | `ar-XA-Chirp3-HD-Charon` |
 | Azure Speech | `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION` | `ar-OM-AbdullahNeural` |

@@ -14,7 +14,7 @@ Providers (pick one; the key is read from the environment, never from the comman
                                     python3 gen_voices_cloud.py --provider elevenlabs --list-voices
   google      GOOGLE_TTS_API_KEY   Google Cloud TTS, Chirp 3 HD (default ar-XA-Chirp3-HD-Charon)
   azure       AZURE_SPEECH_KEY + AZURE_SPEECH_REGION   (default ar-OM-AbdullahNeural)
-  edge        no key — Microsoft Edge neural voices via edge-tts (default ar-SA-HamedNeural).
+  edge        no key — Microsoft Edge neural voices via edge-tts (default ar-OM-AbdullahNeural — Omani male).
               Behind a TLS-inspecting proxy set EDGE_TTS_CAFILE to the proxy CA bundle.
 
 usage:
@@ -34,14 +34,14 @@ from gen_voices import DATA, DUAS, clean  # noqa: E402  (shared texts & hand-dia
 FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 
 DEFAULT_VOICE = {
-    "edge": "ar-SA-HamedNeural",
+    "edge": "ar-OM-AbdullahNeural",
     "elevenlabs": None,                        # must be chosen (see --list-voices)
     "google": "ar-XA-Chirp3-HD-Charon",
     "azure": "ar-OM-AbdullahNeural",
 }
 
-PACE = 0.92       # measured teaching pace
-DUA_PACE = 0.86   # supplications slower and more deliberate
+PACE = 0.95       # measured teaching pace (heavier slowing sounds robotic)
+DUA_PACE = 0.90   # supplications slower and more deliberate
 
 
 # MARK: - HTTP
@@ -136,7 +136,7 @@ def edge(voice, parts, pace):
 
     async def run():
         chunks = []
-        async for msg in edge_tts.Communicate(text, voice, rate=rate, pitch="-3Hz").stream():
+        async for msg in edge_tts.Communicate(text, voice, rate=rate, pitch="-2Hz").stream():
             if msg["type"] == "audio":
                 chunks.append(msg["data"])
         return b"".join(chunks)
@@ -175,8 +175,10 @@ def to_m4a(mp3_bytes, out_path):
     try:
         subprocess.run(
             [FFMPEG, "-y", "-loglevel", "error", "-i", mp3,
-             "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-             "-ac", "1", "-ar", "24000", "-c:a", "aac", "-b:a", "40k",
+             # warmth: gentle low-mid lift, softened sibilance, then loudness normalisation
+             "-af", "highpass=f=60,equalizer=f=180:t=q:w=1.0:g=2,equalizer=f=6500:t=q:w=1.5:g=-2,"
+                    "loudnorm=I=-16:TP=-1.5:LRA=11",
+             "-ac", "1", "-ar", "24000", "-c:a", "aac", "-b:a", "48k",
              "-movflags", "+faststart", out_path],
             check=True,
         )
