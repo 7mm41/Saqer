@@ -255,12 +255,19 @@ struct SearchField: View {
             TextField(placeholder, text: $text)
                 .focused($focused)
                 .submitLabel(.search)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
             if !text.isEmpty {
                 Button {
-                    withAnimation { text = "" }
+                    text = ""
+                    focused = false
                 } label: {
-                    Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary)
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                        .frame(width: 30, height: 30)
+                        .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
                 .accessibilityLabel(L10n.t("search.clear"))
             }
         }

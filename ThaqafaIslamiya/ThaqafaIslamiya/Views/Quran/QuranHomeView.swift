@@ -43,6 +43,7 @@ struct QuranHomeView: View {
                             fridayCard
                         }
                         specialSection
+                        qiblaCard
                         reciterRow
                         indexPicker
                         switch index {
@@ -115,7 +116,7 @@ struct QuranHomeView: View {
     }
 
     private var fridayCard: some View {
-        Button { router.openMushaf(page: quran.surah(18)?.page ?? 293) } label: {
+        Button { router.openSurah(18, page: quran.surah(18)?.page ?? 293) } label: {
             HStack(spacing: 14) {
                 Image(systemName: "sparkles")
                     .font(.title2)
@@ -161,8 +162,9 @@ struct QuranHomeView: View {
                     .background(LinearGradient.diagonal(colors), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 Spacer()
                 Button {
+                    audio.confinedSurah = surah.n
                     if let reciter = quran.reciter { audio.play(from: AyahRef(surah: surah.n, ayah: 1), reciter: reciter) }
-                    router.openMushaf(page: surah.page)
+                    router.openSurah(surah.n, page: surah.page)
                 } label: {
                     Image(systemName: "play.circle.fill").font(.title2).foregroundStyle(colors.first ?? .teal)
                 }
@@ -181,7 +183,30 @@ struct QuranHomeView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassCard(cornerRadius: 24, tint: colors.first ?? .teal, interactive: true, elevated: false)
         .contentShape(RoundedRectangle(cornerRadius: 24))
-        .onTapGesture { router.openMushaf(page: surah.page) }
+        .onTapGesture { router.openSurah(surah.n, page: surah.page) }
+    }
+
+    // MARK: - Qibla
+
+    private var qiblaCard: some View {
+        Button { router.showQibla = true } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "location.north.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 48, height: 48)
+                    .background(LinearGradient.diagonal(gold), in: Circle())
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(L10n.t("qibla.title")).font(.headline).foregroundStyle(.primary)
+                    Text(L10n.t("qibla.subtitle")).font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.forward").foregroundStyle(.secondary)
+            }
+            .padding(16)
+            .glassCard(cornerRadius: 24, tint: .orange, interactive: true)
+        }
+        .buttonStyle(PressableCardStyle())
     }
 
     // MARK: - Reciter

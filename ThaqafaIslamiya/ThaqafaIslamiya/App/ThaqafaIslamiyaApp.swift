@@ -178,7 +178,11 @@ struct RootView: View {
                 .withAppEnvironment(env)
         }
         .fullScreenCover(item: $router.presentedMushaf) { launch in
-            MushafReaderView(startPage: launch.page)
+            MushafReaderView(launch: launch)
+                .withAppEnvironment(env)
+        }
+        .fullScreenCover(isPresented: $router.showQibla) {
+            QiblaView()
                 .withAppEnvironment(env)
         }
         .task {

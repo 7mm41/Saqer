@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PageTafsirView: View {
     let page: Int
+    /// الآية التي ضُغط عليها في المصحف (يُمرَّر إليها وتُميَّز).
+    var focus: AyahRef? = nil
 
     @Environment(QuranStore.self) private var quran
     @Environment(QuranAudioPlayer.self) private var audio
@@ -34,7 +36,9 @@ struct PageTafsirView: View {
                     .padding(16)
                 }
                 .onAppear {
-                    if let current = audio.current, quran.page(of: current) == page {
+                    if let focus {
+                        DispatchQueue.main.async { reader.scrollTo(focus, anchor: .top) }
+                    } else if let current = audio.current, quran.page(of: current) == page {
                         reader.scrollTo(current, anchor: .center)
                     }
                 }
@@ -73,6 +77,7 @@ struct PageTafsirView: View {
 
     private func ayahCard(_ ref: AyahRef) -> some View {
         let playing = audio.current == ref
+        let focused = focus == ref
         return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text(L10n.t("quran.ayahNumber", ref.ayah.digits))
@@ -124,7 +129,7 @@ struct PageTafsirView: View {
             }
         }
         .padding(14)
-        .glassCard(cornerRadius: 22, tint: playing ? .green : .white, elevated: false)
+        .glassCard(cornerRadius: 22, tint: playing ? .green : (focused ? .orange : .white), elevated: false)
         .animation(.easeInOut(duration: 0.25), value: playing)
     }
 }

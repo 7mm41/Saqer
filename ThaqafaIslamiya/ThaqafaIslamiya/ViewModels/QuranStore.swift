@@ -14,6 +14,10 @@ final class QuranStore {
     private(set) var meta: QuranMeta?
     private(set) var reciters: [QuranReciter] = []
     private(set) var isLoading = false
+    /// تخطيط صفحات المصحف (خطوط مجمع الملك فهد) — يُحمَّل في الخلفية عند أول فتح للمصحف.
+    private(set) var layout: MushafLayout?
+    @ObservationIgnored private(set) var basmalaCodes: [String] = []
+    @ObservationIgnored private var isLoadingLayout = false
 
     /// آخر صفحة قرأها المستخدم (1…604).
     private(set) var lastPage: Int
@@ -99,6 +103,24 @@ final class QuranStore {
         }
     }
 
+    /// يحمّل تخطيط صفحات المصحف في الخلفية (مرة واحدة)، ويسجّل خط أسماء السور.
+    func loadLayoutIfNeeded() {
+        guard layout == nil, !isLoadingLayout else { return }
+        isLoadingLayout = true
+        Task.detached(priority: .userInitiated) { [weak self] in
+            let layout = try? Bundle.main.decode(MushafLayout.self, from: "mushaf_layout")
+            QuranFonts.ensureSurahNames()
+            QuranFonts.ensurePage(1)
+            let basmala = layout?.basmalaCodes ?? []
+            await MainActor.run {
+                guard let self else { return }
+                self.basmalaCodes = basmala
+                self.layout = layout
+                self.isLoadingLayout = false
+            }
+        }
+    }
+
     // MARK: - Pages & ayahs
 
     func surah(_ n: Int) -> QuranSurah? {
@@ -143,6 +165,13 @@ final class QuranStore {
         var seen: [Int] = []
         for a in ayahs(onPage: page) where !seen.contains(a.surah) { seen.append(a.surah) }
         return seen.compactMap(surah)
+    }
+
+    /// صفحات سورة من أولها إلى آخرها (لوضع قراءة السورة وحدها، مثل الكهف والملك).
+    func pageRange(ofSurah n: Int) -> ClosedRange<Int> {
+        guard let s = surah(n) else { return 1...Self.pageCount }
+        let last = page(of: AyahRef(surah: n, ayah: s.count))
+        return s.page...max(s.page, last)
     }
 
     func juz(forPage page: Int) -> Int {

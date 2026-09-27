@@ -210,6 +210,22 @@ S = {
     "quran.ayahNumber": ["الآية {0}", "Ayah {0}", "آیهٔ {0}", "Ayet {0}", "आयत {0}", "আয়াত {0}"],
     "quran.sajda": ["سجدة", "Prostration", "سجده", "Secde", "सज्दा", "সিজদা"],
     "quran.pageLabel": ["صفحة المصحف {0}", "Mushaf page {0}", "صفحهٔ مصحف {0}", "Mushaf sayfası {0}", "मुसहफ़ पृष्ठ {0}", "মুসহাফ পৃষ্ঠা {0}"],
+    "quran.confined": ["قراءة {0} حتى تمامها", "Reading {0} to the end", "خواندن {0} تا پایان", "{0} sonuna kadar okunuyor", "{0} पूरी पढ़ें", "{0} শেষ পর্যন্ত পড়া"],
+    "quran.confined.done": ["أتممت قراءة {0} — تقبّل الله منك", "You completed {0} — may Allah accept it", "{0} را به پایان رساندی — خدا بپذیرد", "{0} tamamlandı — Allah kabul etsin", "आपने {0} पूरी की — अल्लाह क़बूल करे", "তুমি {0} শেষ করেছ — আল্লাহ কবুল করুন"],
+    "quran.confined.restart": ["من البداية", "From the start", "از ابتدا", "Baştan", "शुरू से", "শুরু থেকে"],
+    "quran.pressHint": ["اضغط مطوّلًا على آية لتفسيرها", "Long-press an ayah for its tafsir", "برای تفسیر، روی آیه نگه دار", "Tefsiri için ayete basılı tut", "तफ़सीर के लिए आयत को दबाकर रखें", "তাফসীরের জন্য আয়াতে চেপে ধরো"],
+    "qibla.title": ["اتجاه القبلة", "Qibla direction", "جهت قبله", "Kıble yönü", "क़िबला की दिशा", "কিবলার দিক"],
+    "qibla.subtitle": ["بوصلة تعمل دون إنترنت", "A compass that works offline", "قطب‌نمایی که بدون اینترنت کار می‌کند", "İnternetsiz çalışan pusula", "बिना इंटरनेट चलने वाला कम्पास", "ইন্টারনেট ছাড়াই চলা কম্পাস"],
+    "qibla.aligned": ["أنت تتجه إلى القبلة", "You are facing the Qibla", "رو به قبله هستی", "Kıbleye dönüksün", "आप क़िबला की ओर हैं", "তুমি কিবলার দিকে মুখ করে আছ"],
+    "qibla.turn": ["أدِر الجهاز حتى يتطابق السهم مع الكعبة", "Turn until the arrow meets the Kaaba", "بچرخ تا پیکان با کعبه یکی شود", "Ok Kâbe ile buluşana kadar dön", "तब तक घुमाएँ जब तक तीर काबा से न मिले", "তীর কাবার সঙ্গে না মেলা পর্যন্ত ঘোরাও"],
+    "qibla.bearing": ["القبلة {0}° من الشمال", "Qibla {0}° from north", "قبله {0}° از شمال", "Kıble kuzeyden {0}°", "क़िबला उत्तर से {0}°", "কিবলা উত্তর থেকে {0}°"],
+    "qibla.distance": ["المسافة إلى مكة {0} كم", "{0} km to Makkah", "{0} کیلومتر تا مکه", "Mekke'ye {0} km", "मक्का तक {0} किमी", "মক্কা পর্যন্ত {0} কিমি"],
+    "qibla.locating": ["جارٍ تحديد موقعك…", "Finding your location…", "در حال یافتن موقعیت…", "Konum bulunuyor…", "आपकी जगह खोजी जा रही है…", "তোমার অবস্থান খোঁজা হচ্ছে…"],
+    "qibla.denied": ["اسمح للتطبيق بالوصول إلى موقعك من الإعدادات لتحديد القبلة. لا يُرسل موقعك إلى أي مكان.", "Allow location access in Settings to find the Qibla. Your location never leaves the device.", "برای یافتن قبله، دسترسی به موقعیت را در تنظیمات مجاز کن. موقعیتت جایی فرستاده نمی‌شود.", "Kıbleyi bulmak için Ayarlar'dan konum izni ver. Konumun cihazdan çıkmaz.", "क़िबला के लिए सेटिंग्स में लोकेशन की अनुमति दें। आपकी लोकेशन कहीं नहीं भेजी जाती।", "কিবলা খুঁজতে সেটিংসে লোকেশনের অনুমতি দাও। তোমার অবস্থান কোথাও পাঠানো হয় না।"],
+    "qibla.openSettings": ["فتح الإعدادات", "Open Settings", "باز کردن تنظیمات", "Ayarları aç", "सेटिंग्स खोलें", "সেটিংস খোলো"],
+    "qibla.calibrate": ["حرّك الجهاز على شكل ٨ لمعايرة البوصلة", "Move your device in a figure 8 to calibrate", "برای تنظیم قطب‌نما، دستگاه را به شکل ۸ حرکت بده", "Pusulayı ayarlamak için cihazı 8 çizerek hareket ettir", "कम्पास ठीक करने के लिए फ़ोन को 8 के आकार में घुमाएँ", "কম্পাস ঠিক করতে ফোনটি ৮-এর মতো ঘোরাও"],
+    "qibla.noCompass": ["هذا الجهاز لا يحتوي على بوصلة — استخدم الزاوية من الشمال.", "This device has no compass — use the angle from north.", "این دستگاه قطب‌نما ندارد — از زاویه نسبت به شمال استفاده کن.", "Bu cihazda pusula yok — kuzeyden açıyı kullan.", "इस डिवाइस में कम्पास नहीं है — उत्तर से कोण का उपयोग करें।", "এই ডিভাইসে কম্পাস নেই — উত্তর থেকে কোণ ব্যবহার করো।"],
+    "qibla.north": ["ش", "N", "ش", "K", "उ", "উ"],
 }
 
 out = {}

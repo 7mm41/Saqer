@@ -159,6 +159,10 @@ final class QuranAudioPlayer: NSObject {
     private(set) var activeReciter: QuranReciter?
     /// رسالة للمستخدم (مثل: السورة غير محمّلة وليس هناك اتصال).
     var notice: String?
+    /// وضع قراءة سورة وحدها (مثل الكهف والملك): تتوقف التلاوة عند نهايتها ولا تنتقل إلى ما بعدها.
+    var confinedSurah: Int?
+    /// آخر سورة اكتملت تلاوتها في وضع السورة الواحدة (لإظهار رسالة الختام).
+    private(set) var completedSurah: Int?
 
     @ObservationIgnored var store: QuranStore?
     @ObservationIgnored var downloads: QuranDownloads?
@@ -196,6 +200,7 @@ final class QuranAudioPlayer: NSObject {
         } else { return }
 
         stopPlayer()
+        completedSurah = nil
         activeReciter = reciter
         surah = ref.surah
         current = ref
@@ -258,6 +263,11 @@ final class QuranAudioPlayer: NSObject {
     }
 
     private func surahFinished() {
+        if let confined = confinedSurah, confined == surah {
+            stop()
+            completedSurah = confined
+            return
+        }
         guard let reciter = activeReciter, surah < 114 else { stop(); return }
         let preferred = store?.reciter ?? reciter
         play(from: AyahRef(surah: surah + 1, ayah: 1), reciter: preferred)
@@ -283,6 +293,7 @@ final class QuranAudioPlayer: NSObject {
         let g = store.globalIndex(current) + delta
         guard (0..<QuranStore.ayahCount).contains(g) else { return }
         let target = store.ref(forGlobal: g)
+        if let confined = confinedSurah, target.surah != confined { return }
         if target.surah == surah, timing.indices.contains(target.ayah - 1) {
             player?.seek(to: CMTime(value: CMTimeValue(timing[target.ayah - 1]), timescale: 1000),
                          toleranceBefore: .zero, toleranceAfter: .zero)

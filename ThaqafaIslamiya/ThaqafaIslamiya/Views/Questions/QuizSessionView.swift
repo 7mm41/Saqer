@@ -61,7 +61,8 @@ struct QuizSessionView: View {
                 Image(systemName: "xmark")
                     .font(.headline.weight(.bold))
                     .frame(width: 44, height: 44)
-                    .glassCircle()
+                    .glassCircle(interactive: false)
+                    .contentShape(Circle())
             }
             .buttonStyle(PressableCardStyle())
             .accessibilityLabel(L10n.t("common.close"))

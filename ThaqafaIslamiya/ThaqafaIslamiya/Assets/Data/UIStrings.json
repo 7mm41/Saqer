@@ -679,6 +679,102 @@
   "hi": "“{0}” पाठ शुरू करें",
   "tr": "“{0}” dersini başlat"
  },
+ "qibla.aligned": {
+  "ar": "أنت تتجه إلى القبلة",
+  "bn": "তুমি কিবলার দিকে মুখ করে আছ",
+  "en": "You are facing the Qibla",
+  "fa": "رو به قبله هستی",
+  "hi": "आप क़िबला की ओर हैं",
+  "tr": "Kıbleye dönüksün"
+ },
+ "qibla.bearing": {
+  "ar": "القبلة {0}° من الشمال",
+  "bn": "কিবলা উত্তর থেকে {0}°",
+  "en": "Qibla {0}° from north",
+  "fa": "قبله {0}° از شمال",
+  "hi": "क़िबला उत्तर से {0}°",
+  "tr": "Kıble kuzeyden {0}°"
+ },
+ "qibla.calibrate": {
+  "ar": "حرّك الجهاز على شكل ٨ لمعايرة البوصلة",
+  "bn": "কম্পাস ঠিক করতে ফোনটি ৮-এর মতো ঘোরাও",
+  "en": "Move your device in a figure 8 to calibrate",
+  "fa": "برای تنظیم قطب‌نما، دستگاه را به شکل ۸ حرکت بده",
+  "hi": "कम्पास ठीक करने के लिए फ़ोन को 8 के आकार में घुमाएँ",
+  "tr": "Pusulayı ayarlamak için cihazı 8 çizerek hareket ettir"
+ },
+ "qibla.denied": {
+  "ar": "اسمح للتطبيق بالوصول إلى موقعك من الإعدادات لتحديد القبلة. لا يُرسل موقعك إلى أي مكان.",
+  "bn": "কিবলা খুঁজতে সেটিংসে লোকেশনের অনুমতি দাও। তোমার অবস্থান কোথাও পাঠানো হয় না।",
+  "en": "Allow location access in Settings to find the Qibla. Your location never leaves the device.",
+  "fa": "برای یافتن قبله، دسترسی به موقعیت را در تنظیمات مجاز کن. موقعیتت جایی فرستاده نمی‌شود.",
+  "hi": "क़िबला के लिए सेटिंग्स में लोकेशन की अनुमति दें। आपकी लोकेशन कहीं नहीं भेजी जाती।",
+  "tr": "Kıbleyi bulmak için Ayarlar'dan konum izni ver. Konumun cihazdan çıkmaz."
+ },
+ "qibla.distance": {
+  "ar": "المسافة إلى مكة {0} كم",
+  "bn": "মক্কা পর্যন্ত {0} কিমি",
+  "en": "{0} km to Makkah",
+  "fa": "{0} کیلومتر تا مکه",
+  "hi": "मक्का तक {0} किमी",
+  "tr": "Mekke'ye {0} km"
+ },
+ "qibla.locating": {
+  "ar": "جارٍ تحديد موقعك…",
+  "bn": "তোমার অবস্থান খোঁজা হচ্ছে…",
+  "en": "Finding your location…",
+  "fa": "در حال یافتن موقعیت…",
+  "hi": "आपकी जगह खोजी जा रही है…",
+  "tr": "Konum bulunuyor…"
+ },
+ "qibla.noCompass": {
+  "ar": "هذا الجهاز لا يحتوي على بوصلة — استخدم الزاوية من الشمال.",
+  "bn": "এই ডিভাইসে কম্পাস নেই — উত্তর থেকে কোণ ব্যবহার করো।",
+  "en": "This device has no compass — use the angle from north.",
+  "fa": "این دستگاه قطب‌نما ندارد — از زاویه نسبت به شمال استفاده کن.",
+  "hi": "इस डिवाइस में कम्पास नहीं है — उत्तर से कोण का उपयोग करें।",
+  "tr": "Bu cihazda pusula yok — kuzeyden açıyı kullan."
+ },
+ "qibla.north": {
+  "ar": "ش",
+  "bn": "উ",
+  "en": "N",
+  "fa": "ش",
+  "hi": "उ",
+  "tr": "K"
+ },
+ "qibla.openSettings": {
+  "ar": "فتح الإعدادات",
+  "bn": "সেটিংস খোলো",
+  "en": "Open Settings",
+  "fa": "باز کردن تنظیمات",
+  "hi": "सेटिंग्स खोलें",
+  "tr": "Ayarları aç"
+ },
+ "qibla.subtitle": {
+  "ar": "بوصلة تعمل دون إنترنت",
+  "bn": "ইন্টারনেট ছাড়াই চলা কম্পাস",
+  "en": "A compass that works offline",
+  "fa": "قطب‌نمایی که بدون اینترنت کار می‌کند",
+  "hi": "बिना इंटरनेट चलने वाला कम्पास",
+  "tr": "İnternetsiz çalışan pusula"
+ },
+ "qibla.title": {
+  "ar": "اتجاه القبلة",
+  "bn": "কিবলার দিক",
+  "en": "Qibla direction",
+  "fa": "جهت قبله",
+  "hi": "क़िबला की दिशा",
+  "tr": "Kıble yönü"
+ },
+ "qibla.turn": {
+  "ar": "أدِر الجهاز حتى يتطابق السهم مع الكعبة",
+  "bn": "তীর কাবার সঙ্গে না মেলা পর্যন্ত ঘোরাও",
+  "en": "Turn until the arrow meets the Kaaba",
+  "fa": "بچرخ تا پیکان با کعبه یکی شود",
+  "hi": "तब तक घुमाएँ जब तक तीर काबा से न मिले",
+  "tr": "Ok Kâbe ile buluşana kadar dön"
+ },
  "quiz.back": {
   "ar": "العودة للقسم",
   "bn": "অধ্যায়ে ফিরে যাও",
@@ -806,6 +902,30 @@
   "fa": "آیهٔ {0}",
   "hi": "आयत {0}",
   "tr": "Ayet {0}"
+ },
+ "quran.confined": {
+  "ar": "قراءة {0} حتى تمامها",
+  "bn": "{0} শেষ পর্যন্ত পড়া",
+  "en": "Reading {0} to the end",
+  "fa": "خواندن {0} تا پایان",
+  "hi": "{0} पूरी पढ़ें",
+  "tr": "{0} sonuna kadar okunuyor"
+ },
+ "quran.confined.done": {
+  "ar": "أتممت قراءة {0} — تقبّل الله منك",
+  "bn": "তুমি {0} শেষ করেছ — আল্লাহ কবুল করুন",
+  "en": "You completed {0} — may Allah accept it",
+  "fa": "{0} را به پایان رساندی — خدا بپذیرد",
+  "hi": "आपने {0} पूरी की — अल्लाह क़बूल करे",
+  "tr": "{0} tamamlandı — Allah kabul etsin"
+ },
+ "quran.confined.restart": {
+  "ar": "من البداية",
+  "bn": "শুরু থেকে",
+  "en": "From the start",
+  "fa": "از ابتدا",
+  "hi": "शुरू से",
+  "tr": "Baştan"
  },
  "quran.continue": {
   "ar": "تابع القراءة",
@@ -1030,6 +1150,14 @@
   "fa": "{0} سوره ضبط شده",
   "hi": "{0} सूरतें रिकॉर्ड कीं",
   "tr": "{0} sure kaydetti"
+ },
+ "quran.pressHint": {
+  "ar": "اضغط مطوّلًا على آية لتفسيرها",
+  "bn": "তাফসীরের জন্য আয়াতে চেপে ধরো",
+  "en": "Long-press an ayah for its tafsir",
+  "fa": "برای تفسیر، روی آیه نگه دار",
+  "hi": "तफ़सीर के लिए आयत को दबाकर रखें",
+  "tr": "Tefsiri için ayete basılı tut"
  },
  "quran.reciter": {
   "ar": "القارئ",
