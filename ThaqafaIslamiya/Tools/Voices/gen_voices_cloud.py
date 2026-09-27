@@ -209,7 +209,7 @@ def main():
         raise SystemExit("Give OUT_DIR and --voice (ElevenLabs: see --list-voices).")
     synth = PROVIDERS[a.provider]
     os.makedirs(a.out, exist_ok=True)
-    data = json.load(open(os.path.join(DATA, "TalqeenData.json"), encoding="utf-8"))
+    data = json.load(open(os.path.join(DATA, "ContentData.json"), encoding="utf-8"))
 
     # Fully diacritized text (so every word is pronounced correctly, e.g. الْبَسْمَلَة، الْقِبْلَة);
     # it is the on-screen text letter for letter once the diacritics are removed.

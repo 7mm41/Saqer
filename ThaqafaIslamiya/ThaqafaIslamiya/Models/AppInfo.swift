@@ -2,15 +2,15 @@
 //  AppInfo.swift
 //  ثقافة إسلامية
 //
-//  هوية التطبيق والمطوّر: صقر ستور.
+//  هوية التطبيق والمطوّر: صقر.
 //
 
 import Foundation
 
 enum AppInfo {
     /// اسم المطوّر كما يظهر في التطبيق.
-    static let developerArabic = "صقر ستور"
-    static let developerLatin = "Saqer Store"
+    static let developerArabic = "صقر"
+    static let developerLatin = "Saqer"
     static let copyrightYear = 2026
     /// بريد الدعم الفني.
     static let supportEmail = "xiisaqer@gmail.com"

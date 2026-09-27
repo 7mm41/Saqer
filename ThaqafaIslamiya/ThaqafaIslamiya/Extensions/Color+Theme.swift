@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension Color {
-    /// يحوّل اسم اللون الوارد في `TalqeenData.json` إلى لون SwiftUI.
+    /// يحوّل اسم اللون الوارد في `ContentData.json` إلى لون SwiftUI.
     static func theme(_ name: String) -> Color {
         switch name {
         case "mint": return .mint

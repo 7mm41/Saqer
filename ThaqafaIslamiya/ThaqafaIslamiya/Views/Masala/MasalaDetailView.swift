@@ -63,7 +63,7 @@ struct MasalaDetailView: View {
                     learnedButton
                         .padding(.top, 6)
 
-                    Text(L10n.t("masala.source", library.book?.title ?? "", masala.page.digits))
+                    Text(L10n.t("masala.page", masala.page.digits))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .padding(.top, 4)

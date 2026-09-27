@@ -106,7 +106,7 @@ def main():
     for lang in langs:
         voice = PiperVoice.load(os.path.join(os.environ.get("PIPER_VOICES", os.path.join(HERE, "voices")), VOICES[lang] + ".onnx"))
         suffix = "" if lang == "ar" else "." + lang
-        data = json.load(open(os.path.join(DATA, f"TalqeenData{suffix}.json"), encoding="utf-8"))
+        data = json.load(open(os.path.join(DATA, f"ContentData{suffix}.json"), encoding="utf-8"))
 
         if only in (None, "steps"):
             for lesson in data["lessons"]:

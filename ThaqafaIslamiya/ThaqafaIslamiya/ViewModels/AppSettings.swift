@@ -129,7 +129,7 @@ final class AppSettings {
 
     /// ملف المحتوى المناسب: العربية المشكولة عند تفعيل «إظهار التشكيل».
     var contentFileName: String {
-        language == .arabic && showTashkeel ? "TalqeenData.tashkeel" : language.dataFileName
+        language == .arabic && showTashkeel ? "ContentData.tashkeel" : language.dataFileName
     }
 
     var reminderDate: Date {

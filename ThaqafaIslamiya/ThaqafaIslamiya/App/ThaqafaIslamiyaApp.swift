@@ -2,7 +2,7 @@
 //  ThaqafaIslamiyaApp.swift
 //  ثقافة إسلامية
 //
-//  نقطة دخول التطبيق — تطوير صقر ستور © 2026. يعمل التطبيق دون إنترنت بالكامل:
+//  نقطة دخول التطبيق — تطوير صقر © 2026. يعمل التطبيق دون إنترنت بالكامل:
 //  المحتوى بست لغات وبنك الأسئلة في `Assets/Data`، والرسوم ثلاثية الأبعاد في `Assets/Animations`،
 //  والأصوات الطبيعية في `Assets/Voices`.
 //
@@ -18,33 +18,44 @@ struct ThaqafaIslamiyaApp: App {
     @State private var progress = ProgressStore()
     @State private var router = AppRouter()
     @State private var voice = VoicePlayer()
+    @State private var quran = QuranStore()
+    @State private var quranDownloads = QuranDownloads()
+    @State private var quranAudio = QuranAudioPlayer()
 
     init() {
         let settings = AppSettings()
         _settings = State(initialValue: settings)
         _library = State(initialValue: LibraryViewModel(fileName: settings.contentFileName, language: settings.language))
-        // الرسوم المتحركة صامتة ولا توقف صوت التطبيقات الأخرى، والقراءة تُسمع حتى في الوضع الصامت.
+        // الرسوم المتحركة صامتة ولا توقف صوت التطبيقات الأخرى، والقراءة والتلاوة تُسمعان حتى في الوضع الصامت.
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
+        QuranFont.register()
+    }
+
+    private var env: AppEnvironment {
+        AppEnvironment(settings: settings, library: library, bank: bank, progress: progress, router: router, voice: voice,
+                       quran: quran, quranDownloads: quranDownloads, quranAudio: quranAudio)
     }
 
     var body: some Scene {
         WindowGroup {
             RootView()
-                .withAppEnvironment(AppEnvironment(settings: settings, library: library, bank: bank,
-                                                   progress: progress, router: router, voice: voice))
-                .onAppear { bank.load(settings.language) }
+                .withAppEnvironment(env)
+                .onAppear {
+                    voice.rate = settings.speechRate
+                    quranAudio.store = quran
+                    quranAudio.downloads = quranDownloads
+                }
                 .onChange(of: settings.language) { _, language in
                     voice.stop()
                     library.searchText = ""
                     library.load(fileName: settings.contentFileName, language: language)
-                    bank.load(language)
+                    if bank.language != nil { bank.load(language) }
                     if settings.reminderEnabled { ReminderScheduler.schedule(minutes: settings.reminderMinutes) }
                 }
                 .onChange(of: settings.showTashkeel) {
                     library.load(fileName: settings.contentFileName, language: settings.language)
                 }
                 .onChange(of: settings.speechRate) { _, rate in voice.rate = rate }
-                .onAppear { voice.rate = settings.speechRate }
         }
     }
 }
@@ -57,15 +68,22 @@ struct AppEnvironment {
     let progress: ProgressStore
     let router: AppRouter
     let voice: VoicePlayer
+    let quran: QuranStore
+    let quranDownloads: QuranDownloads
+    let quranAudio: QuranAudioPlayer
 }
 
 extension AppEnvironment {
     /// بيئة كاملة للمعاينات (Xcode Previews).
     static func preview() -> AppEnvironment {
         let settings = AppSettings()
+        let quran = QuranStore(), downloads = QuranDownloads(), audio = QuranAudioPlayer()
+        audio.store = quran
+        audio.downloads = downloads
         return AppEnvironment(settings: settings,
                               library: LibraryViewModel(fileName: settings.contentFileName, language: settings.language),
-                              bank: QuestionBankViewModel(), progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer())
+                              bank: QuestionBankViewModel(), progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer(),
+                              quran: quran, quranDownloads: downloads, quranAudio: audio)
     }
 }
 
@@ -79,6 +97,9 @@ extension View {
             .environment(env.progress)
             .environment(env.router)
             .environment(env.voice)
+            .environment(env.quran)
+            .environment(env.quranDownloads)
+            .environment(env.quranAudio)
             .environment(\.layoutDirection, env.settings.layoutDirection)
             .environment(\.locale, env.settings.language.locale)
             .preferredColorScheme(env.settings.appearance.colorScheme)
@@ -95,11 +116,15 @@ struct RootView: View {
     @Environment(AppRouter.self) private var router
     @Environment(ProgressStore.self) private var progress
     @Environment(VoicePlayer.self) private var voice
+    @Environment(QuranStore.self) private var quran
+    @Environment(QuranDownloads.self) private var quranDownloads
+    @Environment(QuranAudioPlayer.self) private var quranAudio
 
     @State private var showSplash = true
 
     private var env: AppEnvironment {
-        AppEnvironment(settings: settings, library: library, bank: bank, progress: progress, router: router, voice: voice)
+        AppEnvironment(settings: settings, library: library, bank: bank, progress: progress, router: router, voice: voice,
+                       quran: quran, quranDownloads: quranDownloads, quranAudio: quranAudio)
     }
 
     var body: some View {
@@ -115,6 +140,12 @@ struct RootView: View {
                 }
                 .tabItem { Label(L10n.t("tab.home"), systemImage: "house.fill") }
                 .tag(AppRouter.Tab.home)
+
+                NavigationStack {
+                    QuranHomeView()
+                }
+                .tabItem { Label(L10n.t("tab.quran"), systemImage: "book.closed.fill") }
+                .tag(AppRouter.Tab.quran)
 
                 NavigationStack {
                     QuestionsHomeView()
@@ -135,6 +166,7 @@ struct RootView: View {
                 SplashView()
                     .transition(.opacity.combined(with: .scale(scale: 1.08)))
                     .zIndex(10)
+                    .onTapGesture { withAnimation(.easeOut(duration: 0.25)) { showSplash = false } }
             }
         }
         .fullScreenCover(item: $router.presentedLesson) { lesson in
@@ -145,9 +177,17 @@ struct RootView: View {
             QuizSessionView(config: config)
                 .withAppEnvironment(env)
         }
+        .fullScreenCover(item: $router.presentedMushaf) { launch in
+            MushafReaderView(startPage: launch.page)
+                .withAppEnvironment(env)
+        }
         .task {
-            try? await Task.sleep(for: .milliseconds(1400))
-            withAnimation(.easeInOut(duration: 0.6)) { showSplash = false }
+            // شاشة بداية قصيرة (نصف ثانية) — الواجهة جاهزة خلفها
+            try? await Task.sleep(for: .milliseconds(500))
+            withAnimation(.easeOut(duration: 0.35)) { showSplash = false }
+            // تجهيز بنك الأسئلة في الخلفية بعد ظهور الواجهة
+            try? await Task.sleep(for: .milliseconds(800))
+            bank.load(settings.language)
         }
     }
 

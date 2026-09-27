@@ -13,6 +13,7 @@ struct QuestionsHomeView: View {
     @Environment(LibraryViewModel.self) private var library
     @Environment(ProgressStore.self) private var progress
     @Environment(AppRouter.self) private var router
+    @Environment(AppSettings.self) private var settings
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var appeared = false
@@ -43,7 +44,10 @@ struct QuestionsHomeView: View {
         .navigationTitle(L10n.t("tab.questions"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .onAppear { withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) { appeared = true } }
+        .onAppear {
+            bank.load(settings.language)
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) { appeared = true }
+        }
     }
 
     // MARK: - Hero

@@ -2,7 +2,7 @@
 //  LibraryViewModel.swift
 //  ثقافة إسلامية
 //
-//  يحمّل محتوى الكتاب باللغة المختارة من الملف المحلي (`TalqeenData.json` أو `TalqeenData.<lang>.json`)
+//  يحمّل محتوى الكتاب باللغة المختارة من الملف المحلي (`ContentData.json` أو `ContentData.<lang>.json`)
 //  ويوفّر البحث والوصول للأقسام والمسائل والدروس.
 //  كل الفهارس ونصوص البحث المطبّعة تُحسب مرة واحدة عند التحميل، فيبقى البحث فوريًا أثناء الكتابة.
 //
@@ -37,10 +37,10 @@ final class LibraryViewModel {
         load(fileName: fileName ?? language.dataFileName, language: language, bundle: bundle)
     }
 
-    /// يحمّل ملف المحتوى (مثل `TalqeenData.en` أو `TalqeenData.tashkeel` للعربية المشكولة).
+    /// يحمّل ملف المحتوى (مثل `ContentData.en` أو `ContentData.tashkeel` للعربية المشكولة).
     func load(fileName: String, language: AppLanguage, bundle: Bundle = .main) {
         do {
-            let library = try bundle.decode(TalqeenLibrary.self, from: fileName)
+            let library = try bundle.decode(ContentLibrary.self, from: fileName)
             self.language = language
             book = library.book
             chapters = library.chapters

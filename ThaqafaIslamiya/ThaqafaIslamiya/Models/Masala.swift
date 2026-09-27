@@ -3,7 +3,7 @@
 //  ثقافة إسلامية
 //
 //  نموذج «المسألة» الفقهية: الوحدة الأساسية للمحتوى في التطبيق.
-//  كل مسألة مستخرجة من كتاب «تلقين الصبيان ما يلزم الإنسان» ولها قسم مستقل.
+//  لكل مسألة قسم مستقل ورقم صفحتها في الأصل.
 //
 
 import Foundation
@@ -70,8 +70,8 @@ struct BookInfo: Codable, Hashable {
     let structure: [String]
 }
 
-/// الجذر الكامل لملف البيانات المحلي `TalqeenData.json`.
-struct TalqeenLibrary: Codable {
+/// الجذر الكامل لملف البيانات المحلي `ContentData.json`.
+struct ContentLibrary: Codable {
     let book: BookInfo
     let chapters: [Chapter]
     let lessons: [InteractiveLesson]

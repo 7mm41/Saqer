@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# English translation overlay for TalqeenData (keys = ids in the Arabic source)
+# English translation overlay for ContentData (keys = ids in the Arabic source)
 BOOK = {
     "title": "Talqīn al-Ṣibyān — Teaching Children What Every Person Needs",
     "author": "Nur al-Din Abdullah bin Humaid al-Salimi",

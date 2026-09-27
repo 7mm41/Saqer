@@ -16,6 +16,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.saqer.ThaqafaIslamiya
         GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Supporting/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: "ثقافة إسلامية"
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES

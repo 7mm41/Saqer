@@ -69,8 +69,8 @@ enum AppLanguage: String, CaseIterable, Identifiable, Codable {
         }
     }
 
-    /// ملف المحتوى: `TalqeenData.json` للعربية و`TalqeenData.<code>.json` للترجمات.
-    var dataFileName: String { self == .arabic ? "TalqeenData" : "TalqeenData.\(rawValue)" }
+    /// ملف المحتوى: `ContentData.json` للعربية و`ContentData.<code>.json` للترجمات.
+    var dataFileName: String { self == .arabic ? "ContentData" : "ContentData.\(rawValue)" }
 
     /// لغة الجهاز إن كانت من لغات التطبيق، وإلا العربية.
     static var deviceDefault: AppLanguage {

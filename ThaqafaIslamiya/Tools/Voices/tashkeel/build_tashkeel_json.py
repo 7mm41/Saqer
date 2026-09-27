@@ -1,4 +1,4 @@
-"""Build TalqeenData.tashkeel.json: the Arabic content with full tashkeel on steps and masail.
+"""Build ContentData.tashkeel.json: the Arabic content with full tashkeel on steps and masail.
 
 Source files (one line per text, `id|key|text`): steps.txt (key t=title, x=text) and ch_<chapter>.txt
 (key t=title, s=summary, 0..n=points). Each diacritized text must equal the original once the diacritics
@@ -32,7 +32,7 @@ def tashkeel_table():
 
 def main():
     table = load()
-    src = json.load(open(os.path.join(DATA, "TalqeenData.json"), encoding="utf-8"))
+    src = json.load(open(os.path.join(DATA, "ContentData.json"), encoding="utf-8"))
     out = copy.deepcopy(src)
     problems = []
 
@@ -58,7 +58,7 @@ def main():
     if problems:
         print("\n".join(problems))
         sys.exit(1)
-    json.dump(out, open(os.path.join(DATA, "TalqeenData.tashkeel.json"), "w", encoding="utf-8"),
+    json.dump(out, open(os.path.join(DATA, "ContentData.tashkeel.json"), "w", encoding="utf-8"),
               ensure_ascii=False, separators=(",", ":"))
     print("ok", len(table), "texts")
 

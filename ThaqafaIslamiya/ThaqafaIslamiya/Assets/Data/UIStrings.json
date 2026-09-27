@@ -8,12 +8,12 @@
   "tr": "Yazar: {0}"
  },
  "about.book": {
-  "ar": "عن الكتاب",
-  "bn": "বই সম্পর্কে",
-  "en": "About the book",
-  "fa": "دربارهٔ کتاب",
-  "hi": "किताब के बारे में",
-  "tr": "Kitap hakkında"
+  "ar": "عن المحتوى",
+  "bn": "বিষয়বস্তু সম্পর্কে",
+  "en": "About the content",
+  "fa": "دربارهٔ محتوا",
+  "hi": "सामग्री के बारे में",
+  "tr": "İçerik hakkında"
  },
  "about.lessonsDone": {
   "ar": "الدروس المكتملة: {0} من {1}",
@@ -281,11 +281,11 @@
  },
  "brand.developedBy": {
   "ar": "تم تطويره بواسطة {0} © {1}",
-  "bn": "Saqer Store দ্বারা নির্মিত © {1}",
-  "en": "Developed by Saqer Store © {1}",
-  "fa": "توسعه‌یافته توسط Saqer Store © {1}",
-  "hi": "Saqer Store द्वारा विकसित © {1}",
-  "tr": "Saqer Store tarafından geliştirildi © {1}"
+  "bn": "Saqer দ্বারা নির্মিত © {1}",
+  "en": "Developed by Saqer © {1}",
+  "fa": "توسعه‌یافته توسط صقر (Saqer) © {1}",
+  "hi": "Saqer द्वारा विकसित © {1}",
+  "tr": "Saqer tarafından geliştirildi © {1}"
  },
  "brand.tagline": {
   "ar": "تعلّم دينك خطوة بخطوة",
@@ -655,6 +655,14 @@
   "hi": "मैंने यह मसला सीख लिया",
   "tr": "Bu meseleyi öğrendim"
  },
+ "masala.page": {
+  "ar": "الصفحة {0}",
+  "bn": "পৃষ্ঠা {0}",
+  "en": "Page {0}",
+  "fa": "صفحهٔ {0}",
+  "hi": "पृष्ठ {0}",
+  "tr": "Sayfa {0}"
+ },
  "masala.source": {
   "ar": "المصدر: {0} — ص {1}",
   "bn": "সূত্র: {0} — পৃ. {1}",
@@ -774,6 +782,390 @@
   "fa": "اشکالی ندارد، چیز تازه‌ای یاد گرفتیم",
   "hi": "कोई बात नहीं, हमने कुछ नया सीखा",
   "tr": "Sorun değil, yeni bir şey öğrendik"
+ },
+ "quran.addBookmark": {
+  "ar": "ضع علامة على هذه الصفحة",
+  "bn": "এই পৃষ্ঠা বুকমার্ক করো",
+  "en": "Bookmark this page",
+  "fa": "نشانه‌گذاری این صفحه",
+  "hi": "यह पृष्ठ बुकमार्क करें",
+  "tr": "Bu sayfayı işaretle"
+ },
+ "quran.ayahCount": {
+  "ar": "{0} آية",
+  "bn": "{0} আয়াত",
+  "en": "{0} ayahs",
+  "fa": "{0} آیه",
+  "hi": "{0} आयतें",
+  "tr": "{0} ayet"
+ },
+ "quran.ayahNumber": {
+  "ar": "الآية {0}",
+  "bn": "আয়াত {0}",
+  "en": "Ayah {0}",
+  "fa": "آیهٔ {0}",
+  "hi": "आयत {0}",
+  "tr": "Ayet {0}"
+ },
+ "quran.continue": {
+  "ar": "تابع القراءة",
+  "bn": "পড়া চালিয়ে যাও",
+  "en": "Continue reading",
+  "fa": "ادامهٔ قرائت",
+  "hi": "पढ़ना जारी रखें",
+  "tr": "Okumaya devam et"
+ },
+ "quran.delete": {
+  "ar": "حذف التحميلات",
+  "bn": "ডাউনলোড মুছো",
+  "en": "Delete downloads",
+  "fa": "حذف دانلودها",
+  "hi": "डाउनलोड हटाएँ",
+  "tr": "İndirilenleri sil"
+ },
+ "quran.deleteConfirm": {
+  "ar": "حذف السور المحمّلة لهذا القارئ؟ (المدمجة في التطبيق تبقى)",
+  "bn": "এই ক্বারীর ডাউনলোড করা সূরাগুলো মুছবে? (অ্যাপের ভেতরেরগুলো থাকবে)",
+  "en": "Delete this reciter’s downloaded surahs? (Built-in ones stay)",
+  "fa": "سوره‌های دانلودشدهٔ این قاری حذف شود؟ (سوره‌های داخلی می‌مانند)",
+  "hi": "इस क़ारी की डाउनलोड सूरतें हटाएँ? (अंदर की सूरतें रहेंगी)",
+  "tr": "Bu kârinin indirilen sureleri silinsin mi? (Dahili olanlar kalır)"
+ },
+ "quran.downloadAll": {
+  "ar": "حمّل المصحف كاملًا بهذا الصوت",
+  "bn": "পুরো কুরআন এই কণ্ঠে ডাউনলোড করো",
+  "en": "Download the whole Quran in this voice",
+  "fa": "دانلود کامل قرآن با این صدا",
+  "hi": "पूरा क़ुरआन इस आवाज़ में डाउनलोड करें",
+  "tr": "Tüm Kur’an’ı bu sesle indir"
+ },
+ "quran.follow": {
+  "ar": "تابع التلاوة صفحة بصفحة",
+  "bn": "তিলাওয়াতের সঙ্গে পৃষ্ঠা বদলাও",
+  "en": "Follow the recitation page by page",
+  "fa": "همراهی با تلاوت صفحه‌به‌صفحه",
+  "hi": "तिलावत के साथ पृष्ठ बदलें",
+  "tr": "Tilaveti sayfa sayfa izle"
+ },
+ "quran.friday.body": {
+  "ar": "من السنّة قراءة سورة الكهف يوم الجمعة. اضغط لتبدأ.",
+  "bn": "জুমার দিনে সূরা কাহফ পড়া সুন্নত। শুরু করতে ছোঁও।",
+  "en": "It is Sunnah to read Al-Kahf on Friday. Tap to begin.",
+  "fa": "خواندن سورهٔ کهف در روز جمعه سنت است. برای شروع لمس کن.",
+  "hi": "जुमा के दिन सूरह अल-कहफ़ पढ़ना सुन्नत है। शुरू करने के लिए छुएँ।",
+  "tr": "Cuma günü Kehf suresini okumak sünnettir. Başlamak için dokun."
+ },
+ "quran.friday.title": {
+  "ar": "جمعة مباركة — سورة الكهف",
+  "bn": "জুমা মোবারক — সূরা আল-কাহফ",
+  "en": "Blessed Friday — Surat Al-Kahf",
+  "fa": "جمعهٔ مبارک — سورهٔ کهف",
+  "hi": "जुमा मुबारक — सूरह अल-कहफ़",
+  "tr": "Hayırlı Cumalar — Kehf Suresi"
+ },
+ "quran.index.bookmarks": {
+  "ar": "العلامات",
+  "bn": "বুকমার্ক",
+  "en": "Bookmarks",
+  "fa": "نشانه‌ها",
+  "hi": "बुकमार्क",
+  "tr": "Yer imleri"
+ },
+ "quran.index.juz": {
+  "ar": "الأجزاء",
+  "bn": "পারা",
+  "en": "Juz",
+  "fa": "جزءها",
+  "hi": "पारे",
+  "tr": "Cüzler"
+ },
+ "quran.index.surahs": {
+  "ar": "السور",
+  "bn": "সূরা",
+  "en": "Surahs",
+  "fa": "سوره‌ها",
+  "hi": "सूरतें",
+  "tr": "Sureler"
+ },
+ "quran.juz": {
+  "ar": "الجزء",
+  "bn": "পারা",
+  "en": "Juz",
+  "fa": "جزء",
+  "hi": "पारा",
+  "tr": "Cüz"
+ },
+ "quran.khatma": {
+  "ar": "الختمة",
+  "bn": "খতম",
+  "en": "Khatmah",
+  "fa": "ختم",
+  "hi": "ख़त्म",
+  "tr": "Hatim"
+ },
+ "quran.listen": {
+  "ar": "استمع",
+  "bn": "শোনো",
+  "en": "Listen",
+  "fa": "گوش کن",
+  "hi": "सुनें",
+  "tr": "Dinle"
+ },
+ "quran.listenFromHere": {
+  "ar": "استمع من هذه الآية",
+  "bn": "এই আয়াত থেকে শোনো",
+  "en": "Listen from this ayah",
+  "fa": "از این آیه گوش کن",
+  "hi": "इस आयत से सुनें",
+  "tr": "Bu ayetten dinle"
+ },
+ "quran.listenPage": {
+  "ar": "استمع للصفحة",
+  "bn": "এই পৃষ্ঠাটি শোনো",
+  "en": "Listen to this page",
+  "fa": "به این صفحه گوش کن",
+  "hi": "यह पृष्ठ सुनें",
+  "tr": "Bu sayfayı dinle"
+ },
+ "quran.loading": {
+  "ar": "جارٍ تجهيز المصحف…",
+  "bn": "মুসহাফ প্রস্তুত হচ্ছে…",
+  "en": "Preparing the mushaf…",
+  "fa": "در حال آماده‌سازی مصحف…",
+  "hi": "मुसहफ़ तैयार हो रहा है…",
+  "tr": "Mushaf hazırlanıyor…"
+ },
+ "quran.meccan": {
+  "ar": "مكية",
+  "bn": "মাক্কী",
+  "en": "Meccan",
+  "fa": "مکی",
+  "hi": "मक्की",
+  "tr": "Mekki"
+ },
+ "quran.medinan": {
+  "ar": "مدنية",
+  "bn": "মাদানী",
+  "en": "Medinan",
+  "fa": "مدنی",
+  "hi": "मदनी",
+  "tr": "Medeni"
+ },
+ "quran.nightPages": {
+  "ar": "صفحات ليلية",
+  "bn": "রাতের পৃষ্ঠা",
+  "en": "Night pages",
+  "fa": "صفحه‌های شبانه",
+  "hi": "रात के पृष्ठ",
+  "tr": "Gece sayfaları"
+ },
+ "quran.noBookmarks": {
+  "ar": "لا توجد علامات بعد — اضغط زر العلامة داخل المصحف لحفظ صفحة.",
+  "bn": "এখনো কোনো বুকমার্ক নেই — মুসহাফে বুকমার্ক বোতাম চাপো।",
+  "en": "No bookmarks yet — use the bookmark button in the mushaf to save a page.",
+  "fa": "هنوز نشانه‌ای نیست — در مصحف دکمهٔ نشانه را بزن.",
+  "hi": "अभी कोई बुकमार्क नहीं — मुसहफ़ में बुकमार्क बटन दबाएँ।",
+  "tr": "Henüz yer imi yok — mushafta yer imi düğmesine dokun."
+ },
+ "quran.notRecorded": {
+  "ar": "لم يسجّل {0} هذه السورة، تُتلى بصوت {1}.",
+  "bn": "{0} এই সূরাটি রেকর্ড করেননি; {1}-এর কণ্ঠে বাজছে।",
+  "en": "{0} hasn’t recorded this surah; playing {1}.",
+  "fa": "{0} این سوره را ضبط نکرده؛ با صدای {1} پخش می‌شود.",
+  "hi": "{0} ने यह सूरह रिकॉर्ड नहीं की; {1} की आवाज़ में।",
+  "tr": "{0} bu sureyi kaydetmedi; {1} sesiyle çalınıyor."
+ },
+ "quran.nowPlaying": {
+  "ar": "سورة {0} · الآية {1}",
+  "bn": "সূরা {0} · আয়াত {1}",
+  "en": "Surah {0} · Ayah {1}",
+  "fa": "سورهٔ {0} · آیهٔ {1}",
+  "hi": "सूरह {0} · आयत {1}",
+  "tr": "{0} Suresi · Ayet {1}"
+ },
+ "quran.offlineCount": {
+  "ar": "{0} من {1} سورة دون إنترنت",
+  "bn": "{1}টির মধ্যে {0}টি সূরা অফলাইন",
+  "en": "{0} of {1} surahs offline",
+  "fa": "{0} از {1} سوره بدون اینترنت",
+  "hi": "{1} में से {0} सूरतें ऑफ़लाइन",
+  "tr": "{1} sureden {0} tanesi çevrimdışı"
+ },
+ "quran.offlineFooter": {
+  "ar": "الكهف والملك والفاتحة ويس والرحمن والواقعة وجزء عمّ بصوت هزاع البلوشي، والبقرة والكهف والملك بصوت مشاري العفاسي — مدمجة وتعمل دون إنترنت. أي سورة أخرى تُحفظ على جهازك تلقائيًا بعد أول استماع، أو حمّل المصحف كاملًا مرة واحدة ليعمل دون إنترنت دائمًا.",
+  "bn": "আল-কাহফ, আল-মুলক, আল-ফাতিহা, ইয়াসীন, আর-রহমান, আল-ওয়াকিআ ও আমপারা (হাজ্জা আল-বালুশি), এবং আল-বাকারা, আল-কাহফ ও আল-মুলক (মিশারি আলাফাসি) অ্যাপের ভেতরেই আছে এবং ইন্টারনেট ছাড়া চলে। অন্য সূরাগুলো প্রথমবার শোনার পর ডিভাইসে সংরক্ষিত হয়, অথবা পুরো কুরআন একবার ডাউনলোড করো।",
+  "en": "Al-Kahf, Al-Mulk, Al-Fatiha, Ya-Sin, Ar-Rahman, Al-Waqi’ah and Juz ’Amma (Hazza Al-Balushi), plus Al-Baqarah, Al-Kahf and Al-Mulk (Mishary Alafasy), are built in and work offline. Any other surah is saved on your device after the first listen — or download a whole recitation once to keep it offline forever.",
+  "fa": "کهف، ملک، فاتحه، یس، الرحمن، واقعه و جزء عمّ با صدای هزاع البلوشی، و بقره، کهف و ملک با صدای مشاری العفاسی داخل برنامه‌اند و بدون اینترنت کار می‌کنند. هر سورهٔ دیگر پس از اولین شنیدن روی دستگاه ذخیره می‌شود، یا یک‌بار کل قرآن را دانلود کن.",
+  "hi": "अल-कहफ़, अल-मुल्क, अल-फ़ातिहा, या-सीन, अर-रहमान, अल-वाक़िआ और पारा अम्म (हज़्ज़ा अल-बलूशी), और अल-बक़रह, अल-कहफ़ व अल-मुल्क (मिशारी अल-अफ़ासी) ऐप में ही हैं और बिना इंटरनेट चलती हैं। बाक़ी सूरतें पहली बार सुनने के बाद डिवाइस में सेव हो जाती हैं, या पूरा क़ुरआन एक बार डाउनलोड करें।",
+  "tr": "Kehf, Mülk, Fatiha, Yasin, Rahman, Vâkıa ve Amme cüzü (Hazza el-Beluşi) ile Bakara, Kehf ve Mülk (Mişari Afasi) uygulamanın içindedir ve internetsiz çalışır. Diğer sureler ilk dinlemeden sonra cihazına kaydedilir; ya da tüm tilaveti bir kez indir."
+ },
+ "quran.offlineMissing": {
+  "ar": "هذه السورة غير محمّلة على جهازك ولا يوجد اتصال. حمّلها مرة واحدة لتعمل دون إنترنت.",
+  "bn": "এই সূরাটি তোমার ডিভাইসে নেই এবং সংযোগও নেই। অফলাইনের জন্য একবার ডাউনলোড করো।",
+  "en": "This surah isn’t on your device and there’s no connection. Download it once to use it offline.",
+  "fa": "این سوره روی دستگاه نیست و اتصال ندارید. یک‌بار دانلودش کن تا بدون اینترنت کار کند.",
+  "hi": "यह सूरह आपके डिवाइस पर नहीं है और इंटरनेट भी नहीं है। ऑफ़लाइन के लिए एक बार डाउनलोड करें।",
+  "tr": "Bu sure cihazında yok ve bağlantı yok. Çevrimdışı kullanmak için bir kez indir."
+ },
+ "quran.pageJuz": {
+  "ar": "الصفحة {0} · الجزء {1}",
+  "bn": "পৃষ্ঠা {0} · পারা {1}",
+  "en": "Page {0} · Juz {1}",
+  "fa": "صفحهٔ {0} · جزء {1}",
+  "hi": "पृष्ठ {0} · पारा {1}",
+  "tr": "Sayfa {0} · Cüz {1}"
+ },
+ "quran.pageLabel": {
+  "ar": "صفحة المصحف {0}",
+  "bn": "মুসহাফ পৃষ্ঠা {0}",
+  "en": "Mushaf page {0}",
+  "fa": "صفحهٔ مصحف {0}",
+  "hi": "मुसहफ़ पृष्ठ {0}",
+  "tr": "Mushaf sayfası {0}"
+ },
+ "quran.partial": {
+  "ar": "سجّل {0} سورة",
+  "bn": "{0}টি সূরা রেকর্ড",
+  "en": "Recorded {0} surahs",
+  "fa": "{0} سوره ضبط شده",
+  "hi": "{0} सूरतें रिकॉर्ड कीं",
+  "tr": "{0} sure kaydetti"
+ },
+ "quran.reciter": {
+  "ar": "القارئ",
+  "bn": "ক্বারী",
+  "en": "Reciter",
+  "fa": "قاری",
+  "hi": "क़ारी",
+  "tr": "Kâri"
+ },
+ "quran.reciters": {
+  "ar": "القرّاء",
+  "bn": "ক্বারীগণ",
+  "en": "Reciters",
+  "fa": "قاریان",
+  "hi": "क़ारी",
+  "tr": "Kâriler"
+ },
+ "quran.removeBookmark": {
+  "ar": "أزل العلامة",
+  "bn": "বুকমার্ক সরাও",
+  "en": "Remove bookmark",
+  "fa": "حذف نشانه",
+  "hi": "बुकमार्क हटाएँ",
+  "tr": "Yer imini kaldır"
+ },
+ "quran.sajda": {
+  "ar": "سجدة",
+  "bn": "সিজদা",
+  "en": "Prostration",
+  "fa": "سجده",
+  "hi": "सज्दा",
+  "tr": "Secde"
+ },
+ "quran.search": {
+  "ar": "ابحث عن سورة (الاسم أو الرقم)",
+  "bn": "সূরা খোঁজো (নাম বা নম্বর)",
+  "en": "Search a surah (name or number)",
+  "fa": "جستجوی سوره (نام یا شماره)",
+  "hi": "सूरह खोजें (नाम या संख्या)",
+  "tr": "Sure ara (ad veya numara)"
+ },
+ "quran.showTafsir": {
+  "ar": "التفسير الميسّر",
+  "bn": "আরবি তাফসীর",
+  "en": "Arabic tafsir",
+  "fa": "تفسیر عربی",
+  "hi": "अरबी तफ़सीर",
+  "tr": "Arapça tefsir"
+ },
+ "quran.special": {
+  "ar": "سور مختارة",
+  "bn": "নির্বাচিত সূরা",
+  "en": "Selected surahs",
+  "fa": "سوره‌های منتخب",
+  "hi": "चुनी हुई सूरतें",
+  "tr": "Seçilmiş sureler"
+ },
+ "quran.special.18": {
+  "ar": "تُقرأ كل جمعة",
+  "bn": "প্রতি জুমায় পড়া হয়",
+  "en": "Read every Friday",
+  "fa": "هر جمعه خوانده می‌شود",
+  "hi": "हर जुमा को पढ़ी जाती है",
+  "tr": "Her cuma okunur"
+ },
+ "quran.special.2": {
+  "ar": "أخذها بركة وتركها حسرة",
+  "bn": "এটি গ্রহণ বরকত, বর্জন অনুশোচনা",
+  "en": "Taking it is a blessing, leaving it a regret",
+  "fa": "فراگرفتنش برکت و رها کردنش حسرت است",
+  "hi": "इसे अपनाना बरकत, छोड़ना पछतावा",
+  "tr": "Onu almak bereket, bırakmak hasrettir"
+ },
+ "quran.special.36": {
+  "ar": "قلب القرآن",
+  "bn": "কুরআনের হৃদয়",
+  "en": "The heart of the Quran",
+  "fa": "قلب قرآن",
+  "hi": "क़ुरआन का दिल",
+  "tr": "Kur’an’ın kalbi"
+ },
+ "quran.special.67": {
+  "ar": "المانعة من عذاب القبر، تُقرأ كل ليلة",
+  "bn": "কবরের আজাব থেকে রক্ষাকারী, প্রতি রাতে",
+  "en": "The protector — read every night",
+  "fa": "بازدارنده از عذاب قبر، هر شب",
+  "hi": "क़ब्र के अज़ाब से बचाने वाली, हर रात",
+  "tr": "Kabir azabına kalkan, her gece okunur"
+ },
+ "quran.start": {
+  "ar": "ابدأ القراءة",
+  "bn": "পড়া শুরু করো",
+  "en": "Start reading",
+  "fa": "شروع قرائت",
+  "hi": "पढ़ना शुरू करें",
+  "tr": "Okumaya başla"
+ },
+ "quran.surahName": {
+  "ar": "سورة {0}",
+  "bn": "সূরা {0}",
+  "en": "Surah {0}",
+  "fa": "سورهٔ {0}",
+  "hi": "सूरह {0}",
+  "tr": "{0} Suresi"
+ },
+ "quran.tafsir": {
+  "ar": "التفسير",
+  "bn": "তাফসীর",
+  "en": "Tafsir",
+  "fa": "تفسیر",
+  "hi": "तफ़सीर",
+  "tr": "Tefsir"
+ },
+ "quran.tafsirName": {
+  "ar": "التفسير الميسّر",
+  "bn": "আত-তাফসীর আল-মুয়াস্সার (আরবি)",
+  "en": "Al-Tafsir Al-Muyassar (Arabic)",
+  "fa": "التفسیر المیسر (عربی)",
+  "hi": "अत-तफ़सीर अल-मुयस्सर (अरबी)",
+  "tr": "Et-Tefsîrü’l-Müyesser (Arapça)"
+ },
+ "quran.tafsirTitle": {
+  "ar": "تفسير الصفحة {0}",
+  "bn": "পৃষ্ঠা {0}-এর তাফসীর",
+  "en": "Tafsir of page {0}",
+  "fa": "تفسیر صفحهٔ {0}",
+  "hi": "पृष्ठ {0} की तफ़सीर",
+  "tr": "Sayfa {0} tefsiri"
+ },
+ "quran.title": {
+  "ar": "القرآن الكريم",
+  "bn": "কুরআন মাজীদ",
+  "en": "The Holy Quran",
+  "fa": "قرآن کریم",
+  "hi": "क़ुरआन मजीद",
+  "tr": "Kur’an-ı Kerim"
  },
  "reminder.body": {
   "ar": "حان وقت درسك اليومي — سؤال واحد يكفي لتبدأ ✨",
@@ -1016,12 +1408,12 @@
   "tr": "Uygulamayı paylaş"
  },
  "settings.shareText": {
-  "ar": "تطبيق «{0}» — تعلّم الوضوء والصلاة وأحكام الدين خطوة بخطوة من كتاب «تلقين الصبيان»، دون إنترنت. من تطوير {1}.",
-  "bn": "“{0}” — “তালকীনুস সিবইয়ান” বই থেকে অজু, নামাজ ও দ্বীনের মৌলিক বিষয় ধাপে ধাপে, ইন্টারনেট ছাড়াই শেখো। নির্মাতা: {1}।",
-  "en": "“{0}” — learn wudu, prayer and the basics of the faith step by step from the book “Talqeen al-Sibyan”, fully offline. Developed by {1}.",
-  "fa": "«{0}» — وضو، نماز و احکام دین را قدم‌به‌قدم از کتاب «تلقین الصبیان» بدون اینترنت بیاموز. ساختهٔ {1}.",
-  "hi": "“{0}” — “तल्क़ीनुस-सिब्यान” किताब से वुज़ू, नमाज़ और दीन की बुनियादी बातें क़दम-ब-क़दम, बिना इंटरनेट सीखें। विकसित: {1}.",
-  "tr": "“{0}” — abdest, namaz ve dinin temellerini “Talkinü’s-Sıbyan” kitabından adım adım, internetsiz öğren. Geliştiren: {1}."
+  "ar": "تطبيق «{0}» — القرآن الكريم مع التفسير والتلاوة، وتعلّم الوضوء والصلاة خطوة بخطوة، دون إنترنت. من تطوير {1}.",
+  "bn": "“{0}” — তাফসীর ও তিলাওয়াতসহ কুরআন মাজীদ, ধাপে ধাপে অজু ও নামাজ, ইন্টারনেট ছাড়াই। নির্মাতা: Saqer।",
+  "en": "“{0}” — the Holy Quran with tafsir and recitation, plus wudu and prayer step by step, fully offline. Developed by Saqer.",
+  "fa": "«{0}» — قرآن کریم با تفسیر و تلاوت، و آموزش وضو و نماز قدم‌به‌قدم، بدون اینترنت. ساختهٔ صقر.",
+  "hi": "“{0}” — तफ़सीर और तिलावत के साथ क़ुरआन मजीद, और क़दम-ब-क़दम वुज़ू व नमाज़, बिना इंटरनेट। विकसित: Saqer.",
+  "tr": "“{0}” — tefsir ve tilavetle Kur’an-ı Kerim, adım adım abdest ve namaz, internetsiz. Geliştiren: Saqer."
  },
  "settings.speed": {
   "ar": "سرعة القراءة",
@@ -1174,6 +1566,14 @@
   "fa": "پرسش‌ها",
   "hi": "सवाल",
   "tr": "Sorular"
+ },
+ "tab.quran": {
+  "ar": "القرآن",
+  "bn": "কুরআন",
+  "en": "Quran",
+  "fa": "قرآن",
+  "hi": "क़ुरआन",
+  "tr": "Kur’an"
  },
  "tab.settings": {
   "ar": "الإعدادات",

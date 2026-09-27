@@ -1,6 +1,6 @@
 # الترجمات
 
-`TalqeenData.json` (العربية) هو المصدر. كل لغة لها ملف تراكب `tr_<lang>.py` بالمعرّفات نفسها:
+`ContentData.json` (العربية) هو المصدر. كل لغة لها ملف تراكب `tr_<lang>.py` بالمعرّفات نفسها:
 
 | المتغيّر | الشكل |
 |---|---|
@@ -12,7 +12,7 @@
 | `QUIZ` | `chapterId → [(question, [3 options], explanation)]` بترتيب الخيارات نفسه |
 
 ```bash
-python3 build_i18n.py en fa tr hi bn     # يولّد TalqeenData.<lang>.json ويتحقق من اكتمال كل المعرّفات
+python3 build_i18n.py en fa tr hi bn     # يولّد ContentData.<lang>.json ويتحقق من اكتمال كل المعرّفات
 python3 ui_strings.py                     # يولّد UIStrings.json لنصوص الواجهة
 ```
 

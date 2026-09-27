@@ -2,7 +2,7 @@
 //  BrandViews.swift
 //  ثقافة إسلامية
 //
-//  هوية التطبيق والمطوّر (صقر ستور): شعار التطبيق، شارة صقر ستور، تذييل «تم تطويره بواسطة»، وشاشة البداية.
+//  هوية التطبيق والمطوّر (صقر): شعار التطبيق، شارة صقر، تذييل «تم تطويره بواسطة»، وشاشة البداية.
 //
 
 import SwiftUI
@@ -28,7 +28,7 @@ struct AppMark: View {
     }
 }
 
-/// شارة صقر ستور: رمز الصقر داخل دائرة متدرّجة + الاسم بالعربية واللاتينية.
+/// شارة صقر: رمز الصقر داخل دائرة متدرّجة + الاسم بالعربية واللاتينية.
 struct SaqerStoreBadge: View {
     var compact = false
 
@@ -51,7 +51,7 @@ struct SaqerStoreBadge: View {
                     .font((compact ? Font.caption : .headline).weight(.heavy))
                 Text(AppInfo.developerLatin.uppercased())
                     .font(.system(size: compact ? 8 : 10, weight: .bold, design: .rounded))
-                    .tracking(2)
+                    .tracking(3)
                     .foregroundStyle(.secondary)
             }
         }
@@ -59,7 +59,7 @@ struct SaqerStoreBadge: View {
     }
 }
 
-/// «تم تطويره بواسطة صقر ستور © ٢٠٢٦».
+/// «تم تطويره بواسطة صقر © ٢٠٢٦».
 struct DeveloperFooter: View {
     var body: some View {
         VStack(spacing: 8) {

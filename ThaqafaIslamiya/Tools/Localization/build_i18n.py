@@ -1,7 +1,8 @@
-"""Build TalqeenData.<lang>.json from the Arabic source + a translation overlay module (tr_<lang>.py)."""
+"""Build ContentData.<lang>.json from the Arabic source + a translation overlay module (tr_<lang>.py)."""
 import json, os, sys, copy, importlib
+from content_rules import neutralize
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "ThaqafaIslamiya", "Assets", "Data")
-src = json.load(open(f'{DATA}/TalqeenData.json', encoding='utf-8'))
+src = json.load(open(f'{DATA}/ContentData.json', encoding='utf-8'))
 
 def build(lang):
     T = importlib.import_module(f'tr_{lang}')
@@ -32,7 +33,8 @@ def build(lang):
             elif meaning: problems.append('meaning without dua ' + s['id'])
     extra = set(T.MASAIL) - {m['id'] for c in d['chapters'] for m in c['masail']}
     if extra: problems.append('extra ' + str(extra))
-    json.dump(d, open(f'{DATA}/TalqeenData.{lang}.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    neutralize(d)
+    json.dump(d, open(f'{DATA}/ContentData.{lang}.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(lang, 'ok' if not problems else problems)
 
 for lang in sys.argv[1:]:

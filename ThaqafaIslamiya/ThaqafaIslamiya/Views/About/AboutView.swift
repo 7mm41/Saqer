@@ -23,8 +23,6 @@ struct AboutView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Label(L10n.t("about.book"), systemImage: "book.closed.fill")
                                 .font(.title2.weight(.bold))
-                            Text(book.title).font(.title3.weight(.heavy))
-                            Text(L10n.t("about.author", book.author)).foregroundStyle(.secondary)
                             Text(book.about).lineSpacing(5)
                             Divider()
                             ForEach(book.structure, id: \.self) { item in

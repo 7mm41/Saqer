@@ -1,6 +1,6 @@
 """Build the random question bank (> 1000 questions per language) from the book content.
 
-Every question is derived from the text of «تلقين الصبيان» itself (TalqeenData[.<lang>].json), so it is always
+Every question is derived from the text of «تلقين الصبيان» itself (ContentData[.<lang>].json), so it is always
 consistent with what the learner reads in the app. Output: Assets/Data/Questions.<lang>.json
 
 Question kinds
@@ -93,7 +93,7 @@ def fold(s):
 
 
 def load(lang):
-    name = "TalqeenData.json" if lang == "ar" else f"TalqeenData.{lang}.json"
+    name = "ContentData.json" if lang == "ar" else f"ContentData.{lang}.json"
     return json.load(open(os.path.join(DATA, name), encoding="utf-8"))
 
 

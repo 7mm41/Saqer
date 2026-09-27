@@ -14,7 +14,7 @@ struct InteractiveLesson: Codable, Identifiable, Hashable {
     let subtitle: String
     let symbol: String
     let colors: [String]
-    /// موضع الدرس في الكتاب، مثل: "تلقين الصبيان، ص ٦١–٦٤".
+    /// موضع الدرس في الأصل، مثل: "ص ٦١–٦٤".
     let reference: String
     let steps: [LessonStep]
 

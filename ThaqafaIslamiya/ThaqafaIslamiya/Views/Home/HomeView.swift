@@ -14,6 +14,7 @@ struct HomeView: View {
     @Environment(AppRouter.self) private var router
     @Environment(AppSettings.self) private var settings
     @Environment(QuestionBankViewModel.self) private var bank
+    @Environment(QuranStore.self) private var quran
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var appeared = false
@@ -36,6 +37,7 @@ struct HomeView: View {
                     } else if library.isSearching {
                         searchResults
                     } else {
+                        quranCard
                         lessonsSection
                         if let daily = bank.dailyQuestion {
                             DailyQuestionCard(question: daily) {
@@ -70,7 +72,7 @@ struct HomeView: View {
                 Text(L10n.t("app.name"))
                     .font(.system(size: isWide ? 44 : 34, weight: .heavy, design: .rounded))
                     .foregroundStyle(LinearGradient.diagonal([.teal, .indigo]))
-                Text(library.book?.title ?? "")
+                Text(L10n.t("brand.tagline"))
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
             }
@@ -114,6 +116,37 @@ struct HomeView: View {
             }
         }
         .frame(width: isWide ? 92 : 76, height: isWide ? 92 : 76)
+    }
+
+    // MARK: - Quran
+
+    /// متابعة قراءة القرآن من آخر صفحة.
+    private var quranCard: some View {
+        Button { router.openMushaf(page: quran.lastPage) } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "book.closed.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 52, height: 52)
+                    .background(LinearGradient.diagonal([Color(red: 0.2, green: 0.6, blue: 0.45), .teal]),
+                                in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(L10n.t("quran.title"))
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text(L10n.t(quran.lastReadDate == nil ? "quran.start" : "quran.continue") + " · "
+                         + L10n.t("masala.page", quran.lastPage.digits))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+                ProgressRing(progress: quran.khatmaProgress, colors: [.teal, .green], lineWidth: 5)
+                    .frame(width: 34, height: 34)
+            }
+            .padding(16)
+            .glassCard(cornerRadius: 26, tint: .green, interactive: true)
+        }
+        .buttonStyle(PressableCardStyle())
     }
 
     // MARK: - Lessons
@@ -212,13 +245,14 @@ struct HomeView: View {
 
 struct SearchField: View {
     @Binding var text: String
+    var placeholder: String = L10n.t("search.placeholder")
     @FocusState private var focused: Bool
 
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
-            TextField(L10n.t("search.placeholder"), text: $text)
+            TextField(placeholder, text: $text)
                 .focused($focused)
                 .submitLabel(.search)
             if !text.isEmpty {
