@@ -19,6 +19,8 @@ The app ships with a mock backend (`AppServices.mock`) that seeds this member:
 | Mobile number | **+968 9123 4567** → SMS code **123456** |
 | Email | **demo@sarena.om** / **Sarena2026** |
 
+The demo member starts on the **👑 Gold** package. Package switches are simulated, and no payment is taken. In production they would go through a StoreKit 2 auto-renewable subscription.
+
 The login screen also has a **Demo account** card with a **Use demo account** button. It fills in the details (and the SMS code) for you. The card only appears while `AppServices.isDemo` is `true`, so it goes away once you switch to the real API. With the mock backend, every registered number accepts `123456` as its SMS code.
 
 ## First launch flow
@@ -36,9 +38,10 @@ The login screen also has a **Demo account** card with a **Use demo account** bu
 | Auth | Phone OTP (SMS AutoFill), email/password, registration with live validation (Omani numbers, Arabic-Indic digits, password strength), Keychain-backed session |
 | Dashboard | Savings banner, 3D "cover-flow" featured carousel with live countdowns, the 7 category cards, a "Biggest savings" list, search |
 | Categories | Cinema · Jet Ski · Oman Shooting Club · Oman Automobile Association · Ibri Arena · Video Game Arcades · Oman Festivals (Ibri & Muscat Nights) |
-| Venue detail | Hero art with a floating discount medallion, description, highlights, MapKit `Map` with a marker and directions, VIP/Regular/Family/Group tickets (struck-through original price vs member price, scarcity), quantity, floating **Book Now** bar |
+| Venue detail | Hero art with a floating discount medallion, description, highlights, MapKit `Map` with a marker and directions, **your package's price** (struck-through original price vs member price, scarcity) with a "Change package" link, quantity, floating **Book Now** bar |
+| Subscription | New **Subscription (الاشتراك)** tab with three packages: ⭐️ Regular (free), 👑 Gold and 👨‍👩‍👧‍👦 Family. It shows the current package card, monthly prices, perks and a switch confirmation. **The tab label in the bottom bar shows the member's package name next to its emoji** (e.g. «👑 الذهبية»), and venue prices follow the package |
 | Wallet | Lifetime savings card, glass segmented control **Active Codes / Used Codes**, ticket-shaped cards, QR sheet, copy code, mark as used |
-| Settings | Membership card, **language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), **app icon picker**, appearance, floating-motion toggle, **Log Out** |
+| Settings | Membership card showing the package (tap it to open Subscription), **language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), **app icon picker**, appearance, floating-motion toggle, **Log Out** |
 
 ## Architecture (MVVM)
 
@@ -47,11 +50,11 @@ Sarena/
 ├── App/            SarenaApp (entry point), RootView (auth gate), MainTabView
 ├── DesignSystem/   Theme tokens, GlassSurface modifier, FloatingGlass (motion),
 │                   GlassBackground, buttons / text field / segmented control, brand views
-├── Models/         User, OfferCategory, Venue + TicketOption, PromoCode, AppPreferences, sample data
-├── Services/       AuthService (email + OTP), CatalogService, BookingService, KeychainStore, AppServices (DI)
-├── Stores/         SessionStore, WalletStore, AppRouter  (@Observable, @MainActor)
-├── ViewModels/     Login, Register, Home, VenueDetail, Wallet, Settings
-├── Views/          Onboarding, Auth, Home, Detail, Wallet, Settings, Shared
+├── Models/         User, OfferCategory, Venue + TicketOption, MembershipPlan + Subscription, PromoCode, AppPreferences, sample data
+├── Services/       AuthService (email + OTP), CatalogService, BookingService, SubscriptionService, KeychainStore, AppServices (DI)
+├── Stores/         SessionStore, WalletStore, SubscriptionStore, AppRouter  (@Observable, @MainActor)
+├── ViewModels/     Login, Register, Home, VenueDetail, Wallet, Subscription, Settings
+├── Views/          Onboarding, Auth, Home, Detail, Wallet, Subscription, Settings, Shared
 └── Resources/      Assets.xcassets, Localizable.xcstrings, InfoPlist.xcstrings, Info.plist
 ```
 

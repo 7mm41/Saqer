@@ -6,6 +6,7 @@ struct SarenaApp: App {
     private let services: AppServices
     @State private var session: SessionStore
     @State private var wallet: WalletStore
+    @State private var subscription: SubscriptionStore
     @State private var motion: MotionManager
 
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
@@ -17,6 +18,7 @@ struct SarenaApp: App {
         self.services = services
         _session = State(initialValue: SessionStore(auth: services.auth))
         _wallet = State(initialValue: WalletStore())
+        _subscription = State(initialValue: SubscriptionStore())
         _motion = State(initialValue: MotionManager())
     }
 
@@ -26,6 +28,7 @@ struct SarenaApp: App {
                 .environment(\.services, services)
                 .environment(session)
                 .environment(wallet)
+                .environment(subscription)
                 .environment(motion)
                 .appLanguage(language)
                 .preferredColorScheme(appearance.colorScheme)

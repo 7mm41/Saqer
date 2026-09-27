@@ -10,6 +10,8 @@ struct SettingsView: View {
     @Environment(\.locale) private var locale
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.openURL) private var openURL
+    @Environment(SubscriptionStore.self) private var subscription
+    @Environment(AppRouter.self) private var router: AppRouter?
 
     init(session: SessionStore) {
         _viewModel = State(initialValue: SettingsViewModel(session: session))
@@ -20,7 +22,12 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xl) {
                     if let user = viewModel.user {
-                        MemberCard(user: user)
+                        Button {
+                            router?.selectedTab = .subscription
+                        } label: {
+                            MemberCard(user: user, plan: subscription.plan)
+                        }
+                        .buttonStyle(.glassPress)
                     }
                     languageSection
                     appIconSection
@@ -208,6 +215,7 @@ struct SettingsSection<Content: View>: View {
 /// Apple-Card-style floating glass membership card.
 private struct MemberCard: View {
     let user: User
+    let plan: MembershipPlan
     @Environment(\.locale) private var locale
 
     var body: some View {
@@ -220,7 +228,7 @@ private struct MemberCard: View {
                 Text("Sarena")
                     .font(.system(.title3, design: .rounded, weight: .black))
                 Spacer()
-                GlassBadge(text: "Gold Member", systemImage: "crown.fill", tint: Theme.Palette.gold, prominent: true)
+                GlassBadge(verbatim: plan.label(locale), tint: plan.tint, prominent: true)
             }
 
             HStack(spacing: Theme.Spacing.m) {

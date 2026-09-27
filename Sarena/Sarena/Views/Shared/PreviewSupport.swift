@@ -16,6 +16,7 @@ extension User {
 struct PreviewContainer<Content: View>: View {
     @State private var session: SessionStore
     @State private var wallet: WalletStore
+    @State private var subscription: SubscriptionStore
     @State private var motion: MotionManager
     private let content: Content
 
@@ -26,12 +27,15 @@ struct PreviewContainer<Content: View>: View {
             directory: .temporaryDirectory.appending(path: "SarenaPreview", directoryHint: .isDirectory),
             defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard
         )
+        let subscription = SubscriptionStore(defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard)
         if signedIn {
             session.didAuthenticate(.preview)
             wallet.load(for: User.preview.id)
+            subscription.load(for: .preview)
         }
         _session = State(initialValue: session)
         _wallet = State(initialValue: wallet)
+        _subscription = State(initialValue: subscription)
         _motion = State(initialValue: MotionManager())
         self.content = content()
     }
@@ -41,6 +45,7 @@ struct PreviewContainer<Content: View>: View {
             .environment(\.services, .preview)
             .environment(session)
             .environment(wallet)
+            .environment(subscription)
             .environment(motion)
     }
 }

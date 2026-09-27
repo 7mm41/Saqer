@@ -37,11 +37,18 @@ struct Venue: Identifiable, Hashable, Codable, Sendable {
     var startingOriginalPrice: Decimal? {
         tickets.min(by: { $0.memberPrice < $1.memberPrice })?.originalPrice
     }
+
+    /// The offer included in a package, falling back to the Regular offer.
+    func ticket(for plan: MembershipPlan) -> TicketOption? {
+        tickets.first { $0.tier == plan } ?? tickets.first { $0.tier == .regular } ?? tickets.first
+    }
 }
 
+/// A venue's offer for one membership package.
 struct TicketOption: Identifiable, Hashable, Codable, Sendable {
     let id: String
-    let tier: TicketTier
+    /// The package this offer belongs to (members see the offer for their own package).
+    let tier: MembershipPlan
     let originalPrice: Decimal
     /// The exclusive price only signed-in members can see.
     let memberPrice: Decimal
@@ -58,40 +65,6 @@ struct TicketOption: Identifiable, Hashable, Codable, Sendable {
     }
 
     var isLowStock: Bool { (remaining ?? .max) <= 15 }
-}
-
-enum TicketTier: String, Codable, CaseIterable, Sendable {
-    case regular
-    case vip
-    case family
-    case group
-
-    var title: LocalizedStringKey {
-        switch self {
-        case .regular: "Regular"
-        case .vip: "VIP"
-        case .family: "Family"
-        case .group: "Group"
-        }
-    }
-
-    var symbol: String {
-        switch self {
-        case .regular: "ticket.fill"
-        case .vip: "crown.fill"
-        case .family: "person.2.fill"
-        case .group: "person.3.fill"
-        }
-    }
-
-    var tint: Color {
-        switch self {
-        case .regular: Theme.Palette.orange
-        case .vip: Theme.Palette.gold
-        case .family: Theme.Palette.lagoon
-        case .group: Theme.Palette.violet
-        }
-    }
 }
 
 extension Decimal {

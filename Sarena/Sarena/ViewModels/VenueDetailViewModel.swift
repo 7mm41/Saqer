@@ -5,7 +5,6 @@ import Observation
 @MainActor
 final class VenueDetailViewModel {
     let venue: Venue
-    var selectedTicketID: TicketOption.ID?
     var quantity = 1
     let quantityRange = 1...10
 
@@ -17,38 +16,45 @@ final class VenueDetailViewModel {
     private let booking: any BookingServicing
     private let session: SessionStore
     private let wallet: WalletStore
+    private let subscription: SubscriptionStore
 
-    init(venue: Venue, booking: any BookingServicing, session: SessionStore, wallet: WalletStore) {
+    init(venue: Venue, booking: any BookingServicing, session: SessionStore, wallet: WalletStore, subscription: SubscriptionStore) {
         self.venue = venue
         self.booking = booking
         self.session = session
         self.wallet = wallet
-        // Pre-select the biggest saving: the strongest reason to tap "Book Now".
-        selectedTicketID = venue.tickets.max { $0.discountPercent < $1.discountPercent }?.id
+        self.subscription = subscription
     }
 
-    var selectedTicket: TicketOption? {
-        venue.tickets.first { $0.id == selectedTicketID }
+    /// The member's package — packages are chosen in the Subscription tab.
+    var plan: MembershipPlan { subscription.plan }
+
+    /// The offer included in the member's package at this venue.
+    var ticket: TicketOption? { venue.ticket(for: plan) }
+
+    /// Shown as an upsell when another package gets a bigger discount here.
+    var betterPlan: MembershipPlan? {
+        guard let current = ticket else { return nil }
+        return venue.tickets
+            .filter { $0.tier != plan && $0.discountPercent > current.discountPercent }
+            .max { $0.discountPercent < $1.discountPercent }?
+            .tier
     }
 
     var total: Decimal {
-        (selectedTicket?.memberPrice ?? 0) * Decimal(quantity)
+        (ticket?.memberPrice ?? 0) * Decimal(quantity)
     }
 
     var originalTotal: Decimal {
-        (selectedTicket?.originalPrice ?? 0) * Decimal(quantity)
+        (ticket?.originalPrice ?? 0) * Decimal(quantity)
     }
 
     var savings: Decimal { originalTotal - total }
 
-    var canBook: Bool { selectedTicket != nil && !isBooking && session.user != nil }
-
-    func select(_ ticket: TicketOption) {
-        selectedTicketID = ticket.id
-    }
+    var canBook: Bool { ticket != nil && !isBooking && session.user != nil }
 
     func book() async {
-        guard canBook, let ticket = selectedTicket, let user = session.user else { return }
+        guard canBook, let ticket, let user = session.user else { return }
         isBooking = true
         error = nil
         defer { isBooking = false }

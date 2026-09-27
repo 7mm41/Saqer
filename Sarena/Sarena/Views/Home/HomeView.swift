@@ -5,6 +5,7 @@ struct HomeView: View {
     @Environment(\.services) private var services
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
+    @Environment(SubscriptionStore.self) private var subscription
     @Environment(\.locale) private var locale
 
     @State private var viewModel: HomeViewModel
@@ -209,7 +210,9 @@ struct HomeView: View {
             CategoryVenuesView(category: category, venues: viewModel.venues(in: category))
         case .venue(let venue):
             VenueDetailView(
-                viewModel: VenueDetailViewModel(venue: venue, booking: services.booking, session: session, wallet: wallet)
+                viewModel: VenueDetailViewModel(
+                    venue: venue, booking: services.booking, session: session, wallet: wallet, subscription: subscription
+                )
             )
         }
     }

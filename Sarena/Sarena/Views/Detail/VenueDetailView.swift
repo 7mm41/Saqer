@@ -25,7 +25,7 @@ struct VenueDetailView: View {
                 aboutCard
                 highlights
                 locationCard
-                ticketsSection
+                packagePriceSection
                 quantityCard
             }
             .padding(.bottom, Theme.Spacing.xl)
@@ -205,19 +205,48 @@ struct VenueDetailView: View {
         if let url = components?.url { openURL(url) }
     }
 
-    // MARK: Tickets
+    // MARK: Your package price
 
-    private var ticketsSection: some View {
+    /// Packages live in the Subscription tab; here the member simply sees the
+    /// offer included in their own package.
+    private var packagePriceSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            SectionHeader(title: "Choose your ticket", subtitle: "Exclusive member prices — never at the door")
-            ForEach(venue.tickets) { ticket in
-                TicketOptionCard(ticket: ticket, isSelected: ticket.id == viewModel.selectedTicketID) {
-                    withAnimation(.snappy) { viewModel.select(ticket) }
-                }
+            SectionHeader(title: "Your price", subtitle: "Exclusive member price with your package")
+            if let ticket = viewModel.ticket {
+                PlanOfferCard(ticket: ticket)
             }
+            packageRow
         }
         .padding(.horizontal, Theme.gutter)
         .padding(.top, Theme.Spacing.s)
+    }
+
+    private var packageRow: some View {
+        HStack(spacing: Theme.Spacing.m) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Your package")
+                    .font(.sarena(.caption, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                Text(verbatim: viewModel.plan.label(locale))
+                    .font(.sarena(.headline, weight: .bold))
+                if let better = viewModel.betterPlan {
+                    Text("Save more here with \(better.label(locale))")
+                        .font(.sarena(.caption, weight: .bold))
+                        .foregroundStyle(Theme.Palette.success)
+                }
+            }
+            Spacer(minLength: Theme.Spacing.s)
+            Button {
+                router?.selectedTab = .subscription
+            } label: {
+                Label("Change package", systemImage: "arrow.left.arrow.right")
+                    .font(.sarena(.subheadline, weight: .bold))
+            }
+            .foregroundStyle(Theme.Palette.orange)
+        }
+        .padding(Theme.Spacing.l)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassSurface(.card)
     }
 
     private var quantityCard: some View {
@@ -277,76 +306,71 @@ struct VenueDetailView: View {
     }
 }
 
-/// One ticket tier: perks, original price struck through, the member price and scarcity.
-struct TicketOptionCard: View {
+/// The offer included in the member's package: perks, original price struck
+/// through, the member price and scarcity.
+struct PlanOfferCard: View {
     let ticket: TicketOption
-    let isSelected: Bool
-    let onSelect: () -> Void
 
     @Environment(\.locale) private var locale
 
     var body: some View {
-        Button(action: onSelect) {
-            VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-                HStack(alignment: .top, spacing: Theme.Spacing.m) {
-                    GlassIconOrb(systemImage: ticket.tier.symbol, colors: [ticket.tier.tint.opacity(0.75), ticket.tier.tint], size: 44)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(ticket.tier.title)
-                            .font(.sarena(.headline, weight: .bold))
-                        ForEach(ticket.perks, id: \.self) { perk in
-                            Label(perk(locale), systemImage: "checkmark")
-                                .font(.sarena(.caption))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    Spacer(minLength: 0)
-                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .font(.title2)
-                        .foregroundStyle(isSelected ? AnyShapeStyle(Theme.brandGradient) : AnyShapeStyle(.tertiary))
-                }
-
-                HStack(alignment: .bottom) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Original price")
-                            .font(.sarena(.caption2, weight: .semibold))
-                            .foregroundStyle(.secondary)
-                        Text(verbatim: ticket.originalPrice.omr(locale))
-                            .font(.sarena(.subheadline, weight: .semibold))
-                            .strikethrough(true, color: Theme.Palette.danger)
+        VStack(alignment: .leading, spacing: Theme.Spacing.m) {
+            HStack(alignment: .top, spacing: Theme.Spacing.m) {
+                Text(verbatim: ticket.tier.emoji)
+                    .font(.system(size: 24))
+                    .frame(width: 46, height: 46)
+                    .background(Circle().fill(ticket.tier.tint.opacity(0.22)))
+                    .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(verbatim: ticket.tier.name(locale))
+                        .font(.sarena(.headline, weight: .bold))
+                    ForEach(ticket.perks, id: \.self) { perk in
+                        Label(perk(locale), systemImage: "checkmark")
+                            .font(.sarena(.caption))
                             .foregroundStyle(.secondary)
                     }
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("Member price")
-                            .font(.sarena(.caption2, weight: .bold))
-                            .foregroundStyle(Theme.Palette.orange)
-                        Text(verbatim: ticket.memberPrice.omr(locale))
-                            .font(.sarena(.title2, weight: .heavy))
-                            .foregroundStyle(Theme.brandGradient)
-                    }
                 }
+                Spacer(minLength: 0)
+                GlassBadge(text: "Included", systemImage: "checkmark.seal.fill", tint: ticket.tier.tint)
+            }
 
-                HStack(spacing: Theme.Spacing.s) {
-                    GlassBadge(text: "Save \(ticket.savings.omr(locale))", systemImage: "arrow.down.circle.fill", tint: Theme.Palette.success)
-                    GlassBadge(text: "−\(ticket.discountPercent.localizedPercent(locale))", tint: Theme.Palette.orange)
-                    Spacer(minLength: 0)
-                    if ticket.isLowStock, let remaining = ticket.remaining {
-                        GlassBadge(text: "Only \(remaining) left", systemImage: "flame.fill", tint: Theme.Palette.danger)
-                    }
+            HStack(alignment: .bottom) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Original price")
+                        .font(.sarena(.caption2, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                    Text(verbatim: ticket.originalPrice.omr(locale))
+                        .font(.sarena(.subheadline, weight: .semibold))
+                        .strikethrough(true, color: Theme.Palette.danger)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("Member price")
+                        .font(.sarena(.caption2, weight: .bold))
+                        .foregroundStyle(Theme.Palette.orange)
+                    Text(verbatim: ticket.memberPrice.omr(locale))
+                        .font(.sarena(.title2, weight: .heavy))
+                        .foregroundStyle(Theme.brandGradient)
                 }
             }
-            .padding(Theme.Spacing.l)
-            .glassSurface(isSelected ? .tinted(Theme.Palette.orange, opacity: 0.22, cornerRadius: Theme.Radius.tile) : .tile)
-            .overlay {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                        .strokeBorder(Theme.brandGradient, lineWidth: 2)
+
+            HStack(spacing: Theme.Spacing.s) {
+                GlassBadge(text: "Save \(ticket.savings.omr(locale))", systemImage: "arrow.down.circle.fill", tint: Theme.Palette.success)
+                GlassBadge(text: "−\(ticket.discountPercent.localizedPercent(locale))", tint: Theme.Palette.orange)
+                Spacer(minLength: 0)
+                if ticket.isLowStock, let remaining = ticket.remaining {
+                    GlassBadge(text: "Only \(remaining) left", systemImage: "flame.fill", tint: Theme.Palette.danger)
                 }
             }
-            .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
         }
-        .buttonStyle(.glassPress)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .padding(Theme.Spacing.l)
+        .glassSurface(.tinted(ticket.tier.tint, opacity: 0.2, cornerRadius: Theme.Radius.tile, shadow: .floating))
+        .overlay {
+            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
+                .strokeBorder(Theme.brandGradient, lineWidth: 1.5)
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -361,13 +385,15 @@ struct TicketOptionCard: View {
 private struct VenueDetailViewPreview: View {
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
+    @Environment(SubscriptionStore.self) private var subscription
 
     var body: some View {
         VenueDetailView(viewModel: VenueDetailViewModel(
             venue: Venue.samples[0],
             booking: AppServices.preview.booking,
             session: session,
-            wallet: wallet
+            wallet: wallet,
+            subscription: subscription
         ))
     }
 }

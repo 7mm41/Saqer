@@ -1,6 +1,26 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ / month" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ شهرياً"
+          }
+        }
+      }
+    },
+    "%@ / month · renews monthly" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ شهرياً · يتجدّد كل شهر"
+          }
+        }
+      }
+    },
     "About" : {
       "localizations" : {
         "ar" : {
@@ -161,12 +181,32 @@
         }
       }
     },
+    "Cancel" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
+          }
+        }
+      }
+    },
     "Change number" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "تغيير الرقم"
+          }
+        }
+      }
+    },
+    "Change package" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغيير الباقة"
           }
         }
       }
@@ -181,12 +221,22 @@
         }
       }
     },
-    "Choose your ticket" : {
+    "Choose this package" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "اختر تذكرتك"
+            "value" : "اختر هذه الباقة"
+          }
+        }
+      }
+    },
+    "Choose your package" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر باقتك"
           }
         }
       }
@@ -227,6 +277,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "الأكواد التي تستخدمها في الأماكن تُحفظ هنا كسجل لك."
+          }
+        }
+      }
+    },
+    "Confirm" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكيد"
           }
         }
       }
@@ -277,6 +337,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تعذّر تغيير الأيقونة"
+          }
+        }
+      }
+    },
+    "Couldn't change your package" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر تغيير باقتك"
           }
         }
       }
@@ -337,6 +407,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حساب تجريبي"
+          }
+        }
+      }
+    },
+    "Demo mode — no payment is taken." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وضع تجريبي — لا يتم خصم أي مبلغ."
           }
         }
       }
@@ -441,12 +521,12 @@
         }
       }
     },
-    "Exclusive member prices — never at the door" : {
+    "Exclusive member price with your package" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "أسعار حصرية للأعضاء — لن تجدها عند البوابة"
+            "value" : "سعر الأعضاء الحصري حسب باقتك"
           }
         }
       }
@@ -501,16 +581,6 @@
         }
       }
     },
-    "Family" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "عائلية"
-          }
-        }
-      }
-    },
     "Featured deals" : {
       "localizations" : {
         "ar" : {
@@ -527,6 +597,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حركة الزجاج العائم"
+          }
+        }
+      }
+    },
+    "Free" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجاناً"
+          }
+        }
+      }
+    },
+    "Free forever" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجانية دائماً"
           }
         }
       }
@@ -601,26 +691,6 @@
         }
       }
     },
-    "Gold Member" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "عضو ذهبي"
-          }
-        }
-      }
-    },
-    "Group" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مجموعة"
-          }
-        }
-      }
-    },
     "Hand-picked. Ending soon." : {
       "localizations" : {
         "ar" : {
@@ -677,6 +747,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ساحة عبري للاستعراض"
+          }
+        }
+      }
+    },
+    "Included" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مشمول"
           }
         }
       }
@@ -901,6 +981,16 @@
         }
       }
     },
+    "Most popular" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأكثر طلباً"
+          }
+        }
+      }
+    },
     "New to Sarena?" : {
       "localizations" : {
         "ar" : {
@@ -1101,6 +1191,16 @@
         }
       }
     },
+    "per month" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شهرياً"
+          }
+        }
+      }
+    },
     "Play more, pay less" : {
       "localizations" : {
         "ar" : {
@@ -1191,12 +1291,12 @@
         }
       }
     },
-    "Regular" : {
+    "Renews on %@" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "عادية"
+            "value" : "تتجدّد في %@"
           }
         }
       }
@@ -1267,6 +1367,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "وفّر %@"
+          }
+        }
+      }
+    },
+    "Save more here with %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّر أكثر هنا مع %@"
           }
         }
       }
@@ -1431,6 +1541,36 @@
         }
       }
     },
+    "Subscription" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاشتراك"
+          }
+        }
+      }
+    },
+    "Switch anytime. Your prices update instantly." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بدّل باقتك متى شئت، وتتحدّث أسعارك فوراً."
+          }
+        }
+      }
+    },
+    "Switch to %@?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التحويل إلى %@؟"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "ar" : {
@@ -1477,6 +1617,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+          }
+        }
+      }
+    },
+    "The free package — member prices at every venue." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الباقة المجانية — أسعار الأعضاء في جميع الأماكن."
           }
         }
       }
@@ -1681,16 +1831,6 @@
         }
       }
     },
-    "VIP" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "VIP"
-          }
-        }
-      }
-    },
     "Wallet" : {
       "localizations" : {
         "ar" : {
@@ -1867,12 +2007,42 @@
         }
       }
     },
+    "Your current package" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باقتك الحالية"
+          }
+        }
+      }
+    },
     "Your member prices are live" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "أسعار الأعضاء متاحة لك الآن"
+          }
+        }
+      }
+    },
+    "Your package" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باقتك"
+          }
+        }
+      }
+    },
+    "Your price" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سعرك"
           }
         }
       }

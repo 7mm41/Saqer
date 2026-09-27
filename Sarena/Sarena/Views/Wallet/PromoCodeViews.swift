@@ -46,7 +46,7 @@ struct PromoCodeCard: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                 HStack(spacing: 6) {
-                    Text(code.tier.title)
+                    Text(verbatim: code.tier.label(locale))
                     Text(verbatim: "·")
                     Text(verbatim: "×" + code.quantity.localizedNumber(locale))
                 }
@@ -161,7 +161,7 @@ struct PromoCodeSheet: View {
                         .font(.sarena(.title2, weight: .heavy))
                         .multilineTextAlignment(.center)
                     HStack(spacing: 6) {
-                        Text(code.tier.title)
+                        Text(verbatim: code.tier.label(locale))
                         Text(verbatim: "·")
                         Text(verbatim: "×" + code.quantity.localizedNumber(locale))
                     }

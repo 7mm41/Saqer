@@ -28,7 +28,7 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "cin-reg", tier: .regular, originalPrice: .baisa(4_500), memberPrice: .baisa(2_900),
                                  perks: [t("Any 2D show", "أي عرض ثنائي الأبعاد")], remaining: nil),
-                    TicketOption(id: "cin-vip", tier: .vip, originalPrice: .baisa(9_000), memberPrice: .baisa(5_500),
+                    TicketOption(id: "cin-gold", tier: .gold, originalPrice: .baisa(9_000), memberPrice: .baisa(5_500),
                                  perks: [t("Recliner in VIP hall", "مقعد في قاعة كبار الشخصيات"), t("Popcorn & drink combo", "وجبة فشار ومشروب")], remaining: 12),
                     TicketOption(id: "cin-fam", tier: .family, originalPrice: .baisa(16_000), memberPrice: .baisa(9_900),
                                  perks: [t("4 tickets, same show", "٤ تذاكر لنفس العرض"), t("2 kids' snack boxes", "وجبتان خفيفتان للأطفال")], remaining: nil),
@@ -53,8 +53,10 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "js-reg", tier: .regular, originalPrice: .baisa(25_000), memberPrice: .baisa(15_000),
                                  perks: [t("30-minute ride", "رحلة ٣٠ دقيقة"), t("Safety briefing", "شرح السلامة")], remaining: nil),
-                    TicketOption(id: "js-vip", tier: .vip, originalPrice: .baisa(45_000), memberPrice: .baisa(27_000),
+                    TicketOption(id: "js-gold", tier: .gold, originalPrice: .baisa(45_000), memberPrice: .baisa(27_000),
                                  perks: [t("60-minute guided coast ride", "رحلة ساحلية ٦٠ دقيقة مع مرشد"), t("GoPro footage", "تصوير بكاميرا GoPro")], remaining: 6),
+                    TicketOption(id: "js-fam", tier: .family, originalPrice: .baisa(48_000), memberPrice: .baisa(29_500),
+                                 perks: [t("2 jet skis · 30 minutes", "دراجتان مائيتان · ٣٠ دقيقة"), t("Kids ride with an instructor", "الأطفال يركبون مع مدرب")], remaining: nil),
                 ],
                 isFeatured: true,
                 dealEndsAt: now.addingTimeInterval(hour * 52)
@@ -76,7 +78,9 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "qb-reg", tier: .regular, originalPrice: .baisa(18_000), memberPrice: .baisa(11_500),
                                  perks: [t("20-minute ride", "رحلة ٢٠ دقيقة")], remaining: nil),
-                    TicketOption(id: "qb-grp", tier: .group, originalPrice: .baisa(50_000), memberPrice: .baisa(30_000),
+                    TicketOption(id: "qb-gold", tier: .gold, originalPrice: .baisa(35_000), memberPrice: .baisa(22_000),
+                                 perks: [t("40-minute private cove tour", "جولة خاصة ٤٠ دقيقة في الخلجان"), t("Omani coffee on the beach", "قهوة عُمانية على الشاطئ")], remaining: 8),
+                    TicketOption(id: "qb-fam", tier: .family, originalPrice: .baisa(50_000), memberPrice: .baisa(30_000),
                                  perks: [t("3 jet skis · 40 minutes", "٣ دراجات مائية · ٤٠ دقيقة"), t("Beach stop included", "توقف على الشاطئ")], remaining: 9),
                 ],
                 isFeatured: false,
@@ -99,9 +103,9 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "osc-reg", tier: .regular, originalPrice: .baisa(12_000), memberPrice: .baisa(7_500),
                                  perks: [t("25 rounds · pistol lane", "٢٥ طلقة · ممر المسدس")], remaining: nil),
-                    TicketOption(id: "osc-vip", tier: .vip, originalPrice: .baisa(30_000), memberPrice: .baisa(19_000),
+                    TicketOption(id: "osc-gold", tier: .gold, originalPrice: .baisa(30_000), memberPrice: .baisa(19_000),
                                  perks: [t("Pistol, rifle & clay", "مسدس وبندقية وأطباق"), t("Private range officer", "مشرف خاص")], remaining: 8),
-                    TicketOption(id: "osc-grp", tier: .group, originalPrice: .baisa(40_000), memberPrice: .baisa(26_000),
+                    TicketOption(id: "osc-fam", tier: .family, originalPrice: .baisa(40_000), memberPrice: .baisa(26_000),
                                  perks: [t("Up to 4 shooters", "حتى ٤ رماة"), t("100 rounds shared", "١٠٠ طلقة مشتركة")], remaining: nil),
                 ],
                 isFeatured: false,
@@ -124,7 +128,7 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "oaa-reg", tier: .regular, originalPrice: .baisa(10_000), memberPrice: .baisa(6_500),
                                  perks: [t("10-lap karting session", "جلسة كارتينج ١٠ لفات")], remaining: nil),
-                    TicketOption(id: "oaa-vip", tier: .vip, originalPrice: .baisa(60_000), memberPrice: .baisa(39_000),
+                    TicketOption(id: "oaa-gold", tier: .gold, originalPrice: .baisa(60_000), memberPrice: .baisa(39_000),
                                  perks: [t("3 drift hot laps", "٣ لفات دريفت"), t("Onboard video", "فيديو من داخل السيارة")], remaining: 4),
                     TicketOption(id: "oaa-fam", tier: .family, originalPrice: .baisa(30_000), memberPrice: .baisa(19_500),
                                  perks: [t("2 adults + 2 juniors", "بالغان + ناشئان"), t("Junior track access", "دخول حلبة الناشئين")], remaining: nil),
@@ -149,7 +153,7 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "iba-reg", tier: .regular, originalPrice: .baisa(5_000), memberPrice: .baisa(3_000),
                                  perks: [t("General stand", "المدرج العام")], remaining: nil),
-                    TicketOption(id: "iba-vip", tier: .vip, originalPrice: .baisa(15_000), memberPrice: .baisa(9_500),
+                    TicketOption(id: "iba-gold", tier: .gold, originalPrice: .baisa(15_000), memberPrice: .baisa(9_500),
                                  perks: [t("Barrier-side seat", "مقعد بجانب الحاجز"), t("Refreshments", "مرطبات")], remaining: 14),
                     TicketOption(id: "iba-fam", tier: .family, originalPrice: .baisa(16_000), memberPrice: .baisa(10_000),
                                  perks: [t("4 seats together", "٤ مقاعد متجاورة")], remaining: nil),
@@ -174,10 +178,10 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "arc-reg", tier: .regular, originalPrice: .baisa(10_000), memberPrice: .baisa(6_000),
                                  perks: [t("100 game credits", "١٠٠ رصيد ألعاب")], remaining: nil),
-                    TicketOption(id: "arc-vip", tier: .vip, originalPrice: .baisa(20_000), memberPrice: .baisa(12_000),
+                    TicketOption(id: "arc-gold", tier: .gold, originalPrice: .baisa(20_000), memberPrice: .baisa(12_000),
                                  perks: [t("3 hours unlimited", "٣ ساعات غير محدودة"), t("VR included", "الواقع الافتراضي مشمول")], remaining: 20),
-                    TicketOption(id: "arc-grp", tier: .group, originalPrice: .baisa(45_000), memberPrice: .baisa(27_000),
-                                 perks: [t("Party for 6", "حفلة لـ ٦ أشخاص"), t("Private host", "مضيف خاص")], remaining: 5),
+                    TicketOption(id: "arc-fam", tier: .family, originalPrice: .baisa(32_000), memberPrice: .baisa(19_000),
+                                 perks: [t("4 players · 2 hours unlimited", "٤ لاعبين · ساعتان غير محدودة"), t("Kids' VR zone", "منطقة واقع افتراضي للأطفال")], remaining: 5),
                 ],
                 isFeatured: false,
                 dealEndsAt: nil
@@ -199,7 +203,7 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "mn-reg", tier: .regular, originalPrice: .baisa(3_000), memberPrice: .baisa(1_500),
                                  perks: [t("Entry + fast lane", "دخول + مسار سريع")], remaining: nil),
-                    TicketOption(id: "mn-vip", tier: .vip, originalPrice: .baisa(12_000), memberPrice: .baisa(7_500),
+                    TicketOption(id: "mn-gold", tier: .gold, originalPrice: .baisa(12_000), memberPrice: .baisa(7_500),
                                  perks: [t("Reserved main-stage seat", "مقعد محجوز أمام المسرح"), t("Lounge access", "دخول الصالة")], remaining: 10),
                     TicketOption(id: "mn-fam", tier: .family, originalPrice: .baisa(9_000), memberPrice: .baisa(5_500),
                                  perks: [t("Entry for 4", "دخول ٤ أشخاص"), t("Kids' zone wristbands", "أساور منطقة الأطفال")], remaining: nil),
@@ -224,10 +228,10 @@ extension Venue {
                 tickets: [
                     TicketOption(id: "if-reg", tier: .regular, originalPrice: .baisa(2_000), memberPrice: .baisa(1_000),
                                  perks: [t("Festival entry", "دخول المهرجان")], remaining: nil),
+                    TicketOption(id: "if-gold", tier: .gold, originalPrice: .baisa(10_000), memberPrice: .baisa(6_500),
+                                 perks: [t("Majlis seating", "جلسة في المجلس"), t("Omani coffee & dates", "قهوة عُمانية وتمر")], remaining: 15),
                     TicketOption(id: "if-fam", tier: .family, originalPrice: .baisa(6_000), memberPrice: .baisa(3_500),
                                  perks: [t("Entry for 4", "دخول ٤ أشخاص")], remaining: nil),
-                    TicketOption(id: "if-vip", tier: .vip, originalPrice: .baisa(10_000), memberPrice: .baisa(6_500),
-                                 perks: [t("Majlis seating", "جلسة في المجلس"), t("Omani coffee & dates", "قهوة عُمانية وتمر")], remaining: 15),
                 ],
                 isFeatured: false,
                 dealEndsAt: nil
@@ -261,7 +265,7 @@ extension PromoCode {
             make("muscat-cinemas", ticket: 1, code: "SRN-VIP7-KQ4M", quantity: 2, purchasedDaysAgo: 1, validDays: 30),
             make("almouj-jetski", ticket: 0, code: "SRN-J3T5-K2WX", quantity: 1, purchasedDaysAgo: 20, validDays: 30, usedDaysAgo: 12),
             make("muscat-arcade-hub", ticket: 1, code: "SRN-G4ME-8PLY", quantity: 2, purchasedDaysAgo: 34, validDays: 30, usedDaysAgo: 30),
-            make("ibri-festival", ticket: 1, code: "SRN-1BR1-F3ST", quantity: 1, purchasedDaysAgo: 70, validDays: 30),
+            make("ibri-festival", ticket: 2, code: "SRN-1BR1-F3ST", quantity: 1, purchasedDaysAgo: 70, validDays: 30),
         ].compactMap { $0 }
     }
 }

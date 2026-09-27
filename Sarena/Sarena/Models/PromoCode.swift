@@ -12,7 +12,8 @@ struct PromoCode: Identifiable, Hashable, Codable, Sendable {
     let venueID: String
     let venueName: LocalizedText
     let category: OfferCategory
-    let tier: TicketTier
+    /// Package the code was booked with.
+    let tier: MembershipPlan
     let quantity: Int
     let paidTotal: Decimal
     let originalTotal: Decimal

@@ -4,7 +4,7 @@ import XCTest
 
 final class ModelTests: XCTestCase {
     func testDiscountPercentAndSavings() {
-        let ticket = TicketOption(id: "t", tier: .vip, originalPrice: .baisa(9_000), memberPrice: .baisa(5_500), perks: [], remaining: 3)
+        let ticket = TicketOption(id: "t", tier: .gold, originalPrice: .baisa(9_000), memberPrice: .baisa(5_500), perks: [], remaining: 3)
         XCTAssertEqual(ticket.savings, .baisa(3_500))
         XCTAssertEqual(ticket.discountPercent, 39)
         XCTAssertTrue(ticket.isLowStock)
@@ -21,6 +21,19 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(AppIcon.glass.alternateIconName, "AppIcon-Glass")
         XCTAssertEqual(AppIcon(alternateIconName: "AppIcon-Glass"), .glass)
         XCTAssertEqual(AppIcon(alternateIconName: nil), .classic)
+    }
+
+    func testEveryVenueHasAnOfferForEveryPackage() {
+        for venue in Venue.samples {
+            for plan in MembershipPlan.allCases {
+                XCTAssertEqual(venue.ticket(for: plan)?.tier, plan, "\(venue.id) has no \(plan) offer")
+            }
+        }
+    }
+
+    func testLegacyTierNamesStillDecode() throws {
+        let decoded = try JSONDecoder().decode([MembershipPlan].self, from: Data(#"["vip","group","regular","gold"]"#.utf8))
+        XCTAssertEqual(decoded, [.gold, .family, .regular, .gold])
     }
 
     func testArabicLanguageIsRightToLeft() {
@@ -115,14 +128,20 @@ final class WalletAndBookingTests: XCTestCase {
         session.didAuthenticate(User.preview)
         wallet.load(for: User.preview.id)
 
+        let subscription = SubscriptionStore(defaults: UserDefaults(suiteName: "SarenaTests.\(UUID().uuidString)")!)
+        subscription.load(for: User.preview)
+
         let venue = Venue.samples[0]
-        let viewModel = VenueDetailViewModel(venue: venue, booking: MockBookingService(latency: .zero), session: session, wallet: wallet)
+        let viewModel = VenueDetailViewModel(
+            venue: venue, booking: MockBookingService(latency: .zero), session: session, wallet: wallet, subscription: subscription
+        )
         viewModel.quantity = 2
         await viewModel.book()
 
         XCTAssertNotNil(viewModel.confirmedCode)
         XCTAssertEqual(wallet.activeCodes.count, 1)
         XCTAssertEqual(wallet.activeCodes.first?.quantity, 2)
+        XCTAssertEqual(wallet.activeCodes.first?.tier, subscription.plan)
         XCTAssertEqual(wallet.totalSavings, viewModel.savings)
     }
 
@@ -143,5 +162,58 @@ final class WalletAndBookingTests: XCTestCase {
     func testPromoCodeFormat() {
         let code = MockBookingService.makeCode()
         XCTAssertNotNil(code.wholeMatch(of: #/SRN-[A-Z2-9]{4}-[A-Z2-9]{4}/#))
+    }
+}
+
+@MainActor
+final class SubscriptionTests: XCTestCase {
+    private func makeStore() -> SubscriptionStore {
+        SubscriptionStore(defaults: UserDefaults(suiteName: "SarenaTests.\(UUID().uuidString)")!)
+    }
+
+    func testDemoMemberStartsOnGoldOthersOnRegular() {
+        let store = makeStore()
+        store.load(for: User.preview) // demo@sarena.om
+        XCTAssertEqual(store.plan, .gold)
+
+        let other = User(id: UUID(), fullName: "New Member", email: "new@sarena.om", phone: "92223333",
+                         memberNumber: "SRN-1", memberSince: .now)
+        store.load(for: other)
+        XCTAssertEqual(store.plan, .regular)
+        XCTAssertNil(store.current.renewsAt)
+    }
+
+    func testSwitchingPackageUpdatesPricesAndPersists() async {
+        let defaults = UserDefaults(suiteName: "SarenaTests.\(UUID().uuidString)")!
+        let store = SubscriptionStore(defaults: defaults)
+        let session = SessionStore(auth: MockAuthService(latency: .zero), keychain: KeychainStore(service: "SarenaTests.\(UUID().uuidString)"))
+        session.didAuthenticate(User.preview)
+        store.load(for: User.preview)
+
+        let viewModel = SubscriptionViewModel(service: MockSubscriptionService(latency: .zero), store: store, session: session)
+        viewModel.choose(.family)
+        XCTAssertEqual(viewModel.pendingPlan, .family)
+        viewModel.pendingPlan = nil // the dialog clears this as it dismisses
+        await viewModel.confirm(.family)
+        XCTAssertEqual(store.plan, .family)
+        XCTAssertNotNil(store.current.renewsAt)
+
+        // Venue prices follow the package.
+        let detail = VenueDetailViewModel(venue: Venue.samples[0], booking: MockBookingService(latency: .zero),
+                                          session: session, wallet: WalletStore(seedsWelcomeCodes: false), subscription: store)
+        XCTAssertEqual(detail.ticket?.tier, .family)
+
+        // Persisted per member.
+        let reloaded = SubscriptionStore(defaults: defaults)
+        reloaded.load(for: User.preview)
+        XCTAssertEqual(reloaded.plan, .family)
+    }
+
+    func testCurrentPackageCannotBeChosenAgain() {
+        let store = makeStore()
+        let session = SessionStore(auth: MockAuthService(latency: .zero), keychain: KeychainStore(service: "SarenaTests.\(UUID().uuidString)"))
+        let viewModel = SubscriptionViewModel(service: MockSubscriptionService(latency: .zero), store: store, session: session)
+        viewModel.choose(.regular)
+        XCTAssertNil(viewModel.pendingPlan)
     }
 }

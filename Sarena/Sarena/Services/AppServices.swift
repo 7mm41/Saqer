@@ -7,6 +7,7 @@ struct AppServices: Sendable {
     let auth: any AuthServicing
     let catalog: any CatalogServicing
     let booking: any BookingServicing
+    let subscriptions: any SubscriptionServicing
     /// True while the app runs on the mock backend: enables the demo-account shortcut.
     var isDemo = false
 
@@ -16,6 +17,7 @@ struct AppServices: Sendable {
         auth: MockAuthService(),
         catalog: MockCatalogService(),
         booking: MockBookingService(),
+        subscriptions: MockSubscriptionService(),
         isDemo: true
     )
 
@@ -24,6 +26,7 @@ struct AppServices: Sendable {
         auth: MockAuthService(latency: .zero),
         catalog: MockCatalogService(latency: .zero),
         booking: MockBookingService(latency: .zero),
+        subscriptions: MockSubscriptionService(latency: .zero),
         isDemo: true
     )
 }

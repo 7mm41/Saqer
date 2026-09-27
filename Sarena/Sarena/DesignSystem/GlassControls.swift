@@ -196,17 +196,32 @@ struct GlassSegmentedControl<Option: Hashable & Identifiable>: View {
 
 // MARK: - Small pieces
 
-/// Capsule badge — discounts, "Members only", scarcity labels.
+/// Capsule badge — discounts, "Members only", scarcity labels, package names.
 struct GlassBadge: View {
-    let text: LocalizedStringKey
+    private let label: Text
     var systemImage: String?
     var tint: Color = Theme.Palette.orange
     var prominent = false
 
+    init(text: LocalizedStringKey, systemImage: String? = nil, tint: Color = Theme.Palette.orange, prominent: Bool = false) {
+        self.label = Text(text)
+        self.systemImage = systemImage
+        self.tint = tint
+        self.prominent = prominent
+    }
+
+    /// Non-localised text, e.g. "👑 الذهبية".
+    init(verbatim: String, systemImage: String? = nil, tint: Color = Theme.Palette.orange, prominent: Bool = false) {
+        self.label = Text(verbatim: verbatim)
+        self.systemImage = systemImage
+        self.tint = tint
+        self.prominent = prominent
+    }
+
     var body: some View {
         HStack(spacing: 5) {
             if let systemImage { Image(systemName: systemImage) }
-            Text(text)
+            label
         }
         .font(.sarena(.caption, weight: .bold))
         .foregroundStyle(prominent ? Color.white : tint)

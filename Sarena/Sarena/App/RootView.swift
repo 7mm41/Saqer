@@ -6,6 +6,7 @@ struct RootView: View {
     @Environment(\.services) private var services
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
+    @Environment(SubscriptionStore.self) private var subscription
     @Environment(MotionManager.self) private var motion
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -33,6 +34,7 @@ struct RootView: View {
         .task { await session.restore() }
         .onChange(of: session.user?.id, initial: true) { _, userID in
             wallet.load(for: userID)
+            subscription.load(for: session.user)
         }
         .onChange(of: motionAllowed, initial: true) { _, allowed in
             // The sensor itself only runs while a `.parallax()` view is on screen.
