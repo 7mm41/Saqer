@@ -18,6 +18,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Supporting/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: "ثقافة إسلامية"
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "يُستخدم موقعك على جهازك فقط لتحديد اتجاه القبلة، ولا يُرسل إلى أي مكان. Your location is used on-device only to find the Qibla."
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
