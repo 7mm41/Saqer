@@ -76,6 +76,28 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Name in its own script, for the language-change screen.
+    var nativeName: String {
+        switch self {
+        case .system: Self.systemResolved == .arabic ? "العربية" : "English"
+        case .english: "English"
+        case .arabic: "العربية"
+        }
+    }
+
+    var flag: String {
+        switch self {
+        case .system: "🌐"
+        case .english: "🇬🇧"
+        case .arabic: "🇴🇲"
+        }
+    }
+
+    /// The concrete language `.system` currently resolves to.
+    private static var systemResolved: AppLanguage {
+        Bundle.main.preferredLocalizations.first?.hasPrefix("ar") == true ? .arabic : .english
+    }
+
     var locale: Locale {
         switch self {
         case .system: .autoupdatingCurrent

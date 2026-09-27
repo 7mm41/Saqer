@@ -41,6 +41,7 @@ The login screen also has a **Demo account** card with a **Use demo account** bu
 | Venue detail | Hero art with a floating discount medallion, description, highlights, MapKit `Map` with a marker and directions, **your package's price** (struck-through original price vs member price, scarcity) with a "Change package" link, quantity, floating **Book Now** bar |
 | My Account (حسابي) | One tab for everything about the member: the membership card (with the package, e.g. «👑 الذهبية»), **member savings** (total saved, ready and redeemed codes, a link to the Wallet), **subscription info** (current package, renewal date, monthly price) and the **packages**: ⭐️ Regular (free), 👑 Gold and 👨‍👩‍👧‍👦 Family, with perks, prices and a switch confirmation. Venue prices follow the package |
 | Wallet | Glass segmented control **Active Codes / Used Codes**, ticket-shaped cards, QR sheet, copy code, mark as used |
+| Language switch | Changing the language shows a short branded **"Changing language…" screen** (logo in a filling timer ring, the target language with its flag). The switch happens behind it, so the layout never flips between LTR and RTL in view. The same screen appears when the language is picked on first launch |
 | Settings | **Language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), **app icon picker**, appearance, floating-motion toggle, **Log Out** |
 
 ## Architecture (MVVM)
@@ -52,7 +53,7 @@ Sarena/
 │                   GlassBackground, buttons / text field / segmented control, brand views
 ├── Models/         User, OfferCategory, Venue + TicketOption, MembershipPlan + Subscription, PromoCode, AppPreferences, sample data
 ├── Services/       AuthService (email + OTP), CatalogService, BookingService, SubscriptionService, KeychainStore, AppServices (DI)
-├── Stores/         SessionStore, WalletStore, SubscriptionStore, AppRouter  (@Observable, @MainActor)
+├── Stores/         SessionStore, WalletStore, SubscriptionStore, LanguageCoordinator, AppRouter  (@Observable, @MainActor)
 ├── ViewModels/     Login, Register, Home, VenueDetail, Wallet, Account, Settings
 ├── Views/          Onboarding, Auth, Home, Detail, Wallet, Account, Settings, Shared
 └── Resources/      Assets.xcassets, Localizable.xcstrings, InfoPlist.xcstrings, Info.plist

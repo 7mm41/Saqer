@@ -244,3 +244,42 @@ final class AccountTests: XCTestCase {
         XCTAssertNil(viewModel.pendingPlan)
     }
 }
+
+@MainActor
+final class LanguageCoordinatorTests: XCTestCase {
+    private func makeDefaults() -> UserDefaults {
+        UserDefaults(suiteName: "SarenaTests.\(UUID().uuidString)")!
+    }
+
+    func testLanguageSwitchesBehindTheCover() async {
+        let defaults = makeDefaults()
+        let coordinator = LanguageCoordinator(defaults: defaults, coverDelay: .zero, settleDelay: .zero)
+        XCTAssertEqual(coordinator.language, .system)
+
+        var languageWhileCovered: AppLanguage?
+        var coverWhileCovered: AppLanguage?
+        await coordinator.change(to: .arabic) {
+            languageWhileCovered = coordinator.language
+            coverWhileCovered = coordinator.coverLanguage
+        }
+
+        // Applied while the cover was up, then the cover lifted.
+        XCTAssertEqual(languageWhileCovered, .arabic)
+        XCTAssertEqual(coverWhileCovered, .arabic)
+        XCTAssertEqual(coordinator.language, .arabic)
+        XCTAssertNil(coordinator.coverLanguage)
+        XCTAssertEqual(coordinator.transitionSeconds, 0)
+
+        // Persisted for the next launch.
+        XCTAssertEqual(LanguageCoordinator(defaults: defaults).language, .arabic)
+    }
+
+    func testChoosingTheCurrentLanguageSkipsTheCover() async {
+        let coordinator = LanguageCoordinator(defaults: makeDefaults(), coverDelay: .zero, settleDelay: .zero)
+        var continued = false
+        await coordinator.change(to: .system) { continued = true }
+        XCTAssertTrue(continued)
+        XCTAssertNil(coordinator.coverLanguage)
+        XCTAssertEqual(coordinator.language, .system)
+    }
+}

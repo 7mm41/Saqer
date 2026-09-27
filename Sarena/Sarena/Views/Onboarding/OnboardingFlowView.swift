@@ -30,7 +30,7 @@ struct OnboardingFlowView: View {
 struct LanguagePickerView: View {
     let onContinue: () -> Void
 
-    @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
+    @Environment(LanguageCoordinator.self) private var languageCoordinator
     @State private var chipsVisible = false
 
     private struct Option: Identifiable {
@@ -123,8 +123,8 @@ struct LanguagePickerView: View {
         let isAvailable = option.language != nil
         return Button {
             guard let selected = option.language else { return }
-            language = selected
-            onContinue()
+            // The carousel is shown while the cover is up, so it appears already translated.
+            Task { await languageCoordinator.change(to: selected) { onContinue() } }
         } label: {
             HStack(spacing: Theme.Spacing.m) {
                 Text(verbatim: option.flag)
@@ -294,7 +294,9 @@ struct PageIndicator: View {
 }
 
 #Preview("Language") {
-    LanguagePickerView {}
+    PreviewContainer(signedIn: false) {
+        LanguagePickerView {}
+    }
 }
 
 #Preview("Onboarding") {

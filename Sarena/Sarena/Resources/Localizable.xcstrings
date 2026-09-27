@@ -211,6 +211,16 @@
         }
       }
     },
+    "Changing language…" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ تغيير اللغة…"
+          }
+        }
+      }
+    },
     "Check your connection and try again." : {
       "localizations" : {
         "ar" : {
@@ -787,6 +797,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "انضم إلى النادي"
+          }
+        }
+      }
+    },
+    "Just a moment" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لحظات من فضلك"
           }
         }
       }

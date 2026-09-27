@@ -3,13 +3,13 @@ import SwiftUI
 struct SettingsView: View {
     @State private var viewModel: SettingsViewModel
 
-    @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
     @AppStorage(PreferenceKeys.floatingMotion) private var floatingMotion = true
 
     @Environment(\.locale) private var locale
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.openURL) private var openURL
+    @Environment(LanguageCoordinator.self) private var languageCoordinator
 
     init(session: SessionStore) {
         _viewModel = State(initialValue: SettingsViewModel(session: session))
@@ -65,7 +65,11 @@ struct SettingsView: View {
 
             GlassSegmentedControl(
                 options: AppLanguage.allCases,
-                selection: $language.animation(.smooth),
+                selection: Binding(
+                    get: { languageCoordinator.language },
+                    // Switches behind the "changing language" cover.
+                    set: { newLanguage in Task { await languageCoordinator.change(to: newLanguage) } }
+                ),
                 title: \.title
             )
 

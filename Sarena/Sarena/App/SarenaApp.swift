@@ -8,8 +8,8 @@ struct SarenaApp: App {
     @State private var wallet: WalletStore
     @State private var subscription: SubscriptionStore
     @State private var motion: MotionManager
+    @State private var languageCoordinator: LanguageCoordinator
 
-    @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
 
     init() {
@@ -20,6 +20,7 @@ struct SarenaApp: App {
         _wallet = State(initialValue: WalletStore())
         _subscription = State(initialValue: SubscriptionStore())
         _motion = State(initialValue: MotionManager())
+        _languageCoordinator = State(initialValue: LanguageCoordinator())
     }
 
     var body: some Scene {
@@ -30,7 +31,10 @@ struct SarenaApp: App {
                 .environment(wallet)
                 .environment(subscription)
                 .environment(motion)
-                .appLanguage(language)
+                .environment(languageCoordinator)
+                .appLanguage(languageCoordinator.language)
+                // Branded "changing language" cover, so the switch never flips the UI in view.
+                .languageTransitionCover(languageCoordinator)
                 .preferredColorScheme(appearance.colorScheme)
                 .tint(Theme.Palette.orange)
         }
