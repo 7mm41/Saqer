@@ -204,11 +204,11 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
         let explicit = !silentUpdate
         silentUpdate = false
         isLocating = false
-        // تحديث صامت: لا نغيّر شيئًا إن لم يبتعد المستخدم أكثر من ٣ كم عن الموقع المحفوظ
+        // تحديث صامت: لا نغيّر شيئًا إن لم يبتعد المستخدم أكثر من ١ كم عن الموقع المحفوظ (فرق المواقيت فيه ثانيتان)
         if !explicit, let latitude, let longitude,
-           location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) < 3000 { return }
+           location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) < 1000 { return }
         if let latitude, let longitude,
-           location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) >= 3000 {
+           location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) >= 1000 {
             placeName = nil                                  // مدينة جديدة: لا يبقى اسم المدينة السابقة
             defaults.removeObject(forKey: Keys.place)
         }
