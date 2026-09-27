@@ -14,7 +14,7 @@ Checks (fails loudly): every glyph exists in its page font; every page has 15 li
 every ayah 1…6236 appears exactly once as an end medallion, in order; page first ayahs = quran_meta.json.
 usage: python3 build_mushaf.py RAW_DIR [--preview PAGE ...]
 """
-import json, os, shutil, statistics, sys
+import json, os, statistics, sys
 from fontTools.ttLib import TTFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +30,21 @@ for _s in META["surahs"]:
 def gidx(key):
     s, a = map(int, key.split(":"))
     return FIRST[s] + a - 1
+
+
+# the app draws glyph outlines straight from cmap + glyf (no shaping), so only these tables are kept;
+# the old AAT tables (morx/feat/just/prop), hinting and odd embedding flags are dropped
+KEEP_TABLES = {"cmap", "glyf", "loca", "head", "hhea", "hmtx", "maxp", "name", "OS/2", "post"}
+
+
+def clean_font(src, dst):
+    font = TTFont(src)
+    for tag in list(font.keys()):
+        if tag not in KEEP_TABLES and tag != "GlyphOrder":
+            del font[tag]
+    font["post"].formatType = 3.0
+    font["OS/2"].fsType = 0
+    font.save(dst)
 
 
 def load_pages(raw):
@@ -121,8 +136,8 @@ def main():
 
     os.makedirs(FDIR, exist_ok=True)
     for p in range(1, 605):
-        shutil.copyfile(os.path.join(raw, "fonts", f"p{p}.ttf"), os.path.join(FDIR, f"QCF_P{p:03d}.ttf"))
-    shutil.copyfile(os.path.join(raw, "fonts", "sura_names.ttf"), os.path.join(FDIR, "QuranSurahNames.ttf"))
+        clean_font(os.path.join(raw, "fonts", f"p{p}.ttf"), os.path.join(FDIR, f"QCF_P{p:03d}.ttf"))
+    clean_font(os.path.join(raw, "fonts", "sura_names.ttf"), os.path.join(FDIR, "QuranSurahNames.ttf"))
     path = os.path.join(QDIR, "mushaf_layout.json")
     json.dump({"target": round(target, 4), "pages": out}, open(path, "w", encoding="utf-8"),
               ensure_ascii=False, separators=(",", ":"))

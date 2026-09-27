@@ -84,37 +84,91 @@ struct MushafLayout: Decodable {
     }
 }
 
-/// خطوط المصحف (خط لكل صفحة + خط أسماء السور): تُنشأ مباشرة من ملف الخط في الحزمة (CTFont من البيانات)
-/// ولا تعتمد على التسجيل العام ولا البحث بالاسم — كان ذلك يفشل فيظهر النص بخط النظام وأسماء السور «؟».
+/// رسم كلمة (أو أكثر) من خط المصحف: شكل الحروف مسارًا جاهزًا بوحدة em (الأعلى سالب، خط الأساس صفر)،
+/// وعرضها. الرموز داخل الكلمة تُرتَّب من اليمين إلى اليسار كما في المصحف.
+struct GlyphRun {
+    let path: CGPath
+    let advance: CGFloat
+}
+
+/// خط من خطوط المصحف مقروء مباشرة من ملفه (CGFont) وتُستخرج منه أشكال الحروف مسارات.
+/// الرسم بالمسارات لا يمر بآلية اختيار الخطوط في SwiftUI/CoreText إطلاقًا — كانت تستبدل خط المصحف
+/// بخط النظام (حروف عربية عادية) وأسماء السور برموز تعبيرية و«؟».
+final class QuranFace: @unchecked Sendable {
+    /// صاعد ونازل صندوق السطر بوحدة em.
+    let ascent: CGFloat
+    let descent: CGFloat
+    private let font: CTFont
+    private var runs: [String: GlyphRun] = [:]
+    private let lock = NSLock()
+
+    init?(url: URL) {
+        guard let data = try? Data(contentsOf: url),
+              let provider = CGDataProvider(data: data as CFData),
+              let graphicsFont = CGFont(provider) else { return nil }
+        font = CTFontCreateWithGraphicsFont(graphicsFont, 1, nil, nil)
+        ascent = CTFontGetAscent(font)
+        descent = CTFontGetDescent(font)
+    }
+
+    func run(_ code: String) -> GlyphRun {
+        lock.lock(); defer { lock.unlock() }
+        if let cached = runs[code] { return cached }
+        var glyphs: [CGGlyph] = []
+        var advances: [CGFloat] = []
+        for scalar in code.unicodeScalars {
+            var units = Array(String(scalar).utf16)
+            var found = [CGGlyph](repeating: 0, count: units.count)
+            CTFontGetGlyphsForCharacters(font, &units, &found, units.count)
+            var glyph = found[0]
+            var advance = CGSize.zero
+            CTFontGetAdvancesForGlyphs(font, .horizontal, &glyph, &advance, 1)
+            glyphs.append(glyph)
+            advances.append(advance.width)
+        }
+        let total = advances.reduce(0, +)
+        let path = CGMutablePath()
+        var x = total
+        for (glyph, advance) in zip(glyphs, advances) {
+            x -= advance                                  // الرمز الأول في أقصى اليمين
+            if glyph != 0, let outline = CTFontCreatePathForGlyph(font, glyph, nil) {
+                // إحداثيات الخط للأعلى؛ نقلبها لإحداثيات الشاشة (للأسفل)
+                path.addPath(outline, transform: CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: x, ty: 0))
+            }
+        }
+        let run = GlyphRun(path: path, advance: total)
+        runs[code] = run
+        return run
+    }
+}
+
+/// خطوط المصحف: خط لكل صفحة (QCF) وخط أسماء السور، تُقرأ عند الحاجة ويُحتفظ بآخرها في الذاكرة.
 enum QuranFonts {
-    private static var descriptors: [String: CTFontDescriptor] = [:]
+    private static let cache: NSCache<NSString, QuranFace> = {
+        let cache = NSCache<NSString, QuranFace>()
+        cache.countLimit = 24
+        return cache
+    }()
     private static let lock = NSLock()
 
     static func pageFileName(_ page: Int) -> String { String(format: "QCF_P%03d", page) }
     static let surahNamesFile = "QuranSurahNames"
 
-    /// واصف خط من ملف في الحزمة (يُقرأ مرة واحدة ويُحفظ).
-    private static func descriptor(_ file: String) -> CTFontDescriptor? {
+    static func face(_ file: String) -> QuranFace? {
         lock.lock(); defer { lock.unlock() }
-        if let cached = descriptors[file] { return cached }
+        if let cached = cache.object(forKey: file as NSString) { return cached }
         guard let url = Bundle.main.url(forResource: file, withExtension: "ttf"),
-              let data = try? Data(contentsOf: url),
-              let descriptor = CTFontManagerCreateFontDescriptorFromData(data as CFData) else { return nil }
-        descriptors[file] = descriptor
-        return descriptor
+              let face = QuranFace(url: url) else { return nil }
+        cache.setObject(face, forKey: file as NSString)
+        return face
     }
+
+    static func pageFace(_ page: Int) -> QuranFace? { face(pageFileName(page)) }
+    static var surahNamesFace: QuranFace? { face(surahNamesFile) }
 
     /// يجهّز خط الصفحة مسبقًا (من الخلفية) لتقليب سلس.
-    static func preload(page: Int) { _ = descriptor(pageFileName(page)) }
-    static func preloadSurahNames() { _ = descriptor(surahNamesFile) }
-
-    static func pageFont(_ page: Int, size: CGFloat) -> Font { font(pageFileName(page), size: size) }
-    static func surahNamesFont(size: CGFloat) -> Font { font(surahNamesFile, size: size) }
-
-    private static func font(_ file: String, size: CGFloat) -> Font {
-        guard let descriptor = descriptor(file) else { return .system(size: size) }
-        return Font(CTFontCreateWithFontDescriptor(descriptor, size, nil))
-    }
+    static func preload(page: Int) { _ = pageFace(page) }
+    static func preloadSurahNames() { _ = surahNamesFace }
 
     /// رمز اسم السورة في خط أسماء السور: U+E000 + رقم السورة مكتوبًا بأرقام ست عشرية (١١٤ → U+E114).
     static func surahNameGlyph(_ surah: Int) -> String {

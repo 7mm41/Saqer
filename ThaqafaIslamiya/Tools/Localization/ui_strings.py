@@ -93,6 +93,7 @@ S = {
     "tab.questions": ["الأسئلة", "Questions", "پرسش‌ها", "Sorular", "सवाल", "প্রশ্ন"],
     "tab.settings": ["الإعدادات", "Settings", "تنظیمات", "Ayarlar", "सेटिंग्स", "সেটিংস"],
     "settings.applyingLanguage": ["جارٍ تطبيق اللغة…", "Applying language…", "در حال اعمال زبان…", "Dil uygulanıyor…", "भाषा लागू हो रही है…", "ভাষা প্রয়োগ হচ্ছে…"],
+    "quran.fontMissing": ["تعذّر تحميل خط هذه الصفحة", "This page's font could not be loaded", "بارگذاری قلم این صفحه ممکن نشد", "Bu sayfanın yazı tipi yüklenemedi", "इस पृष्ठ का फ़ॉन्ट लोड नहीं हो सका", "এই পৃষ্ঠার ফন্ট লোড করা যায়নি"],
     "common.close": ["إغلاق", "Close", "بستن", "Kapat", "बंद करें", "বন্ধ করো"],
     "bank.title": ["بنك الأسئلة", "Question bank", "بانک پرسش‌ها", "Soru bankası", "सवालों का बैंक", "প্রশ্ন ভান্ডার"],
     "bank.subtitle": ["{0} سؤالًا من الكتاب تظهر عشوائيًا", "{0} questions from the book, in random order", "{0} پرسش از کتاب، به‌صورت تصادفی", "Kitaptan rastgele {0} soru", "किताब से {0} सवाल, बेतरतीब क्रम में", "বই থেকে {0}টি প্রশ্ন, এলোমেলো ক্রমে"],

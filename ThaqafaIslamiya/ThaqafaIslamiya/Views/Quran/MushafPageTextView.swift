@@ -71,24 +71,34 @@ struct MushafPageTextView: View {
     private func row(_ line: MushafLine, fontSize: CGFloat, rowHeight: CGFloat, width: CGFloat) -> some View {
         switch line {
         case .words(let words, let scale):
-            wordLine(words, font: QuranFonts.pageFont(page, size: fontSize), fontSize: fontSize, scale: scale)
+            if let face = QuranFonts.pageFace(page) {
+                wordLine(words, face: face, fontSize: fontSize, scale: scale)
+            } else {
+                missingFont
+            }
         case .surahTitle(let surah):
             SurahTitleBand(surah: surah, palette: palette, height: rowHeight * 0.84)
                 .frame(width: min(width, fontSize * CGFloat(target)))
         case .basmala:
-            wordLine(basmala.map { MushafWord(code: $0) }, font: QuranFonts.pageFont(1, size: fontSize * 1.25),
-                     fontSize: fontSize * 1.25, scale: 1)
+            if let face = QuranFonts.pageFace(1) {
+                wordLine(basmala.map { MushafWord(code: $0) }, face: face, fontSize: fontSize * 1.25, scale: 1)
+            }
         }
     }
 
-    private func wordLine(_ words: [MushafWord], font: Font, fontSize: CGFloat, scale: Double) -> some View {
+    /// لا يُفترض أن يظهر: ملف خط الصفحة غير موجود في التطبيق.
+    private var missingFont: some View {
+        Label(L10n.t("quran.fontMissing"), systemImage: "exclamationmark.triangle.fill")
+            .font(.caption.weight(.bold))
+            .foregroundStyle(.orange)
+    }
+
+    private func wordLine(_ words: [MushafWord], face: QuranFace, fontSize: CGFloat, scale: Double) -> some View {
         HStack(spacing: 0) {
             ForEach(Array(words.enumerated()), id: \.offset) { _, word in
                 let active = word.ayah >= 0 && word.ayah == highlighted
-                Text(word.code)
-                    .font(font)
-                    .foregroundStyle(word.isEnd ? palette.marker : palette.ink)
-                    .fixedSize()
+                GlyphRunView(run: face.run(word.code), face: face, size: fontSize,
+                             color: word.isEnd ? palette.marker : palette.ink)
                     .background {
                         if active {
                             RoundedRectangle(cornerRadius: fontSize * 0.18, style: .continuous)
@@ -248,17 +258,16 @@ struct SurahTitleBand: View {
             }
             .padding(.horizontal, height * 0.62)
 
-            // «سورة» على اليمين ثم اسمها — محارف خاصة (اتجاهها يسار ← يمين) فتُرتَّب صراحة
-            HStack(spacing: nameSize * 0.25) {
-                Text(QuranFonts.surahWordGlyph)
-                Text(QuranFonts.surahNameGlyph(surah))
+            // «سورة» على اليمين ثم اسمها — تُرسم أشكالها مباشرة من خط أسماء السور وتُرتَّب صراحة
+            if let face = QuranFonts.surahNamesFace {
+                HStack(spacing: nameSize * 0.25) {
+                    GlyphRunView(run: face.run(QuranFonts.surahWordGlyph), face: face, size: nameSize, color: palette.bandInk)
+                    GlyphRunView(run: face.run(QuranFonts.surahNameGlyph(surah)), face: face, size: nameSize, color: palette.bandInk)
+                }
+                .environment(\.layoutDirection, .rightToLeft)
+                // صندوق الخط (صاعد ٨٤٠ / نازل ١٨٣) متوازن حول الرسم، فالتوسيط يضع الاسم في منتصف الشريط
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
-            .font(QuranFonts.surahNamesFont(size: nameSize))
-            .foregroundStyle(palette.bandInk)
-            .fixedSize()
-            .environment(\.layoutDirection, .rightToLeft)
-            // صندوق الخط (صاعد ٨٤٠ / نازل ١٨٣) متوازن حول الرسم، فالتوسيط يضع الاسم في منتصف الشريط
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
         .frame(height: height)
     }
@@ -267,6 +276,35 @@ struct SurahTitleBand: View {
         Octagram()
             .fill(palette.gold)
             .frame(width: height * 0.36, height: height * 0.36)
+    }
+}
+
+// MARK: - Glyph drawing
+
+/// كلمة من خط المصحف مرسومة من شكلها مباشرة: العرض = عرض الكلمة، والارتفاع = صندوق سطر الخط.
+struct GlyphRunView: View {
+    let run: GlyphRun
+    let face: QuranFace
+    let size: CGFloat
+    let color: Color
+
+    var body: some View {
+        GlyphShape(run: run, ascent: face.ascent)
+            .fill(color)
+            .frame(width: run.advance * size, height: (face.ascent + face.descent) * size)
+            // الشكل مرسوم بترتيبه الصحيح؛ لا يُعكس في واجهة يمين ← يسار
+            .environment(\.layoutDirection, .leftToRight)
+    }
+}
+
+private struct GlyphShape: Shape {
+    let run: GlyphRun
+    let ascent: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let scale = run.advance > 0 ? rect.width / run.advance : 0
+        let transform = CGAffineTransform(a: scale, b: 0, c: 0, d: scale, tx: rect.minX, ty: rect.minY + ascent * scale)
+        return Path(run.path).applying(transform)
     }
 }
 
