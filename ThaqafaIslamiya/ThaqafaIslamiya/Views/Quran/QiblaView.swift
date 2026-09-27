@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CoreLocation
+import CoreMotion
 import UIKit
 
 // MARK: - Compass model
@@ -21,6 +22,9 @@ final class QiblaCompass: NSObject, CLLocationManagerDelegate {
     private(set) var status: CLAuthorizationStatus
 
     @ObservationIgnored private let manager: CLLocationManager
+    /// مستشعرات الحركة بمرجع الشمال الحقيقي (كتطبيق البوصلة في iOS): اتجاه صحيح والجهاز مسطّح أو قائم.
+    @ObservationIgnored private let motion = CMMotionManager()
+    @ObservationIgnored private var usingMotion = false
 
     /// الكعبة المشرّفة.
     static let kaaba = CLLocation(latitude: 21.422487, longitude: 39.826206)
@@ -31,7 +35,7 @@ final class QiblaCompass: NSObject, CLLocationManagerDelegate {
         status = manager.authorizationStatus
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.headingFilter = 0.5
         manager.headingOrientation = .portrait
     }
@@ -47,14 +51,62 @@ final class QiblaCompass: NSObject, CLLocationManagerDelegate {
         if status == .notDetermined {
             manager.requestWhenInUseAuthorization()
         }
-        if let last = manager.location { location = last }
+        // آخر موقع معروف يُستخدم فقط إن كان حديثًا (قد يكون من مدينة أخرى)
+        if let last = manager.location, abs(last.timestamp.timeIntervalSinceNow) < 600 { location = last }
         manager.startUpdatingLocation()
         if hasCompass { manager.startUpdatingHeading() }
+        startMotion()
     }
 
     func stop() {
         manager.stopUpdatingLocation()
         manager.stopUpdatingHeading()
+        motion.stopDeviceMotionUpdates()
+        usingMotion = false
+    }
+
+    /// الاتجاه من مستشعرات الحركة: الجاذبية والمجال المغناطيسي المعايَر (كلاهما بمحاور الجهاز)، فيُحسب الشرق والشمال
+    /// بضرب متجهي بلا أي افتراض عن اتجاه المصفوفات — ثم اتجاه حافة الجهاز العليا حين يكون مسطّحًا،
+    /// أو اتجاه الكاميرا الخلفية حين يكون قائمًا أمام المستخدم، ويُصحَّح إلى الشمال الحقيقي بالانحراف المغناطيسي.
+    private func startMotion() {
+        guard motion.isDeviceMotionAvailable,
+              CMMotionManager.availableAttitudeReferenceFrames().contains(.xMagneticNorthZVertical) else { return }
+        motion.deviceMotionUpdateInterval = 1.0 / 30
+        motion.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: .main) { [weak self] data, _ in
+            guard let self, let data, data.magneticField.accuracy != .uncalibrated else { return }
+            let g = data.gravity, f = data.magneticField.field
+            let down = Vec(g.x, g.y, g.z).normalized
+            let east = down.cross(Vec(f.x, f.y, f.z)).normalized
+            let north = east.cross(down)
+            let pointing = abs(g.z) > 0.6 ? Vec(0, 1, 0) : Vec(0, 0, -1)
+            let magnetic = atan2(pointing.dot(east), pointing.dot(north)) * 180 / .pi
+            guard magnetic.isFinite else { return }
+            self.usingMotion = true
+            let trueHeading = (magnetic + self.declination + 720).truncatingRemainder(dividingBy: 360)
+            self.heading = Self.smooth(previous: self.heading, next: trueHeading)
+        }
+    }
+
+    /// الانحراف المغناطيسي في موقع المستخدم (الشمال الحقيقي − المغناطيسي)، من بوصلة iOS.
+    @ObservationIgnored private var declination: Double = 0
+
+    private struct Vec {
+        let x: Double, y: Double, z: Double
+        init(_ x: Double, _ y: Double, _ z: Double) { self.x = x; self.y = y; self.z = z }
+        var normalized: Vec {
+            let n = (x * x + y * y + z * z).squareRoot()
+            return n > 0 ? Vec(x / n, y / n, z / n) : self
+        }
+        func cross(_ o: Vec) -> Vec { Vec(y * o.z - z * o.y, z * o.x - x * o.z, x * o.y - y * o.x) }
+        func dot(_ o: Vec) -> Double { x * o.x + y * o.y + z * o.z }
+    }
+
+    /// تنعيم دائري خفيف لإزالة الاهتزاز دون تأخير ملحوظ.
+    private static func smooth(previous: Double?, next: Double) -> Double {
+        guard let previous else { return next }
+        var delta = next - previous
+        if delta > 180 { delta -= 360 } else if delta < -180 { delta += 360 }
+        return (previous + delta * 0.35 + 360).truncatingRemainder(dividingBy: 360)
     }
 
     static func bearing(from c: CLLocationCoordinate2D) -> Double {
@@ -87,8 +139,16 @@ final class QiblaCompass: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        heading = newHeading.trueHeading >= 0 ? newHeading.trueHeading : newHeading.magneticHeading
         headingAccuracy = newHeading.headingAccuracy
+        if newHeading.trueHeading >= 0 {
+            var d = newHeading.trueHeading - newHeading.magneticHeading
+            if d > 180 { d -= 360 } else if d < -180 { d += 360 }
+            declination = d
+        }
+        // البوصلة التقليدية احتياطًا فقط إن لم تتوفر مستشعرات الحركة
+        guard !usingMotion else { return }
+        let value = newHeading.trueHeading >= 0 ? newHeading.trueHeading : newHeading.magneticHeading
+        heading = Self.smooth(previous: heading, next: value)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {}
@@ -140,7 +200,7 @@ struct QiblaView: View {
             let delta = (target - dialRotation).truncatingRemainder(dividingBy: 360)
             let shortest = delta > 180 ? delta - 360 : (delta < -180 ? delta + 360 : delta)
             target = dialRotation + shortest
-            withAnimation(.interpolatingSpring(stiffness: 120, damping: 18)) { dialRotation = target }
+            withAnimation(.linear(duration: 0.08)) { dialRotation = target }      // القراءة منعّمة؛ حركة مباشرة بلا ارتداد
         }
         .onChange(of: offset.map { abs($0) < 3 } ?? false) { _, nowAligned in
             withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) { aligned = nowAligned }
