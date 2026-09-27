@@ -22,6 +22,15 @@ enum L10n {
     }()
 
     static func t(_ key: String, _ args: String...) -> String {
+        format(key, in: language, args)
+    }
+
+    /// نص بلغة محددة (مثل شاشة الانتظار التي تظهر باللغة الجديدة قبل تطبيقها).
+    static func t(_ key: String, in language: AppLanguage) -> String {
+        format(key, in: language, [])
+    }
+
+    private static func format(_ key: String, in language: AppLanguage, _ args: [String]) -> String {
         let entry = table[key]
         var text = entry?[language.rawValue] ?? entry?[AppLanguage.arabic.rawValue] ?? key
         for (index, value) in args.enumerated() {

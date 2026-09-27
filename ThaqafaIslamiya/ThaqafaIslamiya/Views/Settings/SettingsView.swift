@@ -13,6 +13,7 @@ import UIKit
 struct SettingsView: View {
     @Environment(AppSettings.self) private var settings
     @Environment(VoicePlayer.self) private var voice
+    @Environment(AppRouter.self) private var router
     @Environment(ProgressStore.self) private var progress
     @Environment(\.horizontalSizeClass) private var sizeClass
 
@@ -289,7 +290,7 @@ struct SettingsView: View {
         let selected = settings.language == language
         return Button {
             voice.stop()
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) { settings.language = language }
+            router.changeLanguage(to: language, settings: settings)
         } label: {
             HStack(spacing: 12) {
                 Text(language.glyph)

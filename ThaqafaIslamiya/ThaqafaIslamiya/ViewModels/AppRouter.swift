@@ -29,6 +29,8 @@ final class AppRouter {
     var presentedMushaf: MushafLaunch?
     /// بوصلة القبلة.
     var showQibla = false
+    /// اللغة الجاري تطبيقها (تظهر شاشة انتظار أنيقة بدل انقلاب الواجهة أمام المستخدم).
+    private(set) var switchingLanguage: AppLanguage?
 
     func open(_ route: Route) { path.append(route) }
     func present(_ lesson: InteractiveLesson) { presentedLesson = lesson }
@@ -37,4 +39,19 @@ final class AppRouter {
     func openMushaf(page: Int) { presentedMushaf = MushafLaunch(page: page) }
     func openSurah(_ surah: Int, page: Int) { presentedMushaf = MushafLaunch(page: page, surah: surah) }
     func closeMushaf() { presentedMushaf = nil }
+
+    /// تغيير اللغة خلف شاشة انتظار: تظهر الشاشة، ثم تُبدَّل اللغة وتُبنى الواجهة من جديد بلا حركة، ثم تختفي.
+    @MainActor
+    func changeLanguage(to language: AppLanguage, settings: AppSettings) {
+        guard settings.language != language, switchingLanguage == nil else { return }
+        withAnimation(.easeInOut(duration: 0.25)) { switchingLanguage = language }
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(320))
+            var instant = Transaction()
+            instant.disablesAnimations = true
+            withTransaction(instant) { settings.language = language }
+            try? await Task.sleep(for: .milliseconds(650))
+            withAnimation(.easeInOut(duration: 0.4)) { switchingLanguage = nil }
+        }
+    }
 }

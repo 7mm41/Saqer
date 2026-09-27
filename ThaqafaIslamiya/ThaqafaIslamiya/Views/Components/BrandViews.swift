@@ -113,6 +113,59 @@ struct SplashView: View {
     }
 }
 
+/// شاشة انتظار تغيير اللغة: شعار التطبيق ينبض فوق خلفية زجاجية، ورمز اللغة الجديدة ونصها بها.
+struct LanguageSwitchView: View {
+    let language: AppLanguage
+    @State private var pulse = false
+    @State private var appear = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        ZStack {
+            LiquidBackground()
+            Rectangle().fill(.ultraThinMaterial).ignoresSafeArea()
+
+            VStack(spacing: 22) {
+                ZStack {
+                    Circle()
+                        .stroke(LinearGradient.diagonal([.teal, .indigo]), lineWidth: 3)
+                        .frame(width: 150, height: 150)
+                        .scaleEffect(pulse ? 1.12 : 0.92)
+                        .opacity(pulse ? 0 : 0.8)
+                    AppMark(size: 104)
+                        .scaleEffect(appear ? 1 : 0.85)
+                }
+                HStack(spacing: 10) {
+                    Text(language.glyph)
+                        .font(.headline.weight(.heavy))
+                        .foregroundStyle(.white)
+                        .frame(width: 38, height: 38)
+                        .background(LinearGradient.diagonal([.teal, .indigo]), in: Circle())
+                    Text(language.nativeName)
+                        .font(.title3.weight(.heavy))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .glassCapsule(interactive: false)
+                HStack(spacing: 10) {
+                    ProgressView()
+                    Text(L10n.t("settings.applyingLanguage", in: language))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+                .environment(\.layoutDirection, language.isRightToLeft ? .rightToLeft : .leftToRight)
+            }
+            .opacity(appear ? 1 : 0)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { appear = true }
+            guard !reduceMotion else { return }
+            withAnimation(.easeOut(duration: 1.1).repeatForever(autoreverses: false)) { pulse = true }
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
 #Preview {
     SplashView()
 }

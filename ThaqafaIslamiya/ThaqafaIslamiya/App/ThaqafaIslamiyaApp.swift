@@ -162,6 +162,12 @@ struct RootView: View {
             // إعادة بناء الواجهة كاملة عند تغيير اللغة (النصوص والاتجاه والأرقام).
             .id(settings.language)
 
+            if let language = router.switchingLanguage {
+                LanguageSwitchView(language: language)
+                    .transition(.opacity)
+                    .zIndex(20)
+            }
+
             if showSplash {
                 SplashView()
                     .transition(.opacity.combined(with: .scale(scale: 1.08)))

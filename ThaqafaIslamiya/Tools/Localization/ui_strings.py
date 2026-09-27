@@ -92,6 +92,7 @@ S = {
     "tab.home": ["الرئيسية", "Home", "خانه", "Ana Sayfa", "होम", "হোম"],
     "tab.questions": ["الأسئلة", "Questions", "پرسش‌ها", "Sorular", "सवाल", "প্রশ্ন"],
     "tab.settings": ["الإعدادات", "Settings", "تنظیمات", "Ayarlar", "सेटिंग्स", "সেটিংস"],
+    "settings.applyingLanguage": ["جارٍ تطبيق اللغة…", "Applying language…", "در حال اعمال زبان…", "Dil uygulanıyor…", "भाषा लागू हो रही है…", "ভাষা প্রয়োগ হচ্ছে…"],
     "common.close": ["إغلاق", "Close", "بستن", "Kapat", "बंद करें", "বন্ধ করো"],
     "bank.title": ["بنك الأسئلة", "Question bank", "بانک پرسش‌ها", "Soru bankası", "सवालों का बैंक", "প্রশ্ন ভান্ডার"],
     "bank.subtitle": ["{0} سؤالًا من الكتاب تظهر عشوائيًا", "{0} questions from the book, in random order", "{0} پرسش از کتاب، به‌صورت تصادفی", "Kitaptan rastgele {0} soru", "किताब से {0} सवाल, बेतरतीब क्रम में", "বই থেকে {0}টি প্রশ্ন, এলোমেলো ক্রমে"],

@@ -1439,6 +1439,14 @@
   "hi": "रूप",
   "tr": "Görünüm"
  },
+ "settings.applyingLanguage": {
+  "ar": "جارٍ تطبيق اللغة…",
+  "bn": "ভাষা প্রয়োগ হচ্ছে…",
+  "en": "Applying language…",
+  "fa": "در حال اعمال زبان…",
+  "hi": "भाषा लागू हो रही है…",
+  "tr": "Dil uygulanıyor…"
+ },
  "settings.audio": {
   "ar": "الصوت",
   "bn": "অডিও",
