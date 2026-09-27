@@ -1,0 +1,226 @@
+<!doctype html>
+<!--
+  Sarena — 3D glass logo renderer.
+  Rendered headlessly by render.sh. Query parameters:
+    v    = classic | glass | midnight | frost      (visual variant)
+    mode = icon | mark | lockup | lockup-dark       (layout)
+    tint = 1                                         (grayscale, for the iOS "tinted" icon)
+  Every layer is plain CSS/SVG so designers can tweak and re-render.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Montserrat"; src: url(fonts/montserrat.woff2) format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Alexandria"; src: url(fonts/alexandria-ar.woff2) format("woff2"); font-weight: 100 900; }
+
+  :root {
+    --brand: #FF7900;
+    --brand-hi: #FFB05C;
+    --brand-lo: #E45A00;
+    --ink: #15151B;
+  }
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+  body { width: var(--w, 1024px); height: var(--h, 1024px); }
+
+  .stage { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(var(--blur, 90px)); }
+
+  /* ---------- the price-tag tile ---------- */
+  .tag-wrap { position: absolute; left: 50%; top: 50%; width: var(--s); height: var(--s);
+              transform: translate(-50%, -50%) translateY(var(--lift, -2%)); }
+  .tag {
+    position: absolute; inset: 0;
+    border-radius: 31% 22% 22% 22%;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  /* floating shadow = orange glow + tight contact shadow */
+  .shadow { position: absolute; left: 8%; right: 8%; bottom: -14%; height: 26%; border-radius: 50%;
+            background: radial-gradient(closest-side, var(--shadow-col, rgba(255,95,0,.55)), transparent);
+            filter: blur(calc(var(--s) * .06)); }
+  .body-fill { position: absolute; inset: 0; background: var(--fill); backdrop-filter: var(--backdrop, none); -webkit-backdrop-filter: var(--backdrop, none); }
+  /* inner depth: bottom-right darkening + top-left bloom */
+  .depth { position: absolute; inset: 0;
+           box-shadow: inset 0 calc(var(--s) * -.07) calc(var(--s) * .12) var(--depth-lo, rgba(140,35,0,.45)),
+                       inset calc(var(--s) * .05) calc(var(--s) * .05) calc(var(--s) * .12) var(--depth-hi, rgba(255,255,255,.28)); }
+  /* gloss arc — the big reflection on the upper half */
+  .gloss { position: absolute; left: -22%; right: -22%; top: -58%; height: 105%; border-radius: 50%;
+           background: linear-gradient(180deg, rgba(255,255,255,var(--gloss, .55)) 0%, rgba(255,255,255,0) 78%); }
+  /* thin diagonal specular streak */
+  .streak { position: absolute; width: 16%; height: 170%; left: 66%; top: -35%; transform: rotate(32deg);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,var(--streak, .22)), transparent); }
+  /* rim light: gradient border using mask compositing */
+  .rim { position: absolute; inset: 0; border-radius: inherit; padding: calc(var(--s) * .012);
+         background: var(--rim, linear-gradient(145deg, rgba(255,255,255,.95), rgba(255,255,255,.08) 40%, rgba(255,255,255,.05) 60%, rgba(255,230,200,.55)));
+         -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+         -webkit-mask-composite: xor; mask-composite: exclude; }
+
+  /* tag hole (a pearl / cut-out) */
+  .hole { position: absolute; left: 17%; top: 15%; width: 16%; height: 16%; border-radius: 50%;
+          background: var(--hole, radial-gradient(circle at 35% 30%, #fff 0 30%, #FFF1E4 55%, #FFD2A8 100%));
+          box-shadow: var(--hole-shadow, inset 0 calc(var(--s)*.012) calc(var(--s)*.02) rgba(120,40,0,.35), 0 calc(var(--s)*.006) 0 rgba(255,255,255,.6)); }
+
+  .glyph { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: var(--glyph-filter, none); }
+
+  /* optional back layer to show stacked floating glass */
+  .back-glass { position: absolute; width: calc(var(--s) * .92); height: calc(var(--s) * .92); left: 50%; top: 50%;
+                transform: translate(-38%, -62%) rotate(-14deg); border-radius: 31% 22% 22% 22%;
+                background: linear-gradient(145deg, rgba(255,255,255,.28), rgba(255,255,255,.06));
+                border: 2px solid rgba(255,255,255,.25);
+                backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+
+  /* ---------- variants ---------- */
+  .classic { --fill: linear-gradient(150deg, #FFAE57 0%, #FF8A1F 38%, #FF7900 55%, #EE6000 100%); }
+  .glass   { --fill: linear-gradient(150deg, rgba(255,184,110,.62) 0%, rgba(255,121,0,.42) 50%, rgba(235,85,0,.62) 100%);
+             --backdrop: blur(26px) saturate(170%); --gloss: .5; --streak: .28; }
+  .midnight{ --fill: linear-gradient(150deg, rgba(64,58,70,.72), rgba(22,20,28,.82) 60%, rgba(10,10,14,.9));
+             --backdrop: blur(24px) saturate(140%);
+             --rim: linear-gradient(145deg, rgba(255,170,90,.95), rgba(255,121,0,.25) 40%, rgba(255,121,0,.05) 60%, rgba(255,121,0,.85));
+             --depth-lo: rgba(0,0,0,.55); --depth-hi: rgba(255,140,40,.16); --gloss: .2; --streak: .12;
+             --shadow-col: rgba(255,110,0,.55);
+             --hole: radial-gradient(circle at 40% 35%, #FFD5A6 0 18%, #FF7900 60%, #B94400);
+             --hole-shadow: 0 0 calc(var(--s)*.05) rgba(255,121,0,.9), inset 0 calc(var(--s)*.01) calc(var(--s)*.02) rgba(80,20,0,.6); }
+  .frost   { --fill: linear-gradient(150deg, rgba(255,255,255,.62), rgba(255,255,255,.28) 55%, rgba(255,240,228,.45));
+             --backdrop: blur(28px) saturate(150%);
+             --depth-lo: rgba(190,70,0,.28); --depth-hi: rgba(255,255,255,.45); --gloss: .6;
+             --shadow-col: rgba(150,40,0,.45);
+             --hole: radial-gradient(circle at 40% 35%, #FFB463 0 20%, #FF7900 70%, #D85500);
+             --hole-shadow: inset 0 calc(var(--s)*.01) calc(var(--s)*.02) rgba(90,30,0,.45); }
+
+  .tinted .stage { filter: grayscale(1) contrast(1.05); }
+
+  /* ---------- wordmark ---------- */
+  .lockup { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .lockup .tag-wrap { position: relative; left: auto; top: auto; transform: none; margin-bottom: 70px; }
+  .word { font-family: "Montserrat"; font-weight: 900; font-size: 150px; letter-spacing: 6px; line-height: 1;
+          color: var(--word, var(--ink)); }
+  .word-ar { font-family: "Alexandria"; font-weight: 800; font-size: 88px; line-height: 1.3; margin-top: 18px;
+             color: var(--brand); direction: rtl; }
+  .lockup-dark { --word: #FFFFFF; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage"></div>
+
+<template id="tag-tpl">
+  <div class="tag-wrap">
+    <div class="shadow"></div>
+    <div class="tag">
+      <div class="body-fill"></div>
+      <div class="depth"></div>
+      <div class="gloss"></div>
+      <div class="streak"></div>
+      <div class="hole"></div>
+      <svg class="glyph" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--g1)"/><stop offset="1" stop-color="var(--g2)"/>
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#ink)" stroke-width="6.8">
+          <circle cx="40.5" cy="43.5" r="8.6"/>
+          <circle cx="67.5" cy="71" r="8.6"/>
+        </g>
+        <polygon points="66.5,29 76.5,29 44,86 34,86" fill="url(#ink)"/>
+      </svg>
+      <div class="rim"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  const v = q.get("v") || "classic";
+  const mode = q.get("mode") || "icon";
+  const W = +(q.get("w") || 1024), H = +(q.get("h") || 1024);
+  document.body.style.setProperty("--w", W + "px");
+  document.body.style.setProperty("--h", H + "px");
+  document.body.classList.add(v, "m-" + mode);
+  if (q.get("tint") === "1") document.body.classList.add("tinted");
+
+  const glyphInk = {
+    classic:  ["#2A2A33", "#0B0B10"],
+    glass:    ["#FFFFFF", "#FFE7D1"],
+    midnight: ["#FFC27A", "#FF6A00"],
+    frost:    ["#FF8A1F", "#D94A00"],
+  }[v];
+  document.body.style.setProperty("--g1", glyphInk[0]);
+  document.body.style.setProperty("--g2", glyphInk[1]);
+    const glyphFilter = {
+    classic:  "drop-shadow(0 2px 1px rgba(255,200,150,.5))",
+    glass:    "drop-shadow(0 6px 10px rgba(140,40,0,.45))",
+    midnight: "drop-shadow(0 0 14px rgba(255,121,0,.85))",
+    frost:    "drop-shadow(0 5px 8px rgba(150,40,0,.35))",
+  }[v];
+  document.body.style.setProperty("--glyph-filter", glyphFilter);
+
+  const stage = document.getElementById("stage");
+  const tpl = document.getElementById("tag-tpl");
+  const orb = (x, y, d, color, blur) => {
+    const o = document.createElement("div");
+    o.className = "orb";
+    Object.assign(o.style, { left: (x - d / 2) + "px", top: (y - d / 2) + "px", width: d + "px", height: d + "px", background: color });
+    if (blur) o.style.setProperty("--blur", blur + "px");
+    stage.appendChild(o);
+  };
+
+  // Full-bleed icon backgrounds. Each is tuned to read well at 60pt on a home screen.
+  const backgrounds = {
+    classic() {
+      stage.style.background = "radial-gradient(120% 90% at 30% 15%, #FFFFFF 0%, #FFF4EA 45%, #FFE0C2 100%)";
+      orb(260, 190, 420, "rgba(255,190,120,.55)", 110);
+      orb(820, 860, 520, "rgba(255,121,0,.40)", 120);
+      orb(900, 150, 260, "rgba(255,214,170,.8)", 80);
+    },
+    glass() {
+      stage.style.background = "linear-gradient(160deg, #2A0E3A 0%, #170A24 50%, #0C0716 100%)";
+      orb(250, 230, 520, "#FF7900", 90);
+      orb(860, 820, 560, "#FF2F7D", 100);
+      orb(840, 180, 300, "#FFC24D", 80);
+      orb(120, 900, 380, "#6B3DFF", 100);
+      orb(560, 560, 260, "rgba(255,121,0,.8)", 90);
+    },
+    midnight() {
+      stage.style.background = "radial-gradient(90% 90% at 50% 40%, #1C1822 0%, #0A090E 60%, #050507 100%)";
+      orb(512, 560, 560, "rgba(255,110,0,.55)", 130);
+      orb(180, 160, 240, "rgba(255,170,80,.18)", 90);
+    },
+    frost() {
+      stage.style.background = "linear-gradient(150deg, #FFB25E 0%, #FF7900 50%, #F2530A 100%)";
+      orb(230, 210, 420, "rgba(255,236,200,.85)", 100);
+      orb(860, 860, 480, "rgba(255,60,90,.55)", 110);
+      orb(870, 170, 240, "rgba(255,255,255,.55)", 80);
+    },
+  };
+
+  const addTag = (size, parent) => {
+    const node = tpl.content.firstElementChild.cloneNode(true);
+    node.style.setProperty("--s", size + "px");
+    parent.appendChild(node);
+    return node;
+  };
+
+  if (mode === "icon") {
+    backgrounds[v]();
+    if (v === "glass") {
+      const back = document.createElement("div");
+      back.className = "back-glass";
+      back.style.setProperty("--s", "560px");
+      stage.appendChild(back);
+    }
+    addTag(v === "glass" ? 560 : 600, stage);
+  } else if (mode === "mark") {
+    // Transparent background: in-app logo / iOS 18 dark & tinted icon layers.
+    addTag(+(q.get("s") || Math.round(Math.min(W, H) * .70)), stage);
+  } else {
+    const box = document.createElement("div");
+    box.className = "lockup" + (mode === "lockup-dark" ? " lockup-dark" : "");
+    stage.appendChild(box);
+    addTag(380, box);
+    const word = document.createElement("div"); word.className = "word"; word.textContent = "SARENA"; box.appendChild(word);
+    const ar = document.createElement("div"); ar.className = "word-ar"; ar.textContent = "سرينا"; box.appendChild(ar);
+  }
+</script>
+</body>
+</html>

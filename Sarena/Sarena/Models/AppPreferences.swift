@@ -1,0 +1,132 @@
+import SwiftUI
+
+// MARK: - App icon
+
+/// Home Screen icons shipped in `Assets.xcassets`.
+///
+/// Every alternate must also be listed in the target's
+/// `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES` build setting
+/// (`AppIcon-Glass AppIcon-Midnight AppIcon-Frost`), otherwise
+/// `setAlternateIconName(_:)` fails with "file not found".
+enum AppIcon: String, CaseIterable, Identifiable {
+    /// Primary icon — the classic orange Sarena tag rendered as 3D glass.
+    case classic
+    /// "Glassmorphism Logo" — frosted orange glass floating over colour orbs.
+    case glass
+    /// Smoked glass with a neon orange rim.
+    case midnight
+    /// White frosted glass on a sunset gradient.
+    case frost
+
+    var id: String { rawValue }
+
+    /// Name passed to `UIApplication.setAlternateIconName(_:)`; `nil` restores the primary icon.
+    var alternateIconName: String? {
+        switch self {
+        case .classic: nil
+        case .glass: "AppIcon-Glass"
+        case .midnight: "AppIcon-Midnight"
+        case .frost: "AppIcon-Frost"
+        }
+    }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .classic: "Sarena Classic"
+        case .glass: "Glassmorphism Logo"
+        case .midnight: "Midnight Glass"
+        case .frost: "Frost Glass"
+        }
+    }
+
+    /// Alternate icons can't be loaded with `UIImage(named:)`, so previews ship as image sets.
+    var previewImageName: String {
+        switch self {
+        case .classic: "IconPreview-Classic"
+        case .glass: "IconPreview-Glass"
+        case .midnight: "IconPreview-Midnight"
+        case .frost: "IconPreview-Frost"
+        }
+    }
+
+    init(alternateIconName: String?) {
+        self = Self.allCases.first { $0.alternateIconName == alternateIconName } ?? .classic
+    }
+}
+
+// MARK: - Language
+
+/// In-app language override. `.system` follows iOS (including the per-app
+/// language chosen in Settings › Sarena › Language).
+enum AppLanguage: String, CaseIterable, Identifiable {
+    case system
+    case english
+    case arabic
+
+    static let storageKey = "sarena.language"
+
+    var id: String { rawValue }
+
+    /// Language names are shown in their own script in both UIs.
+    var title: LocalizedStringKey {
+        switch self {
+        case .system: "System"
+        case .english: "English"
+        case .arabic: "العربية"
+        }
+    }
+
+    var locale: Locale {
+        switch self {
+        case .system: .autoupdatingCurrent
+        case .english: Locale(identifier: "en_OM")
+        case .arabic: Locale(identifier: "ar_OM")
+        }
+    }
+
+    /// Direction of the language the UI is actually rendered in.
+    var layoutDirection: LayoutDirection {
+        let language: Locale.Language
+        switch self {
+        case .system:
+            // The bundle localisation iOS picked for this app, not the device region.
+            language = Locale.Language(identifier: Bundle.main.preferredLocalizations.first ?? "en")
+        case .english, .arabic:
+            language = locale.language
+        }
+        return language.characterDirection == .rightToLeft ? .rightToLeft : .leftToRight
+    }
+}
+
+// MARK: - Appearance
+
+enum AppAppearance: String, CaseIterable, Identifiable {
+    case system
+    case light
+    case dark
+
+    static let storageKey = "sarena.appearance"
+
+    var id: String { rawValue }
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
+    }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .system: "Auto"
+        case .light: "Light"
+        case .dark: "Dark"
+        }
+    }
+}
+
+enum PreferenceKeys {
+    static let floatingMotion = "sarena.floatingMotion"
+    static let hasCompletedOnboarding = "sarena.onboarding.completed"
+}

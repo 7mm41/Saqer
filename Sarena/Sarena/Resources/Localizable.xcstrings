@@ -1,0 +1,1902 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "About" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نبذة"
+          }
+        }
+      }
+    },
+    "Active" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعّال"
+          }
+        }
+      }
+    },
+    "Active Codes" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأكواد الفعالة"
+          }
+        }
+      }
+    },
+    "Alternate icons aren't available on this device." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأيقونات البديلة غير متاحة على هذا الجهاز."
+          }
+        }
+      }
+    },
+    "An account with this email already exists. Try signing in." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يوجد حساب مسجّل بهذا البريد الإلكتروني. جرّب تسجيل الدخول."
+          }
+        }
+      }
+    },
+    "App Icon" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أيقونة التطبيق"
+          }
+        }
+      }
+    },
+    "Appearance" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المظهر"
+          }
+        }
+      }
+    },
+    "Auto" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تلقائي"
+          }
+        }
+      }
+    },
+    "Biggest savings" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أعلى نسب التوفير"
+          }
+        }
+      }
+    },
+    "Blockbusters for less" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أحدث الأفلام بأقل سعر"
+          }
+        }
+      }
+    },
+    "Book a deal from Discover and your code will appear here instantly." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احجز عرضاً من صفحة «اكتشف» وسيظهر كودك هنا فوراً."
+          }
+        }
+      }
+    },
+    "Book Now" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احجز الآن"
+          }
+        }
+      }
+    },
+    "Book your first deal to start saving." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احجز عرضك الأول وابدأ التوفير."
+          }
+        }
+      }
+    },
+    "Book. Scan. Enjoy." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "احجز. امسح. استمتع."
+          }
+        }
+      }
+    },
+    "Booking failed" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر الحجز"
+          }
+        }
+      }
+    },
+    "Booking failed. You have not been charged — please try again." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر إتمام الحجز. لم يُخصم أي مبلغ — يُرجى المحاولة مرة أخرى."
+          }
+        }
+      }
+    },
+    "Change number" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغيير الرقم"
+          }
+        }
+      }
+    },
+    "Check your connection and try again." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
+          }
+        }
+      }
+    },
+    "Choose your ticket" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر تذكرتك"
+          }
+        }
+      }
+    },
+    "Cinema Offers" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عروض السينما"
+          }
+        }
+      }
+    },
+    "Cinemas, jet skis, clubs, arenas and festivals — all at member prices." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السينما والجيتسكي والأندية والساحات والمهرجانات — كلها بأسعار الأعضاء."
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إغلاق"
+          }
+        }
+      }
+    },
+    "Codes you redeem at venues are kept here as your history." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأكواد التي تستخدمها في الأماكن تُحفظ هنا كسجل لك."
+          }
+        }
+      }
+    },
+    "Confirm password" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكيد كلمة المرور"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المتابعة"
+          }
+        }
+      }
+    },
+    "Copied" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم النسخ"
+          }
+        }
+      }
+    },
+    "Copy code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نسخ الكود"
+          }
+        }
+      }
+    },
+    "Couldn't change the icon" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر تغيير الأيقونة"
+          }
+        }
+      }
+    },
+    "Couldn't load offers" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر تحميل العروض"
+          }
+        }
+      }
+    },
+    "Create a free account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أنشئ حساباً مجانياً"
+          }
+        }
+      }
+    },
+    "Create Account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنشاء حساب"
+          }
+        }
+      }
+    },
+    "Current language" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغة الحالية"
+          }
+        }
+      }
+    },
+    "Dark" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "داكن"
+          }
+        }
+      }
+    },
+    "Demo account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حساب تجريبي"
+          }
+        }
+      }
+    },
+    "Directions" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاتجاهات"
+          }
+        }
+      }
+    },
+    "Discover" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اكتشف"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم"
+          }
+        }
+      }
+    },
+    "Email" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البريد الإلكتروني"
+          }
+        }
+      }
+    },
+    "Ends in" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ينتهي خلال"
+          }
+        }
+      }
+    },
+    "English" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        }
+      }
+    },
+    "Enter a valid email address." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل بريداً إلكترونياً صحيحاً."
+          }
+        }
+      }
+    },
+    "Enter the verification code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل رمز التحقق"
+          }
+        }
+      }
+    },
+    "Exclusive deals, every day" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عروض حصرية كل يوم"
+          }
+        }
+      }
+    },
+    "Exclusive deals. Members only." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عروض حصرية… للأعضاء فقط."
+          }
+        }
+      }
+    },
+    "Exclusive member prices — never at the door" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أسعار حصرية للأعضاء — لن تجدها عند البوابة"
+          }
+        }
+      }
+    },
+    "Experience" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التجربة"
+          }
+        }
+      }
+    },
+    "Expired" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "منتهي"
+          }
+        }
+      }
+    },
+    "Expired on %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتهى في %@"
+          }
+        }
+      }
+    },
+    "Explore" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استكشف"
+          }
+        }
+      }
+    },
+    "Fair" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متوسطة"
+          }
+        }
+      }
+    },
+    "Family" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عائلية"
+          }
+        }
+      }
+    },
+    "Featured deals" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عروض مميزة"
+          }
+        }
+      }
+    },
+    "Floating glass motion" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حركة الزجاج العائم"
+          }
+        }
+      }
+    },
+    "From" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يبدأ من"
+          }
+        }
+      }
+    },
+    "Frost Glass" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الزجاج الثلجي"
+          }
+        }
+      }
+    },
+    "Full name" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاسم الكامل"
+          }
+        }
+      }
+    },
+    "Fully localized in English & العربية, with right-to-left layout." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مترجم بالكامل إلى العربية والإنجليزية مع دعم الاتجاه من اليمين لليسار."
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ الآن"
+          }
+        }
+      }
+    },
+    "Glass tilts and catches the light as you move your phone." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يميل الزجاج ويلتقط الضوء مع حركة هاتفك."
+          }
+        }
+      }
+    },
+    "Glassmorphism Logo" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شعار الزجاج العائم"
+          }
+        }
+      }
+    },
+    "Gold Member" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عضو ذهبي"
+          }
+        }
+      }
+    },
+    "Group" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مجموعة"
+          }
+        }
+      }
+    },
+    "Hand-picked. Ending soon." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مختارة بعناية. تنتهي قريباً."
+          }
+        }
+      }
+    },
+    "Hello, %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أهلاً %@"
+          }
+        }
+      }
+    },
+    "Hide password" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إخفاء كلمة المرور"
+          }
+        }
+      }
+    },
+    "I agree to Sarena's Terms of Use and Privacy Policy." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوافق على شروط الاستخدام وسياسة الخصوصية في سرينا."
+          }
+        }
+      }
+    },
+    "Ibri & Muscat Nights" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عبري وليالي مسقط"
+          }
+        }
+      }
+    },
+    "Ibri Arena" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ساحة عبري للاستعراض"
+          }
+        }
+      }
+    },
+    "Instant codes" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أكواد فورية"
+          }
+        }
+      }
+    },
+    "Jet Ski" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الجيتسكي"
+          }
+        }
+      }
+    },
+    "Join the club" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انضم إلى النادي"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغة"
+          }
+        }
+      }
+    },
+    "Left-to-right" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "من اليسار لليمين"
+          }
+        }
+      }
+    },
+    "Light" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فاتح"
+          }
+        }
+      }
+    },
+    "Live shows & stunts" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عروض حية واستعراضات"
+          }
+        }
+      }
+    },
+    "Location" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الموقع"
+          }
+        }
+      }
+    },
+    "Log Out" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيل الخروج"
+          }
+        }
+      }
+    },
+    "Log out of Sarena?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيل الخروج من سرينا؟"
+          }
+        }
+      }
+    },
+    "Mark as Used" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحديد كمستخدم"
+          }
+        }
+      }
+    },
+    "Mark this code as used?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد تحديد هذا الكود كمستخدم؟"
+          }
+        }
+      }
+    },
+    "Member No." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رقم العضوية"
+          }
+        }
+      }
+    },
+    "Member price" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سعر الأعضاء"
+          }
+        }
+      }
+    },
+    "Member savings" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توفير الأعضاء"
+          }
+        }
+      }
+    },
+    "Member since" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عضو منذ"
+          }
+        }
+      }
+    },
+    "Members only" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "للأعضاء فقط"
+          }
+        }
+      }
+    },
+    "Members save up to %@ every day" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يوفّر الأعضاء حتى %@ كل يوم"
+          }
+        }
+      }
+    },
+    "Midnight Glass" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زجاج منتصف الليل"
+          }
+        }
+      }
+    },
+    "Mobile" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الجوال"
+          }
+        }
+      }
+    },
+    "Mobile Number" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رقم الهاتف"
+          }
+        }
+      }
+    },
+    "Mobile number" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رقم الهاتف"
+          }
+        }
+      }
+    },
+    "New to Sarena?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جديد في سرينا؟"
+          }
+        }
+      }
+    },
+    "No account uses this number yet. Create a free account first." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد حساب بهذا الرقم بعد. أنشئ حساباً مجانياً أولاً."
+          }
+        }
+      }
+    },
+    "No active codes" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أكواد فعالة"
+          }
+        }
+      }
+    },
+    "No used codes yet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أكواد مستخدمة بعد"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسناً"
+          }
+        }
+      }
+    },
+    "Oman Automobile Association" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نادي عمان للسيارات"
+          }
+        }
+      }
+    },
+    "Oman Festivals" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مهرجانات عمان"
+          }
+        }
+      }
+    },
+    "Oman Shooting Club" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نادي عمان للرماية"
+          }
+        }
+      }
+    },
+    "Oman's top venues" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أفضل الأماكن في عُمان"
+          }
+        }
+      }
+    },
+    "Omani mobile numbers have 8 digits and start with 7 or 9." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرقام الهواتف العُمانية مكوّنة من ٨ أرقام وتبدأ بـ ٧ أو ٩."
+          }
+        }
+      }
+    },
+    "One free account unlocks members-only prices on cinemas, jet skis, clubs, arenas and festivals across Oman." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حساب مجاني واحد يفتح لك أسعار الأعضاء الحصرية في السينما والجيتسكي والأندية والساحات والمهرجانات في جميع أنحاء عُمان."
+          }
+        }
+      }
+    },
+    "Only %lld left" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متبقٍ %lld فقط"
+          }
+        }
+      }
+    },
+    "Only do this once the venue has accepted the code. It will move to your history." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدم هذا الخيار فقط بعد قبول المكان للكود، وسيُنقل بعدها إلى السجل."
+          }
+        }
+      }
+    },
+    "Open %@ in Maps" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح %@ في الخرائط"
+          }
+        }
+      }
+    },
+    "Open iOS Language Settings" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فتح إعدادات اللغة في iOS"
+          }
+        }
+      }
+    },
+    "Original price" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السعر الأصلي"
+          }
+        }
+      }
+    },
+    "Page %lld of %lld" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الصفحة %lld من %lld"
+          }
+        }
+      }
+    },
+    "Paid" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المدفوع"
+          }
+        }
+      }
+    },
+    "Password" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كلمة المرور"
+          }
+        }
+      }
+    },
+    "Passwords don't match." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كلمتا المرور غير متطابقتين."
+          }
+        }
+      }
+    },
+    "Play more, pay less" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العب أكثر وادفع أقل"
+          }
+        }
+      }
+    },
+    "Please try again in a moment." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يُرجى المحاولة بعد قليل."
+          }
+        }
+      }
+    },
+    "Precision, supervised" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دقة تحت إشراف كامل"
+          }
+        }
+      }
+    },
+    "Prices unlock after sign-in" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تظهر الأسعار بعد تسجيل الدخول"
+          }
+        }
+      }
+    },
+    "QR code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز QR"
+          }
+        }
+      }
+    },
+    "Quantity" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الكمية"
+          }
+        }
+      }
+    },
+    "Read more" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اقرأ المزيد"
+          }
+        }
+      }
+    },
+    "Ready to use" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جاهز للاستخدام"
+          }
+        }
+      }
+    },
+    "Redeemed" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مستخدم"
+          }
+        }
+      }
+    },
+    "Regular" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عادية"
+          }
+        }
+      }
+    },
+    "Resend code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة إرسال الرمز"
+          }
+        }
+      }
+    },
+    "Resend code in %llds" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة الإرسال بعد %lld ث"
+          }
+        }
+      }
+    },
+    "Ride the Muscat coast" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انطلق على ساحل مسقط"
+          }
+        }
+      }
+    },
+    "Right-to-left" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "من اليمين لليسار"
+          }
+        }
+      }
+    },
+    "Sarena" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرينا"
+          }
+        }
+      }
+    },
+    "Sarena Classic" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سرينا الكلاسيكية"
+          }
+        }
+      }
+    },
+    "Save %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّر %@"
+          }
+        }
+      }
+    },
+    "Save up to" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّر حتى"
+          }
+        }
+      }
+    },
+    "Saved" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّرت"
+          }
+        }
+      }
+    },
+    "Search venues or areas" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابحث عن مكان أو منطقة"
+          }
+        }
+      }
+    },
+    "Send Code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إرسال الرمز"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإعدادات"
+          }
+        }
+      }
+    },
+    "Seven destinations. One membership." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سبع وجهات… بعضوية واحدة."
+          }
+        }
+      }
+    },
+    "Show less" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض أقل"
+          }
+        }
+      }
+    },
+    "Show password" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إظهار كلمة المرور"
+          }
+        }
+      }
+    },
+    "Show QR" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض QR"
+          }
+        }
+      }
+    },
+    "Show this code at the entrance. Staff will scan it to apply your member price." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعرض هذا الكود عند المدخل، وسيقوم الموظف بمسحه لتطبيق سعر الأعضاء."
+          }
+        }
+      }
+    },
+    "Sign In" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيل الدخول"
+          }
+        }
+      }
+    },
+    "Sign in to see today's member prices." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سجّل دخولك لمشاهدة أسعار الأعضاء اليوم."
+          }
+        }
+      }
+    },
+    "Skip" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تخطي"
+          }
+        }
+      }
+    },
+    "SMS code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز SMS"
+          }
+        }
+      }
+    },
+    "Soon" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قريباً"
+          }
+        }
+      }
+    },
+    "Strong" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قوية"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النظام"
+          }
+        }
+      }
+    },
+    "Testing only" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "للتجربة فقط"
+          }
+        }
+      }
+    },
+    "That code isn't right. Check the SMS and try again." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الرمز غير صحيح. تحقق من الرسالة النصية وحاول مرة أخرى."
+          }
+        }
+      }
+    },
+    "The deepest member discounts right now" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أكبر خصومات الأعضاء الآن"
+          }
+        }
+      }
+    },
+    "The email or password is incorrect." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+          }
+        }
+      }
+    },
+    "The Sarena team is glad you're here. Oman's best experiences, at members-only prices." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فريق سرينا سعيد بانضمامك. أفضل التجارب في عُمان بأسعار حصرية للأعضاء."
+          }
+        }
+      }
+    },
+    "This mobile number is already linked to an account." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رقم الهاتف هذا مرتبط بحساب بالفعل."
+          }
+        }
+      }
+    },
+    "This ticket just sold out at the member price. Please pick another option." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نفدت هذه التذكرة بسعر الأعضاء للتو. يُرجى اختيار خيار آخر."
+          }
+        }
+      }
+    },
+    "Total saved with Sarena" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إجمالي ما وفّرته مع سرينا"
+          }
+        }
+      }
+    },
+    "Track days & karting" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أيام الحلبة والكارتينج"
+          }
+        }
+      }
+    },
+    "Try Again" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حاول مرة أخرى"
+          }
+        }
+      }
+    },
+    "Up to %@ off" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خصم حتى %@"
+          }
+        }
+      }
+    },
+    "Up to 10 per booking" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حتى ١٠ لكل حجز"
+          }
+        }
+      }
+    },
+    "Use at least 8 characters with letters and numbers." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدم ٨ أحرف على الأقل تتضمن حروفاً وأرقاماً."
+          }
+        }
+      }
+    },
+    "Use demo account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدم الحساب التجريبي"
+          }
+        }
+      }
+    },
+    "Used" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مستخدم"
+          }
+        }
+      }
+    },
+    "Used Codes" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأكواد المستخدمة"
+          }
+        }
+      }
+    },
+    "Used on %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استُخدم في %@"
+          }
+        }
+      }
+    },
+    "Valid until" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صالح حتى"
+          }
+        }
+      }
+    },
+    "Valid until %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صالح حتى %@"
+          }
+        }
+      }
+    },
+    "Verification code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز التحقق"
+          }
+        }
+      }
+    },
+    "Verify & Sign In" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تحقق وسجّل الدخول"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإصدار"
+          }
+        }
+      }
+    },
+    "Video Game Arcades" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "صالة ألعاب الفيديو"
+          }
+        }
+      }
+    },
+    "View in Wallet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض في المحفظة"
+          }
+        }
+      }
+    },
+    "VIP" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VIP"
+          }
+        }
+      }
+    },
+    "Wallet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المحفظة"
+          }
+        }
+      }
+    },
+    "Was %@, member price %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كان %1$@، وسعر الأعضاء %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was %1$@, member price %2$@"
+          }
+        }
+      }
+    },
+    "We couldn't reach Sarena. Check your connection and try again." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر الاتصال بسرينا. تحقق من اتصالك وحاول مرة أخرى."
+          }
+        }
+      }
+    },
+    "We sent an SMS to %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرسلنا رسالة نصية إلى %@"
+          }
+        }
+      }
+    },
+    "We'll text you a one-time code. No password needed." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سنرسل لك رمزاً لمرة واحدة برسالة نصية، دون الحاجة إلى كلمة مرور."
+          }
+        }
+      }
+    },
+    "Weak" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ضعيفة"
+          }
+        }
+      }
+    },
+    "Welcome back" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أهلاً بعودتك"
+          }
+        }
+      }
+    },
+    "Welcome to Sarena" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مرحباً بك في سرينا"
+          }
+        }
+      }
+    },
+    "with your Sarena membership" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بفضل عضويتك في سرينا"
+          }
+        }
+      }
+    },
+    "You save %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "توفّر %@"
+          }
+        }
+      }
+    },
+    "You saved" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّرت"
+          }
+        }
+      }
+    },
+    "You saved %@ on this booking" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وفّرت %@ في هذا الحجز"
+          }
+        }
+      }
+    },
+    "You're booked!" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم الحجز!"
+          }
+        }
+      }
+    },
+    "You've saved" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لقد وفّرت"
+          }
+        }
+      }
+    },
+    "Your code is in your Wallet. Show it at the entrance to get your member price." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كودك محفوظ في المحفظة. اعرضه عند المدخل لتحصل على سعر الأعضاء."
+          }
+        }
+      }
+    },
+    "Your code lands in your Wallet instantly — just show the QR at the entrance." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يصلك الكود فوراً في محفظتك — فقط اعرض رمز QR عند المدخل."
+          }
+        }
+      }
+    },
+    "Your codes stay safe in your Wallet and will be waiting when you sign back in." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ستبقى أكوادك محفوظة في محفظتك بانتظارك عند تسجيل الدخول مجدداً."
+          }
+        }
+      }
+    },
+    "Your member prices are live" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أسعار الأعضاء متاحة لك الآن"
+          }
+        }
+      }
+    },
+    "العربية" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العربية"
+          }
+        }
+      }
+    },
+    "−%@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "−%@"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

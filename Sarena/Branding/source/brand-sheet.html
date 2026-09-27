@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Montserrat"; src: url(fonts/montserrat.woff2) format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Alexandria"; src: url(fonts/alexandria-ar.woff2) format("woff2"); font-weight: 100 900; }
+  html, body { margin: 0; width: 2400px; height: 1500px; overflow: hidden; }
+  body { font-family: "Montserrat", sans-serif; color: #fff;
+         background: linear-gradient(160deg, #1E0B2C 0%, #110818 55%, #07050C 100%); position: relative; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(140px); }
+  .glass { background: linear-gradient(145deg, rgba(255,255,255,.16), rgba(255,255,255,.05));
+           border: 1.5px solid rgba(255,255,255,.22); border-radius: 44px;
+           backdrop-filter: blur(30px) saturate(160%);
+           box-shadow: 0 40px 90px rgba(0,0,0,.45), inset 0 1.5px 0 rgba(255,255,255,.35); }
+  header { position: absolute; left: 110px; top: 90px; right: 110px; display: flex; align-items: flex-end; justify-content: space-between; }
+  h1 { margin: 0; font-size: 92px; font-weight: 900; letter-spacing: 4px; }
+  h1 span { color: #FF7900; }
+  .sub { font-size: 30px; font-weight: 800; opacity: .7; letter-spacing: 3px; margin-top: 10px; }
+  .ar { font-family: "Alexandria"; direction: rtl; font-size: 44px; font-weight: 800; color: #FFB05C; text-align: right; }
+  .ar small { display: block; font-size: 28px; color: rgba(255,255,255,.7); margin-top: 8px; }
+
+  .icons { position: absolute; left: 110px; top: 330px; width: 1360px; height: 560px; display: flex; gap: 40px; padding: 48px; box-sizing: border-box; align-items: center; justify-content: space-between; }
+  .icon { text-align: center; }
+  .icon img { width: 260px; height: 260px; border-radius: 58px; display: block;
+              box-shadow: 0 34px 60px rgba(0,0,0,.55), 0 0 0 1.5px rgba(255,255,255,.18); }
+  .icon .name { margin-top: 34px; font-size: 26px; font-weight: 800; letter-spacing: 1px; }
+  .icon .file { margin-top: 8px; font-size: 19px; opacity: .55; font-weight: 800; }
+  .icon.primary .name::after { content: "PRIMARY"; display: inline-block; margin-left: 12px; padding: 5px 12px; border-radius: 99px; background: #FF7900; font-size: 15px; vertical-align: middle; }
+
+  .lockups { position: absolute; right: 110px; top: 330px; width: 780px; height: 1080px; display: grid; grid-template-rows: 1fr 1fr; gap: 30px; }
+  .lock { border-radius: 44px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .lock.light { background: radial-gradient(120% 100% at 30% 10%, #FFFFFF, #FFF1E3 60%, #FFE0C0); box-shadow: 0 40px 90px rgba(0,0,0,.45); }
+  .lock img { height: 84%; }
+
+  .palette { position: absolute; left: 110px; top: 930px; width: 1360px; height: 480px; padding: 48px; box-sizing: border-box; }
+  .palette h3 { margin: 0 0 30px; font-size: 26px; letter-spacing: 3px; opacity: .7; }
+  .swatches { display: flex; gap: 26px; }
+  .sw { flex: 1; }
+  .sw .chip { height: 170px; border-radius: 30px; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.35), 0 20px 40px rgba(0,0,0,.35); }
+  .sw .n { margin-top: 20px; font-size: 22px; font-weight: 800; }
+  .sw .h { margin-top: 6px; font-size: 19px; opacity: .6; font-weight: 800; }
+</style>
+</head>
+<body>
+  <div class="orb" style="left:-120px;top:-160px;width:760px;height:760px;background:#FF7900;opacity:.55"></div>
+  <div class="orb" style="left:1500px;top:900px;width:900px;height:900px;background:#FF2F7D;opacity:.35"></div>
+  <div class="orb" style="left:900px;top:-200px;width:620px;height:620px;background:#6B3DFF;opacity:.35"></div>
+
+  <header>
+    <div>
+      <h1>SARENA <span>·</span> GLASS</h1>
+      <div class="sub">BRAND IDENTITY — APP ICONS &amp; LOCKUPS</div>
+    </div>
+    <div class="ar">سرينا<small>عروض حصرية… للأعضاء فقط</small></div>
+  </header>
+
+  <section class="icons glass">
+    <div class="icon primary"><img src="../renders/AppIcon.png"><div class="name">Sarena Classic</div><div class="file">AppIcon</div></div>
+    <div class="icon"><img src="../renders/AppIcon-Glass.png"><div class="name">Glassmorphism Logo</div><div class="file">AppIcon-Glass</div></div>
+    <div class="icon"><img src="../renders/AppIcon-Midnight.png"><div class="name">Midnight Glass</div><div class="file">AppIcon-Midnight</div></div>
+    <div class="icon"><img src="../renders/AppIcon-Frost.png"><div class="name">Frost Glass</div><div class="file">AppIcon-Frost</div></div>
+  </section>
+
+  <section class="lockups">
+    <div class="lock light"><img src="../renders/Sarena-lockup-light.png"></div>
+    <div class="lock glass"><img src="../renders/Sarena-lockup-dark.png"></div>
+  </section>
+
+  <section class="palette glass">
+    <h3>PALETTE</h3>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#FF7900"></div><div class="n">Sarena Orange</div><div class="h">#FF7900</div></div>
+      <div class="sw"><div class="chip" style="background:#FFB05C"></div><div class="n">Glow</div><div class="h">#FFB05C</div></div>
+      <div class="sw"><div class="chip" style="background:#E45A00"></div><div class="n">Ember</div><div class="h">#E45A00</div></div>
+      <div class="sw"><div class="chip" style="background:#FF2F7D"></div><div class="n">Festival Pink</div><div class="h">#FF2F7D</div></div>
+      <div class="sw"><div class="chip" style="background:#170A24;border:1.5px solid rgba(255,255,255,.2)"></div><div class="n">Night Plum</div><div class="h">#170A24</div></div>
+      <div class="sw"><div class="chip" style="background:#15151B;border:1.5px solid rgba(255,255,255,.2)"></div><div class="n">Ink</div><div class="h">#15151B</div></div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<!--
+  Sarena onboarding illustrations (rendered by render.sh at 1170 × 1440, i.e. 390 × 480 pt @3x).
+  ?p=1 welcome · ?p=2 deals · ?p=3 codes
+  Deliberately text-free so the same artwork works in English and Arabic.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Montserrat"; src: url(fonts/montserrat.woff2) format("woff2"); font-weight: 100 900; }
+  html, body { margin: 0; width: 1170px; height: 1440px; overflow: hidden; }
+  body { position: relative; font-family: "Montserrat", sans-serif; }
+  .abs { position: absolute; }
+  .ring { position: absolute; border-radius: 50%; border-style: solid; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); }
+  .glass {
+    position: absolute;
+    background: linear-gradient(145deg, rgba(255,255,255,.55), rgba(255,255,255,.14));
+    border: 3px solid rgba(255,255,255,.55);
+    backdrop-filter: blur(26px) saturate(170%);
+    box-shadow: 0 50px 90px rgba(90,20,0,.35), inset 0 3px 0 rgba(255,255,255,.7), inset 0 -20px 50px rgba(255,255,255,.08);
+  }
+  .bubble { border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .emoji { font-family: "Noto Color Emoji"; line-height: 1; filter: drop-shadow(0 14px 16px rgba(80,20,0,.35)); }
+  .num { font-weight: 900; color: #fff; letter-spacing: -2px; text-shadow: 0 8px 20px rgba(120,30,0,.35); }
+  .bar { position: absolute; height: 22px; border-radius: 11px; background: rgba(255,255,255,.75); }
+  .sparkle { position: absolute; color: #fff; font-size: 64px; filter: drop-shadow(0 0 18px rgba(255,255,255,.9)); }
+</style>
+</head>
+<body>
+<div id="scene"></div>
+<script>
+  const p = new URLSearchParams(location.search).get("p") || "1";
+  const scene = document.getElementById("scene");
+  const add = (html) => scene.insertAdjacentHTML("beforeend", html);
+  const px = (v) => typeof v === "number" ? v + "px" : v;
+  const box = (cls, s, inner = "") => add(`<div class="${cls}" style="${Object.entries(s).map(([k, v]) => `${k}:${px(v)}`).join(";")}">${inner}</div>`);
+
+  const bubble = (x, y, d, emoji, rot = 0) =>
+    box("glass bubble", { left: x, top: y, width: d, height: d, transform: `rotate(${rot}deg)` },
+        `<span class="emoji" style="font-size:${Math.round(d * .5)}px">${emoji}</span>`);
+  const sparkle = (x, y, s = 64) => box("sparkle", { left: x, top: y, "font-size": s }, "✦");
+
+  const themes = {
+    1: ["#FFA24A", "#FF7A12", "#E9451F", "rgba(200,60,0,.55)"],
+    2: ["#FFE067", "#FFC12E", "#FF9A1F", "rgba(255,120,0,.55)"],
+    3: ["#FF6FA0", "#FF3D7F", "#FF7900", "rgba(200,20,90,.45)"],
+  }[p];
+  document.body.style.background = `linear-gradient(165deg, ${themes[0]} 0%, ${themes[1]} 45%, ${themes[2]} 100%)`;
+
+  // Big concentric rings, like a spotlight behind the hero.
+  box("ring", { left: 470, top: -120, width: 980, height: 980, "border-width": 130, "border-color": themes[3] });
+  box("ring", { left: -380, top: 700, width: 760, height: 760, "border-width": 90, "border-color": themes[3], opacity: .7 });
+  box("orb", { left: 300, top: 420, width: 620, height: 620, background: "rgba(255,255,255,.35)" });
+
+  if (p === "1") {
+    // Welcome: the glass Sarena tag surrounded by the experiences it unlocks.
+    add(`<img src="../renders/SarenaLogo.png" class="abs" style="left:325px;top:400px;width:520px;filter:drop-shadow(0 60px 80px rgba(120,30,0,.45))">`);
+    bubble(110, 250, 230, "🎬", -8);
+    bubble(840, 190, 250, "🌊", 10);
+    bubble(60, 900, 210, "🎮", 6);
+    bubble(880, 880, 230, "🎆", -10);
+    bubble(470, 1130, 190, "🏎️", 4);
+    bubble(520, 110, 150, "🎯", -4);
+    sparkle(360, 330); sparkle(820, 560, 48); sparkle(250, 760, 52); sparkle(760, 1150, 44);
+  }
+
+  if (p === "2") {
+    // Deals: a fanned stack of floating glass deal cards.
+    const card = (x, y, rot, emoji, pct, z) => {
+      box("glass", { left: x, top: y, width: 620, height: 380, "border-radius": 56, transform: `rotate(${rot}deg)`, "z-index": z },
+        `<span class="emoji abs" style="left:48px;top:44px;font-size:120px">${emoji}</span>
+         <div class="num abs" style="right:46px;top:40px;font-size:128px">−${pct}%</div>
+         <div class="bar" style="left:52px;bottom:118px;width:280px;opacity:.55"></div>
+         <div class="bar" style="left:52px;bottom:118px;width:280px;height:6px;top:auto;background:rgba(160,30,0,.55);transform:translateY(-8px)"></div>
+         <div class="bar" style="left:52px;bottom:60px;width:190px;background:#fff"></div>
+         <div class="abs" style="right:46px;bottom:46px;width:150px;height:74px;border-radius:37px;background:linear-gradient(135deg,#FFB05C,#FF7900 55%,#E45A00);box-shadow:0 16px 30px rgba(200,70,0,.5)"></div>`);
+    };
+    card(90, 330, -12, "🍿", 40, 1);
+    card(420, 560, 9, "🛥️", 45, 2);
+    card(210, 820, -4, "🎟️", 50, 3);
+    bubble(900, 170, 200, "🔥", 12);
+    bubble(70, 1180, 170, "💸", -8);
+    sparkle(820, 460, 56); sparkle(140, 700, 46); sparkle(980, 1180, 60);
+  }
+
+  if (p === "3") {
+    // Codes: a glass phone holding a QR ticket, with a success badge.
+    box("glass", { left: 330, top: 190, width: 510, height: 1040, "border-radius": 90 },
+      `<div class="abs" style="left:180px;top:30px;width:150px;height:34px;border-radius:17px;background:rgba(40,10,20,.35)"></div>
+       <div class="abs" id="qr" style="left:55px;top:170px;width:400px;height:400px;border-radius:44px;background:#fff;box-shadow:0 30px 60px rgba(120,20,40,.35)"></div>
+       <div class="bar" style="left:95px;top:640px;width:320px;height:34px;border-radius:17px"></div>
+       <div class="bar" style="left:145px;top:700px;width:220px;opacity:.6"></div>
+       <div class="abs" style="left:60px;top:830px;width:390px;height:110px;border-radius:55px;background:linear-gradient(135deg,#FFB05C,#FF7900 55%,#E45A00);box-shadow:0 20px 40px rgba(200,70,0,.5)"></div>`);
+    // Pseudo-QR: deterministic modules + three finder patterns.
+    const qr = document.getElementById("qr");
+    const n = 25, cell = 13.6, pad = 30;
+    let seed = 7;
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const finder = (cx, cy) => cx < 8 && cy < 8 || cx > n - 9 && cy < 8 || cx < 8 && cy > n - 9;
+    let html = "";
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      if (finder(x, y)) continue;
+      if (rand() > .52) html += `<div class="abs" style="left:${pad + x * cell}px;top:${pad + y * cell}px;width:${cell}px;height:${cell}px;background:#15151B;border-radius:3px"></div>`;
+    }
+    for (const [fx, fy] of [[0, 0], [n - 7, 0], [0, n - 7]]) {
+      const s = 7 * cell;
+      html += `<div class="abs" style="left:${pad + fx * cell}px;top:${pad + fy * cell}px;width:${s}px;height:${s}px;border:${cell}px solid #15151B;border-radius:22px;box-sizing:border-box"></div>
+               <div class="abs" style="left:${pad + (fx + 2) * cell}px;top:${pad + (fy + 2) * cell}px;width:${3 * cell}px;height:${3 * cell}px;background:#FF7900;border-radius:10px"></div>`;
+    }
+    qr.innerHTML = html;
+    bubble(790, 250, 220, "✅", 10);
+    bubble(120, 330, 190, "🎉", -10);
+    bubble(80, 950, 200, "🎫", 8);
+    bubble(860, 980, 180, "🎊", -6);
+    sparkle(930, 600, 58); sparkle(210, 700, 48); sparkle(560, 1290, 52);
+  }
+</script>
+</body>
+</html>
