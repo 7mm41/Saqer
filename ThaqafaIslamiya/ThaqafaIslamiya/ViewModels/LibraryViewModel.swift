@@ -20,10 +20,7 @@ final class LibraryViewModel {
     private(set) var totalMasailCount = 0
     private(set) var loadError: String?
 
-    var searchText: String = "" {
-        didSet { updateSearch() }
-    }
-    private(set) var searchResults: [SearchResult] = []
+    var searchText: String = ""
 
     // فهارس سريعة للبحث بالمعرّف
     @ObservationIgnored private var chapterIndex: [String: Chapter] = [:]
@@ -47,7 +44,6 @@ final class LibraryViewModel {
             lessons = library.lessons
             buildIndexes()
             loadError = nil
-            updateSearch()
         } catch {
             loadError = error.localizedDescription
         }
@@ -105,12 +101,11 @@ final class LibraryViewModel {
         !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    private func updateSearch() {
-        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines).searchNormalized
-        guard !query.isEmpty else {
-            if !searchResults.isEmpty { searchResults = [] }
-            return
-        }
-        searchResults = searchHaystack.filter { $0.text.contains(query) }.map { $0.result }
+    /// نتائج البحث تُحسب مباشرة من النص الحالي (سريعة: نصوص المسائل مطبَّعة مسبقًا عند التحميل).
+    /// كل كلمات العبارة يجب أن تظهر في المسألة، بأي ترتيب.
+    var searchResults: [SearchResult] {
+        let words = searchText.searchNormalized.split(whereSeparator: { $0.isWhitespace }).map(String.init)
+        guard !words.isEmpty else { return [] }
+        return searchHaystack.filter { entry in words.allSatisfy { entry.text.contains($0) } }.map { $0.result }
     }
 }
