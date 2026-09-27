@@ -53,7 +53,7 @@ struct PrayerTimesView: View {
         }
         .onAppear {
             prayers.refreshIfNeeded()
-            if !prayers.hasLocation { prayers.locate() }
+            if prayers.hasLocation { prayers.updateLocationIfAuthorized() } else { prayers.locate() }
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { prayers.refreshIfNeeded() }
@@ -249,6 +249,17 @@ struct PrayerTimesView: View {
                 .pickerStyle(.menu)
                 .tint(.teal)
             }
+            HStack(spacing: 6) {
+                Image(systemName: prayers.methodIsManual ? "hand.tap.fill" : "location.fill")
+                Text(L10n.t(prayers.methodIsManual ? "prayer.method.manual" : "prayer.method.auto"))
+                Spacer(minLength: 0)
+                if prayers.methodIsManual {
+                    Button(L10n.t("prayer.method.useAuto")) { prayers.useAutomaticMethod() }
+                        .font(.caption.weight(.bold))
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
 
             VStack(alignment: .leading, spacing: 8) {
                 Label(L10n.t("prayer.asrTitle"), systemImage: "sun.min.fill").font(.subheadline.weight(.semibold))

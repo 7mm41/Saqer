@@ -28,7 +28,14 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
     private(set) var latitude: Double?
     private(set) var longitude: Double?
     private(set) var placeName: String?
-    var method: PrayerMethod { didSet { save(); refresh(); scheduleNotifications() } }
+    var method: PrayerMethod {
+        didSet {
+            if !applyingAutomaticMethod { methodIsManual = true }       // اختيار المستخدم يُحترم ولا يُستبدل تلقائيًا
+            save(); refresh(); scheduleNotifications()
+        }
+    }
+    /// اختار المستخدم طريقة الحساب بنفسه؛ وإلا تُختار تلقائيًا حسب البلد الذي هو فيه.
+    private(set) var methodIsManual: Bool
     var asrSchool: AsrSchool { didSet { save(); refresh(); scheduleNotifications() } }
     var alertSound: AlertSound { didSet { save(); scheduleNotifications() } }
     /// تنبيه الأذان لكل صلاة.
@@ -47,6 +54,10 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
     @ObservationIgnored private let manager: CLLocationManager
     @ObservationIgnored private var player: AVAudioPlayer?
     @ObservationIgnored private var computedFor: Date?
+    @ObservationIgnored private var applyingAutomaticMethod = false
+    /// تحديث صامت للموقع عند فتح التطبيق (دون مؤشر انتظار).
+    @ObservationIgnored private var silentUpdate = false
+    @ObservationIgnored private var countryCode: String?
 
     static let notificationPrefix = "adhan."
     static let notificationCategory = "adhan"
@@ -57,6 +68,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
     private enum Keys {
         static let lat = "prayer.lat", lng = "prayer.lng", place = "prayer.place"
         static let method = "prayer.method", asr = "prayer.asr", sound = "prayer.sound", alerts = "prayer.alerts"
+        static let manual = "prayer.methodManual", country = "prayer.country"
     }
 
     init(defaults: UserDefaults = .standard) {
@@ -68,8 +80,10 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
             longitude = defaults.double(forKey: Keys.lng)
         }
         placeName = defaults.string(forKey: Keys.place)
+        countryCode = defaults.string(forKey: Keys.country)
+        methodIsManual = defaults.bool(forKey: Keys.manual)
         method = defaults.string(forKey: Keys.method).flatMap(PrayerMethod.init(rawValue:))
-            ?? PrayerMethod.suggested(region: Locale.current.region?.identifier)
+            ?? PrayerMethod.suggested(region: defaults.string(forKey: Keys.country) ?? Locale.current.region?.identifier)
         asrSchool = defaults.string(forKey: Keys.asr).flatMap(AsrSchool.init(rawValue:)) ?? .standard
         alertSound = defaults.string(forKey: Keys.sound).flatMap(AlertSound.init(rawValue:)) ?? .adhan
         if let saved = defaults.array(forKey: Keys.alerts) as? [String] {
@@ -87,6 +101,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
 
     private func save() {
         defaults.set(method.rawValue, forKey: Keys.method)
+        defaults.set(methodIsManual, forKey: Keys.manual)
         defaults.set(asrSchool.rawValue, forKey: Keys.asr)
         defaults.set(alertSound.rawValue, forKey: Keys.sound)
         defaults.set(alerts.map(\.rawValue), forKey: Keys.alerts)
@@ -130,6 +145,30 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
 
     // MARK: Location
 
+    /// يُستدعى عند فتح التطبيق: يحدّث الموقع بصمت إن كان الإذن ممنوحًا، فتتبع المواقيت المستخدم أينما سافر.
+    func updateLocationIfAuthorized() {
+        let status = manager.authorizationStatus
+        guard status == .authorizedWhenInUse || status == .authorizedAlways, !isLocating else { return }
+        silentUpdate = true
+        manager.requestLocation()
+    }
+
+    /// يعيد طريقة الحساب إلى الاختيار التلقائي حسب البلد.
+    func useAutomaticMethod() {
+        methodIsManual = false
+        applyAutomaticMethod()
+        save()
+    }
+
+    private func applyAutomaticMethod() {
+        guard !methodIsManual else { return }
+        let suggested = PrayerMethod.suggested(region: countryCode ?? Locale.current.region?.identifier)
+        guard suggested != method else { return }
+        applyingAutomaticMethod = true
+        method = suggested
+        applyingAutomaticMethod = false
+    }
+
     func locate() {
         switch manager.authorizationStatus {
         case .notDetermined:
@@ -162,19 +201,36 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        let explicit = !silentUpdate
+        silentUpdate = false
         isLocating = false
+        // تحديث صامت: لا نغيّر شيئًا إن لم يبتعد المستخدم أكثر من ٣ كم عن الموقع المحفوظ
+        if !explicit, let latitude, let longitude,
+           location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) < 3000 { return }
+        if let latitude, let longitude,
+           location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) >= 3000 {
+            placeName = nil                                  // مدينة جديدة: لا يبقى اسم المدينة السابقة
+            defaults.removeObject(forKey: Keys.place)
+        }
         latitude = location.coordinate.latitude
         longitude = location.coordinate.longitude
         defaults.set(latitude, forKey: Keys.lat)
         defaults.set(longitude, forKey: Keys.lng)
         refresh()
-        Task { await enableNotifications() }
+        if explicit { Task { await enableNotifications() } } else { scheduleNotifications() }
         // اسم المدينة (يحتاج اتصالًا؛ دونه تُعرض الإحداثيات)
         CLGeocoder().reverseGeocodeLocation(location, preferredLocale: L10n.language.locale) { [weak self] marks, _ in
             guard let self, let mark = marks?.first else { return }
             let name = [mark.locality ?? mark.subAdministrativeArea, mark.country].compactMap { $0 }.joined(separator: "، ")
-            guard !name.isEmpty else { return }
+            let country = mark.isoCountryCode
             DispatchQueue.main.async {
+                // طريقة الحساب تتبع البلد الذي فيه المستخدم فعلًا (ما لم يخترها بنفسه)
+                if let country {
+                    self.countryCode = country
+                    self.defaults.set(country, forKey: Keys.country)
+                    self.applyAutomaticMethod()
+                }
+                guard !name.isEmpty else { return }
                 self.placeName = name
                 self.defaults.set(name, forKey: Keys.place)
                 self.scheduleNotifications()
@@ -184,6 +240,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         isLocating = false
+        silentUpdate = false
     }
 
     // MARK: Adhan alerts

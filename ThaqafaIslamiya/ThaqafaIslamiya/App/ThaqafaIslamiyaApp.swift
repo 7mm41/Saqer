@@ -69,6 +69,7 @@ struct ThaqafaIslamiyaApp: App {
                     guard phase == .active else { return }
                     prayers.refresh()
                     if prayers.hasLocation { prayers.scheduleNotifications() }
+                    prayers.updateLocationIfAuthorized()                 // المواقيت تتبع المستخدم أينما سافر
                 }
         }
     }

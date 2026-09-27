@@ -791,6 +791,14 @@
   "hi": "मग़रिब",
   "tr": "Akşam"
  },
+ "prayer.method.auto": {
+  "ar": "تُختار تلقائيًا حسب البلد الذي أنت فيه",
+  "bn": "তুমি যে দেশে আছ সে অনুযায়ী স্বয়ংক্রিয়",
+  "en": "Chosen automatically for the country you are in",
+  "fa": "خودکار بر اساس کشوری که در آن هستی",
+  "hi": "आप जिस देश में हैं उसके हिसाब से अपने-आप",
+  "tr": "Bulunduğun ülkeye göre otomatik seçilir"
+ },
  "prayer.method.dubai": {
   "ar": "دبي (الإمارات)",
   "bn": "দুবাই (সংযুক্ত আরব আমিরাত)",
@@ -830,6 +838,14 @@
   "fa": "کویت",
   "hi": "कुवैत",
   "tr": "Kuveyt"
+ },
+ "prayer.method.manual": {
+  "ar": "اخترتها بنفسك",
+  "bn": "তোমার পছন্দ",
+  "en": "Chosen by you",
+  "fa": "انتخاب خودت",
+  "hi": "आपकी पसंद",
+  "tr": "Senin seçimin"
  },
  "prayer.method.muslimWorldLeague": {
   "ar": "رابطة العالم الإسلامي",
@@ -878,6 +894,14 @@
   "fa": "ام القری (مکه)",
   "hi": "उम्म अल-क़ुरा (मक्का)",
   "tr": "Ümmü'l-Kura (Mekke)"
+ },
+ "prayer.method.useAuto": {
+  "ar": "تلقائي",
+  "bn": "স্বয়ংক্রিয়",
+  "en": "Automatic",
+  "fa": "خودکار",
+  "hi": "अपने-आप",
+  "tr": "Otomatik"
  },
  "prayer.methodTitle": {
   "ar": "طريقة الحساب",
