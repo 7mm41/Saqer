@@ -975,6 +975,14 @@
   "hi": "इस ऐप की सूचनाएँ बंद हैं, अज़ान आप तक नहीं पहुँचेगी। सेटिंग्स में चालू करें।",
   "tr": "Bu uygulamanın bildirimleri kapalı, ezan sana ulaşmayacak. Ayarlar'dan aç."
  },
+ "prayer.omanSource": {
+  "ar": "مواقيت وزارة الأوقاف والشؤون الدينية الرسمية، مضبوطة على موقعك بالضبط",
+  "bn": "ওমানের আওকাফ মন্ত্রণালয়ের সরকারি সময়, তোমার সঠিক অবস্থান অনুযায়ী",
+  "en": "Official times of Oman's Ministry of Awqaf, adjusted to your exact location",
+  "fa": "اوقات رسمی وزارت اوقاف عمان، تنظیم‌شده برای موقعیت دقیق تو",
+  "hi": "ओमान के औक़ाफ़ मंत्रालय के आधिकारिक समय, आपकी सटीक जगह के अनुसार",
+  "tr": "Umman Vakıflar Bakanlığı'nın resmî vakitleri, tam konumuna göre"
+ },
  "prayer.placesCredit": {
   "ar": "أسماء الأماكن: GeoNames (CC BY 4.0)",
   "bn": "স্থানের নাম: GeoNames (CC BY 4.0)",

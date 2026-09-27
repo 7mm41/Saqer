@@ -121,7 +121,37 @@ enum PrayerCalculator {
         let (y, m, d) = (parts.year ?? 2000, parts.month ?? 1, parts.day ?? 1)
         let noonDate = calendar.date(from: DateComponents(year: y, month: m, day: d, hour: 12)) ?? date
         let tz = Double(timeZone.secondsFromGMT(for: noonDate)) / 3600
+        let midnight = calendar.startOfDay(for: noonDate)
 
+        // سلطنة عُمان: الجدول الرسمي لأقرب مكان مرجعي من وزارة الأوقاف، مُعدَّلًا بفرق موقع المستخدم الفعلي عنه
+        if method == .oman, asr == .standard,
+           let official = OmanMinistry.times(year: y, month: m, day: d, latitude: lat, longitude: lng,
+                                             raw: { la, lo in rawHours(y, m, d, la, lo, 4, noonDate, method, asr) }) {
+            let muscat = TimeZone(identifier: "Asia/Muscat") ?? timeZone
+            var omanCalendar = Calendar(identifier: .gregorian)
+            omanCalendar.timeZone = muscat
+            let omanMidnight = omanCalendar.date(from: DateComponents(year: y, month: m, day: d)) ?? midnight
+            var times: [Prayer: Date] = [:]
+            for (prayer, minutes) in official { times[prayer] = omanMidnight.addingTimeInterval(minutes.rounded() * 60) }
+            return PrayerDay(date: midnight, times: times)
+        }
+
+        var t = rawHours(y, m, d, lat, lng, tz, noonDate, method, asr)
+        for (prayer, minutes) in method.offsets { t[prayer] = (t[prayer] ?? .nan) + minutes / 60 }
+
+        var times: [Prayer: Date] = [:]
+        for (prayer, hours) in t where hours.isFinite {
+            // تقريب لأقرب دقيقة (أو للدقيقة التالية حسب الطريقة)
+            let minutes = hours * 60
+            let seconds = (method.roundsUp ? minutes.rounded(.up) : minutes.rounded()) * 60
+            times[prayer] = midnight.addingTimeInterval(seconds)
+        }
+        return PrayerDay(date: midnight, times: times)
+    }
+
+    /// الأوقات الفلكية بالساعات المحلية (قبل دقائق الاحتياط والتقريب).
+    static func rawHours(_ y: Int, _ m: Int, _ d: Int, _ lat: Double, _ lng: Double, _ tz: Double, _ noonDate: Date,
+                         _ method: PrayerMethod, _ asr: AsrSchool) -> [Prayer: Double] {
         let jd = julian(y, m, d) - lng / (15 * 24)
 
         func mid(_ t: Double) -> Double { fixHour(12 - sun(jd + t).eqt) }
@@ -168,17 +198,7 @@ enum PrayerCalculator {
                 if let i = t[.isha], !i.isFinite || fixHour(i - maghrib) > ishaPortion { t[.isha] = maghrib + ishaPortion }
             }
         }
-        for (prayer, minutes) in method.offsets { t[prayer] = (t[prayer] ?? .nan) + minutes / 60 }
-
-        let midnight = calendar.startOfDay(for: noonDate)
-        var times: [Prayer: Date] = [:]
-        for (prayer, hours) in t where hours.isFinite {
-            // تقريب لأقرب دقيقة (أو للدقيقة التالية حسب الطريقة)
-            let minutes = hours * 60
-            let seconds = (method.roundsUp ? minutes.rounded(.up) : minutes.rounded()) * 60
-            times[prayer] = midnight.addingTimeInterval(seconds)
-        }
-        return PrayerDay(date: midnight, times: times)
+        return t
     }
 
     // MARK: Astronomy
