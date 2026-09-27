@@ -24,13 +24,18 @@ struct GlassBackground<S: InsettableShape>: ViewModifier {
     func body(content: Content) -> some View {
         #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
+            // الزجاج التفاعلي يلتقط اللمسة قبل الزر فيحتاج المستخدم إلى الضغط مرات عدة،
+            // لذا يبقى الزجاج غير تفاعلي، ويأتي إحساس الضغط من نمط الزر (PressableCardStyle).
             content
-                .glassEffect(.regular.tint(tint.opacity(tint == .white ? 0 : 0.2)).interactive(interactive), in: shape)
+                .glassEffect(.regular.tint(tint.opacity(tint == .white ? 0 : 0.2)), in: shape)
+                .contentShape(shape)
         } else {
             materialGlass(content)
+                .contentShape(shape)
         }
         #else
         materialGlass(content)
+            .contentShape(shape)
         #endif
     }
 
@@ -156,6 +161,7 @@ struct ProminentGlassButtonStyle: ButtonStyle {
 struct PressableCardStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
+            .contentShape(Rectangle())          // كامل مساحة البطاقة قابلة للضغط، لا الأيقونة والنص فقط
             .scaleEffect(configuration.isPressed ? 0.97 : 1)
             .animation(.spring(response: 0.25, dampingFraction: 0.65), value: configuration.isPressed)
     }
