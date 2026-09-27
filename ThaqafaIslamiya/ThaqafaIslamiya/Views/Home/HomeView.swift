@@ -37,6 +37,7 @@ struct HomeView: View {
                     } else if library.isSearching {
                         searchResults
                     } else {
+                        NextPrayerCard()
                         quranCard
                         lessonsSection
                         if let daily = bank.dailyQuestion {

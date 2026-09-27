@@ -679,6 +679,334 @@
   "hi": "“{0}” पाठ शुरू करें",
   "tr": "“{0}” dersini başlat"
  },
+ "prayer.adhanAlert": {
+  "ar": "تنبيه الأذان",
+  "bn": "আযানের সতর্কতা",
+  "en": "Adhan alert",
+  "fa": "اعلان اذان",
+  "hi": "अज़ान अलर्ट",
+  "tr": "Ezan uyarısı"
+ },
+ "prayer.asr": {
+  "ar": "العصر",
+  "bn": "আসর",
+  "en": "Asr",
+  "fa": "عصر",
+  "hi": "अस्र",
+  "tr": "İkindi"
+ },
+ "prayer.asr.hanafi": {
+  "ar": "الحنفي",
+  "bn": "হানাফি",
+  "en": "Hanafi",
+  "fa": "حنفی",
+  "hi": "हनफ़ी",
+  "tr": "Hanefi"
+ },
+ "prayer.asr.standard": {
+  "ar": "الجمهور",
+  "bn": "মানক",
+  "en": "Standard",
+  "fa": "شافعی، مالکی، حنبلی",
+  "hi": "मानक",
+  "tr": "Standart"
+ },
+ "prayer.asrTitle": {
+  "ar": "وقت العصر",
+  "bn": "আসরের সময়",
+  "en": "Asr time",
+  "fa": "وقت عصر",
+  "hi": "अस्र का समय",
+  "tr": "İkindi vakti"
+ },
+ "prayer.coordinates": {
+  "ar": "{0}°، {1}°",
+  "bn": "{0}°, {1}°",
+  "en": "{0}°, {1}°",
+  "fa": "{0}°، {1}°",
+  "hi": "{0}°, {1}°",
+  "tr": "{0}°, {1}°"
+ },
+ "prayer.dhuhr": {
+  "ar": "الظهر",
+  "bn": "যোহর",
+  "en": "Dhuhr",
+  "fa": "ظهر",
+  "hi": "ज़ुहर",
+  "tr": "Öğle"
+ },
+ "prayer.fajr": {
+  "ar": "الفجر",
+  "bn": "ফজর",
+  "en": "Fajr",
+  "fa": "صبح",
+  "hi": "फ़ज्र",
+  "tr": "İmsak / Sabah"
+ },
+ "prayer.footer": {
+  "ar": "تُحسب المواقيت على جهازك دون إنترنت. يُضبط تنبيه الأذان لاثني عشر يومًا قادمة، ويتجدد كلما فتحت التطبيق. إن كان التطبيق مفتوحًا وقت الأذان يُرفع الأذان كاملًا.",
+  "bn": "সময় তোমার ডিভাইসে ইন্টারনেট ছাড়াই হিসাব হয়। আযানের সতর্কতা আগামী বারো দিনের জন্য সেট হয় এবং অ্যাপ খুললেই নবায়ন হয়। অ্যাপ খোলা থাকলে পুরো আযান বাজে।",
+  "en": "Times are calculated on your device, offline. Adhan alerts are set for the next twelve days and renew whenever you open the app. If the app is open at prayer time, the full adhan plays.",
+  "fa": "اوقات روی دستگاه و بدون اینترنت محاسبه می‌شود. اعلان اذان برای دوازده روز آینده تنظیم و با هر بار باز کردن برنامه تمدید می‌شود. اگر برنامه باز باشد، اذان کامل پخش می‌شود.",
+  "hi": "समय आपके डिवाइस पर बिना इंटरनेट निकाले जाते हैं। अज़ान अलर्ट अगले बारह दिनों के लिए लगते हैं और ऐप खोलने पर नए हो जाते हैं। ऐप खुला हो तो पूरी अज़ान चलती है।",
+  "tr": "Vakitler cihazında internetsiz hesaplanır. Ezan uyarıları önümüzdeki on iki gün için kurulur ve uygulamayı her açtığında yenilenir. Uygulama açıksa ezanın tamamı okunur."
+ },
+ "prayer.inHoursMinutes": {
+  "ar": "بعد {0} س و{1} د",
+  "bn": "{0} ঘ {1} মি পরে",
+  "en": "in {0} h {1} min",
+  "fa": "{0} ساعت و {1} دقیقه دیگر",
+  "hi": "{0} घं {1} मि में",
+  "tr": "{0} sa {1} dk sonra"
+ },
+ "prayer.inMinutes": {
+  "ar": "بعد {0} دقيقة",
+  "bn": "{0} মিনিট পরে",
+  "en": "in {0} min",
+  "fa": "{0} دقیقه دیگر",
+  "hi": "{0} मिनट में",
+  "tr": "{0} dk sonra"
+ },
+ "prayer.isha": {
+  "ar": "العشاء",
+  "bn": "এশা",
+  "en": "Isha",
+  "fa": "عشا",
+  "hi": "इशा",
+  "tr": "Yatsı"
+ },
+ "prayer.locate": {
+  "ar": "تحديد موقعي",
+  "bn": "আমার অবস্থান ব্যবহার করো",
+  "en": "Use my location",
+  "fa": "موقعیت من",
+  "hi": "मेरी जगह इस्तेमाल करें",
+  "tr": "Konumumu kullan"
+ },
+ "prayer.maghrib": {
+  "ar": "المغرب",
+  "bn": "মাগরিব",
+  "en": "Maghrib",
+  "fa": "مغرب",
+  "hi": "मग़रिब",
+  "tr": "Akşam"
+ },
+ "prayer.method.dubai": {
+  "ar": "دبي (الإمارات)",
+  "bn": "দুবাই (সংযুক্ত আরব আমিরাত)",
+  "en": "Dubai (UAE)",
+  "fa": "دبی (امارات)",
+  "hi": "दुबई (यूएई)",
+  "tr": "Dubai (BAE)"
+ },
+ "prayer.method.egypt": {
+  "ar": "الهيئة المصرية العامة للمساحة",
+  "bn": "মিশরীয় জেনারেল অথরিটি",
+  "en": "Egyptian General Authority",
+  "fa": "سازمان مساحی مصر",
+  "hi": "मिस्री जनरल अथॉरिटी",
+  "tr": "Mısır Genel Otoritesi"
+ },
+ "prayer.method.gulf": {
+  "ar": "منطقة الخليج",
+  "bn": "উপসাগরীয় অঞ্চল",
+  "en": "Gulf region",
+  "fa": "منطقهٔ خلیج",
+  "hi": "खाड़ी क्षेत्र",
+  "tr": "Körfez bölgesi"
+ },
+ "prayer.method.karachi": {
+  "ar": "جامعة العلوم الإسلامية بكراتشي",
+  "bn": "ইসলামিক সায়েন্সেস বিশ্ববিদ্যালয়, করাচি",
+  "en": "University of Islamic Sciences, Karachi",
+  "fa": "دانشگاه علوم اسلامی کراچی",
+  "hi": "इस्लामी विज्ञान विश्वविद्यालय, कराची",
+  "tr": "Karaçi İslami İlimler Üniversitesi"
+ },
+ "prayer.method.kuwait": {
+  "ar": "الكويت",
+  "bn": "কুয়েত",
+  "en": "Kuwait",
+  "fa": "کویت",
+  "hi": "कुवैत",
+  "tr": "Kuveyt"
+ },
+ "prayer.method.muslimWorldLeague": {
+  "ar": "رابطة العالم الإسلامي",
+  "bn": "মুসলিম ওয়ার্ল্ড লীগ",
+  "en": "Muslim World League",
+  "fa": "رابطهٔ جهان اسلام",
+  "hi": "मुस्लिम वर्ल्ड लीग",
+  "tr": "Dünya İslam Birliği"
+ },
+ "prayer.method.northAmerica": {
+  "ar": "الجمعية الإسلامية لأمريكا الشمالية",
+  "bn": "ইসলামিক সোসাইটি অব নর্থ আমেরিকা",
+  "en": "Islamic Society of North America",
+  "fa": "انجمن اسلامی آمریکای شمالی",
+  "hi": "इस्लामिक सोसाइटी ऑफ़ नॉर्थ अमेरिका",
+  "tr": "Kuzey Amerika İslam Birliği"
+ },
+ "prayer.method.qatar": {
+  "ar": "قطر",
+  "bn": "কাতার",
+  "en": "Qatar",
+  "fa": "قطر",
+  "hi": "क़तर",
+  "tr": "Katar"
+ },
+ "prayer.method.tehran": {
+  "ar": "معهد الجيوفيزياء بطهران",
+  "bn": "ভূপদার্থবিদ্যা ইনস্টিটিউট, তেহরান",
+  "en": "Institute of Geophysics, Tehran",
+  "fa": "مؤسسهٔ ژئوفیزیک تهران",
+  "hi": "भूभौतिकी संस्थान, तेहरान",
+  "tr": "Tahran Jeofizik Enstitüsü"
+ },
+ "prayer.method.turkey": {
+  "ar": "تركيا",
+  "bn": "তুরস্ক",
+  "en": "Turkey",
+  "fa": "ترکیه",
+  "hi": "तुर्की",
+  "tr": "Türkiye"
+ },
+ "prayer.method.ummAlQura": {
+  "ar": "أم القرى (مكة المكرمة)",
+  "bn": "উম্মুল কুরা (মক্কা)",
+  "en": "Umm al-Qura (Makkah)",
+  "fa": "ام القری (مکه)",
+  "hi": "उम्म अल-क़ुरा (मक्का)",
+  "tr": "Ümmü'l-Kura (Mekke)"
+ },
+ "prayer.methodTitle": {
+  "ar": "طريقة الحساب",
+  "bn": "হিসাবের পদ্ধতি",
+  "en": "Calculation method",
+  "fa": "روش محاسبه",
+  "hi": "गणना का तरीका",
+  "tr": "Hesaplama yöntemi"
+ },
+ "prayer.next": {
+  "ar": "الصلاة القادمة",
+  "bn": "পরবর্তী নামাজ",
+  "en": "Next prayer",
+  "fa": "نماز بعدی",
+  "hi": "अगली नमाज़",
+  "tr": "Sıradaki vakit"
+ },
+ "prayer.noLocation": {
+  "ar": "نحتاج موقعك مرة واحدة لحساب مواقيت الصلاة بدقة. يُحفظ على جهازك فقط، وبعدها تعمل المواقيت دون إنترنت.",
+  "bn": "সঠিক সময়ের জন্য একবার তোমার অবস্থান দরকার। এটি শুধু তোমার ডিভাইসে থাকে, তারপর ইন্টারনেট ছাড়াই চলে।",
+  "en": "We need your location once to calculate accurate prayer times. It stays on your device, and the times then work offline.",
+  "fa": "برای محاسبهٔ دقیق اوقات نماز یک بار به موقعیت تو نیاز داریم. فقط روی دستگاه می‌ماند و پس از آن بدون اینترنت کار می‌کند.",
+  "hi": "सही समय के लिए आपकी जगह एक बार चाहिए। यह सिर्फ़ आपके डिवाइस पर रहती है, फिर समय बिना इंटरनेट चलते हैं।",
+  "tr": "Doğru vakitler için konumuna bir kez ihtiyacımız var. Yalnızca cihazında kalır; sonra vakitler internetsiz çalışır."
+ },
+ "prayer.noLocationShort": {
+  "ar": "حدّد موقعك",
+  "bn": "অবস্থান ঠিক করো",
+  "en": "Set your location",
+  "fa": "موقعیت را تعیین کن",
+  "hi": "अपनी जगह चुनें",
+  "tr": "Konumunu belirle"
+ },
+ "prayer.notification.body": {
+  "ar": "حيّ على الصلاة، حيّ على الفلاح",
+  "bn": "নামাজের দিকে এসো, সাফল্যের দিকে এসো",
+  "en": "Come to prayer, come to success",
+  "fa": "حی علی الصلاة، حی علی الفلاح",
+  "hi": "नमाज़ की ओर आओ, कामयाबी की ओर आओ",
+  "tr": "Haydi namaza, haydi kurtuluşa"
+ },
+ "prayer.notification.bodyPlace": {
+  "ar": "حيّ على الصلاة — حسب توقيت {0}",
+  "bn": "নামাজের দিকে এসো — {0}-এর সময়",
+  "en": "Come to prayer — times for {0}",
+  "fa": "حی علی الصلاة — به وقت {0}",
+  "hi": "नमाज़ की ओर आओ — {0} का समय",
+  "tr": "Haydi namaza — {0} vakitleri"
+ },
+ "prayer.notification.title": {
+  "ar": "حان الآن موعد أذان {0}",
+  "bn": "{0}-এর সময় হয়েছে",
+  "en": "It is time for {0}",
+  "fa": "وقت اذان {0} است",
+  "hi": "{0} का समय हो गया",
+  "tr": "{0} vakti girdi"
+ },
+ "prayer.notificationsDenied": {
+  "ar": "الإشعارات متوقفة لهذا التطبيق، فلن يصلك الأذان. فعّلها من الإعدادات.",
+  "bn": "এই অ্যাপের নোটিফিকেশন বন্ধ, তাই আযান পৌঁছাবে না। সেটিংসে চালু করো।",
+  "en": "Notifications are off for this app, so the adhan will not reach you. Turn them on in Settings.",
+  "fa": "اعلان‌ها برای این برنامه خاموش است و اذان به تو نمی‌رسد. از تنظیمات روشنش کن.",
+  "hi": "इस ऐप की सूचनाएँ बंद हैं, अज़ान आप तक नहीं पहुँचेगी। सेटिंग्स में चालू करें।",
+  "tr": "Bu uygulamanın bildirimleri kapalı, ezan sana ulaşmayacak. Ayarlar'dan aç."
+ },
+ "prayer.playAdhan": {
+  "ar": "استمع إلى الأذان",
+  "bn": "আযান শোনো",
+  "en": "Listen to the adhan",
+  "fa": "شنیدن اذان",
+  "hi": "अज़ान सुनें",
+  "tr": "Ezanı dinle"
+ },
+ "prayer.remaining": {
+  "ar": "بعد {0}",
+  "bn": "{0} পরে",
+  "en": "in {0}",
+  "fa": "{0} دیگر",
+  "hi": "{0} में",
+  "tr": "{0} sonra"
+ },
+ "prayer.sound.adhan": {
+  "ar": "الأذان",
+  "bn": "আযান",
+  "en": "Adhan",
+  "fa": "اذان",
+  "hi": "अज़ान",
+  "tr": "Ezan"
+ },
+ "prayer.sound.system": {
+  "ar": "نغمة الجهاز",
+  "bn": "ডিভাইসের টোন",
+  "en": "Device tone",
+  "fa": "صدای دستگاه",
+  "hi": "डिवाइस की टोन",
+  "tr": "Cihaz sesi"
+ },
+ "prayer.soundTitle": {
+  "ar": "صوت التنبيه",
+  "bn": "সতর্কতার শব্দ",
+  "en": "Alert sound",
+  "fa": "صدای اعلان",
+  "hi": "अलर्ट की आवाज़",
+  "tr": "Uyarı sesi"
+ },
+ "prayer.stopAdhan": {
+  "ar": "إيقاف الأذان",
+  "bn": "আযান থামাও",
+  "en": "Stop the adhan",
+  "fa": "توقف اذان",
+  "hi": "अज़ान रोकें",
+  "tr": "Ezanı durdur"
+ },
+ "prayer.sunrise": {
+  "ar": "الشروق",
+  "bn": "সূর্যোদয়",
+  "en": "Sunrise",
+  "fa": "طلوع آفتاب",
+  "hi": "सूर्योदय",
+  "tr": "Güneş"
+ },
+ "prayer.title": {
+  "ar": "مواقيت الصلاة",
+  "bn": "নামাজের সময়",
+  "en": "Prayer times",
+  "fa": "اوقات نماز",
+  "hi": "नमाज़ के समय",
+  "tr": "Namaz vakitleri"
+ },
  "qibla.aligned": {
   "ar": "أنت تتجه إلى القبلة",
   "bn": "তুমি কিবলার দিকে মুখ করে আছ",

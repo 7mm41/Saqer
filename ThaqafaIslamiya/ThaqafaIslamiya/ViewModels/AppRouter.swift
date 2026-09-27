@@ -29,6 +29,8 @@ final class AppRouter {
     var presentedMushaf: MushafLaunch?
     /// بوصلة القبلة.
     var showQibla = false
+    /// مواقيت الصلاة.
+    var showPrayerTimes = false
     /// اللغة الجاري تطبيقها (تظهر شاشة انتظار أنيقة بدل انقلاب الواجهة أمام المستخدم).
     private(set) var switchingLanguage: AppLanguage?
 

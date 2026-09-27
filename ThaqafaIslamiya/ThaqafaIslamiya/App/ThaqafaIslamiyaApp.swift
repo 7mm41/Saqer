@@ -9,6 +9,7 @@
 
 import SwiftUI
 import AVFoundation
+import UserNotifications
 
 @main
 struct ThaqafaIslamiyaApp: App {
@@ -21,6 +22,8 @@ struct ThaqafaIslamiyaApp: App {
     @State private var quran = QuranStore()
     @State private var quranDownloads = QuranDownloads()
     @State private var quranAudio = QuranAudioPlayer()
+    @State private var prayers = PrayerStore()
+    @Environment(\.scenePhase) private var scenePhase
 
     init() {
         let settings = AppSettings()
@@ -29,11 +32,13 @@ struct ThaqafaIslamiyaApp: App {
         // الرسوم المتحركة صامتة ولا توقف صوت التطبيقات الأخرى، والقراءة والتلاوة تُسمعان حتى في الوضع الصامت.
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
         QuranFont.register()
+        // إشعارات الأذان تُعرض والتطبيق مفتوح (مع الأذان كاملًا)، والضغط عليها يفتح المواقيت
+        UNUserNotificationCenter.current().delegate = NotificationHandler.shared
     }
 
     private var env: AppEnvironment {
         AppEnvironment(settings: settings, library: library, bank: bank, progress: progress, router: router, voice: voice,
-                       quran: quran, quranDownloads: quranDownloads, quranAudio: quranAudio)
+                       quran: quran, quranDownloads: quranDownloads, quranAudio: quranAudio, prayers: prayers)
     }
 
     var body: some Scene {
@@ -44,6 +49,8 @@ struct ThaqafaIslamiyaApp: App {
                     voice.rate = settings.speechRate
                     quranAudio.store = quran
                     quranAudio.downloads = quranDownloads
+                    NotificationHandler.shared.prayers = prayers
+                    NotificationHandler.shared.router = router
                 }
                 .onChange(of: settings.language) { _, language in
                     voice.stop()
@@ -51,11 +58,18 @@ struct ThaqafaIslamiyaApp: App {
                     library.load(fileName: settings.contentFileName, language: language)
                     if bank.language != nil { bank.load(language) }
                     if settings.reminderEnabled { ReminderScheduler.schedule(minutes: settings.reminderMinutes) }
+                    if prayers.hasLocation { prayers.scheduleNotifications() }     // نص الإشعار بلغة التطبيق
                 }
                 .onChange(of: settings.showTashkeel) {
                     library.load(fileName: settings.contentFileName, language: settings.language)
                 }
                 .onChange(of: settings.speechRate) { _, rate in voice.rate = rate }
+                .onChange(of: scenePhase) { _, phase in
+                    // تجديد مواقيت اليوم وإشعارات الأذان للأيام القادمة كلما عاد المستخدم إلى التطبيق
+                    guard phase == .active else { return }
+                    prayers.refresh()
+                    if prayers.hasLocation { prayers.scheduleNotifications() }
+                }
         }
     }
 }
@@ -71,6 +85,7 @@ struct AppEnvironment {
     let quran: QuranStore
     let quranDownloads: QuranDownloads
     let quranAudio: QuranAudioPlayer
+    let prayers: PrayerStore
 }
 
 extension AppEnvironment {
@@ -83,7 +98,7 @@ extension AppEnvironment {
         return AppEnvironment(settings: settings,
                               library: LibraryViewModel(fileName: settings.contentFileName, language: settings.language),
                               bank: QuestionBankViewModel(), progress: ProgressStore(), router: AppRouter(), voice: VoicePlayer(),
-                              quran: quran, quranDownloads: downloads, quranAudio: audio)
+                              quran: quran, quranDownloads: downloads, quranAudio: audio, prayers: PrayerStore())
     }
 }
 
@@ -100,6 +115,7 @@ extension View {
             .environment(env.quran)
             .environment(env.quranDownloads)
             .environment(env.quranAudio)
+            .environment(env.prayers)
             .environment(\.layoutDirection, env.settings.layoutDirection)
             .environment(\.locale, env.settings.language.locale)
             .preferredColorScheme(env.settings.appearance.colorScheme)
@@ -119,12 +135,13 @@ struct RootView: View {
     @Environment(QuranStore.self) private var quran
     @Environment(QuranDownloads.self) private var quranDownloads
     @Environment(QuranAudioPlayer.self) private var quranAudio
+    @Environment(PrayerStore.self) private var prayers
 
     @State private var showSplash = true
 
     private var env: AppEnvironment {
         AppEnvironment(settings: settings, library: library, bank: bank, progress: progress, router: router, voice: voice,
-                       quran: quran, quranDownloads: quranDownloads, quranAudio: quranAudio)
+                       quran: quran, quranDownloads: quranDownloads, quranAudio: quranAudio, prayers: prayers)
     }
 
     var body: some View {
@@ -185,6 +202,10 @@ struct RootView: View {
         }
         .fullScreenCover(item: $router.presentedMushaf) { launch in
             MushafReaderView(launch: launch)
+                .withAppEnvironment(env)
+        }
+        .fullScreenCover(isPresented: $router.showPrayerTimes) {
+            PrayerTimesView()
                 .withAppEnvironment(env)
         }
         .fullScreenCover(isPresented: $router.showQibla) {

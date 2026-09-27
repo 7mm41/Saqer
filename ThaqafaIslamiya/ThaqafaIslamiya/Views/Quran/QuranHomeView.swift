@@ -43,6 +43,7 @@ struct QuranHomeView: View {
                             fridayCard
                         }
                         specialSection
+                        NextPrayerCard()
                         qiblaCard
                         reciterRow
                         indexPicker
