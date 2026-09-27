@@ -143,7 +143,7 @@ struct MushafReaderView: View {
                             sheet(p, layout: layout)
                                 .padding(.top, top)
                                 .padding(.bottom, bottom)
-                                .padding(.horizontal, 10)
+                                .padding(.horizontal, 8)
                                 .containerRelativeFrame([.horizontal, .vertical])
                                 .id(p)
                         }
@@ -169,8 +169,7 @@ struct MushafReaderView: View {
     }
 
     private func sheet(_ p: Int, layout: MushafLayout) -> some View {
-        let palette = MushafPalette(night: quran.nightPages)
-        return MushafPageTextView(
+        MushafPageTextView(
             page: p,
             layout: layout.pages[p - 1],
             target: layout.target,
@@ -188,19 +187,6 @@ struct MushafReaderView: View {
                 }
             }
         )
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(palette.paper.opacity(quran.nightPages ? 0.92 : 0.95))
-                .shadow(color: .black.opacity(quran.nightPages ? 0.5 : 0.12), radius: 18, y: 8)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .strokeBorder(LinearGradient(colors: [palette.band.opacity(0.55), Color(red: 0.8, green: 0.64, blue: 0.3).opacity(0.5)],
-                                             startPoint: .top, endPoint: .bottom), lineWidth: 1.2)
-                .allowsHitTesting(false)
-        }
     }
 
     /// ترويسة الصفحة كما في المصحف المطبوع: اسم السورة والجزء.
@@ -209,11 +195,11 @@ struct MushafReaderView: View {
         return (name, "الجزء " + quran.juz(forPage: p).arabicIndic)
     }
 
-    /// تسجيل خطوط الصفحات المجاورة في الخلفية لتقليب سلس.
+    /// تجهيز خطوط الصفحة وجاراتها في الخلفية لتقليب سلس.
     private func prefetchFonts(around p: Int) {
         let neighbours = [p - 1, p + 1, p - 2, p + 2].filter { (1...QuranStore.pageCount).contains($0) }
         Task.detached(priority: .utility) {
-            for n in neighbours { QuranFonts.ensurePage(n) }
+            for n in [p] + neighbours { QuranFonts.preload(page: n) }
         }
     }
 

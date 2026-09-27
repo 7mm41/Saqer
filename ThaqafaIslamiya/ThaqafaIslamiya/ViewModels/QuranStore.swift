@@ -103,14 +103,14 @@ final class QuranStore {
         }
     }
 
-    /// يحمّل تخطيط صفحات المصحف في الخلفية (مرة واحدة)، ويسجّل خط أسماء السور.
+    /// يحمّل تخطيط صفحات المصحف في الخلفية (مرة واحدة)، ويجهّز خط أسماء السور.
     func loadLayoutIfNeeded() {
         guard layout == nil, !isLoadingLayout else { return }
         isLoadingLayout = true
         Task.detached(priority: .userInitiated) { [weak self] in
             let layout = try? Bundle.main.decode(MushafLayout.self, from: "mushaf_layout")
-            QuranFonts.ensureSurahNames()
-            QuranFonts.ensurePage(1)
+            QuranFonts.preloadSurahNames()
+            QuranFonts.preload(page: 1)
             let basmala = layout?.basmalaCodes ?? []
             await MainActor.run {
                 guard let self else { return }

@@ -119,7 +119,7 @@ struct QiblaView: View {
 
     var body: some View {
         ZStack {
-            LiquidBackground(colors: aligned ? [.green, .mint] : [.orange, .teal])
+            LiquidBackground(colors: aligned ? [.green, .mint] : [.teal, .indigo])
                 .animation(.easeInOut(duration: 0.6), value: aligned)
 
             VStack(spacing: 22) {
@@ -187,7 +187,8 @@ struct QiblaView: View {
         } else if let bearing = compass.bearing {
             VStack(spacing: 26) {
                 dial(bearing: bearing)
-                    .frame(maxWidth: 360, maxHeight: 360)
+                    .frame(maxWidth: 340, maxHeight: 340)
+                    .padding(.horizontal, 8)
                     .aspectRatio(1, contentMode: .fit)
                 status(bearing: bearing)
             }
@@ -200,80 +201,150 @@ struct QiblaView: View {
 
     // MARK: Dial
 
+    /// قرص زجاجي عائم: وردة إسلامية ثمانية في المركز، تدريج ودرجات تدور مع الجهاز، والكعبة على حافة القرص
+    /// في اتجاهها الحقيقي، وقوس ذهبي يبيّن مقدار الدوران المتبقي، ومؤشر ثابت أعلى القرص يخضرّ عند المحاذاة.
     private func dial(bearing: Double) -> some View {
         GeometryReader { proxy in
             let side = min(proxy.size.width, proxy.size.height)
             let radius = side / 2
+            let rotation = compass.hasCompass ? dialRotation : 0
+            let accent: Color = aligned ? .green : gold[0]
             ZStack {
-                // القرص الدوّار: الشمال والتدريج والكعبة في اتجاهها الحقيقي
+                // القرص الزجاجي
+                Color.clear
+                    .glassCircle(tint: aligned ? .green : .teal, interactive: false)
+                    .shadow(color: accent.opacity(aligned ? 0.55 : 0.25), radius: aligned ? 30 : 22, y: 10)
+                Circle()
+                    .strokeBorder(AngularGradient(colors: [gold[0], .teal, gold[1], .teal, gold[0]], center: .center), lineWidth: 2)
+
+                // الطبقة الدوّارة
                 ZStack {
-                    Circle()
-                        .fill(.ultraThinMaterial)
-                        .overlay(Circle().strokeBorder(LinearGradient.diagonal(gold), lineWidth: 3))
-                        .shadow(color: .black.opacity(0.15), radius: 20, y: 10)
-                    ForEach(0..<72, id: \.self) { i in
+                    IslamicRosette()
+                        .stroke(gold[0].opacity(0.35), lineWidth: 1)
+                        .frame(width: side * 0.46, height: side * 0.46)
+                    ForEach(0..<120, id: \.self) { i in
+                        let major = i % 10 == 0
                         Capsule()
-                            .fill(i % 18 == 0 ? Color.primary : Color.secondary.opacity(i % 2 == 0 ? 0.7 : 0.35))
-                            .frame(width: i % 18 == 0 ? 3 : 1.5, height: i % 18 == 0 ? 16 : (i % 2 == 0 ? 10 : 6))
-                            .offset(y: -radius + 14)
-                            .rotationEffect(.degrees(Double(i) * 5))
+                            .fill(major ? Color.primary.opacity(0.9) : Color.primary.opacity(i % 5 == 0 ? 0.5 : 0.22))
+                            .frame(width: major ? 2.5 : 1.2, height: major ? 14 : (i % 5 == 0 ? 9 : 5))
+                            .offset(y: -radius + 12)
+                            .rotationEffect(.degrees(Double(i) * 3))
                     }
-                    Text(L10n.t("qibla.north"))
-                        .font(.headline.weight(.heavy))
-                        .foregroundStyle(.red)
-                        .rotationEffect(.degrees(-dialRotation))
-                        .offset(y: -radius + 40)
-                    // خط القبلة والكعبة
+                    ForEach(0..<12, id: \.self) { i in
+                        let degrees = i * 30
+                        Group {
+                            if degrees % 90 == 0 {
+                                Text(cardinal(degrees))
+                                    .font(.system(size: side * 0.06, weight: .heavy, design: .rounded))
+                                    .foregroundStyle(degrees == 0 ? Color.red : Color.primary)
+                            } else {
+                                Text(degrees.digits)
+                                    .font(.system(size: side * 0.036, weight: .semibold, design: .rounded))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .rotationEffect(.degrees(-Double(degrees) - rotation))
+                        .offset(y: -radius + side * 0.1)
+                        .rotationEffect(.degrees(Double(degrees)))
+                    }
+                    // اتجاه القبلة
                     Capsule()
-                        .fill(LinearGradient(colors: [gold[0].opacity(0), gold[0]], startPoint: .bottom, endPoint: .top))
-                        .frame(width: 4, height: radius - 56)
-                        .offset(y: -(radius - 56) / 2)
+                        .fill(LinearGradient(colors: [gold[0].opacity(0), gold[0].opacity(0.9)], startPoint: .bottom, endPoint: .top))
+                        .frame(width: 3, height: side * 0.2)
+                        .offset(y: -side * 0.2)
                         .rotationEffect(.degrees(bearing))
-                    KaabaGlyph(size: side * 0.13)
-                        .rotationEffect(.degrees(-bearing - dialRotation))
-                        .offset(y: -radius + side * 0.16)
+                    KaabaGlyph(size: side * 0.12)
+                        .shadow(color: gold[0].opacity(0.6), radius: aligned ? 14 : 6)
+                        .rotationEffect(.degrees(-bearing - rotation))
+                        .offset(y: -radius + side * 0.21)
                         .rotationEffect(.degrees(bearing))
                 }
-                .rotationEffect(.degrees(compass.hasCompass ? dialRotation : 0))
+                .rotationEffect(.degrees(rotation))
 
-                // مؤشر الجهاز الثابت (أعلى الشاشة)
-                Image(systemName: "location.north.fill")
-                    .font(.system(size: side * 0.14))
-                    .foregroundStyle(aligned ? AnyShapeStyle(LinearGradient.diagonal([.green, .mint])) : AnyShapeStyle(Color.primary.opacity(0.8)))
-                    .shadow(color: aligned ? .green.opacity(0.6) : .clear, radius: 14)
-                    .scaleEffect(aligned ? 1.12 : 1)
+                // قوس الدوران المتبقي (من أعلى القرص إلى القبلة)
+                if let offset, compass.hasCompass, !aligned {
+                    Circle()
+                        .trim(from: 0, to: min(abs(offset), 180) / 360)
+                        .stroke(LinearGradient(colors: [gold[0], .orange], startPoint: .top, endPoint: .bottom),
+                                style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                        .scaleEffect(x: offset < 0 ? -1 : 1)
+                        .padding(side * 0.035)
+                        .opacity(0.9)
+                }
 
-                Circle()
-                    .fill(aligned ? Color.green : Color.primary.opacity(0.6))
-                    .frame(width: 10, height: 10)
+                // المؤشر الثابت أعلى القرص
+                PointerTriangle()
+                    .fill(aligned ? AnyShapeStyle(LinearGradient(colors: [.green, .mint], startPoint: .top, endPoint: .bottom))
+                                  : AnyShapeStyle(LinearGradient(colors: [gold[0], gold[1]], startPoint: .top, endPoint: .bottom)))
+                    .frame(width: side * 0.07, height: side * 0.06)
+                    .shadow(color: accent.opacity(0.6), radius: 6)
+                    .offset(y: -radius - side * 0.02)
+
+                centerReadout(side: side)
             }
             .frame(width: side, height: side)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .scaleEffect(aligned ? 1.02 : 1)
         }
         .environment(\.layoutDirection, .leftToRight)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(L10n.t("qibla.bearing", Int(bearing.rounded()).digits))
     }
 
-    private func status(bearing: Double) -> some View {
-        VStack(spacing: 10) {
-            if !compass.hasCompass {
-                Text(L10n.t("qibla.noCompass"))
-            } else if aligned {
-                Label(L10n.t("qibla.aligned"), systemImage: "checkmark.seal.fill")
-                    .font(.headline)
-                    .foregroundStyle(.green)
-            } else {
-                Text(L10n.t("qibla.turn")).font(.headline)
-            }
-            HStack(spacing: 10) {
-                Label(L10n.t("qibla.bearing", Int(bearing.rounded()).digits), systemImage: "safari.fill")
-                if let km = compass.distanceKm {
-                    Label(L10n.t("qibla.distance", Int(km.rounded()).digits), systemImage: "point.topleft.down.to.point.bottomright.curvepath.fill")
+    /// مركز القرص: الزاوية المتبقية واتجاه الدوران، أو علامة المحاذاة.
+    private func centerReadout(side: CGFloat) -> some View {
+        ZStack {
+            Color.clear
+                .glassCircle(tint: aligned ? .green : .white, interactive: false)
+            VStack(spacing: 2) {
+                if aligned {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: side * 0.1))
+                        .foregroundStyle(LinearGradient(colors: [.green, .mint], startPoint: .top, endPoint: .bottom))
+                        .symbolEffect(.bounce, value: aligned)
+                } else if let offset, compass.hasCompass {
+                    Text("\(Int(abs(offset).rounded()).digits)°")
+                        .font(.system(size: side * 0.1, weight: .heavy, design: .rounded))
+                        .contentTransition(.numericText())
+                        .monospacedDigit()
+                    Label(L10n.t(offset > 0 ? "qibla.turnRight" : "qibla.turnLeft"),
+                          systemImage: offset > 0 ? "arrow.turn.up.right" : "arrow.turn.up.left")
+                        .font(.system(size: side * 0.036, weight: .bold))
+                        .foregroundStyle(gold[0])
+                } else {
+                    KaabaGlyph(size: side * 0.1)
                 }
             }
-            .font(.caption.weight(.semibold))
-            .foregroundStyle(.secondary)
+        }
+        .frame(width: side * 0.34, height: side * 0.34)
+    }
+
+    private func cardinal(_ degrees: Int) -> String {
+        switch degrees {
+        case 0: L10n.t("qibla.north")
+        case 90: L10n.t("qibla.east")
+        case 180: L10n.t("qibla.south")
+        default: L10n.t("qibla.west")
+        }
+    }
+
+    private func status(bearing: Double) -> some View {
+        VStack(spacing: 12) {
+            if !compass.hasCompass {
+                Text(L10n.t("qibla.noCompass")).font(.subheadline.weight(.semibold))
+            } else {
+                Text(L10n.t(aligned ? "qibla.aligned" : "qibla.turn"))
+                    .font(.headline)
+                    .foregroundStyle(aligned ? Color.green : Color.primary)
+                    .contentTransition(.opacity)
+            }
+            HStack(spacing: 10) {
+                statPill(symbol: "safari.fill", text: L10n.t("qibla.bearing", Int(bearing.rounded()).digits))
+                if let km = compass.distanceKm {
+                    statPill(symbol: "location.fill", text: L10n.t("qibla.distance", Int(km.rounded()).digits))
+                }
+            }
             if compass.hasCompass, compass.headingAccuracy < 0 || compass.headingAccuracy > 25 {
                 Label(L10n.t("qibla.calibrate"), systemImage: "infinity")
                     .font(.caption2.weight(.semibold))
@@ -283,7 +354,16 @@ struct QiblaView: View {
         .multilineTextAlignment(.center)
         .padding(16)
         .frame(maxWidth: 420)
-        .glassCard(cornerRadius: 24, tint: aligned ? .green : .orange, elevated: false)
+        .glassCard(cornerRadius: 28, tint: aligned ? .green : .teal, elevated: false)
+    }
+
+    private func statPill(symbol: String, text: String) -> some View {
+        Label(text, systemImage: symbol)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .glassCapsule(interactive: false)
     }
 
     private func messageCard<Accessory: View>(symbol: String, text: String, @ViewBuilder accessory: () -> Accessory) -> some View {
@@ -320,5 +400,32 @@ struct KaabaGlyph: View {
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.12, style: .continuous))
         .shadow(color: .black.opacity(0.35), radius: 6, y: 3)
+    }
+}
+
+/// مؤشر مثلث يشير إلى أسفل (أعلى القرص).
+struct PointerTriangle: Shape {
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        p.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        p.closeSubpath()
+        return p
+    }
+}
+
+/// وردة إسلامية: نجمتان ثمانيتان متداخلتان ودائرتان.
+struct IslamicRosette: Shape {
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let c = CGPoint(x: rect.midX, y: rect.midY)
+        p.addPath(Octagram().path(in: rect))
+        let inner = rect.insetBy(dx: rect.width * 0.18, dy: rect.height * 0.18)
+        let turn = CGAffineTransform(translationX: c.x, y: c.y).rotated(by: .pi / 8).translatedBy(x: -c.x, y: -c.y)
+        p.addPath(Octagram().path(in: inner).applying(turn))
+        p.addEllipse(in: rect.insetBy(dx: rect.width * 0.36, dy: rect.height * 0.36))
+        p.addEllipse(in: rect.insetBy(dx: -rect.width * 0.04, dy: -rect.height * 0.04))
+        return p
     }
 }

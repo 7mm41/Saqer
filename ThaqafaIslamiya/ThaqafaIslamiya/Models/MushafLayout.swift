@@ -9,6 +9,7 @@
 
 import Foundation
 import CoreText
+import SwiftUI
 
 struct MushafWord: Decodable, Hashable {
     /// رمز الكلمة في خط الصفحة.
@@ -83,32 +84,36 @@ struct MushafLayout: Decodable {
     }
 }
 
-/// تسجيل خطوط المصحف عند الحاجة (خط لكل صفحة) — سريع ومرة واحدة لكل خط.
+/// خطوط المصحف (خط لكل صفحة + خط أسماء السور): تُنشأ مباشرة من ملف الخط في الحزمة (CTFont من البيانات)
+/// ولا تعتمد على التسجيل العام ولا البحث بالاسم — كان ذلك يفشل فيظهر النص بخط النظام وأسماء السور «؟».
 enum QuranFonts {
-    static let surahNames = "sura_names"
-    private static var registered = Set<String>()
+    private static var descriptors: [String: CTFontDescriptor] = [:]
     private static let lock = NSLock()
 
-    static func pageFontName(_ page: Int) -> String { String(format: "QCF_P%03d", page) }
+    static func pageFileName(_ page: Int) -> String { String(format: "QCF_P%03d", page) }
+    static let surahNamesFile = "QuranSurahNames"
 
-    /// يضمن تسجيل خط الصفحة ويعيد اسمه.
-    @discardableResult
-    static func ensurePage(_ page: Int) -> String {
-        let name = pageFontName(page)
-        register(file: name, name: name)
-        return name
-    }
-
-    static func ensureSurahNames() {
-        register(file: "QuranSurahNames", name: surahNames)
-    }
-
-    private static func register(file: String, name: String) {
+    /// واصف خط من ملف في الحزمة (يُقرأ مرة واحدة ويُحفظ).
+    private static func descriptor(_ file: String) -> CTFontDescriptor? {
         lock.lock(); defer { lock.unlock() }
-        guard !registered.contains(name),
-              let url = Bundle.main.url(forResource: file, withExtension: "ttf") else { return }
-        CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
-        registered.insert(name)
+        if let cached = descriptors[file] { return cached }
+        guard let url = Bundle.main.url(forResource: file, withExtension: "ttf"),
+              let data = try? Data(contentsOf: url),
+              let descriptor = CTFontManagerCreateFontDescriptorFromData(data as CFData) else { return nil }
+        descriptors[file] = descriptor
+        return descriptor
+    }
+
+    /// يجهّز خط الصفحة مسبقًا (من الخلفية) لتقليب سلس.
+    static func preload(page: Int) { _ = descriptor(pageFileName(page)) }
+    static func preloadSurahNames() { _ = descriptor(surahNamesFile) }
+
+    static func pageFont(_ page: Int, size: CGFloat) -> Font { font(pageFileName(page), size: size) }
+    static func surahNamesFont(size: CGFloat) -> Font { font(surahNamesFile, size: size) }
+
+    private static func font(_ file: String, size: CGFloat) -> Font {
+        guard let descriptor = descriptor(file) else { return .system(size: size) }
+        return Font(CTFontCreateWithFontDescriptor(descriptor, size, nil))
     }
 
     /// رمز اسم السورة في خط أسماء السور: U+E000 + رقم السورة مكتوبًا بأرقام ست عشرية (١١٤ → U+E114).

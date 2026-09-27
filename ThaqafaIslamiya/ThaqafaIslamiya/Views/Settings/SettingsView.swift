@@ -34,11 +34,11 @@ struct SettingsView: View {
                     appHeader
 
                     section(L10n.t("settings.language"), symbol: "globe") {
-                        GlassGroup(spacing: 12) {
-                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 12)], spacing: 12) {
-                                ForEach(AppLanguage.allCases) { language in
-                                    languageTile(language)
-                                }
+                        // شبكة عادية بلا حاوية دمج الزجاج: الخلايا الكسولة داخل GlassEffectContainer
+                        // كانت تندمج في كتلة فارغة وتُخفي الهندية والبنغالية
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 12)], spacing: 12) {
+                            ForEach(AppLanguage.allCases) { language in
+                                languageTile(language)
                             }
                         }
                     }

@@ -3,8 +3,9 @@
 //  ثقافة إسلامية
 //
 //  صفحة المصحف المدني مرسومة نصًّا بخطوط مجمع الملك فهد (QCF): كل كلمة بخط صفحتها، فتطابق الطبعة
-//  الورقية سطرًا بسطر، وتبقى حادّة بأي حجم. الصفحة ورقة كريمية متناسقة مع خلفية التطبيق:
-//  علامات الآيات وأشرطة السور بالأخضر، وتظليل الآية التي تُتلى، والضغط المطوّل على آية يفتح تفسيرها.
+//  الورقية سطرًا بسطر، وتبقى حادّة بأي حجم.
+//  التصميم: ورقة عائمة داخل إطار زجاجي، بزخرفة إسلامية (نجمة ثمانية في الأركان، إطار مزدوج ذهبي وأخضر،
+//  شريط السورة على شكل خرطوش، رقم الصفحة داخل نجمة) — نهارًا ورقة كريمية، وليلًا ورقة زمرّدية داكنة بحبر فاتح.
 //
 
 import SwiftUI
@@ -29,32 +30,34 @@ struct MushafPageTextView: View {
     private var palette: MushafPalette { MushafPalette(night: night) }
 
     var body: some View {
-        GeometryReader { proxy in
-            let size = proxy.size
-            let headerHeight: CGFloat = 26
-            let footerHeight: CGFloat = 30
-            let textHeight = max(size.height - headerHeight - footerHeight, 100)
-            let fontSize = min(size.width / CGFloat(target),
-                               textHeight / (CGFloat(Self.lineCount) * Self.linePitch))
-            let rowHeight = page <= 2 ? fontSize * Self.linePitch * 1.12 : textHeight / CGFloat(Self.lineCount)
+        IslamicPageFrame(palette: palette) {
+            GeometryReader { proxy in
+                let size = proxy.size
+                let headerHeight: CGFloat = 30
+                let footerHeight: CGFloat = 36
+                let textHeight = max(size.height - headerHeight - footerHeight, 100)
+                let fontSize = min(size.width / CGFloat(target),
+                                   textHeight / (CGFloat(Self.lineCount) * Self.linePitch))
+                let rowHeight = page <= 2 ? fontSize * Self.linePitch * 1.12 : textHeight / CGFloat(Self.lineCount)
 
-            VStack(spacing: 0) {
-                pageHeader
-                    .frame(height: headerHeight)
-                Spacer(minLength: 0)
                 VStack(spacing: 0) {
-                    ForEach(Array(layout.lines.enumerated()), id: \.offset) { _, line in
-                        row(line, fontSize: fontSize, rowHeight: rowHeight, width: size.width)
-                            .frame(width: size.width, height: rowHeight)
+                    pageHeader
+                        .frame(height: headerHeight, alignment: .top)
+                    Spacer(minLength: 0)
+                    VStack(spacing: 0) {
+                        ForEach(Array(layout.lines.enumerated()), id: \.offset) { _, line in
+                            row(line, fontSize: fontSize, rowHeight: rowHeight, width: size.width)
+                                .frame(width: size.width, height: rowHeight)
+                        }
                     }
+                    .padding(.vertical, page <= 2 ? rowHeight * 0.6 : 0)
+                    .background {
+                        if page <= 2 { openingFrame }
+                    }
+                    Spacer(minLength: 0)
+                    pageNumber
+                        .frame(height: footerHeight, alignment: .bottom)
                 }
-                .padding(.vertical, page <= 2 ? rowHeight * 0.6 : 0)
-                .overlay {
-                    if page <= 2 { centeredFrame }
-                }
-                Spacer(minLength: 0)
-                pageNumber
-                    .frame(height: footerHeight)
             }
         }
         .environment(\.layoutDirection, .rightToLeft)
@@ -68,28 +71,29 @@ struct MushafPageTextView: View {
     private func row(_ line: MushafLine, fontSize: CGFloat, rowHeight: CGFloat, width: CGFloat) -> some View {
         switch line {
         case .words(let words, let scale):
-            wordLine(words, font: QuranFonts.ensurePage(page), fontSize: fontSize, scale: scale)
+            wordLine(words, font: QuranFonts.pageFont(page, size: fontSize), fontSize: fontSize, scale: scale)
         case .surahTitle(let surah):
-            SurahTitleBand(surah: surah, palette: palette, height: rowHeight * 0.86)
+            SurahTitleBand(surah: surah, palette: palette, height: rowHeight * 0.84)
                 .frame(width: min(width, fontSize * CGFloat(target)))
         case .basmala:
-            wordLine(basmala.map { MushafWord(code: $0) }, font: QuranFonts.ensurePage(1),
+            wordLine(basmala.map { MushafWord(code: $0) }, font: QuranFonts.pageFont(1, size: fontSize * 1.25),
                      fontSize: fontSize * 1.25, scale: 1)
         }
     }
 
-    private func wordLine(_ words: [MushafWord], font: String, fontSize: CGFloat, scale: Double) -> some View {
+    private func wordLine(_ words: [MushafWord], font: Font, fontSize: CGFloat, scale: Double) -> some View {
         HStack(spacing: 0) {
             ForEach(Array(words.enumerated()), id: \.offset) { _, word in
                 let active = word.ayah >= 0 && word.ayah == highlighted
                 Text(word.code)
-                    .font(.custom(font, fixedSize: fontSize))
+                    .font(font)
                     .foregroundStyle(word.isEnd ? palette.marker : palette.ink)
                     .fixedSize()
                     .background {
                         if active {
-                            palette.highlight
-                                .padding(.vertical, -fontSize * 0.05)
+                            RoundedRectangle(cornerRadius: fontSize * 0.18, style: .continuous)
+                                .fill(palette.highlight)
+                                .padding(.vertical, -fontSize * 0.04)
                         }
                     }
                     .contentShape(Rectangle())
@@ -113,82 +117,58 @@ struct MushafPageTextView: View {
     // MARK: Decorations
 
     private var pageHeader: some View {
-        HStack {
-            Text(header.surah)
-            Spacer()
-            Text(header.juz)
+        HStack(spacing: 8) {
+            headerChip(header.surah)
+            Spacer(minLength: 0)
+            headerChip(header.juz)
         }
-        .font(.caption.weight(.bold))
-        .foregroundStyle(palette.marker.opacity(0.9))
-        .padding(.horizontal, 6)
-        .lineLimit(1)
     }
 
+    private func headerChip(_ text: String) -> some View {
+        HStack(spacing: 5) {
+            Octagram()
+                .fill(palette.gold)
+                .frame(width: 8, height: 8)
+            Text(text)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(palette.marker)
+                .lineLimit(1)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 4)
+        .background(Capsule().fill(palette.marker.opacity(night ? 0.16 : 0.08)))
+        .overlay(Capsule().strokeBorder(palette.gold.opacity(0.45), lineWidth: 0.8))
+    }
+
+    /// رقم الصفحة داخل نجمة ثمانية (ربع الحزب).
     private var pageNumber: some View {
-        Text(page.arabicIndic)
-            .font(.footnote.weight(.heavy).monospacedDigit())
-            .foregroundStyle(palette.marker)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 3)
-            .background(Capsule().fill(palette.marker.opacity(0.1)))
-            .overlay(Capsule().strokeBorder(palette.marker.opacity(0.35), lineWidth: 1))
+        ZStack {
+            Octagram()
+                .fill(LinearGradient(colors: [palette.marker.opacity(night ? 0.3 : 0.14), palette.marker.opacity(night ? 0.12 : 0.05)],
+                                     startPoint: .top, endPoint: .bottom))
+            Octagram()
+                .stroke(palette.gold.opacity(0.8), lineWidth: 1)
+            Text(page.arabicIndic)
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .foregroundStyle(palette.marker)
+                .minimumScaleFactor(0.6)
+                .padding(6)
+        }
+        .frame(width: 36, height: 36)
     }
 
     /// إطار زخرفي لصفحتي الفاتحة وأول البقرة.
-    private var centeredFrame: some View {
-        RoundedRectangle(cornerRadius: 28, style: .continuous)
-            .strokeBorder(palette.marker.opacity(0.35), style: StrokeStyle(lineWidth: 1.5, dash: [2, 5]))
-            .allowsHitTesting(false)
-    }
-}
-
-// MARK: - Surah title band
-
-/// شريط اسم السورة: إطار أخضر مزخرف، والاسم بخط أسماء السور في منتصفه تمامًا (أفقيًا وعموديًا).
-struct SurahTitleBand: View {
-    let surah: Int
-    let palette: MushafPalette
-    let height: CGFloat
-
-    var body: some View {
-        let nameSize = height * 0.8
+    private var openingFrame: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: height * 0.3, style: .continuous)
-                .fill(LinearGradient(colors: [palette.band.opacity(0.22), palette.band.opacity(0.1), palette.band.opacity(0.22)],
-                                     startPoint: .leading, endPoint: .trailing))
-            RoundedRectangle(cornerRadius: height * 0.3, style: .continuous)
-                .strokeBorder(palette.band.opacity(0.75), lineWidth: 1.4)
-            RoundedRectangle(cornerRadius: height * 0.22, style: .continuous)
-                .strokeBorder(palette.band.opacity(0.35), lineWidth: 0.8)
-                .padding(height * 0.1)
-
-            HStack {
-                ornament
-                Spacer()
-                ornament
-            }
-            .padding(.horizontal, height * 0.28)
-
-            // «سورة» على اليمين ثم اسمها — محارف خاصة (اتجاهها يسار ← يمين) فتُرتَّب صراحة
-            HStack(spacing: nameSize * 0.25) {
-                Text(QuranFonts.surahWordGlyph)
-                Text(QuranFonts.surahNameGlyph(surah))
-            }
-            .font(.custom(QuranFonts.surahNames, fixedSize: nameSize))
-            .foregroundStyle(palette.bandInk)
-            .fixedSize()
-            .environment(\.layoutDirection, .rightToLeft)
-            // صندوق الخط (صاعد ٨٤٠ / نازل ١٨٣) متوازن حول الرسم، فالتوسيط يضع الاسم في منتصف الشريط
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            RoundedRectangle(cornerRadius: 34, style: .continuous)
+                .fill(palette.marker.opacity(night ? 0.08 : 0.04))
+            RoundedRectangle(cornerRadius: 34, style: .continuous)
+                .strokeBorder(palette.gold.opacity(0.7), lineWidth: 1.4)
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .strokeBorder(palette.marker.opacity(0.35), style: StrokeStyle(lineWidth: 1, dash: [1.5, 4]))
+                .padding(6)
         }
-        .frame(height: height)
-        .onAppear { QuranFonts.ensureSurahNames() }
-    }
-
-    private var ornament: some View {
-        Image(systemName: "seal.fill")
-            .font(.system(size: height * 0.34))
-            .foregroundStyle(palette.band.opacity(0.7))
+        .allowsHitTesting(false)
     }
 }
 
@@ -197,15 +177,158 @@ enum MushafAyahAction {
     case tafsir, listen
 }
 
+// MARK: - Page frame
+
+/// ورقة المصحف العائمة: إطار زجاجي خارجي، ثم ورقة بإطار مزدوج (ذهبي وأخضر) ونجمة ثمانية في كل ركن.
+struct IslamicPageFrame<Content: View>: View {
+    let palette: MushafPalette
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        content
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(palette.paperGradient)
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .strokeBorder(palette.gold.opacity(0.75), lineWidth: 1.2)
+                    RoundedRectangle(cornerRadius: 19, style: .continuous)
+                        .strokeBorder(palette.marker.opacity(0.35), lineWidth: 0.8)
+                        .padding(5)
+                    cornerStars
+                }
+            }
+            .padding(7)
+            .glassCard(cornerRadius: 31, tint: palette.night ? .teal : .green, elevated: true)
+    }
+
+    private var cornerStars: some View {
+        GeometryReader { proxy in
+            let s: CGFloat = 13
+            let inset: CGFloat = 11
+            ForEach(0..<4, id: \.self) { i in
+                Octagram()
+                    .fill(palette.gold)
+                    .overlay(Octagram().stroke(palette.marker.opacity(0.5), lineWidth: 0.6))
+                    .frame(width: s, height: s)
+                    .position(x: i % 2 == 0 ? inset : proxy.size.width - inset,
+                              y: i < 2 ? inset : proxy.size.height - inset)
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+// MARK: - Surah title band
+
+/// شريط اسم السورة على شكل خرطوش مدبّب الطرفين بتدرّج زمرّدي وحافة ذهبية، ونجمة ثمانية في كل طرف،
+/// والاسم بخط أسماء السور في منتصفه تمامًا (أفقيًا وعموديًا).
+struct SurahTitleBand: View {
+    let surah: Int
+    let palette: MushafPalette
+    let height: CGFloat
+
+    var body: some View {
+        let nameSize = height * 0.8
+        ZStack {
+            Cartouche()
+                .fill(LinearGradient(colors: palette.bandColors, startPoint: .top, endPoint: .bottom))
+            Cartouche()
+                .stroke(palette.gold, lineWidth: 1.4)
+            Cartouche()
+                .stroke(palette.gold.opacity(0.45), lineWidth: 0.7)
+                .padding(height * 0.12)
+
+            HStack {
+                star
+                Spacer()
+                star
+            }
+            .padding(.horizontal, height * 0.62)
+
+            // «سورة» على اليمين ثم اسمها — محارف خاصة (اتجاهها يسار ← يمين) فتُرتَّب صراحة
+            HStack(spacing: nameSize * 0.25) {
+                Text(QuranFonts.surahWordGlyph)
+                Text(QuranFonts.surahNameGlyph(surah))
+            }
+            .font(QuranFonts.surahNamesFont(size: nameSize))
+            .foregroundStyle(palette.bandInk)
+            .fixedSize()
+            .environment(\.layoutDirection, .rightToLeft)
+            // صندوق الخط (صاعد ٨٤٠ / نازل ١٨٣) متوازن حول الرسم، فالتوسيط يضع الاسم في منتصف الشريط
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        }
+        .frame(height: height)
+    }
+
+    private var star: some View {
+        Octagram()
+            .fill(palette.gold)
+            .frame(width: height * 0.36, height: height * 0.36)
+    }
+}
+
+// MARK: - Islamic shapes
+
+/// نجمة ثمانية (مربعان متداخلان بزاوية ٤٥°) — رمز ربع الحزب في المصاحف.
+struct Octagram: Shape {
+    func path(in rect: CGRect) -> Path {
+        let c = CGPoint(x: rect.midX, y: rect.midY)
+        let r = min(rect.width, rect.height) / 2
+        let inner = r * cos(.pi / 4) / cos(.pi / 8)
+        var path = Path()
+        for i in 0..<16 {
+            let angle = Double(i) * .pi / 8 - .pi / 2
+            let radius = i.isMultiple(of: 2) ? r : inner
+            let point = CGPoint(x: c.x + radius * cos(angle), y: c.y + radius * sin(angle))
+            if i == 0 { path.move(to: point) } else { path.addLine(to: point) }
+        }
+        path.closeSubpath()
+        return path
+    }
+}
+
+/// خرطوش مدبّب الطرفين (إطار اسم السورة في المصاحف).
+struct Cartouche: Shape {
+    func path(in rect: CGRect) -> Path {
+        let h = rect.height, w = rect.width
+        let inset = min(h * 0.55, w / 4)
+        let mid = rect.minY + h / 2
+        var p = Path()
+        p.move(to: CGPoint(x: rect.minX, y: mid))
+        p.addQuadCurve(to: CGPoint(x: rect.minX + inset, y: rect.minY), control: CGPoint(x: rect.minX + inset * 0.15, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX - inset, y: rect.minY))
+        p.addQuadCurve(to: CGPoint(x: rect.maxX, y: mid), control: CGPoint(x: rect.maxX - inset * 0.15, y: rect.minY))
+        p.addQuadCurve(to: CGPoint(x: rect.maxX - inset, y: rect.maxY), control: CGPoint(x: rect.maxX - inset * 0.15, y: rect.maxY))
+        p.addLine(to: CGPoint(x: rect.minX + inset, y: rect.maxY))
+        p.addQuadCurve(to: CGPoint(x: rect.minX, y: mid), control: CGPoint(x: rect.minX + inset * 0.15, y: rect.maxY))
+        p.closeSubpath()
+        return p
+    }
+}
+
 // MARK: - Palette
 
 struct MushafPalette {
     let night: Bool
 
-    var paper: Color { night ? Color(red: 0.07, green: 0.09, blue: 0.08) : Color(red: 0.995, green: 0.975, blue: 0.93) }
-    var ink: Color { night ? Color(red: 0.93, green: 0.91, blue: 0.85) : Color(red: 0.1, green: 0.09, blue: 0.07) }
-    var marker: Color { night ? Color(red: 0.45, green: 0.85, blue: 0.6) : Color(red: 0.05, green: 0.47, blue: 0.3) }
-    var band: Color { night ? Color(red: 0.35, green: 0.75, blue: 0.5) : Color(red: 0.1, green: 0.5, blue: 0.32) }
-    var bandInk: Color { night ? Color(red: 0.85, green: 0.95, blue: 0.88) : Color(red: 0.04, green: 0.3, blue: 0.18) }
-    var highlight: Color { night ? Color(red: 0.3, green: 0.75, blue: 0.5).opacity(0.28) : Color(red: 0.95, green: 0.78, blue: 0.3).opacity(0.35) }
+    var paperGradient: LinearGradient {
+        night
+            ? LinearGradient(colors: [Color(red: 0.06, green: 0.12, blue: 0.1), Color(red: 0.03, green: 0.07, blue: 0.06)],
+                             startPoint: .top, endPoint: .bottom)
+            : LinearGradient(colors: [Color(red: 1.0, green: 0.985, blue: 0.945), Color(red: 0.98, green: 0.955, blue: 0.9)],
+                             startPoint: .top, endPoint: .bottom)
+    }
+    var ink: Color { night ? Color(red: 0.94, green: 0.92, blue: 0.86) : Color(red: 0.1, green: 0.09, blue: 0.07) }
+    var marker: Color { night ? Color(red: 0.5, green: 0.87, blue: 0.66) : Color(red: 0.04, green: 0.45, blue: 0.29) }
+    var gold: Color { night ? Color(red: 0.86, green: 0.72, blue: 0.42) : Color(red: 0.76, green: 0.58, blue: 0.24) }
+    var bandColors: [Color] {
+        night
+            ? [Color(red: 0.1, green: 0.32, blue: 0.23), Color(red: 0.05, green: 0.2, blue: 0.14)]
+            : [Color(red: 0.12, green: 0.5, blue: 0.34), Color(red: 0.05, green: 0.36, blue: 0.24)]
+    }
+    var bandInk: Color { Color(red: 1.0, green: 0.93, blue: 0.76) }
+    var highlight: Color { night ? Color(red: 0.3, green: 0.75, blue: 0.5).opacity(0.3) : Color(red: 0.95, green: 0.78, blue: 0.3).opacity(0.38) }
 }

@@ -226,6 +226,11 @@ S = {
     "qibla.calibrate": ["حرّك الجهاز على شكل ٨ لمعايرة البوصلة", "Move your device in a figure 8 to calibrate", "برای تنظیم قطب‌نما، دستگاه را به شکل ۸ حرکت بده", "Pusulayı ayarlamak için cihazı 8 çizerek hareket ettir", "कम्पास ठीक करने के लिए फ़ोन को 8 के आकार में घुमाएँ", "কম্পাস ঠিক করতে ফোনটি ৮-এর মতো ঘোরাও"],
     "qibla.noCompass": ["هذا الجهاز لا يحتوي على بوصلة — استخدم الزاوية من الشمال.", "This device has no compass — use the angle from north.", "این دستگاه قطب‌نما ندارد — از زاویه نسبت به شمال استفاده کن.", "Bu cihazda pusula yok — kuzeyden açıyı kullan.", "इस डिवाइस में कम्पास नहीं है — उत्तर से कोण का उपयोग करें।", "এই ডিভাইসে কম্পাস নেই — উত্তর থেকে কোণ ব্যবহার করো।"],
     "qibla.north": ["ش", "N", "ش", "K", "उ", "উ"],
+    "qibla.east": ["ق", "E", "خ", "D", "पू", "পূ"],
+    "qibla.south": ["ج", "S", "ج", "G", "द", "দ"],
+    "qibla.west": ["غ", "W", "غ", "B", "प", "প"],
+    "qibla.turnRight": ["أدِر يمينًا", "Turn right", "به راست بچرخ", "Sağa dön", "दाएँ घुमाएँ", "ডানে ঘোরাও"],
+    "qibla.turnLeft": ["أدِر يسارًا", "Turn left", "به چپ بچرخ", "Sola dön", "बाएँ घुमाएँ", "বাঁয়ে ঘোরাও"],
 }
 
 out = {}
