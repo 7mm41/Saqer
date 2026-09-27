@@ -139,6 +139,7 @@ S = {
     "prayer.method.manual": ["اخترتها بنفسك", "Chosen by you", "انتخاب خودت", "Senin seçimin", "आपकी पसंद", "তোমার পছন্দ"],
     "prayer.method.useAuto": ["تلقائي", "Automatic", "خودکار", "Otomatik", "अपने-आप", "স্বয়ংক্রিয়"],
     "prayer.placesCredit": ["أسماء الأماكن: GeoNames (CC BY 4.0)", "Place names: GeoNames (CC BY 4.0)", "نام مکان‌ها: GeoNames (CC BY 4.0)", "Yer adları: GeoNames (CC BY 4.0)", "जगहों के नाम: GeoNames (CC BY 4.0)", "স্থানের নাম: GeoNames (CC BY 4.0)"],
+    "prayer.method.oman": ["سلطنة عُمان (وزارة الأوقاف)", "Oman (Ministry of Awqaf)", "عمان (وزارت اوقاف)", "Umman (Vakıflar Bakanlığı)", "ओमान (औक़ाफ़ मंत्रालय)", "ওমান (আওকাফ মন্ত্রণালয়)"],
     "common.close": ["إغلاق", "Close", "بستن", "Kapat", "बंद करें", "বন্ধ করো"],
     "bank.title": ["بنك الأسئلة", "Question bank", "بانک پرسش‌ها", "Soru bankası", "सवालों का बैंक", "প্রশ্ন ভান্ডার"],
     "bank.subtitle": ["{0} سؤالًا من الكتاب تظهر عشوائيًا", "{0} questions from the book, in random order", "{0} پرسش از کتاب، به‌صورت تصادفی", "Kitaptan rastgele {0} soru", "किताब से {0} सवाल, बेतरतीब क्रम में", "বই থেকে {0}টি প্রশ্ন, এলোমেলো ক্রমে"],

@@ -29,14 +29,14 @@ enum Prayer: String, CaseIterable, Identifiable, Codable {
 
 /// طرق الحساب المعتمدة (زاوية الفجر، والعشاء زاوية أو دقائق بعد المغرب).
 enum PrayerMethod: String, CaseIterable, Identifiable, Codable {
-    case ummAlQura, muslimWorldLeague, egypt, karachi, northAmerica, kuwait, qatar, dubai, gulf, turkey, tehran
+    case oman, ummAlQura, muslimWorldLeague, egypt, karachi, northAmerica, kuwait, qatar, dubai, gulf, turkey, tehran
     var id: String { rawValue }
     var title: String { L10n.t("prayer.method.\(rawValue)") }
 
     var fajrAngle: Double {
         switch self {
         case .ummAlQura: 18.5
-        case .muslimWorldLeague, .karachi, .kuwait, .qatar, .turkey: 18
+        case .oman, .muslimWorldLeague, .karachi, .kuwait, .qatar, .turkey: 18
         case .egypt, .gulf: 19.5
         case .northAmerica: 15
         case .dubai: 18.2
@@ -51,7 +51,7 @@ enum PrayerMethod: String, CaseIterable, Identifiable, Codable {
         case .ummAlQura, .qatar, .gulf: .minutes(90)
         case .muslimWorldLeague, .turkey: .angle(17)
         case .egypt: .angle(17.5)
-        case .karachi: .angle(18)
+        case .oman, .karachi: .angle(18)
         case .northAmerica: .angle(15)
         case .kuwait: .angle(17.5)
         case .dubai: .angle(18.2)
@@ -62,12 +62,25 @@ enum PrayerMethod: String, CaseIterable, Identifiable, Codable {
     /// المغرب بزاوية تحت الأفق (طهران ٤٫٥°) بدل الغروب.
     var maghribAngle: Double? { self == .tehran ? 4.5 : nil }
 
-    /// تعديلات رسمية بالدقائق (دبي: +٣ للظهر والمغرب).
-    var offsets: [Prayer: Double] { self == .dubai ? [.dhuhr: 3, .maghrib: 3] : [:] }
+    /// تعديلات رسمية بالدقائق (احتياط).
+    var offsets: [Prayer: Double] {
+        switch self {
+        case .dubai: [.dhuhr: 3, .maghrib: 3]
+        // وزارة الأوقاف والشؤون الدينية بسلطنة عُمان: استُخرجت من تقويمها الرسمي (سبتمبر ٢٠٢٦، مسقط) —
+        // الفجر والعشاء ١٨°، واحتياط نحو ٥ دقائق للظهر والعصر والمغرب، مع التقريب للدقيقة التالية؛
+        // تطابق ١٤١ قيمة من ١٤٤ تمامًا والبقية بدقيقة واحدة.
+        case .oman: [.fajr: -0.1, .sunrise: -0.1, .dhuhr: 5, .asr: 5.1, .maghrib: 5.2, .isha: 0.5]
+        default: [:]
+        }
+    }
+
+    /// التقريب للدقيقة التالية بدل الأقرب (احتياطًا، كما في التقويم العُماني).
+    var roundsUp: Bool { self == .oman }
 
     /// طريقة مناسبة لبلد الجهاز (يمكن تغييرها من شاشة المواقيت).
     static func suggested(region: String?) -> PrayerMethod {
         switch region?.uppercased() {
+        case "OM": .oman
         case "SA", "YE": .ummAlQura
         case "EG", "SD", "LY", "SY", "LB", "JO", "IQ", "PS": .egypt
         case "PK", "IN", "BD", "AF": .karachi
@@ -159,8 +172,9 @@ enum PrayerCalculator {
         let midnight = calendar.startOfDay(for: noonDate)
         var times: [Prayer: Date] = [:]
         for (prayer, hours) in t where hours.isFinite {
-            // تقريب لأقرب دقيقة
-            let seconds = (hours * 3600 / 60).rounded() * 60
+            // تقريب لأقرب دقيقة (أو للدقيقة التالية حسب الطريقة)
+            let minutes = hours * 60
+            let seconds = (method.roundsUp ? minutes.rounded(.up) : minutes.rounded()) * 60
             times[prayer] = midnight.addingTimeInterval(seconds)
         }
         return PrayerDay(date: midnight, times: times)

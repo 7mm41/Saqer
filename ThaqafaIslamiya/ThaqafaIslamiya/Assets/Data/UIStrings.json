@@ -863,6 +863,14 @@
   "hi": "इस्लामिक सोसाइटी ऑफ़ नॉर्थ अमेरिका",
   "tr": "Kuzey Amerika İslam Birliği"
  },
+ "prayer.method.oman": {
+  "ar": "سلطنة عُمان (وزارة الأوقاف)",
+  "bn": "ওমান (আওকাফ মন্ত্রণালয়)",
+  "en": "Oman (Ministry of Awqaf)",
+  "fa": "عمان (وزارت اوقاف)",
+  "hi": "ओमान (औक़ाफ़ मंत्रालय)",
+  "tr": "Umman (Vakıflar Bakanlığı)"
+ },
  "prayer.method.qatar": {
   "ar": "قطر",
   "bn": "কাতার",
