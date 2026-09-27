@@ -41,6 +41,9 @@ struct PrayerTimesView: View {
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 12)
+                        Text(L10n.t("prayer.placesCredit"))
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
                     } else {
                         locationCard
                     }

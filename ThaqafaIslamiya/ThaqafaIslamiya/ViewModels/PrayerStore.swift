@@ -27,7 +27,10 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
 
     private(set) var latitude: Double?
     private(set) var longitude: Double?
-    private(set) var placeName: String?
+    /// أقرب مكان إلى موقع المستخدم (يُعرف دون إنترنت من قائمة الأماكن المدمجة).
+    private(set) var place: NearestPlace?
+    /// اسم المكان بلغة التطبيق: «عبري، الظاهرة».
+    var placeName: String? { place?.display(arabicScript: L10n.language.isRightToLeft) }
     var method: PrayerMethod {
         didSet {
             if !applyingAutomaticMethod { methodIsManual = true }       // اختيار المستخدم يُحترم ولا يُستبدل تلقائيًا
@@ -79,7 +82,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
             latitude = defaults.double(forKey: Keys.lat)
             longitude = defaults.double(forKey: Keys.lng)
         }
-        placeName = defaults.string(forKey: Keys.place)
+        place = defaults.data(forKey: Keys.place).flatMap { try? JSONDecoder().decode(NearestPlace.self, from: $0) }
         countryCode = defaults.string(forKey: Keys.country)
         methodIsManual = defaults.bool(forKey: Keys.manual)
         method = defaults.string(forKey: Keys.method).flatMap(PrayerMethod.init(rawValue:))
@@ -209,7 +212,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
            location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) < 1000 { return }
         if let latitude, let longitude,
            location.distance(from: CLLocation(latitude: latitude, longitude: longitude)) >= 1000 {
-            placeName = nil                                  // مدينة جديدة: لا يبقى اسم المدينة السابقة
+            place = nil                                      // مكان جديد: لا يبقى اسم المكان السابق
             defaults.removeObject(forKey: Keys.place)
         }
         latitude = location.coordinate.latitude
@@ -218,21 +221,18 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
         defaults.set(longitude, forKey: Keys.lng)
         refresh()
         if explicit { Task { await enableNotifications() } } else { scheduleNotifications() }
-        // اسم المدينة (يحتاج اتصالًا؛ دونه تُعرض الإحداثيات)
-        CLGeocoder().reverseGeocodeLocation(location, preferredLocale: L10n.language.locale) { [weak self] marks, _ in
-            guard let self, let mark = marks?.first else { return }
-            let name = [mark.locality ?? mark.subAdministrativeArea, mark.country].compactMap { $0 }.joined(separator: "، ")
-            let country = mark.isoCountryCode
-            DispatchQueue.main.async {
+        // اسم المكان والبلد دون إنترنت: أقرب مكان مأهول من القائمة المدمجة
+        let coordinate = location.coordinate
+        Task.detached(priority: .utility) { [weak self] in
+            let nearest = WorldPlaces.nearest(latitude: coordinate.latitude, longitude: coordinate.longitude)
+            await MainActor.run {
+                guard let self, let nearest else { return }
+                self.place = nearest
+                self.defaults.set(try? JSONEncoder().encode(nearest), forKey: Keys.place)
                 // طريقة الحساب تتبع البلد الذي فيه المستخدم فعلًا (ما لم يخترها بنفسه)
-                if let country {
-                    self.countryCode = country
-                    self.defaults.set(country, forKey: Keys.country)
-                    self.applyAutomaticMethod()
-                }
-                guard !name.isEmpty else { return }
-                self.placeName = name
-                self.defaults.set(name, forKey: Keys.place)
+                self.countryCode = nearest.country
+                self.defaults.set(nearest.country, forKey: Keys.country)
+                self.applyAutomaticMethod()
                 self.scheduleNotifications()
             }
         }
