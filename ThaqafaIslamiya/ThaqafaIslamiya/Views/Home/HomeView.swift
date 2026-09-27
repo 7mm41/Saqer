@@ -63,13 +63,29 @@ struct HomeView: View {
 
     // MARK: - Header
 
+    /// اسم التطبيق في سطر واحد إن اتسع، وإلا كلمة في كل سطر مع تصغير عند الحاجة — لا تنكسر الكلمة أبدًا
+    /// (كان «Islamic Culture» ينقسم «Cultur / e»).
+    private var appName: some View {
+        let name = L10n.t("app.name")
+        return ViewThatFits(in: .horizontal) {
+            Text(name).lineLimit(1).fixedSize()
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(Array(name.split(separator: " ").enumerated()), id: \.offset) { _, word in
+                    Text(String(word))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                }
+            }
+        }
+    }
+
     private var header: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(L10n.t("home.greeting"))
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(.secondary)
-                Text(L10n.t("app.name"))
+                appName
                     .font(.system(size: isWide ? 44 : 34, weight: .heavy, design: .rounded))
                     .foregroundStyle(LinearGradient.diagonal([.teal, .indigo]))
                 Text(L10n.t("brand.tagline"))
