@@ -10,8 +10,6 @@ struct SettingsView: View {
     @Environment(\.locale) private var locale
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.openURL) private var openURL
-    @Environment(SubscriptionStore.self) private var subscription
-    @Environment(AppRouter.self) private var router: AppRouter?
 
     init(session: SessionStore) {
         _viewModel = State(initialValue: SettingsViewModel(session: session))
@@ -21,14 +19,6 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xl) {
-                    if let user = viewModel.user {
-                        Button {
-                            router?.selectedTab = .subscription
-                        } label: {
-                            MemberCard(user: user, plan: subscription.plan)
-                        }
-                        .buttonStyle(.glassPress)
-                    }
                     languageSection
                     appIconSection
                     experienceSection
@@ -209,80 +199,6 @@ struct SettingsSection<Content: View>: View {
         .padding(Theme.Spacing.l)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassSurface(.card)
-    }
-}
-
-/// Apple-Card-style floating glass membership card.
-private struct MemberCard: View {
-    let user: User
-    let plan: MembershipPlan
-    @Environment(\.locale) private var locale
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.l) {
-            HStack {
-                Image("SarenaLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 34, height: 34)
-                Text("Sarena")
-                    .font(.system(.title3, design: .rounded, weight: .black))
-                Spacer()
-                GlassBadge(verbatim: plan.label(locale), tint: plan.tint, prominent: true)
-            }
-
-            HStack(spacing: Theme.Spacing.m) {
-                Text(verbatim: user.initials)
-                    .font(.sarena(.title3, weight: .heavy))
-                    .foregroundStyle(.white)
-                    .frame(width: 52, height: 52)
-                    .background(Circle().fill(.white.opacity(0.25)))
-                    .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(verbatim: user.fullName)
-                        .font(.sarena(.headline, weight: .bold))
-                    Text(verbatim: user.email)
-                        .font(.sarena(.caption))
-                        .opacity(0.8)
-                }
-            }
-
-            HStack(alignment: .bottom) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Member No.")
-                        .font(.sarena(.caption2, weight: .semibold))
-                        .opacity(0.75)
-                    Text(verbatim: user.memberNumber)
-                        .font(.system(.subheadline, design: .monospaced).weight(.bold))
-                }
-                Spacer()
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("Member since")
-                        .font(.sarena(.caption2, weight: .semibold))
-                        .opacity(0.75)
-                    Text(verbatim: user.memberSince.shortDate(locale))
-                        .font(.sarena(.subheadline, weight: .bold))
-                }
-            }
-        }
-        .foregroundStyle(.white)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Theme.Spacing.xl)
-        .background {
-            ZStack {
-                RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                    .fill(LinearGradient(colors: [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember, Theme.Palette.festivalPink],
-                                         startPoint: .topLeading, endPoint: .bottomTrailing))
-                    .opacity(0.85)
-                // Holographic sheen
-                RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                    .fill(LinearGradient(colors: [.clear, .white.opacity(0.35), .clear], startPoint: .topLeading, endPoint: .bottomTrailing))
-            }
-        }
-        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: Theme.Radius.hero))
-        .parallax(tilt: 8, shift: 4)
-        .padding(.top, Theme.Spacing.s)
-        .accessibilityElement(children: .combine)
     }
 }
 

@@ -1,21 +1,40 @@
 import SwiftUI
 
-/// "الاشتراك" — the member's package (Regular / Gold / Family) and switching between them.
-struct SubscriptionView: View {
-    @State private var viewModel: SubscriptionViewModel
+/// "حسابي" — one place for the member's profile, member savings, subscription
+/// info and the packages (Regular / Gold / Family).
+struct AccountView: View {
+    @State private var viewModel: AccountViewModel
     @Environment(\.locale) private var locale
+    @Environment(AppRouter.self) private var router: AppRouter?
 
-    init(service: any SubscriptionServicing, store: SubscriptionStore, session: SessionStore, isDemo: Bool) {
-        _viewModel = State(initialValue: SubscriptionViewModel(service: service, store: store, session: session, isDemo: isDemo))
+    init(service: any SubscriptionServicing, store: SubscriptionStore, session: SessionStore, wallet: WalletStore, isDemo: Bool) {
+        _viewModel = State(initialValue: AccountViewModel(
+            service: service, store: store, session: session, wallet: wallet, isDemo: isDemo
+        ))
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xl) {
+                    if let user = viewModel.user {
+                        MemberCard(user: user, plan: viewModel.current.plan)
+                    }
+
+                    SavingsCard(
+                        totalSavings: viewModel.totalSavings,
+                        readyCount: viewModel.readyCount,
+                        redeemedCount: viewModel.redeemedCount
+                    ) {
+                        router?.selectedTab = .wallet
+                    }
+
+                    SectionHeader(title: "Subscription", subtitle: "Your package and renewal")
+                        .padding(.top, Theme.Spacing.s)
                     currentPlanCard
 
                     SectionHeader(title: "Choose your package", subtitle: "Switch anytime. Your prices update instantly.")
+                        .padding(.top, Theme.Spacing.s)
 
                     ForEach(viewModel.plans) { plan in
                         PlanCard(
@@ -37,7 +56,7 @@ struct SubscriptionView: View {
                 .padding(.bottom, Theme.Spacing.xxl)
             }
             .sarenaScreenBackground()
-            .navigationTitle("Subscription")
+            .navigationTitle("My Account")
             .toolbarBackground(.hidden, for: .navigationBar)
             .confirmationDialog(
                 confirmationTitle,
@@ -87,7 +106,6 @@ struct SubscriptionView: View {
                     .frame(width: 72, height: 72)
                     .background(Circle().fill(.white.opacity(0.25)))
                     .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: 1))
-                    .parallax(tilt: 12, shift: 4)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Your package")
                         .font(.sarena(.caption, weight: .semibold))
@@ -119,7 +137,6 @@ struct SubscriptionView: View {
                 .fill(LinearGradient(colors: gradient(for: plan), startPoint: .topLeading, endPoint: .bottomTrailing))
         }
         .glassSurface(.tinted(plan.tint, opacity: 0.2, cornerRadius: Theme.Radius.hero))
-        .padding(.top, Theme.Spacing.s)
         .animation(.smooth, value: plan)
         .accessibilityElement(children: .combine)
     }
@@ -225,15 +242,16 @@ private struct PlanCard: View {
 
 #Preview {
     PreviewContainer {
-        SubscriptionViewPreview()
+        AccountViewPreview()
     }
 }
 
-private struct SubscriptionViewPreview: View {
+private struct AccountViewPreview: View {
     @Environment(SessionStore.self) private var session
     @Environment(SubscriptionStore.self) private var store
+    @Environment(WalletStore.self) private var wallet
 
     var body: some View {
-        SubscriptionView(service: AppServices.preview.subscriptions, store: store, session: session, isDemo: true)
+        AccountView(service: AppServices.preview.subscriptions, store: store, session: session, wallet: wallet, isDemo: true)
     }
 }

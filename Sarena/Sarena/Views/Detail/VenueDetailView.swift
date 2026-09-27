@@ -237,7 +237,7 @@ struct VenueDetailView: View {
             }
             Spacer(minLength: Theme.Spacing.s)
             Button {
-                router?.selectedTab = .subscription
+                router?.selectedTab = .account
             } label: {
                 Label("Change package", systemImage: "arrow.left.arrow.right")
                     .font(.sarena(.subheadline, weight: .bold))

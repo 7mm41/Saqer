@@ -6,6 +6,7 @@ struct HomeView: View {
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
     @Environment(SubscriptionStore.self) private var subscription
+    @Environment(AppRouter.self) private var router: AppRouter?
     @Environment(\.locale) private var locale
 
     @State private var viewModel: HomeViewModel
@@ -75,8 +76,14 @@ struct HomeView: View {
 
     private var dashboard: some View {
         VStack(spacing: Theme.Spacing.xxl) {
-            SavingsBanner(totalSavings: wallet.totalSavings)
-                .padding(.horizontal, Theme.gutter)
+            // Tapping the banner opens "My Account", where member savings live.
+            Button {
+                router?.selectedTab = .account
+            } label: {
+                SavingsBanner(totalSavings: wallet.totalSavings)
+            }
+            .buttonStyle(.glassPress)
+            .padding(.horizontal, Theme.gutter)
             featuredCarousel
             categoriesGrid
             topDeals

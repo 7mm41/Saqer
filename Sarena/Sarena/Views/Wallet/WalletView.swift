@@ -3,7 +3,6 @@ import SwiftUI
 /// Promo code wallet: "Active Codes" ready to scan and "Used Codes" history.
 struct WalletView: View {
     @State private var viewModel: WalletViewModel
-    @Environment(\.locale) private var locale
 
     init(wallet: WalletStore) {
         _viewModel = State(initialValue: WalletViewModel(wallet: wallet))
@@ -13,8 +12,6 @@ struct WalletView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xl) {
-                    savingsCard
-
                     GlassSegmentedControl(
                         options: WalletViewModel.Segment.allCases,
                         selection: $viewModel.segment,
@@ -25,6 +22,7 @@ struct WalletView: View {
                     codesList
                 }
                 .padding(.horizontal, Theme.gutter)
+                .padding(.top, Theme.Spacing.s)
                 .padding(.bottom, Theme.Spacing.xxl)
             }
             .sarenaScreenBackground()
@@ -34,53 +32,6 @@ struct WalletView: View {
                 PromoCodeSheet(code: code) { viewModel.markUsed(code) }
             }
         }
-    }
-
-    // MARK: Savings
-
-    private var savingsCard: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            HStack(alignment: .center) {
-                Label("Member savings", systemImage: "chart.line.uptrend.xyaxis")
-                    .font(.sarena(.subheadline, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.9))
-                    .lineLimit(1)
-                Spacer(minLength: Theme.Spacing.s)
-                SarenaLogoView(size: 40)
-            }
-            Text(verbatim: viewModel.totalSavings.omr(locale))
-                .font(.system(size: 42, weight: .heavy, design: .rounded))
-                .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.5)
-                .contentTransition(.numericText())
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Text("Total saved with Sarena")
-                .font(.sarena(.subheadline, weight: .medium))
-                .foregroundStyle(.white.opacity(0.85))
-            // Pills keep their natural size; on very narrow screens they wrap as a whole.
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: Theme.Spacing.m) { statPills }
-                VStack(alignment: .leading, spacing: Theme.Spacing.s) { statPills }
-            }
-        }
-        // Explicit full width: the card must never shrink to its content.
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Theme.Spacing.xl)
-        .background {
-            RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.ember, Theme.Palette.festivalPink.opacity(0.8)],
-                                     startPoint: .topLeading, endPoint: .bottomTrailing))
-                .opacity(0.85)
-        }
-        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: Theme.Radius.hero))
-        .padding(.top, Theme.Spacing.s)
-    }
-
-    @ViewBuilder
-    private var statPills: some View {
-        StatPill(value: viewModel.count(for: .active), title: "Ready to use", systemImage: "qrcode")
-        StatPill(value: viewModel.redeemedCount, title: "Redeemed", systemImage: "checkmark.seal.fill")
     }
 
     // MARK: Codes
@@ -126,31 +77,6 @@ struct WalletView: View {
         }
         .padding(.vertical, Theme.Spacing.xl)
         .glassSurface(.card)
-    }
-}
-
-private struct StatPill: View {
-    let value: Int
-    let title: LocalizedStringKey
-    let systemImage: String
-    @Environment(\.locale) private var locale
-
-    var body: some View {
-        HStack(spacing: Theme.Spacing.s) {
-            Image(systemName: systemImage)
-            Text(verbatim: value.localizedNumber(locale))
-                .fontWeight(.heavy)
-                .contentTransition(.numericText(value: Double(value)))
-            Text(title)
-        }
-        .font(.sarena(.caption, weight: .semibold))
-        .foregroundStyle(.white)
-        .lineLimit(1)
-        .fixedSize()
-        .padding(.horizontal, Theme.Spacing.m)
-        .padding(.vertical, Theme.Spacing.s)
-        .background(Capsule().fill(.white.opacity(0.2)))
-        .overlay(Capsule().strokeBorder(.white.opacity(0.35), lineWidth: 1))
     }
 }
 

@@ -1,9 +1,10 @@
 import Foundation
 import Observation
 
+/// "حسابي" — profile, member savings, subscription info and package switching.
 @Observable
 @MainActor
-final class SubscriptionViewModel {
+final class AccountViewModel {
     /// Package awaiting confirmation (drives the confirmation dialog).
     var pendingPlan: MembershipPlan?
     private(set) var processingPlan: MembershipPlan?
@@ -15,13 +16,26 @@ final class SubscriptionViewModel {
     private let service: any SubscriptionServicing
     private let store: SubscriptionStore
     private let session: SessionStore
+    private let wallet: WalletStore
 
-    init(service: any SubscriptionServicing, store: SubscriptionStore, session: SessionStore, isDemo: Bool = false) {
+    init(service: any SubscriptionServicing, store: SubscriptionStore, session: SessionStore, wallet: WalletStore, isDemo: Bool = false) {
         self.service = service
         self.store = store
         self.session = session
+        self.wallet = wallet
         self.isDemo = isDemo
     }
+
+    // MARK: Profile & member savings
+
+    var user: User? { session.user }
+
+    /// Lifetime savings — the number marketing loves to show.
+    var totalSavings: Decimal { wallet.totalSavings }
+    var readyCount: Int { wallet.activeCodes.count }
+    var redeemedCount: Int { wallet.codes.filter { $0.status == .used }.count }
+
+    // MARK: Subscription & packages
 
     var plans: [MembershipPlan] { MembershipPlan.allCases }
     var current: Subscription { store.current }

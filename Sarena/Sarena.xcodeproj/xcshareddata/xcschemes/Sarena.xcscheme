@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DBE1B1C20125C7D5DA2D130055E73BA8"
+               BlueprintIdentifier = "51DBFF1A7DD69D2C93C7C68B7079665D"
                BuildableName = "Sarena.app"
                BlueprintName = "Sarena"
                ReferencedContainer = "container:Sarena.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DBE1B1C20125C7D5DA2D130055E73BA8"
+            BlueprintIdentifier = "51DBFF1A7DD69D2C93C7C68B7079665D"
             BuildableName = "Sarena.app"
             BlueprintName = "Sarena"
             ReferencedContainer = "container:Sarena.xcodeproj">
@@ -78,7 +78,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DBE1B1C20125C7D5DA2D130055E73BA8"
+            BlueprintIdentifier = "51DBFF1A7DD69D2C93C7C68B7079665D"
             BuildableName = "Sarena.app"
             BlueprintName = "Sarena"
             ReferencedContainer = "container:Sarena.xcodeproj">
@@ -95,7 +95,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DBE1B1C20125C7D5DA2D130055E73BA8"
+            BlueprintIdentifier = "51DBFF1A7DD69D2C93C7C68B7079665D"
             BuildableName = "Sarena.app"
             BlueprintName = "Sarena"
             ReferencedContainer = "container:Sarena.xcodeproj">

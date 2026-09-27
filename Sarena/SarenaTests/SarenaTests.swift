@@ -166,7 +166,7 @@ final class WalletAndBookingTests: XCTestCase {
 }
 
 @MainActor
-final class SubscriptionTests: XCTestCase {
+final class AccountTests: XCTestCase {
     private func makeStore() -> SubscriptionStore {
         SubscriptionStore(defaults: UserDefaults(suiteName: "SarenaTests.\(UUID().uuidString)")!)
     }
@@ -190,7 +190,8 @@ final class SubscriptionTests: XCTestCase {
         session.didAuthenticate(User.preview)
         store.load(for: User.preview)
 
-        let viewModel = SubscriptionViewModel(service: MockSubscriptionService(latency: .zero), store: store, session: session)
+        let viewModel = AccountViewModel(service: MockSubscriptionService(latency: .zero), store: store, session: session,
+                                         wallet: WalletStore(seedsWelcomeCodes: false))
         viewModel.choose(.family)
         XCTAssertEqual(viewModel.pendingPlan, .family)
         viewModel.pendingPlan = nil // the dialog clears this as it dismisses
@@ -209,10 +210,36 @@ final class SubscriptionTests: XCTestCase {
         XCTAssertEqual(reloaded.plan, .family)
     }
 
+    func testAccountShowsMemberSavings() async throws {
+        let wallet = WalletStore(
+            directory: FileManager.default.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory),
+            defaults: UserDefaults(suiteName: "SarenaTests.\(UUID().uuidString)")!,
+            seedsWelcomeCodes: false
+        )
+        wallet.load(for: UUID())
+        let venue = Venue.samples[0]
+        let code = try await MockBookingService(latency: .zero).book(venue: venue, ticket: venue.tickets[0], quantity: 2, for: User.preview)
+        wallet.add(code)
+
+        let session = SessionStore(auth: MockAuthService(latency: .zero), keychain: KeychainStore(service: "SarenaTests.\(UUID().uuidString)"))
+        session.didAuthenticate(User.preview)
+        let account = AccountViewModel(service: MockSubscriptionService(latency: .zero), store: makeStore(), session: session, wallet: wallet)
+
+        XCTAssertEqual(account.user, User.preview)
+        XCTAssertEqual(account.totalSavings, code.savings)
+        XCTAssertEqual(account.readyCount, 1)
+        XCTAssertEqual(account.redeemedCount, 0)
+
+        wallet.markUsed(code.id)
+        XCTAssertEqual(account.readyCount, 0)
+        XCTAssertEqual(account.redeemedCount, 1)
+    }
+
     func testCurrentPackageCannotBeChosenAgain() {
         let store = makeStore()
         let session = SessionStore(auth: MockAuthService(latency: .zero), keychain: KeychainStore(service: "SarenaTests.\(UUID().uuidString)"))
-        let viewModel = SubscriptionViewModel(service: MockSubscriptionService(latency: .zero), store: store, session: session)
+        let viewModel = AccountViewModel(service: MockSubscriptionService(latency: .zero), store: store, session: session,
+                                         wallet: WalletStore(seedsWelcomeCodes: false))
         viewModel.choose(.regular)
         XCTAssertNil(viewModel.pendingPlan)
     }

@@ -3,7 +3,7 @@ import Observation
 enum AppTab: Hashable {
     case discover
     case wallet
-    case subscription
+    case account
     case settings
 }
 

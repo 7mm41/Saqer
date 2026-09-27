@@ -991,6 +991,16 @@
         }
       }
     },
+    "My Account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسابي"
+          }
+        }
+      }
+    },
     "New to Sarena?" : {
       "localizations" : {
         "ar" : {
@@ -1831,6 +1841,16 @@
         }
       }
     },
+    "View Wallet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض المحفظة"
+          }
+        }
+      }
+    },
     "Wallet" : {
       "localizations" : {
         "ar" : {
@@ -2033,6 +2053,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "باقتك"
+          }
+        }
+      }
+    },
+    "Your package and renewal" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "باقتك وموعد التجديد"
           }
         }
       }

@@ -43,10 +43,6 @@ final class WalletViewModel {
         }
     }
 
-    var totalSavings: Decimal { wallet.totalSavings }
-
-    var redeemedCount: Int { wallet.codes.filter { $0.status == .used }.count }
-
     func copy(_ code: PromoCode) {
         UIPasteboard.general.string = code.code
         copiedCodeID = code.id

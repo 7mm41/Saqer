@@ -5,7 +5,6 @@ struct MainTabView: View {
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
     @Environment(SubscriptionStore.self) private var subscription
-    @Environment(\.locale) private var locale
     @State private var router = AppRouter()
 
     var body: some View {
@@ -21,17 +20,13 @@ struct MainTabView: View {
                 .badge(wallet.activeCodes.count)
                 .tag(AppTab.wallet)
 
-            SubscriptionView(service: services.subscriptions, store: subscription, session: session, isDemo: services.isDemo)
-                .glassTabBar()
-                .tabItem {
-                    // The package name sits next to its emoji, e.g. "👑 الذهبية".
-                    Label {
-                        Text(verbatim: subscription.plan.label(locale))
-                    } icon: {
-                        Image(systemName: "rosette")
-                    }
-                }
-                .tag(AppTab.subscription)
+            // "حسابي": member savings + subscription info + packages in one place.
+            AccountView(
+                service: services.subscriptions, store: subscription, session: session, wallet: wallet, isDemo: services.isDemo
+            )
+            .glassTabBar()
+            .tabItem { Label("My Account", systemImage: "person.crop.circle.fill") }
+            .tag(AppTab.account)
 
             SettingsView(session: session)
                 .glassTabBar()
