@@ -1,0 +1,46 @@
+<!doctype html>
+<!--
+  Pre-blurred app backdrop (?mode=dark|light), rendered at 780 × 1690 (390 × 845 pt @2x).
+  Shipping this as an image means no blur or animation work at runtime — glass panes
+  on top of it stay cheap to draw.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 780px; height: 1690px; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; }
+</style>
+</head>
+<body>
+<script>
+  const dark = new URLSearchParams(location.search).get("mode") !== "light";
+  const k = 2; // pt → px
+  document.body.style.background = dark
+    ? "linear-gradient(155deg, #241034 0%, #170A24 50%, #07050C 100%)"
+    : "linear-gradient(155deg, #FFF8F1 0%, #FFEBDB 50%, #FFE1CC 100%)";
+  const s = dark ? 1 : 0.55;
+  const orbs = [
+    ["rgba(255,121,0,A)", 0.85, 360, 0.12, 0.10],
+    ["rgba(255,47,125,A)", 0.55, 380, 0.95, 0.55],
+    ["rgba(107,61,255,A)", 0.50, 320, 0.05, 0.92],
+    ["rgba(255,194,77,A)", 0.55, 220, 0.85, 0.08],
+  ];
+  for (const [color, alpha, size, x, y] of orbs) {
+    const d = size * k, o = document.createElement("div");
+    o.className = "orb";
+    Object.assign(o.style, {
+      width: d + "px", height: d + "px",
+      left: (780 * x - d / 2) + "px", top: (1690 * y - d / 2) + "px",
+      background: color.replace("A", (alpha * s).toFixed(3)),
+      filter: `blur(${Math.round(size * 0.32 * k)}px)`,
+    });
+    document.body.appendChild(o);
+  }
+  const sheen = document.createElement("div");
+  Object.assign(sheen.style, { position: "absolute", inset: 0,
+    background: `linear-gradient(180deg, rgba(255,255,255,${dark ? 0.05 : 0.25}), transparent 50%)` });
+  document.body.appendChild(sheen);
+</script>
+</body>
+</html>

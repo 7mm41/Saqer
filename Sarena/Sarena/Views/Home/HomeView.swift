@@ -97,9 +97,8 @@ struct HomeView: View {
                         .containerRelativeFrame(.horizontal) { width, _ in width * 0.86 }
                         .scrollTransition(axis: .horizontal) { content, phase in
                             content
-                                .scaleEffect(phase.isIdentity ? 1 : 0.92)
-                                .rotation3DEffect(.degrees(phase.value * -14), axis: (x: 0, y: 1, z: 0))
-                                .opacity(phase.isIdentity ? 1 : 0.75)
+                                .scaleEffect(phase.isIdentity ? 1 : 0.94)
+                                .opacity(phase.isIdentity ? 1 : 0.8)
                         }
                     }
                 }
@@ -123,13 +122,9 @@ struct HomeView: View {
             SectionHeader(title: "Explore", subtitle: "Seven destinations. One membership.")
 
             LazyVGrid(columns: columns, spacing: Theme.Spacing.l) {
-                ForEach(Array(gridCategories.enumerated()), id: \.element) { index, category in
+                ForEach(gridCategories) { category in
                     NavigationLink(value: viewModel.route(for: category)) {
-                        CategoryCard(
-                            category: category,
-                            maxDiscount: viewModel.maxDiscount(in: category),
-                            floatPeriod: 2.6 + Double(index % 3) * 0.35
-                        )
+                        CategoryCard(category: category, maxDiscount: viewModel.maxDiscount(in: category))
                     }
                     .buttonStyle(.glassPress)
                 }

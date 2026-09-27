@@ -258,6 +258,7 @@ private struct MemberCard: View {
             }
         }
         .foregroundStyle(.white)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Theme.Spacing.xl)
         .background {
             ZStack {
@@ -271,7 +272,7 @@ private struct MemberCard: View {
             }
         }
         .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: Theme.Radius.hero))
-        .floatingGlass(amplitude: 6, tilt: 12, period: 3.4)
+        .parallax(tilt: 8, shift: 4)
         .padding(.top, Theme.Spacing.s)
         .accessibilityElement(children: .combine)
     }

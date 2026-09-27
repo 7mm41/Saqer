@@ -1,10 +1,12 @@
 import SwiftUI
 
-/// The floating 3D glass Sarena price tag (rendered artwork in `SarenaLogo`),
-/// with an orange halo so it glows over the dark scene.
+/// The 3D glass Sarena price tag (rendered artwork in `SarenaLogo`), with an
+/// orange halo so it glows over the scene.
 struct SarenaLogoView: View {
     var size: CGFloat = 120
-    var floats = true
+    /// Idle float + device parallax. Keep it for hero moments (splash, sign-in);
+    /// small logos inside content stay still.
+    var floats = false
 
     var body: some View {
         let logo = Image("SarenaLogo")
@@ -12,15 +14,18 @@ struct SarenaLogoView: View {
             .scaledToFit()
             .frame(width: size, height: size)
             .background {
+                // Radial gradient instead of a blur filter: same glow, no per-frame blur.
                 Circle()
-                    .fill(Theme.Palette.orange.opacity(0.45))
-                    .blur(radius: size * 0.35)
-                    .scaleEffect(0.9)
+                    .fill(RadialGradient(colors: [Theme.Palette.orange.opacity(0.45), Theme.Palette.orange.opacity(0)],
+                                         center: .center, startRadius: 0, endRadius: size * 0.75))
+                    .frame(width: size * 1.5, height: size * 1.5)
             }
             .accessibilityLabel(Text("Sarena"))
 
         if floats {
-            logo.floatingGlass(amplitude: size * 0.06, tilt: 10, period: 2.6)
+            logo
+                .idleFloat(amplitude: size * 0.05, period: 2.8)
+                .parallax(tilt: 10, shift: size * 0.04)
         } else {
             logo
         }
@@ -30,10 +35,11 @@ struct SarenaLogoView: View {
 /// Logo + wordmark. The wordmark is localised ("Sarena" / "سرينا").
 struct SarenaWordmark: View {
     var logoSize: CGFloat = 96
+    var floats = true
 
     var body: some View {
         VStack(spacing: Theme.Spacing.m) {
-            SarenaLogoView(size: logoSize)
+            SarenaLogoView(size: logoSize, floats: floats)
             Text("Sarena")
                 .font(.system(size: logoSize * 0.38, weight: .black, design: .rounded))
                 .tracking(2)

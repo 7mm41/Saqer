@@ -56,6 +56,16 @@ for p in 1 2 3; do
 done
 python3 "$HERE/postprocess.py" --onboarding "$RAW" "$OUT" "$CATALOG"
 
+# Static, pre-blurred screen backdrop (light + dark)
+for mode in light dark; do
+  "$CHROME" --headless --disable-gpu --no-sandbox --hide-scrollbars \
+    --force-device-scale-factor=1 --allow-file-access-from-files --virtual-time-budget=1500 \
+    --window-size=780,1690 --screenshot="$RAW/backdrop-$mode.png" \
+    "file://$HERE/backdrop.html?mode=$mode" >/dev/null 2>&1
+  echo "rendered backdrop-$mode.png"
+done
+python3 "$HERE/postprocess.py" --backdrop "$RAW" "$OUT" "$CATALOG"
+
 # Brand presentation sheet (uses the processed renders)
 "$CHROME" --headless --disable-gpu --no-sandbox --hide-scrollbars \
   --force-device-scale-factor=1 --allow-file-access-from-files --virtual-time-budget=3000 \

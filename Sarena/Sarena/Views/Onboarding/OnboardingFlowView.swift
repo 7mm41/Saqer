@@ -31,6 +31,7 @@ struct LanguagePickerView: View {
     let onContinue: () -> Void
 
     @AppStorage(AppLanguage.storageKey) private var language: AppLanguage = .system
+    @State private var chipsVisible = false
 
     private struct Option: Identifiable {
         let id: String
@@ -54,7 +55,7 @@ struct LanguagePickerView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: Theme.Spacing.xxl) {
-                SarenaLogoView(size: 96)
+                SarenaLogoView(size: 96, floats: true)
                     .padding(.top, Theme.Spacing.xl)
 
                 greetingCloud
@@ -90,20 +91,22 @@ struct LanguagePickerView: View {
         VStack(spacing: Theme.Spacing.m) {
             HStack(spacing: Theme.Spacing.m) {
                 ForEach(Array(greetings.prefix(4).enumerated()), id: \.offset) { index, word in
-                    greetingChip(word, period: 2.6 + Double(index) * 0.3)
+                    greetingChip(word, index: index)
                 }
             }
             HStack(spacing: Theme.Spacing.m) {
                 ForEach(Array(greetings.dropFirst(4).enumerated()), id: \.offset) { index, word in
-                    greetingChip(word, period: 3.1 + Double(index) * 0.35)
+                    greetingChip(word, index: index + 4)
                 }
             }
         }
         .environment(\.layoutDirection, .leftToRight)
         .accessibilityHidden(true)
+        .onAppear { chipsVisible = true }
     }
 
-    private func greetingChip(_ word: String, period: Double) -> some View {
+    /// Chips pop in once (staggered) and then stay still — no endless animation.
+    private func greetingChip(_ word: String, index: Int) -> some View {
         Text(verbatim: word)
             .font(.sarena(.title3, weight: .heavy))
             .lineLimit(1)
@@ -111,7 +114,9 @@ struct LanguagePickerView: View {
             .padding(.horizontal, Theme.Spacing.l)
             .padding(.vertical, Theme.Spacing.m)
             .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.18, cornerRadius: Theme.Radius.field))
-            .floatingGlass(amplitude: 6, tilt: 8, period: period)
+            .opacity(chipsVisible ? 1 : 0)
+            .offset(y: chipsVisible ? 0 : 14)
+            .animation(.spring(response: 0.5, dampingFraction: 0.7).delay(Double(index) * 0.07), value: chipsVisible)
     }
 
     private func languageCard(_ option: Option) -> some View {
@@ -222,7 +227,6 @@ struct OnboardingPagerView: View {
                         UnevenRoundedRectangle(bottomLeadingRadius: 44, bottomTrailingRadius: 44, style: .continuous)
                             .stroke(.white.opacity(0.5), lineWidth: 1)
                     }
-                    .shadow(color: Theme.Palette.orange.opacity(0.35), radius: 30, y: 18)
                     .accessibilityHidden(true)
 
                 VStack(spacing: Theme.Spacing.s) {

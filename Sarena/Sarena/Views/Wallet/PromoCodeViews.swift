@@ -171,7 +171,6 @@ struct PromoCodeSheet: View {
                 .padding(.top, Theme.Spacing.xl)
 
                 QRCodeTile(payload: code.qrPayload, size: 230)
-                    .floatingGlass(amplitude: 4, tilt: 6)
 
                 Text(verbatim: code.code)
                     .font(.system(.title, design: .monospaced).weight(.heavy))

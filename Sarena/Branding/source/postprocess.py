@@ -5,7 +5,7 @@
 - iOS 18 dark / tinted icon layers keep their transparency.
 - Settings-screen previews and the in-app logo are written as image sets.
 
-Usage: postprocess.py [--onboarding] <raw dir> <renders dir> <Assets.xcassets dir>
+Usage: postprocess.py [--onboarding | --backdrop] <raw dir> <renders dir> <Assets.xcassets dir>
 """
 import json
 import sys
@@ -15,7 +15,8 @@ from PIL import Image
 
 args = sys.argv[1:]
 onboarding_only = args[0] == "--onboarding"
-if onboarding_only:
+backdrop_only = args[0] == "--backdrop"
+if onboarding_only or backdrop_only:
     args = args[1:]
 raw, out, catalog = (Path(p) for p in args[:3])
 out.mkdir(parents=True, exist_ok=True)
@@ -48,6 +49,19 @@ def trim(img: Image.Image, pad: int) -> Image.Image:
     canvas.paste(img, (pad, pad))
     return canvas
 
+
+if backdrop_only:
+    imageset = catalog / "GlassBackdrop.imageset"
+    imageset.mkdir(parents=True, exist_ok=True)
+    for mode, name in (("light", "GlassBackdrop.jpg"), ("dark", "GlassBackdrop-Dark.jpg")):
+        Image.open(raw / f"backdrop-{mode}.png").convert("RGB").save(imageset / name, quality=86, optimize=True)
+    write_json(imageset / "Contents.json", {"images": [
+        {"filename": "GlassBackdrop.jpg", "idiom": "universal", "scale": "2x"},
+        {"appearances": [{"appearance": "luminosity", "value": "dark"}],
+         "filename": "GlassBackdrop-Dark.jpg", "idiom": "universal", "scale": "2x"},
+    ], "info": INFO})
+    print("post-processed backdrop ->", imageset)
+    sys.exit(0)
 
 if onboarding_only:
     # Opaque artwork -> high quality JPEG keeps the app small.

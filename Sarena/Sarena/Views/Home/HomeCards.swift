@@ -53,8 +53,7 @@ struct FeaturedDealCard: View {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
                 .strokeBorder(LinearGradient(colors: [.white.opacity(0.7), .white.opacity(0.1)], startPoint: .top, endPoint: .bottom), lineWidth: 1)
         }
-        .shadow(color: venue.category.accent.opacity(0.45), radius: 26, y: 16)
-        .floatingGlass(amplitude: 4, tilt: 4, period: 3.4)
+        .shadow(color: venue.category.accent.opacity(0.4), radius: 20, y: 12)
         .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous))
     }
 }
@@ -64,7 +63,6 @@ struct CategoryCard: View {
     let category: OfferCategory
     let maxDiscount: Int
     var isWide = false
-    var floatPeriod: Double = 3
 
     @Environment(\.locale) private var locale
 
@@ -95,16 +93,16 @@ struct CategoryCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             // Colour bleeding through the glass from the corner.
+            // Radial gradient, not a blur filter: blurs are re-applied every frame while scrolling.
             Circle()
-                .fill(category.accent.opacity(0.45))
-                .frame(width: 150, height: 150)
-                .blur(radius: 40)
-                .offset(x: 70, y: -60)
+                .fill(RadialGradient(colors: [category.accent.opacity(0.4), category.accent.opacity(0)],
+                                     center: .center, startRadius: 0, endRadius: 110))
+                .frame(width: 220, height: 220)
+                .offset(x: 80, y: -80)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                 .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
         }
         .glassSurface(.tile)
-        .floatingGlass(amplitude: 4, tilt: 6, period: floatPeriod)
         .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
     }
 
@@ -227,7 +225,6 @@ struct SavingsBanner: View {
                 .opacity(0.75)
         }
         .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2))
-        .floatingGlass(amplitude: 3, tilt: 5, period: 3.8)
     }
 }
 
@@ -241,7 +238,6 @@ struct CategoryVenuesView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.l) {
                 HStack(spacing: Theme.Spacing.l) {
                     GlassIconOrb(systemImage: category.symbol, colors: category.colors, size: 64)
-                        .floatingGlass(amplitude: 5, tilt: 10)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(category.title)
                             .font(.sarena(.title2, weight: .heavy))

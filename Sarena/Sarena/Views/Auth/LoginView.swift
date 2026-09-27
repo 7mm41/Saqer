@@ -218,9 +218,9 @@ struct LoginView: View {
 
     private var benefits: some View {
         HStack(spacing: Theme.Spacing.m) {
-            BenefitTile(title: "Up to \(50.localizedPercent(locale)) off", systemImage: "percent", period: 2.8)
-            BenefitTile(title: "Instant codes", systemImage: "qrcode", period: 3.3)
-            BenefitTile(title: "Oman's top venues", systemImage: "star.fill", period: 3.0)
+            BenefitTile(title: "Up to \(50.localizedPercent(locale)) off", systemImage: "percent")
+            BenefitTile(title: "Instant codes", systemImage: "qrcode")
+            BenefitTile(title: "Oman's top venues", systemImage: "star.fill")
         }
     }
 
@@ -282,7 +282,6 @@ private struct DemoAccountCard: View {
 private struct BenefitTile: View {
     let title: LocalizedStringKey
     let systemImage: String
-    let period: Double
 
     var body: some View {
         VStack(spacing: Theme.Spacing.s) {
@@ -298,7 +297,6 @@ private struct BenefitTile: View {
         .frame(maxWidth: .infinity, minHeight: 88)
         .padding(.horizontal, Theme.Spacing.s)
         .glassSurface(.tile)
-        .floatingGlass(amplitude: 5, tilt: 8, period: period)
     }
 }
 

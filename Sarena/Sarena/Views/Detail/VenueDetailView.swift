@@ -80,12 +80,12 @@ struct VenueDetailView: View {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
                 .strokeBorder(LinearGradient(colors: [.white.opacity(0.7), .white.opacity(0.1)], startPoint: .top, endPoint: .bottom), lineWidth: 1)
         }
-        .shadow(color: venue.category.accent.opacity(0.5), radius: 30, y: 18)
+        .shadow(color: venue.category.accent.opacity(0.45), radius: 24, y: 14)
         .overlay(alignment: .bottomTrailing) {
             DiscountMedallion(percent: venue.maxDiscountPercent)
-                .offset(x: -Theme.Spacing.l, y: 40)
+                .padding(.trailing, Theme.Spacing.l)
+                .offset(y: 40)
         }
-        .floatingGlass(amplitude: 4, tilt: 5, period: 3.6)
         .padding(.horizontal, Theme.gutter)
         .padding(.top, Theme.Spacing.s)
     }
@@ -175,7 +175,8 @@ struct VenueDetailView: View {
                 Marker(venue.name(locale), systemImage: venue.category.symbol, coordinate: venue.coordinate)
                     .tint(Theme.Palette.orange)
             }
-            .mapStyle(.standard(elevation: .realistic, pointsOfInterest: .excludingAll))
+            // Flat, non-interactive map: 3D "realistic" terrain keeps the GPU busy.
+            .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
             .frame(height: 210)
             .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
             .overlay(alignment: .bottomLeading) {
@@ -270,7 +271,7 @@ struct VenueDetailView: View {
         }
         .padding(.horizontal, Theme.Spacing.xl)
         .padding(.vertical, Theme.Spacing.m)
-        .glassSurface(.panel)
+        .glassSurface(.bar)
         .padding(.horizontal, Theme.Spacing.m)
         .padding(.bottom, Theme.Spacing.xs)
     }

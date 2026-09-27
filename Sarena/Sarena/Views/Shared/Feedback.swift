@@ -74,7 +74,7 @@ struct ShimmerPlaceholder: View {
 
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            .fill(.ultraThinMaterial)
+            .fill(.white.opacity(0.3))
             .frame(height: height)
             .phaseAnimator([0.45, 0.9]) { view, opacity in
                 view.opacity(opacity)

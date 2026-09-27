@@ -28,7 +28,7 @@ struct RegisterView: View {
 
     private var header: some View {
         VStack(spacing: Theme.Spacing.s) {
-            SarenaLogoView(size: 76)
+            SarenaLogoView(size: 76, floats: true)
             Text("Join the club")
                 .font(.sarena(.title, weight: .heavy))
             Text("One free account unlocks members-only prices on cinemas, jet skis, clubs, arenas and festivals across Oman.")

@@ -40,37 +40,47 @@ struct WalletView: View {
 
     private var savingsCard: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            HStack {
+            HStack(alignment: .center) {
                 Label("Member savings", systemImage: "chart.line.uptrend.xyaxis")
                     .font(.sarena(.subheadline, weight: .bold))
                     .foregroundStyle(.white.opacity(0.9))
-                Spacer()
-                SarenaLogoView(size: 40, floats: false)
+                    .lineLimit(1)
+                Spacer(minLength: Theme.Spacing.s)
+                SarenaLogoView(size: 40)
             }
             Text(verbatim: viewModel.totalSavings.omr(locale))
                 .font(.system(size: 42, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
-                .minimumScaleFactor(0.6)
                 .lineLimit(1)
+                .minimumScaleFactor(0.5)
                 .contentTransition(.numericText())
+                .frame(maxWidth: .infinity, alignment: .leading)
             Text("Total saved with Sarena")
                 .font(.sarena(.subheadline, weight: .medium))
                 .foregroundStyle(.white.opacity(0.85))
-            HStack(spacing: Theme.Spacing.m) {
-                StatPill(value: viewModel.count(for: .active), title: "Ready to use", systemImage: "qrcode")
-                StatPill(value: viewModel.redeemedCount, title: "Redeemed", systemImage: "checkmark.seal.fill")
+            // Pills keep their natural size; on very narrow screens they wrap as a whole.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: Theme.Spacing.m) { statPills }
+                VStack(alignment: .leading, spacing: Theme.Spacing.s) { statPills }
             }
         }
+        // Explicit full width: the card must never shrink to its content.
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Theme.Spacing.xl)
         .background {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
                 .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.ember, Theme.Palette.festivalPink.opacity(0.8)],
                                      startPoint: .topLeading, endPoint: .bottomTrailing))
-                .opacity(0.8)
+                .opacity(0.85)
         }
         .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: Theme.Radius.hero))
-        .floatingGlass(amplitude: 5, tilt: 7)
         .padding(.top, Theme.Spacing.s)
+    }
+
+    @ViewBuilder
+    private var statPills: some View {
+        StatPill(value: viewModel.count(for: .active), title: "Ready to use", systemImage: "qrcode")
+        StatPill(value: viewModel.redeemedCount, title: "Redeemed", systemImage: "checkmark.seal.fill")
     }
 
     // MARK: Codes
@@ -135,6 +145,8 @@ private struct StatPill: View {
         }
         .font(.sarena(.caption, weight: .semibold))
         .foregroundStyle(.white)
+        .lineLimit(1)
+        .fixedSize()
         .padding(.horizontal, Theme.Spacing.m)
         .padding(.vertical, Theme.Spacing.s)
         .background(Capsule().fill(.white.opacity(0.2)))

@@ -34,14 +34,14 @@ struct RootView: View {
         .onChange(of: session.user?.id, initial: true) { _, userID in
             wallet.load(for: userID)
         }
-        .onChange(of: motionShouldRun, initial: true) { _, shouldRun in
-            if shouldRun { motion.start() } else { motion.stop() }
+        .onChange(of: motionAllowed, initial: true) { _, allowed in
+            // The sensor itself only runs while a `.parallax()` view is on screen.
+            motion.setAllowed(allowed)
         }
     }
 
-    private var motionShouldRun: Bool {
+    private var motionAllowed: Bool {
         floatingMotion && !reduceMotion && scenePhase == .active
-            && !ProcessInfo.processInfo.isLowPowerModeEnabled
     }
 }
 

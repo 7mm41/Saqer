@@ -17,8 +17,10 @@ struct VenueArtwork: View {
                 .fill(.white.opacity(0.10))
                 .frame(width: symbolSize * 1.8, height: symbolSize * 1.8)
                 .offset(x: -symbolSize * 1.4, y: symbolSize * 0.9)
+            // Frosted disc: a translucent fill looks the same over a gradient
+            // as a live material, without the backdrop blur.
             Circle()
-                .fill(.ultraThinMaterial)
+                .fill(LinearGradient(colors: [.white.opacity(0.34), .white.opacity(0.14)], startPoint: .topLeading, endPoint: .bottomTrailing))
                 .frame(width: symbolSize * 1.7, height: symbolSize * 1.7)
                 .overlay(Circle().strokeBorder(.white.opacity(0.45), lineWidth: 1))
             Image(systemName: category.symbol)
@@ -26,7 +28,6 @@ struct VenueArtwork: View {
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.25), radius: 8, y: 6)
         }
-        .environment(\.colorScheme, .dark)
         .accessibilityHidden(true)
     }
 }
@@ -100,6 +101,7 @@ struct DealCountdown: View {
 }
 
 /// Floating glass medallion announcing the headline discount.
+/// Solid gradient (no material), so its device-motion parallax stays cheap.
 struct DiscountMedallion: View {
     let percent: Int
     var size: CGFloat = 96
@@ -117,9 +119,17 @@ struct DiscountMedallion: View {
         .foregroundStyle(.white)
         .padding(size * 0.12)
         .frame(width: size, height: size)
-        .background(Circle().fill(Theme.brandGradient))
-        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: size / 2), in: Circle())
-        .floatingGlass(amplitude: 6, tilt: 12, period: 2.4)
+        .background {
+            ZStack {
+                Circle().fill(Theme.brandGradient)
+                Circle()
+                    .fill(LinearGradient(colors: [.white.opacity(0.5), .clear], startPoint: .top, endPoint: .center))
+                    .padding(size * 0.05)
+            }
+            .shadow(color: Theme.Palette.orange.opacity(0.5), radius: 16, y: 10)
+        }
+        .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: 1.5))
+        .parallax(tilt: 12, shift: 6)
         .accessibilityElement(children: .combine)
     }
 }

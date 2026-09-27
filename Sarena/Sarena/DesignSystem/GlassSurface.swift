@@ -13,8 +13,16 @@ import SwiftUI
 /// Text("-45%")
 ///     .glassSurface(.tinted(Theme.Palette.orange), in: Capsule())
 /// ```
+///
+/// Performance note: a `Material` is a live backdrop blur that re-renders
+/// whenever anything behind it moves. The backdrop is already pre-blurred, so
+/// content panes use *frosted* glass (translucent fill, sheen and rim) that looks
+/// the same at a fraction of the GPU cost. Real `ultraThinMaterial` /
+/// `thinMaterial` is reserved for surfaces that float over moving content
+/// (`.panel`, `.bar`, sheets).
 struct GlassSurfaceStyle {
-    var material: Material = .ultraThinMaterial
+    /// Live blur behind the pane; `nil` = frosted glass without a backdrop blur.
+    var material: Material?
     /// Optional colour poured into the glass (orange glass, pink glass, ...).
     var tint: Color?
     var tintOpacity: Double = 0.28
@@ -25,11 +33,14 @@ struct GlassSurfaceStyle {
     var shadow = GlassShadow.floating
 
     static let card = GlassSurfaceStyle()
-    static let panel = GlassSurfaceStyle(material: .thinMaterial, cornerRadius: Theme.Radius.hero, shadow: .lifted)
-    static let tile = GlassSurfaceStyle(cornerRadius: Theme.Radius.tile, shadow: .floating)
+    static let tile = GlassSurfaceStyle(cornerRadius: Theme.Radius.tile)
     static let field = GlassSurfaceStyle(cornerRadius: Theme.Radius.field, shadow: .subtle)
-    static let chip = GlassSurfaceStyle(cornerRadius: Theme.Radius.chip, sheen: false, shadow: .subtle)
+    static let chip = GlassSurfaceStyle(cornerRadius: Theme.Radius.chip, sheen: false, shadow: .none)
     static let flat = GlassSurfaceStyle(sheen: false, shadow: .none)
+    /// Thin-material panel for forms.
+    static let panel = GlassSurfaceStyle(material: .thinMaterial, cornerRadius: Theme.Radius.hero, shadow: .lifted)
+    /// Ultra-thin-material bar that floats over scrolling content (e.g. "Book Now").
+    static let bar = GlassSurfaceStyle(material: .ultraThinMaterial, cornerRadius: Theme.Radius.hero, shadow: .lifted)
 
     static func tinted(
         _ color: Color,
@@ -41,28 +52,25 @@ struct GlassSurfaceStyle {
     }
 }
 
-/// Layered shadows are what make the glass look like it floats above the scene:
-/// a wide soft ambient shadow plus a tighter contact shadow (and an optional colour glow).
+/// A single soft shadow is what lifts the glass off the scene (optionally glowing
+/// in the tint colour). One shadow instead of two halves the offscreen work.
 struct GlassShadow {
-    var ambientRadius: CGFloat
-    var ambientY: CGFloat
-    var ambientOpacity: Double
-    var contactRadius: CGFloat
-    var contactY: CGFloat
-    var contactOpacity: Double
+    var radius: CGFloat
+    var y: CGFloat
+    var opacity: Double
     var glowsWithTint = false
 
-    static let none = GlassShadow(ambientRadius: 0, ambientY: 0, ambientOpacity: 0, contactRadius: 0, contactY: 0, contactOpacity: 0)
-    static let subtle = GlassShadow(ambientRadius: 12, ambientY: 6, ambientOpacity: 0.12, contactRadius: 2, contactY: 1, contactOpacity: 0.08)
-    static let floating = GlassShadow(ambientRadius: 28, ambientY: 18, ambientOpacity: 0.22, contactRadius: 4, contactY: 2, contactOpacity: 0.10)
-    static let lifted = GlassShadow(ambientRadius: 44, ambientY: 28, ambientOpacity: 0.30, contactRadius: 6, contactY: 3, contactOpacity: 0.12)
-    static let glow = GlassShadow(ambientRadius: 32, ambientY: 18, ambientOpacity: 0.45, contactRadius: 4, contactY: 2, contactOpacity: 0.10, glowsWithTint: true)
+    static let none = GlassShadow(radius: 0, y: 0, opacity: 0)
+    static let subtle = GlassShadow(radius: 10, y: 5, opacity: 0.12)
+    static let floating = GlassShadow(radius: 22, y: 14, opacity: 0.22)
+    static let lifted = GlassShadow(radius: 32, y: 20, opacity: 0.28)
+    static let glow = GlassShadow(radius: 24, y: 14, opacity: 0.45, glowsWithTint: true)
 }
 
 // MARK: - Modifier
 
-/// The reusable glassmorphism modifier: blurred material + tint + inner
-/// reflection + gradient rim light + layered floating shadow.
+/// The reusable glassmorphism modifier: glass body (material or frosted fill)
+/// + tint + inner reflection + gradient rim light + floating shadow.
 struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
     let shape: S
     let style: GlassSurfaceStyle
@@ -71,10 +79,13 @@ struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
     func body(content: Content) -> some View {
         content
             .background {
-                glassBody
-                    .compositingGroup()
-                    .shadow(color: shadowColor.opacity(style.shadow.ambientOpacity), radius: style.shadow.ambientRadius, y: style.shadow.ambientY)
-                    .shadow(color: .black.opacity(style.shadow.contactOpacity), radius: style.shadow.contactRadius, y: style.shadow.contactY)
+                if style.shadow.opacity > 0 {
+                    glassBody
+                        .compositingGroup()
+                        .shadow(color: shadowColor.opacity(style.shadow.opacity), radius: style.shadow.radius, y: style.shadow.y)
+                } else {
+                    glassBody
+                }
             }
             .overlay {
                 shape
@@ -85,7 +96,11 @@ struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
 
     private var glassBody: some View {
         ZStack {
-            shape.fill(style.material)
+            if let material = style.material {
+                shape.fill(material)
+            } else {
+                shape.fill(.white.opacity(isDark ? 0.09 : 0.46))
+            }
 
             if let tint = style.tint {
                 shape.fill(

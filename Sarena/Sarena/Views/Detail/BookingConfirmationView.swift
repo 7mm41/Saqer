@@ -26,7 +26,6 @@ struct BookingConfirmationView: View {
 
                 VStack(spacing: Theme.Spacing.l) {
                     QRCodeTile(payload: code.qrPayload, size: 180)
-                        .floatingGlass(amplitude: 5, tilt: 8)
                     Text(verbatim: code.code)
                         .font(.system(.title2, design: .monospaced).weight(.heavy))
                         .tracking(2)
@@ -79,9 +78,9 @@ struct BookingConfirmationView: View {
     private var successMark: some View {
         ZStack {
             Circle()
-                .fill(Theme.Palette.success.opacity(0.35))
-                .frame(width: 130, height: 130)
-                .blur(radius: 30)
+                .fill(RadialGradient(colors: [Theme.Palette.success.opacity(0.4), Theme.Palette.success.opacity(0)],
+                                     center: .center, startRadius: 30, endRadius: 80))
+                .frame(width: 160, height: 160)
             Circle()
                 .fill(LinearGradient(colors: [Color(hex: 0x4ADE80), Theme.Palette.success], startPoint: .topLeading, endPoint: .bottomTrailing))
                 .frame(width: 92, height: 92)
@@ -93,7 +92,6 @@ struct BookingConfirmationView: View {
         }
         .scaleEffect(appeared ? 1 : 0.4)
         .opacity(appeared ? 1 : 0)
-        .floatingGlass(amplitude: 5, tilt: 10, period: 2.4)
         .accessibilityHidden(true)
     }
 }

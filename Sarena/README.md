@@ -61,16 +61,25 @@ Sarena/
 ## The glass design system
 
 ```swift
-content.glassSurface()                                        // default floating card
-content.glassSurface(.panel)                                  // thicker thinMaterial panel
+content.glassSurface()                                        // frosted glass card
+content.glassSurface(.panel)                                  // thinMaterial panel (forms)
+content.glassSurface(.bar)                                    // ultraThinMaterial bar over scrolling content
 content.glassSurface(.tinted(Theme.Palette.orange))           // orange glass with glow
 content.glassSurface(.chip, in: Capsule())                    // any InsettableShape
 content.glassSurface(.card, in: TicketShape())                // ticket with notches
-content.floatingGlass(amplitude: 6, tilt: 8)                  // idle float + device-motion parallax
+logo.idleFloat().parallax()                                   // hero artwork only
 Button("Book Now") { }.buttonStyle(.sarenaProminent)          // .sarenaGlass, .sarenaDestructive
 ```
 
-Each pane is built from four layers: an `ultraThinMaterial`/`thinMaterial` blur, an optional colour tint, an inner reflection, and a gradient rim light. Two stacked shadows (ambient plus contact) make it float. `MotionManager` feeds device tilt into `rotation3DEffect`, so the glass catches the light as the phone moves. Motion turns off automatically with Reduce Motion or Low Power Mode, or from a toggle in Settings.
+Each pane has a glass body, an optional colour tint, an inner reflection, a gradient rim light, and a soft floating shadow.
+
+### Performance rules (why the app stays cool)
+
+* **The backdrop is a static, pre-blurred image** (`GlassBackdrop`, light + dark). Nothing animates behind the glass, so nothing gets re-blurred frame after frame.
+* **Content cards use frosted glass**: a translucent fill with sheen and rim, and no live backdrop blur. Over an already-blurred backdrop it looks the same and costs a fraction of a `Material`. Real `ultraThinMaterial` / `thinMaterial` is kept for surfaces that float over moving content: the booking bar, form panels, sheets and the tab bar.
+* **No endless animations on glass panes.** `idleFloat()` is only for lightweight artwork, such as the logo on the splash, sign-in and onboarding screens.
+* **`parallax()` is used on a few hero elements only**: the logo, the discount medallion and the membership card. `MotionManager` is reference-counted, so the motion sensor runs only while one of them is on screen. It samples at 20 Hz, ignores sub-pixel changes, and pauses in Low Power Mode, under thermal pressure, with Reduce Motion, or when the Settings toggle is off.
+* No blur filters on scrolling content (glows use radial gradients), the map is flat and non-interactive, and QR codes are cached.
 
 The style names use a `Sarena`/`glassSurface` prefix on purpose. iOS 26 adds its own `.glass` button style and `glassEffect`, and the prefix keeps this code compiling on every SDK.
 
