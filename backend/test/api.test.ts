@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, describe, test } from 'node:test';
@@ -107,13 +107,15 @@ async function openLive(token: string) {
 
 before(async () => {
   uploadsDir = mkdtempSync(join(tmpdir(), 'sarena-uploads-'));
+  mkdirSync(join(uploadsDir, 'dashboard'));
+  writeFileSync(join(uploadsDir, 'dashboard', 'index.html'), '<!doctype html><title>Sarena Admin</title>');
   const config = loadConfig({
     NODE_ENV: 'test',
     ADMIN_EMAIL: ADMIN.email,
     ADMIN_PASSWORD: ADMIN.password,
     UPLOADS_DIR: uploadsDir,
     WEBSITE_DIR: join(uploadsDir, 'no-website'),
-    DASHBOARD_DIR: join(uploadsDir, 'no-dashboard'),
+    DASHBOARD_DIR: join(uploadsDir, 'dashboard'),
     PUBLIC_URL: 'https://sarena.test',
   });
   database = await openDatabase({ inMemory: true });
@@ -153,6 +155,16 @@ describe('public', () => {
     const { status, body } = await call('GET', '/v1/venues');
     assert.equal(status, 401);
     assert.equal(body.error.code, 'unauthorized');
+  });
+
+  test('dashboard routes fall back to its index.html', async () => {
+    const index = await app.inject({ method: 'GET', url: '/admin/venues' });
+    assert.equal(index.statusCode, 200);
+    assert.match(String(index.headers['content-type']), /text\/html/);
+    assert.match(index.body, /Sarena Admin/);
+    const redirect = await app.inject({ method: 'GET', url: '/admin' });
+    assert.equal(redirect.statusCode, 302);
+    assert.equal(redirect.headers.location, '/admin/');
   });
 
   test('unknown API routes return a JSON 404', async () => {

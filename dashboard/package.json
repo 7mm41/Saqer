@@ -1,0 +1,24 @@
+{
+  "name": "sarena-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Sarena control panel: members, memberships, events, discounts, seasonal themes, notifications and code redemption.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "5.9",
+    "vite": "^6.4.3"
+  }
+}

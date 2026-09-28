@@ -1,4 +1,6 @@
 import { existsSync, mkdirSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import helmet from '@fastify/helmet';
 import multipart from '@fastify/multipart';
 import rateLimit from '@fastify/rate-limit';
@@ -133,10 +135,12 @@ export async function buildApp({
     await app.register(fastifyStatic, { root: config.websiteDir, prefix: '/' });
   }
 
-  app.setNotFoundHandler((request, reply) => {
-    // Client-side routes of the dashboard fall back to its index.html.
-    if (request.method === 'GET' && request.url.startsWith('/admin') && existsSync(config.dashboardDir)) {
-      return reply.type('text/html').sendFile('index.html', config.dashboardDir);
+  app.setNotFoundHandler(async (request, reply) => {
+    // Client-side routes of the dashboard (/admin/venues...) fall back to its index.html.
+    const dashboardIndex = join(config.dashboardDir, 'index.html');
+    if (request.method === 'GET' && request.url.startsWith('/admin') && existsSync(dashboardIndex)) {
+      if (request.url === '/admin') return reply.redirect('/admin/');
+      return reply.type('text/html; charset=utf-8').header('Cache-Control', 'no-cache').send(await readFile(dashboardIndex));
     }
     return reply.status(404).send({ error: { code: 'not_found', message: 'Not found.' } });
   });
