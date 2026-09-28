@@ -1,0 +1,53 @@
+import { randomBytes } from 'node:crypto';
+import { resolve } from 'node:path';
+
+const root = resolve(import.meta.dirname, '..');
+
+function bool(value: string | undefined, fallback: boolean): boolean {
+  if (value === undefined || value === '') return fallback;
+  return ['1', 'true', 'yes', 'on'].includes(value.toLowerCase());
+}
+
+export type Config = ReturnType<typeof loadConfig>;
+
+/** All settings come from environment variables (see `.env.example`). */
+export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
+  const production = env.NODE_ENV === 'production';
+  const jwtSecret = env.JWT_SECRET ?? (production ? '' : 'dev-only-insecure-secret-change-me');
+  if (production && jwtSecret.length < 32) {
+    throw new Error('JWT_SECRET must be set to at least 32 characters in production.');
+  }
+  return {
+    production,
+    port: Number(env.PORT ?? 3000),
+    host: env.HOST ?? '0.0.0.0',
+    /** Public base URL, used for uploaded image links (e.g. https://sarena.example). */
+    publicUrl: (env.PUBLIC_URL ?? '').replace(/\/$/, ''),
+    /** PostgreSQL connection string. Empty = embedded PGlite database in `dataDir`. */
+    databaseUrl: env.DATABASE_URL ?? '',
+    dataDir: resolve(root, env.DATA_DIR ?? 'data'),
+    uploadsDir: resolve(root, env.UPLOADS_DIR ?? 'data/uploads'),
+    websiteDir: resolve(root, env.WEBSITE_DIR ?? '../website'),
+    dashboardDir: resolve(root, env.DASHBOARD_DIR ?? '../dashboard/dist'),
+    jwtSecret,
+    tokenTtlDays: Number(env.TOKEN_TTL_DAYS ?? 30),
+    adminEmail: (env.ADMIN_EMAIL ?? 'admin@sarena.local').toLowerCase(),
+    /** Initial admin password; generated (and printed once) when not provided. */
+    adminPassword: env.ADMIN_PASSWORD ?? randomBytes(9).toString('base64url'),
+    adminPasswordGenerated: !env.ADMIN_PASSWORD,
+    /** Seeds the demo member and accepts the fixed demo SMS code. Never enable in production. */
+    demoMode: bool(env.DEMO_MODE, !production),
+    /** "demo" grants memberships without payment; anything else requires a real payment integration. */
+    paymentsMode: (env.PAYMENTS_MODE ?? (production ? 'disabled' : 'demo')) as 'demo' | 'disabled',
+    sms: {
+      provider: (env.SMS_PROVIDER ?? 'console') as 'console' | 'twilio',
+      twilioAccountSid: env.TWILIO_ACCOUNT_SID ?? '',
+      twilioAuthToken: env.TWILIO_AUTH_TOKEN ?? '',
+      twilioFrom: env.TWILIO_FROM ?? '',
+    },
+    links: {
+      appStore: env.APP_STORE_URL ?? '',
+      googlePlay: env.GOOGLE_PLAY_URL ?? '',
+    },
+  };
+}

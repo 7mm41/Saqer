@@ -1,0 +1,580 @@
+[
+  {
+    "slug": "muscat-cinemas",
+    "category": "cinema",
+    "name": {
+      "en": "Muscat Premium Cinemas",
+      "ar": "سينما مسقط بريميوم"
+    },
+    "area": {
+      "en": "Al Khuwair, Muscat",
+      "ar": "الخوير، مسقط"
+    },
+    "summary": {
+      "en": "Blockbusters, recliners and Dolby Atmos at member prices.",
+      "ar": "أحدث الأفلام بمقاعد مريحة وصوت Dolby Atmos بأسعار الأعضاء."
+    },
+    "about": {
+      "en": "Muscat's most comfortable movie night. Twelve laser-projection halls with Dolby Atmos sound, fully reclining leather seats and a dedicated VIP lounge with in-seat service. Sarena members unlock exclusive prices on every show, every day of the week — including weekend premieres. Book here, receive your code instantly and scan it at the box office; no printing, no queues.",
+      "ar": "أمتع ليلة سينما في مسقط. اثنتا عشرة قاعة بعرض ليزر وصوت Dolby Atmos، ومقاعد جلدية قابلة للاستلقاء بالكامل، وصالة كبار الشخصيات مع خدمة حتى المقعد. يحصل أعضاء سرينا على أسعار حصرية لكل العروض طوال أيام الأسبوع بما فيها العروض الأولى في نهاية الأسبوع. احجز من هنا، واستلم الكود فوراً، وامسحه عند شباك التذاكر؛ بلا طباعة ولا طوابير."
+    },
+    "highlights": [
+      {
+        "en": "Dolby Atmos halls",
+        "ar": "قاعات Dolby Atmos"
+      },
+      {
+        "en": "Recliner seats",
+        "ar": "مقاعد قابلة للاستلقاء"
+      },
+      {
+        "en": "Valid on weekends",
+        "ar": "صالح في نهاية الأسبوع"
+      },
+      {
+        "en": "Instant digital code",
+        "ar": "كود رقمي فوري"
+      }
+    ],
+    "openingHours": {
+      "en": "Daily · 10:00 AM – 1:00 AM",
+      "ar": "يومياً · ١٠:٠٠ ص – ١:٠٠ ص"
+    },
+    "latitude": 23.5872,
+    "longitude": 58.4067,
+    "rating": 4.8,
+    "reviewCount": 2140,
+    "isFeatured": true,
+    "dealEndsInHours": 30,
+    "sortOrder": 0,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "Any 2D show",
+            "ar": "أي عرض ثنائي الأبعاد"
+          }
+        ],
+        "originalPriceBaisa": 4500,
+        "memberPriceBaisa": 2900,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "almouj-jetski",
+    "category": "jetSki",
+    "name": {
+      "en": "Al Mouj Marina Jet Ski",
+      "ar": "جيتسكي مرسى الموج"
+    },
+    "area": {
+      "en": "Al Mouj, Muscat",
+      "ar": "الموج، مسقط"
+    },
+    "summary": {
+      "en": "Ride the Sea of Oman with certified instructors.",
+      "ar": "انطلق في بحر عُمان مع مدربين معتمدين."
+    },
+    "about": {
+      "en": "Launch from Al Mouj Marina on the latest Sea-Doo and Yamaha jet skis. Every ride starts with a safety briefing and life jackets for all riders; first-timers can ride with an instructor. VIP rides follow a guide along the coastline towards the Daymaniyat horizon at golden hour. Members get priority slots and the lowest price in Muscat.",
+      "ar": "انطلق من مرسى الموج على أحدث دراجات Sea-Doo وYamaha المائية. تبدأ كل رحلة بإرشادات السلامة وسترات نجاة لجميع الراكبين، ويمكن للمبتدئين الركوب مع مدرب. رحلات كبار الشخصيات ترافق مرشداً على طول الساحل باتجاه أفق جزر الديمانيات وقت الغروب. يحصل الأعضاء على أولوية الحجز وأقل سعر في مسقط."
+    },
+    "highlights": [
+      {
+        "en": "Certified instructors",
+        "ar": "مدربون معتمدون"
+      },
+      {
+        "en": "Life jackets included",
+        "ar": "سترات النجاة مشمولة"
+      },
+      {
+        "en": "Sunset slots",
+        "ar": "مواعيد وقت الغروب"
+      },
+      {
+        "en": "No licence needed",
+        "ar": "لا تحتاج رخصة"
+      }
+    ],
+    "openingHours": {
+      "en": "Daily · 8:00 AM – 6:30 PM",
+      "ar": "يومياً · ٨:٠٠ ص – ٦:٣٠ م"
+    },
+    "latitude": 23.6286,
+    "longitude": 58.2785,
+    "rating": 4.9,
+    "reviewCount": 860,
+    "isFeatured": true,
+    "dealEndsInHours": 52,
+    "sortOrder": 1,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "30-minute ride",
+            "ar": "رحلة ٣٠ دقيقة"
+          },
+          {
+            "en": "Safety briefing",
+            "ar": "شرح السلامة"
+          }
+        ],
+        "originalPriceBaisa": 25000,
+        "memberPriceBaisa": 15000,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "qantab-jetski",
+    "category": "jetSki",
+    "name": {
+      "en": "Qantab Bay Rides",
+      "ar": "رحلات خليج قنتب"
+    },
+    "area": {
+      "en": "Qantab, Muscat",
+      "ar": "قنتب، مسقط"
+    },
+    "summary": {
+      "en": "Crystal water, dramatic cliffs, zero crowds.",
+      "ar": "مياه صافية ومنحدرات مذهلة بلا زحام."
+    },
+    "about": {
+      "en": "A quieter alternative tucked between the cliffs of Qantab. Ride through turquoise coves, stop at hidden beaches and finish with Omani coffee on the shore. Group packages are perfect for friends and families visiting on the weekend.",
+      "ar": "وجهة أهدأ بين منحدرات قنتب. انطلق عبر الخلجان الفيروزية وتوقف عند الشواطئ المخفية واختم رحلتك بالقهوة العُمانية على الشاطئ. باقات المجموعات مثالية للأصدقاء والعائلات في عطلة نهاية الأسبوع."
+    },
+    "highlights": [
+      {
+        "en": "Hidden coves",
+        "ar": "خلجان مخفية"
+      },
+      {
+        "en": "Omani coffee on arrival",
+        "ar": "قهوة عُمانية عند الوصول"
+      },
+      {
+        "en": "Group friendly",
+        "ar": "مناسب للمجموعات"
+      }
+    ],
+    "openingHours": {
+      "en": "Thu – Sat · 7:30 AM – 5:30 PM",
+      "ar": "الخميس – السبت · ٧:٣٠ ص – ٥:٣٠ م"
+    },
+    "latitude": 23.5534,
+    "longitude": 58.6352,
+    "rating": 4.7,
+    "reviewCount": 312,
+    "isFeatured": false,
+    "dealEndsInHours": null,
+    "sortOrder": 2,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "20-minute ride",
+            "ar": "رحلة ٢٠ دقيقة"
+          }
+        ],
+        "originalPriceBaisa": 18000,
+        "memberPriceBaisa": 11500,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "oman-shooting-club",
+    "category": "shootingClub",
+    "name": {
+      "en": "Oman Shooting Club",
+      "ar": "نادي عمان للرماية"
+    },
+    "area": {
+      "en": "Muscat",
+      "ar": "مسقط"
+    },
+    "summary": {
+      "en": "Supervised ranges for beginners and pros.",
+      "ar": "ميادين رماية بإشراف كامل للمبتدئين والمحترفين."
+    },
+    "about": {
+      "en": "Oman's home of precision shooting. Indoor pistol lanes, outdoor rifle ranges and a clay-pigeon field, all run by licensed range officers. Every session includes eye and ear protection and a one-to-one safety induction. Members save on single sessions and on the VIP multi-discipline package.",
+      "ar": "بيت الرماية الدقيقة في عُمان. ممرات رماية داخلية بالمسدس وميادين خارجية للبنادق وساحة لرماية الأطباق، يديرها جميعاً مشرفون مرخّصون. تشمل كل جلسة واقيات للعين والأذن وتعريفاً فردياً بإجراءات السلامة. يوفّر الأعضاء على الجلسات الفردية وعلى باقة كبار الشخصيات متعددة الفئات."
+    },
+    "highlights": [
+      {
+        "en": "Licensed range officers",
+        "ar": "مشرفون مرخّصون"
+      },
+      {
+        "en": "Protection gear included",
+        "ar": "معدات الحماية مشمولة"
+      },
+      {
+        "en": "Clay-pigeon field",
+        "ar": "ساحة رماية الأطباق"
+      }
+    ],
+    "openingHours": {
+      "en": "Sat – Thu · 4:00 PM – 10:00 PM",
+      "ar": "السبت – الخميس · ٤:٠٠ م – ١٠:٠٠ م"
+    },
+    "latitude": 23.5603,
+    "longitude": 58.3702,
+    "rating": 4.8,
+    "reviewCount": 540,
+    "isFeatured": false,
+    "dealEndsInHours": null,
+    "sortOrder": 3,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "25 rounds · pistol lane",
+            "ar": "٢٥ طلقة · ممر المسدس"
+          }
+        ],
+        "originalPriceBaisa": 12000,
+        "memberPriceBaisa": 7500,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "oman-automobile-association",
+    "category": "automobileClub",
+    "name": {
+      "en": "Oman Automobile Association",
+      "ar": "نادي عمان للسيارات"
+    },
+    "area": {
+      "en": "Muscat Speedway, Al Amerat",
+      "ar": "حلبة مسقط، العامرات"
+    },
+    "summary": {
+      "en": "Karting, drift experiences and real track days.",
+      "ar": "كارتينج وتجارب دريفت وأيام حلبة حقيقية."
+    },
+    "about": {
+      "en": "Feel real motorsport at the Oman Automobile Association. Race rental karts on the international circuit, ride shotgun with a professional drift driver, or bring your own car to an open track day with timing. Family passes include the junior karting track, so the whole family can race.",
+      "ar": "عِش رياضة السيارات الحقيقية في نادي عمان للسيارات. تسابق بسيارات الكارتينج على الحلبة الدولية، أو اركب بجانب سائق دريفت محترف، أو أحضر سيارتك ليوم حلبة مفتوح مع توقيت اللفات. تشمل الباقة العائلية حلبة كارتينج الناشئين لتتسابق العائلة كلها."
+    },
+    "highlights": [
+      {
+        "en": "International circuit",
+        "ar": "حلبة دولية"
+      },
+      {
+        "en": "Pro drift hot laps",
+        "ar": "لفات دريفت مع محترفين"
+      },
+      {
+        "en": "Junior karting",
+        "ar": "كارتينج للناشئين"
+      },
+      {
+        "en": "Lap timing",
+        "ar": "توقيت اللفات"
+      }
+    ],
+    "openingHours": {
+      "en": "Wed – Sat · 3:00 PM – 11:00 PM",
+      "ar": "الأربعاء – السبت · ٣:٠٠ م – ١١:٠٠ م"
+    },
+    "latitude": 23.4725,
+    "longitude": 58.5395,
+    "rating": 4.9,
+    "reviewCount": 1275,
+    "isFeatured": true,
+    "dealEndsInHours": 75,
+    "sortOrder": 4,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "10-lap karting session",
+            "ar": "جلسة كارتينج ١٠ لفات"
+          }
+        ],
+        "originalPriceBaisa": 10000,
+        "memberPriceBaisa": 6500,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "ibri-arena",
+    "category": "ibriArena",
+    "name": {
+      "en": "Ibri Arena",
+      "ar": "ساحة عبري للاستعراض"
+    },
+    "area": {
+      "en": "Ibri, Ad Dhahirah",
+      "ar": "عبري، محافظة الظاهرة"
+    },
+    "summary": {
+      "en": "Stunt shows, drifting and heritage parades.",
+      "ar": "عروض استعراضية ودريفت ومسيرات تراثية."
+    },
+    "about": {
+      "en": "The Ad Dhahirah region's favourite night out. Ibri Arena hosts live drift and stunt-driving shows, traditional horse and camel parades and weekend concerts under the stars. VIP stands sit right on the barrier with shaded seating and refreshments; family tickets include seats for four.",
+      "ar": "الوجهة المفضلة للسهر في محافظة الظاهرة. تستضيف ساحة عبري عروض الدريفت والقيادة الاستعراضية الحية، ومسيرات الخيل والهجن التقليدية، والحفلات في عطلات نهاية الأسبوع تحت النجوم. مدرجات كبار الشخصيات بجانب الحاجز مباشرة مع مقاعد مظللة ومرطبات، وتذاكر العائلة تشمل أربعة مقاعد."
+    },
+    "highlights": [
+      {
+        "en": "Live drift shows",
+        "ar": "عروض دريفت حية"
+      },
+      {
+        "en": "Heritage parades",
+        "ar": "مسيرات تراثية"
+      },
+      {
+        "en": "Shaded VIP stands",
+        "ar": "مدرجات مظللة لكبار الشخصيات"
+      }
+    ],
+    "openingHours": {
+      "en": "Thu – Sat · 5:00 PM – 12:00 AM",
+      "ar": "الخميس – السبت · ٥:٠٠ م – ١٢:٠٠ ص"
+    },
+    "latitude": 23.2257,
+    "longitude": 56.5157,
+    "rating": 4.6,
+    "reviewCount": 698,
+    "isFeatured": false,
+    "dealEndsInHours": null,
+    "sortOrder": 5,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "General stand",
+            "ar": "المدرج العام"
+          }
+        ],
+        "originalPriceBaisa": 5000,
+        "memberPriceBaisa": 3000,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "muscat-arcade-hub",
+    "category": "videoGames",
+    "name": {
+      "en": "Muscat Arcade Hub",
+      "ar": "مركز ألعاب مسقط"
+    },
+    "area": {
+      "en": "Seeb, Muscat",
+      "ar": "السيب، مسقط"
+    },
+    "summary": {
+      "en": "VR, racing sims and 150+ arcade machines.",
+      "ar": "واقع افتراضي ومحاكيات سباق وأكثر من ١٥٠ لعبة."
+    },
+    "about": {
+      "en": "Muscat's biggest video game hall: more than 150 arcade machines, full-motion racing simulators, free-roam VR arenas and an esports lounge with the latest consoles. Load your credits once and play anything. The VIP pass unlocks unlimited play for three hours including VR, and group parties come with a private host.",
+      "ar": "أكبر صالة ألعاب فيديو في مسقط: أكثر من ١٥٠ جهاز ألعاب، ومحاكيات سباق متحركة بالكامل، وساحات واقع افتراضي حرة الحركة، وصالة رياضات إلكترونية بأحدث الأجهزة. اشحن رصيدك مرة واحدة والعب ما تشاء. تفتح تذكرة كبار الشخصيات لعباً غير محدود لثلاث ساعات بما فيها الواقع الافتراضي، وحفلات المجموعات تأتي مع مضيف خاص."
+    },
+    "highlights": [
+      {
+        "en": "Free-roam VR",
+        "ar": "واقع افتراضي حر الحركة"
+      },
+      {
+        "en": "Racing simulators",
+        "ar": "محاكيات سباق"
+      },
+      {
+        "en": "Esports lounge",
+        "ar": "صالة رياضات إلكترونية"
+      }
+    ],
+    "openingHours": {
+      "en": "Daily · 12:00 PM – 12:00 AM",
+      "ar": "يومياً · ١٢:٠٠ م – ١٢:٠٠ ص"
+    },
+    "latitude": 23.6003,
+    "longitude": 58.2452,
+    "rating": 4.7,
+    "reviewCount": 1893,
+    "isFeatured": false,
+    "dealEndsInHours": null,
+    "sortOrder": 6,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "100 game credits",
+            "ar": "١٠٠ رصيد ألعاب"
+          }
+        ],
+        "originalPriceBaisa": 10000,
+        "memberPriceBaisa": 6000,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "muscat-nights",
+    "category": "festivals",
+    "name": {
+      "en": "Muscat Nights",
+      "ar": "ليالي مسقط"
+    },
+    "area": {
+      "en": "Al Amerat Park, Muscat",
+      "ar": "حديقة العامرات، مسقط"
+    },
+    "summary": {
+      "en": "Fireworks, concerts and food under winter skies.",
+      "ar": "ألعاب نارية وحفلات ومأكولات تحت سماء الشتاء."
+    },
+    "about": {
+      "en": "Muscat Nights turns the capital's parks into a winter wonderland: nightly fireworks, drone light shows, live Omani and international concerts, a heritage village and hundreds of food stalls. Members skip the gate queue with a dedicated fast lane, and VIP passes add reserved seating for the main stage.",
+      "ar": "تحوّل ليالي مسقط حدائق العاصمة إلى عالم شتوي ساحر: ألعاب نارية كل ليلة، وعروض ضوئية بالطائرات المسيّرة، وحفلات عُمانية وعالمية حية، وقرية تراثية، ومئات من أكشاك الطعام. يتجاوز الأعضاء طوابير البوابة عبر مسار سريع مخصص، وتضيف تذاكر كبار الشخصيات مقاعد محجوزة أمام المسرح الرئيسي."
+    },
+    "highlights": [
+      {
+        "en": "Nightly fireworks",
+        "ar": "ألعاب نارية كل ليلة"
+      },
+      {
+        "en": "Drone light shows",
+        "ar": "عروض ضوئية بالطائرات المسيّرة"
+      },
+      {
+        "en": "Members' fast lane",
+        "ar": "مسار سريع للأعضاء"
+      },
+      {
+        "en": "Heritage village",
+        "ar": "قرية تراثية"
+      }
+    ],
+    "openingHours": {
+      "en": "Daily · 4:00 PM – 12:00 AM",
+      "ar": "يومياً · ٤:٠٠ م – ١٢:٠٠ ص"
+    },
+    "latitude": 23.5268,
+    "longitude": 58.4937,
+    "rating": 4.9,
+    "reviewCount": 5230,
+    "isFeatured": true,
+    "dealEndsInHours": 9,
+    "sortOrder": 7,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "Entry + fast lane",
+            "ar": "دخول + مسار سريع"
+          }
+        ],
+        "originalPriceBaisa": 3000,
+        "memberPriceBaisa": 1500,
+        "remaining": null
+      }
+    ]
+  },
+  {
+    "slug": "ibri-festival",
+    "category": "festivals",
+    "name": {
+      "en": "Ibri Festival",
+      "ar": "مهرجان عبري"
+    },
+    "area": {
+      "en": "Ibri, Ad Dhahirah",
+      "ar": "عبري، محافظة الظاهرة"
+    },
+    "summary": {
+      "en": "Heritage, crafts and family evenings in Ibri.",
+      "ar": "تراث وحِرف وأمسيات عائلية في عبري."
+    },
+    "about": {
+      "en": "Ibri Festival celebrates the heritage of Ad Dhahirah with traditional crafts, folk arts, camel racing showcases, local cuisine and children's activities every evening. It is one of the region's biggest family events of the year, and Sarena members enjoy half-price entry.",
+      "ar": "يحتفي مهرجان عبري بتراث محافظة الظاهرة عبر الحِرف التقليدية والفنون الشعبية وعروض سباقات الهجن والمأكولات المحلية وأنشطة الأطفال كل مساء. يُعد من أكبر الفعاليات العائلية في المنطقة خلال العام، ويستمتع أعضاء سرينا بالدخول بنصف السعر."
+    },
+    "highlights": [
+      {
+        "en": "Folk arts",
+        "ar": "فنون شعبية"
+      },
+      {
+        "en": "Traditional crafts",
+        "ar": "حِرف تقليدية"
+      },
+      {
+        "en": "Kids' activities",
+        "ar": "أنشطة للأطفال"
+      }
+    ],
+    "openingHours": {
+      "en": "Daily · 4:00 PM – 11:00 PM",
+      "ar": "يومياً · ٤:٠٠ م – ١١:٠٠ م"
+    },
+    "latitude": 23.2402,
+    "longitude": 56.4948,
+    "rating": 4.7,
+    "reviewCount": 980,
+    "isFeatured": false,
+    "dealEndsInHours": null,
+    "sortOrder": 8,
+    "offers": [
+      {
+        "title": {
+          "en": "Member ticket",
+          "ar": "تذكرة الأعضاء"
+        },
+        "perks": [
+          {
+            "en": "Festival entry",
+            "ar": "دخول المهرجان"
+          }
+        ],
+        "originalPriceBaisa": 2000,
+        "memberPriceBaisa": 1000,
+        "remaining": null
+      }
+    ]
+  }
+]
