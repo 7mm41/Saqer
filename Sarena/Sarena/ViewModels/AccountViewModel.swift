@@ -1,25 +1,23 @@
 import Foundation
 import Observation
 
-/// "حسابي" — profile, member savings, subscription info and package switching.
+/// "حسابي" — profile, member savings and the Sarena membership.
 @Observable
 @MainActor
 final class AccountViewModel {
-    /// Package awaiting confirmation (drives the confirmation dialog).
-    var pendingPlan: MembershipPlan?
-    private(set) var processingPlan: MembershipPlan?
-    var didFail = false
-    /// Briefly true after a switch, for the success haptic / banner.
-    private(set) var justSubscribed: MembershipPlan?
+    /// Drives the confirmation dialog (attached to the subscribe button).
+    var isConfirming = false
+    private(set) var isProcessing = false
+    var failure: MembershipError?
+    /// Changes after a successful purchase, for the success haptic.
+    private(set) var subscribedAt: Date?
 
     let isDemo: Bool
-    private let service: any SubscriptionServicing
-    private let store: SubscriptionStore
+    private let store: MembershipStore
     private let session: SessionStore
     private let wallet: WalletStore
 
-    init(service: any SubscriptionServicing, store: SubscriptionStore, session: SessionStore, wallet: WalletStore, isDemo: Bool = false) {
-        self.service = service
+    init(store: MembershipStore, session: SessionStore, wallet: WalletStore, isDemo: Bool = false) {
         self.store = store
         self.session = session
         self.wallet = wallet
@@ -35,31 +33,41 @@ final class AccountViewModel {
     var readyCount: Int { wallet.activeCodes.count }
     var redeemedCount: Int { wallet.codes.filter { $0.status == .used }.count }
 
-    // MARK: Subscription & packages
+    // MARK: Membership
 
-    var plans: [MembershipPlan] { MembershipPlan.allCases }
-    var current: Subscription { store.current }
+    var plan: MembershipPlan { store.plan }
+    var membership: Membership? { store.membership }
+    var isActive: Bool { store.isActive }
+    var isLoading: Bool { store.state == .loading && store.membership == nil }
 
-    func isCurrent(_ plan: MembershipPlan) -> Bool { plan == store.plan }
+    /// "Subscribe" for new members, "Renew" for existing and lapsed ones.
+    var isRenewal: Bool { membership != nil }
 
-    func choose(_ plan: MembershipPlan) {
-        guard !isCurrent(plan), processingPlan == nil else { return }
-        pendingPlan = plan
+    /// Share of the membership period already used (for the progress bar).
+    func progress(now: Date = .now) -> Double {
+        guard let membership, membership.isActive(at: now) else { return 1 }
+        let total = membership.expiresAt.timeIntervalSince(membership.startsAt)
+        guard total > 0 else { return 1 }
+        return min(1, max(0, now.timeIntervalSince(membership.startsAt) / total))
     }
 
-    /// Takes the package explicitly: the dialog clears `pendingPlan` as it
-    /// dismisses, before this async work starts.
-    func confirm(_ plan: MembershipPlan) async {
-        pendingPlan = nil
-        guard !isCurrent(plan), processingPlan == nil, let user = session.user else { return }
-        processingPlan = plan
-        defer { processingPlan = nil }
+    func requestSubscription() {
+        guard !isProcessing, user != nil else { return }
+        isConfirming = true
+    }
+
+    func confirmSubscription() async {
+        isConfirming = false
+        guard !isProcessing, user != nil else { return }
+        isProcessing = true
+        defer { isProcessing = false }
         do {
-            let subscription = try await service.subscribe(to: plan, for: user)
-            store.update(subscription)
-            justSubscribed = plan
+            try await store.subscribe()
+            subscribedAt = .now
+        } catch let error as MembershipError {
+            failure = error
         } catch {
-            didFail = true
+            failure = .network
         }
     }
 }

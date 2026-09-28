@@ -7,7 +7,7 @@ struct FeaturedDealCard: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            VenueArtwork(category: venue.category, symbolSize: 70)
+            VenueArtwork(category: venue.category, symbolSize: 70, imageURL: venue.imageURL)
 
             VStack {
                 HStack(alignment: .top) {
@@ -144,7 +144,7 @@ struct VenueCard: View {
 
     var body: some View {
         HStack(spacing: Theme.Spacing.m) {
-            VenueArtwork(category: venue.category, symbolSize: 28)
+            VenueArtwork(category: venue.category, symbolSize: 28, imageURL: venue.imageURL)
                 .frame(width: 84, height: 84)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .overlay(alignment: .bottom) {

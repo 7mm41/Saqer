@@ -10,6 +10,8 @@ protocol AuthServicing: Sendable {
     /// Verifies the SMS code and signs the member in.
     func verifyCode(_ code: String, phone: String) async throws -> User
     func register(_ form: RegistrationForm) async throws -> User
+    /// The member's latest profile (name, status...). Throws `APIError` 401 once the session has ended.
+    func refreshed(_ user: User) async throws -> User
     func signOut() async
 }
 
@@ -26,6 +28,8 @@ enum AuthError: Error, Equatable {
     case phoneAlreadyRegistered
     case phoneNotRegistered
     case invalidCode
+    case suspended
+    case tooManyRequests
     case network
 
     var message: LocalizedStringKey {
@@ -35,6 +39,8 @@ enum AuthError: Error, Equatable {
         case .phoneAlreadyRegistered: "This mobile number is already linked to an account."
         case .phoneNotRegistered: "No account uses this number yet. Create a free account first."
         case .invalidCode: "That code isn't right. Check the SMS and try again."
+        case .suspended: "This account is suspended. Contact Sarena support."
+        case .tooManyRequests: "Too many attempts. Please wait a moment and try again."
         case .network: "We couldn't reach Sarena. Check your connection and try again."
         }
     }
@@ -130,8 +136,12 @@ actor MockAuthService: AuthServicing {
         return account.user
     }
 
+    func refreshed(_ user: User) async throws -> User {
+        accounts.values.first { $0.user.id == user.id }?.user ?? user
+    }
+
     func signOut() async {
-        // A real client would revoke the refresh token here.
+        // Nothing to revoke on-device.
     }
 
     // MARK: Helpers

@@ -16,8 +16,9 @@ extension User {
 struct PreviewContainer<Content: View>: View {
     @State private var session: SessionStore
     @State private var wallet: WalletStore
-    @State private var subscription: SubscriptionStore
+    @State private var membership: MembershipStore
     @State private var catalog: CatalogStore
+    @State private var liveSync: LiveSync
     @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
     private let content: Content
@@ -25,20 +26,20 @@ struct PreviewContainer<Content: View>: View {
     @MainActor
     init(signedIn: Bool = true, @ViewBuilder content: () -> Content) {
         let session = SessionStore(auth: AppServices.preview.auth, keychain: KeychainStore(service: "om.sarena.preview"))
-        let wallet = WalletStore(
-            directory: .temporaryDirectory.appending(path: "SarenaPreview", directoryHint: .isDirectory),
-            defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard
-        )
-        let subscription = SubscriptionStore(defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard)
+        let services = AppServices.preview
+        let wallet = WalletStore(booking: services.booking)
+        let membership = MembershipStore(service: services.membership)
+        let catalog = CatalogStore(catalog: services.catalog)
         if signedIn {
             session.didAuthenticate(.preview)
-            wallet.load(for: User.preview.id)
-            subscription.load(for: .preview)
         }
         _session = State(initialValue: session)
         _wallet = State(initialValue: wallet)
-        _subscription = State(initialValue: subscription)
-        _catalog = State(initialValue: CatalogStore(catalog: AppServices.preview.catalog))
+        _membership = State(initialValue: membership)
+        _catalog = State(initialValue: catalog)
+        _liveSync = State(initialValue: LiveSync(
+            live: nil, session: session, catalog: catalog, membership: membership, wallet: wallet
+        ))
         _motion = State(initialValue: MotionManager())
         _languageCoordinator = State(initialValue: LanguageCoordinator(
             defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard
@@ -51,11 +52,16 @@ struct PreviewContainer<Content: View>: View {
             .environment(\.services, .preview)
             .environment(session)
             .environment(wallet)
-            .environment(subscription)
+            .environment(membership)
             .environment(catalog)
+            .environment(liveSync)
             .environment(motion)
             .environment(languageCoordinator)
             .appLanguage(languageCoordinator.language)
             .languageTransitionCover(languageCoordinator)
+            .task {
+                await wallet.load(for: session.user)
+                await membership.load(for: session.user)
+            }
     }
 }

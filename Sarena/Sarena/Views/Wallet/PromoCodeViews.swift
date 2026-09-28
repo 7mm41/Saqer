@@ -46,7 +46,8 @@ struct PromoCodeCard: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
                 HStack(spacing: 6) {
-                    Text(verbatim: code.tier.label(locale))
+                    Text(verbatim: code.offerTitle(locale))
+                        .lineLimit(1)
                     Text(verbatim: "·")
                     Text(verbatim: "×" + code.quantity.localizedNumber(locale))
                 }
@@ -122,7 +123,11 @@ struct PromoCodeCard: View {
     }
 
     private var stampTitle: LocalizedStringKey {
-        code.isExpired ? "Expired" : "Used"
+        switch code.status {
+        case .cancelled: "Cancelled"
+        case .used: "Used"
+        case .active: "Expired"
+        }
     }
 }
 
@@ -161,7 +166,7 @@ struct PromoCodeSheet: View {
                         .font(.sarena(.title2, weight: .heavy))
                         .multilineTextAlignment(.center)
                     HStack(spacing: 6) {
-                        Text(verbatim: code.tier.label(locale))
+                        Text(verbatim: code.offerTitle(locale))
                         Text(verbatim: "·")
                         Text(verbatim: "×" + code.quantity.localizedNumber(locale))
                     }

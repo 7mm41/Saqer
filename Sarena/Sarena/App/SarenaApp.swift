@@ -6,21 +6,29 @@ struct SarenaApp: App {
     private let services: AppServices
     @State private var session: SessionStore
     @State private var wallet: WalletStore
-    @State private var subscription: SubscriptionStore
+    @State private var membership: MembershipStore
     @State private var catalog: CatalogStore
+    @State private var liveSync: LiveSync
     @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
 
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
 
     init() {
-        // Replace `.mock` with the URLSession-backed services once the API is live.
-        let services = AppServices.mock
+        // The Sarena API when Info.plist › SarenaAPIBaseURL is set, else the on-device demo backend.
+        let services = AppServices.configured()
         self.services = services
-        _session = State(initialValue: SessionStore(auth: services.auth))
-        _wallet = State(initialValue: WalletStore())
-        _subscription = State(initialValue: SubscriptionStore())
-        _catalog = State(initialValue: CatalogStore(catalog: services.catalog))
+        let session = SessionStore(auth: services.auth)
+        let wallet = WalletStore(booking: services.booking)
+        let membership = MembershipStore(service: services.membership)
+        let catalog = CatalogStore(catalog: services.catalog)
+        _session = State(initialValue: session)
+        _wallet = State(initialValue: wallet)
+        _membership = State(initialValue: membership)
+        _catalog = State(initialValue: catalog)
+        _liveSync = State(initialValue: LiveSync(
+            live: services.live, session: session, catalog: catalog, membership: membership, wallet: wallet
+        ))
         _motion = State(initialValue: MotionManager())
         _languageCoordinator = State(initialValue: LanguageCoordinator())
     }
@@ -31,8 +39,9 @@ struct SarenaApp: App {
                 .environment(\.services, services)
                 .environment(session)
                 .environment(wallet)
-                .environment(subscription)
+                .environment(membership)
                 .environment(catalog)
+                .environment(liveSync)
                 .environment(motion)
                 .environment(languageCoordinator)
                 .appLanguage(languageCoordinator.language)

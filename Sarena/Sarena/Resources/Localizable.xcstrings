@@ -1,22 +1,52 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@ / month" : {
+    "%@ / year · every venue, all year" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ شهرياً"
+            "value" : "%@ سنوياً · كل الأماكن طوال السنة"
           }
         }
       }
     },
-    "%@ / month · renews monthly" : {
+    "%@ for one more year. It starts when your current membership ends, so you keep every remaining day." : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ شهرياً · يتجدّد كل شهر"
+            "value" : "%@ لسنة إضافية، تبدأ عند انتهاء عضويتك الحالية فلا تخسر أي يوم متبقٍّ."
+          }
+        }
+      }
+    },
+    "%@ for one year of member prices at every Sarena venue and event." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ لسنة كاملة من أسعار الأعضاء في كل أماكن وفعاليات سرينا."
+          }
+        }
+      }
+    },
+    "/ period" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ للفترة"
+          }
+        }
+      }
+    },
+    "/ year" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/ سنوياً"
           }
         }
       }
@@ -97,6 +127,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تلقائي"
+          }
+        }
+      }
+    },
+    "Become a member" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اشترك الآن"
+          }
+        }
+      }
+    },
+    "Become a Sarena member?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد الانضمام إلى عضوية سرينا؟"
           }
         }
       }
@@ -191,22 +241,22 @@
         }
       }
     },
+    "Cancelled" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ملغى"
+          }
+        }
+      }
+    },
     "Change number" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "تغيير الرقم"
-          }
-        }
-      }
-    },
-    "Change package" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تغيير الباقة"
           }
         }
       }
@@ -227,26 +277,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
-          }
-        }
-      }
-    },
-    "Choose this package" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اختر هذه الباقة"
-          }
-        }
-      }
-    },
-    "Choose your package" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اختر باقتك"
           }
         }
       }
@@ -351,12 +381,12 @@
         }
       }
     },
-    "Couldn't change your package" : {
+    "Couldn't complete the subscription" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تعذّر تغيير باقتك"
+            "value" : "تعذّر إتمام الاشتراك"
           }
         }
       }
@@ -367,6 +397,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "تعذّر تحميل العروض"
+          }
+        }
+      }
+    },
+    "Couldn't update the code" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر تحديث الكود"
           }
         }
       }
@@ -407,6 +447,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "داكن"
+          }
+        }
+      }
+    },
+    "days left" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يوماً متبقياً"
           }
         }
       }
@@ -471,6 +521,16 @@
         }
       }
     },
+    "Ending soon — renew to keep your member prices." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنتهي قريباً — جدّد لتحافظ على أسعار الأعضاء."
+          }
+        }
+      }
+    },
     "Ends in" : {
       "localizations" : {
         "ar" : {
@@ -531,12 +591,12 @@
         }
       }
     },
-    "Exclusive member price with your package" : {
+    "Exclusive member prices" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "سعر الأعضاء الحصري حسب باقتك"
+            "value" : "أسعار حصرية للأعضاء"
           }
         }
       }
@@ -607,26 +667,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حركة الزجاج العائم"
-          }
-        }
-      }
-    },
-    "Free" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مجاناً"
-          }
-        }
-      }
-    },
-    "Free forever" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مجانية دائماً"
           }
         }
       }
@@ -761,16 +801,6 @@
         }
       }
     },
-    "Included" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "مشمول"
-          }
-        }
-      }
-    },
     "Instant codes" : {
       "localizations" : {
         "ar" : {
@@ -797,6 +827,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "انضم إلى النادي"
+          }
+        }
+      }
+    },
+    "Just %@ a month" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما يعادل %@ شهرياً فقط"
           }
         }
       }
@@ -901,6 +941,16 @@
         }
       }
     },
+    "Member" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عضو"
+          }
+        }
+      }
+    },
     "Member No." : {
       "localizations" : {
         "ar" : {
@@ -917,6 +967,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "سعر الأعضاء"
+          }
+        }
+      }
+    },
+    "Member prices need an active Sarena membership." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أسعار الأعضاء تتطلب عضوية سرينا فعّالة."
           }
         }
       }
@@ -961,6 +1021,16 @@
         }
       }
     },
+    "Membership" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العضوية"
+          }
+        }
+      }
+    },
     "Midnight Glass" : {
       "localizations" : {
         "ar" : {
@@ -997,16 +1067,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "رقم الهاتف"
-          }
-        }
-      }
-    },
-    "Most popular" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الأكثر طلباً"
           }
         }
       }
@@ -1057,6 +1117,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "لا توجد أكواد مستخدمة بعد"
+          }
+        }
+      }
+    },
+    "Not a member yet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لست عضواً بعد"
+          }
+        }
+      }
+    },
+    "Not now" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ليس الآن"
           }
         }
       }
@@ -1127,6 +1207,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حساب مجاني واحد يفتح لك أسعار الأعضاء الحصرية في السينما والجيتسكي والأندية والساحات والمهرجانات في جميع أنحاء عُمان."
+          }
+        }
+      }
+    },
+    "One plan · every member price, all year" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اشتراك واحد · كل أسعار الأعضاء طوال السنة"
           }
         }
       }
@@ -1221,16 +1311,6 @@
         }
       }
     },
-    "per month" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "شهرياً"
-          }
-        }
-      }
-    },
     "Play more, pay less" : {
       "localizations" : {
         "ar" : {
@@ -1321,12 +1401,22 @@
         }
       }
     },
-    "Renews on %@" : {
+    "Renew for %@ / year" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "تتجدّد في %@"
+            "value" : "جدّد بـ %@ سنوياً"
+          }
+        }
+      }
+    },
+    "Renew your membership?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد تجديد عضويتك؟"
           }
         }
       }
@@ -1397,16 +1487,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "وفّر %@"
-          }
-        }
-      }
-    },
-    "Save more here with %@" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "وفّر أكثر هنا مع %@"
           }
         }
       }
@@ -1551,6 +1631,16 @@
         }
       }
     },
+    "Sold out" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نفدت الكمية"
+          }
+        }
+      }
+    },
     "Soon" : {
       "localizations" : {
         "ar" : {
@@ -1571,32 +1661,22 @@
         }
       }
     },
-    "Subscription" : {
+    "Subscribe for %@ / year" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "الاشتراك"
+            "value" : "اشترك بـ %@ سنوياً"
           }
         }
       }
     },
-    "Switch anytime. Your prices update instantly." : {
+    "Subscriptions open soon. Please try again later." : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "بدّل باقتك متى شئت، وتتحدّث أسعارك فوراً."
-          }
-        }
-      }
-    },
-    "Switch to %@?" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "التحويل إلى %@؟"
+            "value" : "الاشتراكات تُفتح قريباً. حاول مرة أخرى لاحقاً."
           }
         }
       }
@@ -1651,22 +1731,22 @@
         }
       }
     },
-    "The free package — member prices at every venue." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الباقة المجانية — أسعار الأعضاء في جميع الأماكن."
-          }
-        }
-      }
-    },
     "The Sarena team is glad you're here. Oman's best experiences, at members-only prices." : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "فريق سرينا سعيد بانضمامك. أفضل التجارب في عُمان بأسعار حصرية للأعضاء."
+          }
+        }
+      }
+    },
+    "This account is suspended. Contact Sarena support." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هذا الحساب موقوف. تواصل مع دعم سرينا."
           }
         }
       }
@@ -1681,12 +1761,42 @@
         }
       }
     },
+    "This offer is no longer available." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هذا العرض لم يعد متاحاً."
+          }
+        }
+      }
+    },
     "This ticket just sold out at the member price. Please pick another option." : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "نفدت هذه التذكرة بسعر الأعضاء للتو. يُرجى اختيار خيار آخر."
+          }
+        }
+      }
+    },
+    "Tickets" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التذاكر"
+          }
+        }
+      }
+    },
+    "Too many attempts. Please wait a moment and try again." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى."
           }
         }
       }
@@ -1717,6 +1827,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حاول مرة أخرى"
+          }
+        }
+      }
+    },
+    "Unlock member prices" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "افتح أسعار الأعضاء"
           }
         }
       }
@@ -2047,52 +2167,12 @@
         }
       }
     },
-    "Your current package" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "باقتك الحالية"
-          }
-        }
-      }
-    },
     "Your member prices are live" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "أسعار الأعضاء متاحة لك الآن"
-          }
-        }
-      }
-    },
-    "Your package" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "باقتك"
-          }
-        }
-      }
-    },
-    "Your package and renewal" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "باقتك وموعد التجديد"
-          }
-        }
-      }
-    },
-    "Your price" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "سعرك"
           }
         }
       }

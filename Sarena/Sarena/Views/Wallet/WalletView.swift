@@ -25,11 +25,17 @@ struct WalletView: View {
                 .padding(.top, Theme.Spacing.s)
                 .padding(.bottom, Theme.Spacing.xxl)
             }
+            .refreshable { await viewModel.refresh() }
             .sarenaScreenBackground()
             .navigationTitle("Wallet")
             .toolbarBackground(.hidden, for: .navigationBar)
             .sheet(item: $viewModel.presentedCode) { code in
-                PromoCodeSheet(code: code) { viewModel.markUsed(code) }
+                PromoCodeSheet(code: code) { Task { await viewModel.markUsed(code) } }
+            }
+            .alert("Couldn't update the code", isPresented: $viewModel.didFailToMarkUsed) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Please try again in a moment.")
             }
         }
     }

@@ -5,8 +5,34 @@ import SwiftUI
 struct VenueArtwork: View {
     let category: OfferCategory
     var symbolSize: CGFloat = 72
+    /// Photo uploaded from the dashboard. The artwork shows while it loads,
+    /// and stays if there is none or it fails.
+    var imageURL: URL? = nil
 
     var body: some View {
+        artwork
+            .overlay {
+                if let imageURL {
+                    AsyncImage(url: imageURL, transaction: Transaction(animation: .easeOut(duration: 0.25))) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .overlay {
+                                    // Keeps white badges and titles legible on bright photos.
+                                    LinearGradient(colors: [.black.opacity(0.25), .clear, .black.opacity(0.35)],
+                                                   startPoint: .top, endPoint: .bottom)
+                                }
+                                .transition(.opacity)
+                        }
+                    }
+                }
+            }
+            .clipped()
+            .accessibilityHidden(true)
+    }
+
+    private var artwork: some View {
         ZStack {
             LinearGradient(colors: category.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
             Circle()
@@ -28,7 +54,6 @@ struct VenueArtwork: View {
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.25), radius: 8, y: 6)
         }
-        .accessibilityHidden(true)
     }
 }
 

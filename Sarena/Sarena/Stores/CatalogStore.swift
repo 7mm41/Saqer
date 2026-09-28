@@ -28,12 +28,28 @@ final class CatalogStore {
     func reload() async {
         if venues.isEmpty { state = .loading }
         do {
-            venues = try await catalog.fetchVenues()
+            let fresh = try await catalog.fetchVenues()
+            // Unchanged catalogues (ETag hits) don't re-render Home.
+            if fresh != venues { venues = fresh }
             state = .loaded
         } catch is CancellationError {
             if venues.isEmpty { state = .idle }
         } catch {
             state = venues.isEmpty ? .failed : .loaded
+        }
+    }
+
+    func venue(id: Venue.ID) -> Venue? {
+        venues.first { $0.id == id }
+    }
+
+    /// Live scarcity counter: patches one ticket option in place.
+    func updateRemaining(offerID: TicketOption.ID, remaining: Int?) {
+        for venueIndex in venues.indices {
+            if let ticketIndex = venues[venueIndex].tickets.firstIndex(where: { $0.id == offerID }) {
+                venues[venueIndex].tickets[ticketIndex].remaining = remaining
+                return
+            }
         }
     }
 

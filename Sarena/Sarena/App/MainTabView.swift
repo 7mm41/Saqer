@@ -4,7 +4,7 @@ struct MainTabView: View {
     @Environment(\.services) private var services
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
-    @Environment(SubscriptionStore.self) private var subscription
+    @Environment(MembershipStore.self) private var membership
     @Environment(CatalogStore.self) private var catalog
     @State private var router = AppRouter()
 
@@ -21,10 +21,8 @@ struct MainTabView: View {
                 .badge(wallet.activeCodes.count)
                 .tag(AppTab.wallet)
 
-            // "حسابي": member savings + subscription info + packages in one place.
-            AccountView(
-                service: services.subscriptions, store: subscription, session: session, wallet: wallet, isDemo: services.isDemo
-            )
+            // "حسابي": member savings + the annual membership in one place.
+            AccountView(store: membership, session: session, wallet: wallet, isDemo: services.isDemo)
             .glassTabBar()
             .tabItem { Label("My Account", systemImage: "person.crop.circle.fill") }
             .tag(AppTab.account)

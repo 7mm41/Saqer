@@ -26,6 +26,10 @@ final class SessionStore {
     init(auth: any AuthServicing, keychain: KeychainStore = KeychainStore(service: "om.sarena.session")) {
         self.auth = auth
         self.keychain = keychain
+        // The API rejected the token (signed out from the dashboard, suspended...).
+        NotificationCenter.default.addObserver(forName: .sarenaSessionExpired, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in self?.endSession() }
+        }
     }
 
     /// Restores a persisted session at launch. The brief minimum keeps the
@@ -43,16 +47,43 @@ final class SessionStore {
 
     /// Called by the login / registration view models after the API succeeds.
     func didAuthenticate(_ user: User) {
-        // A production app stores the access/refresh tokens here, not the profile.
-        if let data = try? JSONEncoder().encode(user) {
-            keychain.set(data, for: Self.sessionAccount)
-        }
+        store(user)
         phase = .signedIn(user)
+    }
+
+    /// Picks up profile changes made from the dashboard. An ended session
+    /// (signed out elsewhere, suspended) signs the member out here too.
+    func refresh() async {
+        guard let user else { return }
+        do {
+            let fresh = try await auth.refreshed(user)
+            guard self.user?.id == fresh.id else { return }
+            if fresh != user {
+                didAuthenticate(fresh)
+            }
+        } catch let error as APIError where error.endsSession {
+            endSession()
+        } catch {
+            // Offline: keep the cached profile.
+        }
     }
 
     func signOut() async {
         await auth.signOut()
+        endSession()
+    }
+
+    /// Clears the local session without calling the server.
+    func endSession() {
+        guard phase != .signedOut else { return }
         keychain.removeValue(for: Self.sessionAccount)
         phase = .signedOut
+    }
+
+    private func store(_ user: User) {
+        // Only the profile; the API token lives in its own Keychain item.
+        if let data = try? JSONEncoder().encode(user) {
+            keychain.set(data, for: Self.sessionAccount)
+        }
     }
 }

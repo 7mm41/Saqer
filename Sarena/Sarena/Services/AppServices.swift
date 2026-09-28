@@ -7,17 +7,19 @@ struct AppServices: Sendable {
     let auth: any AuthServicing
     let catalog: any CatalogServicing
     let booking: any BookingServicing
-    let subscriptions: any SubscriptionServicing
+    let membership: any MembershipServicing
+    /// Server push for live updates; nil for the on-device mock backend.
+    var live: (any LiveUpdatesServicing)?
     /// True while the app runs on the mock backend: enables the demo-account shortcut.
     var isDemo = false
 
-    /// In-memory implementations used until the Sarena API is live.
-    /// Swap for `.live` (URLSession-backed clients) without touching any view.
+    /// On-device implementations, used when no API address is configured.
     static let mock = AppServices(
         auth: MockAuthService(),
         catalog: MockCatalogService(),
         booking: MockBookingService(),
-        subscriptions: MockSubscriptionService(),
+        membership: MockMembershipService(),
+        live: nil,
         isDemo: true
     )
 
@@ -25,8 +27,11 @@ struct AppServices: Sendable {
     static let preview = AppServices(
         auth: MockAuthService(latency: .zero),
         catalog: MockCatalogService(latency: .zero),
-        booking: MockBookingService(latency: .zero),
-        subscriptions: MockSubscriptionService(latency: .zero),
+        booking: MockBookingService(latency: .zero,
+                                    directory: .temporaryDirectory.appending(path: "SarenaPreview", directoryHint: .isDirectory),
+                                    defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard),
+        membership: MockMembershipService(latency: .zero, defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard),
+        live: nil,
         isDemo: true
     )
 }

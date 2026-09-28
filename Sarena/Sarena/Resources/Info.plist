@@ -22,5 +22,15 @@
 	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<!-- The Sarena API (e.g. https://api.sarena.om). Empty = the on-device demo backend.
+	     The SARENA_API_BASE_URL scheme environment variable overrides it (e.g. http://localhost:3000). -->
+	<key>SarenaAPIBaseURL</key>
+	<string></string>
+	<!-- Lets the simulator reach a development server on this Mac over http. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

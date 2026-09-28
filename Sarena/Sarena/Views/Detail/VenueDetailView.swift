@@ -1,8 +1,9 @@
 import MapKit
 import SwiftUI
 
-/// Place details & booking: description, map, ticket tiers with original vs
-/// member price, quantity and a floating "Book Now" bar.
+/// Place details & booking: description, map, ticket options with original vs
+/// member price, quantity and a floating "Book Now" bar. Everything on it
+/// follows dashboard edits live (prices, photos, remaining tickets).
 struct VenueDetailView: View {
     @State private var viewModel: VenueDetailViewModel
     @State private var isAboutExpanded = false
@@ -25,7 +26,7 @@ struct VenueDetailView: View {
                 aboutCard
                 highlights
                 locationCard
-                packagePriceSection
+                ticketsSection
                 quantityCard
             }
             .padding(.bottom, Theme.Spacing.xl)
@@ -41,8 +42,13 @@ struct VenueDetailView: View {
                 router?.selectedTab = .wallet
             }
         }
-        .alert("Booking failed", isPresented: isShowingError, presenting: viewModel.error) { _ in
-            Button("OK", role: .cancel) {}
+        .alert("Booking failed", isPresented: isShowingError, presenting: viewModel.error) { error in
+            if error == .membershipRequired {
+                Button("Become a member") { router?.selectedTab = .account }
+                Button("Not now", role: .cancel) {}
+            } else {
+                Button("OK", role: .cancel) {}
+            }
         } message: { error in
             Text(error.message)
         }
@@ -60,7 +66,7 @@ struct VenueDetailView: View {
 
     private var hero: some View {
         ZStack(alignment: .topLeading) {
-            VenueArtwork(category: venue.category, symbolSize: 92)
+            VenueArtwork(category: venue.category, symbolSize: 92, imageURL: venue.imageURL)
             VStack(alignment: .leading) {
                 HStack {
                     GlassBadge(text: venue.category.title, systemImage: venue.category.symbol, tint: .white)
@@ -68,6 +74,9 @@ struct VenueDetailView: View {
                     GlassBadge(text: "Members only", systemImage: "lock.open.fill", tint: .white)
                 }
                 Spacer()
+                if let startsAt = venue.eventStartsAt {
+                    GlassBadge(verbatim: eventDates(from: startsAt, to: venue.eventEndsAt), systemImage: "calendar", tint: .white, prominent: true)
+                }
                 if let endsAt = venue.dealEndsAt {
                     DealCountdown(endsAt: endsAt)
                 }
@@ -205,48 +214,60 @@ struct VenueDetailView: View {
         if let url = components?.url { openURL(url) }
     }
 
-    // MARK: Your package price
+    private func eventDates(from start: Date, to end: Date?) -> String {
+        let style = Date.FormatStyle(date: .abbreviated, time: .omitted).locale(locale)
+        guard let end, !Calendar.current.isDate(start, inSameDayAs: end) else { return start.formatted(style) }
+        return "\(start.formatted(style)) – \(end.formatted(style))"
+    }
 
-    /// Packages live in the Subscription tab; here the member simply sees the
-    /// offer included in their own package.
-    private var packagePriceSection: some View {
+    // MARK: Tickets
+
+    private var ticketsSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            SectionHeader(title: "Your price", subtitle: "Exclusive member price with your package")
-            if let ticket = viewModel.ticket {
-                PlanOfferCard(ticket: ticket)
+            SectionHeader(title: "Tickets", subtitle: "Exclusive member prices")
+            if !viewModel.isAvailable {
+                Label("This offer is no longer available.", systemImage: "exclamationmark.circle.fill")
+                    .font(.sarena(.subheadline, weight: .semibold))
+                    .foregroundStyle(Theme.Palette.danger)
+                    .padding(Theme.Spacing.l)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .glassSurface(.card)
             }
-            packageRow
+            ForEach(viewModel.tickets) { ticket in
+                TicketOptionCard(ticket: ticket, isSelected: ticket.id == viewModel.ticket?.id) {
+                    withAnimation(.snappy) { viewModel.select(ticket) }
+                }
+            }
+            if viewModel.needsMembership {
+                membershipNotice
+            }
         }
         .padding(.horizontal, Theme.gutter)
         .padding(.top, Theme.Spacing.s)
+        .animation(.snappy, value: viewModel.tickets)
+        .sensoryFeedback(.selection, trigger: viewModel.selectedTicketID)
     }
 
-    private var packageRow: some View {
+    /// Shown to accounts without an active membership.
+    private var membershipNotice: some View {
         HStack(spacing: Theme.Spacing.m) {
+            Image(systemName: "crown.fill")
+                .font(.title2)
+                .foregroundStyle(.white)
+                .frame(width: 48, height: 48)
+                .background(Circle().fill(Theme.brandGradient))
             VStack(alignment: .leading, spacing: 2) {
-                Text("Your package")
-                    .font(.sarena(.caption, weight: .semibold))
-                    .foregroundStyle(.secondary)
-                Text(verbatim: viewModel.plan.label(locale))
+                Text("Unlock member prices")
                     .font(.sarena(.headline, weight: .bold))
-                if let better = viewModel.betterPlan {
-                    Text("Save more here with \(better.label(locale))")
-                        .font(.sarena(.caption, weight: .bold))
-                        .foregroundStyle(Theme.Palette.success)
-                }
+                Text("\(viewModel.plan.price.omr(locale)) / year · every venue, all year")
+                    .font(.sarena(.caption))
+                    .foregroundStyle(.secondary)
             }
-            Spacer(minLength: Theme.Spacing.s)
-            Button {
-                router?.selectedTab = .account
-            } label: {
-                Label("Change package", systemImage: "arrow.left.arrow.right")
-                    .font(.sarena(.subheadline, weight: .bold))
-            }
-            .foregroundStyle(Theme.Palette.orange)
+            Spacer(minLength: 0)
         }
         .padding(Theme.Spacing.l)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassSurface(.card)
+        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.16, cornerRadius: Theme.Radius.card))
     }
 
     private var quantityCard: some View {
@@ -286,17 +307,26 @@ struct VenueDetailView: View {
             }
             .animation(.snappy, value: viewModel.total)
 
-            Button {
-                Task { await viewModel.book() }
-            } label: {
-                if viewModel.isBooking {
-                    ProgressView().tint(.white)
-                } else {
-                    Label("Book Now", systemImage: "bolt.fill")
+            if viewModel.needsMembership {
+                Button {
+                    router?.selectedTab = .account
+                } label: {
+                    Label("Become a member", systemImage: "crown.fill")
                 }
+                .buttonStyle(.sarenaProminent)
+            } else {
+                Button {
+                    Task { await viewModel.book() }
+                } label: {
+                    if viewModel.isBooking || viewModel.isCheckingMembership {
+                        ProgressView().tint(.white)
+                    } else {
+                        Label("Book Now", systemImage: "bolt.fill")
+                    }
+                }
+                .buttonStyle(.sarenaProminent)
+                .disabled(!viewModel.canBook)
             }
-            .buttonStyle(.sarenaProminent)
-            .disabled(!viewModel.canBook)
         }
         .padding(.horizontal, Theme.Spacing.xl)
         .padding(.vertical, Theme.Spacing.m)
@@ -306,71 +336,75 @@ struct VenueDetailView: View {
     }
 }
 
-/// The offer included in the member's package: perks, original price struck
-/// through, the member price and scarcity.
-struct PlanOfferCard: View {
+/// One ticket option: title and perks, original price struck through, the
+/// member price and scarcity. Tapping selects it for booking.
+struct TicketOptionCard: View {
     let ticket: TicketOption
+    let isSelected: Bool
+    let onSelect: () -> Void
 
     @Environment(\.locale) private var locale
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            HStack(alignment: .top, spacing: Theme.Spacing.m) {
-                Text(verbatim: ticket.tier.emoji)
-                    .font(.system(size: 24))
-                    .frame(width: 46, height: 46)
-                    .background(Circle().fill(ticket.tier.tint.opacity(0.22)))
-                    .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(verbatim: ticket.tier.name(locale))
-                        .font(.sarena(.headline, weight: .bold))
-                    ForEach(ticket.perks, id: \.self) { perk in
-                        Label(perk(locale), systemImage: "checkmark")
-                            .font(.sarena(.caption))
+        Button(action: onSelect) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.m) {
+                HStack(alignment: .top, spacing: Theme.Spacing.m) {
+                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                        .font(.title2.weight(.semibold))
+                        .foregroundStyle(isSelected ? AnyShapeStyle(Theme.brandGradient) : AnyShapeStyle(.secondary))
+                        .contentTransition(.symbolEffect(.replace))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(verbatim: ticket.title(locale))
+                            .font(.sarena(.headline, weight: .bold))
+                            .foregroundStyle(.primary)
+                        ForEach(ticket.perks, id: \.self) { perk in
+                            Label(perk(locale), systemImage: "checkmark")
+                                .font(.sarena(.caption))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    Spacer(minLength: 0)
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(verbatim: ticket.originalPrice.omr(locale))
+                            .font(.sarena(.caption, weight: .semibold))
+                            .strikethrough(true, color: Theme.Palette.danger)
                             .foregroundStyle(.secondary)
+                        Text(verbatim: ticket.memberPrice.omr(locale))
+                            .font(.sarena(.title3, weight: .heavy))
+                            .foregroundStyle(Theme.brandGradient)
+                            .contentTransition(.numericText())
                     }
                 }
-                Spacer(minLength: 0)
-                GlassBadge(text: "Included", systemImage: "checkmark.seal.fill", tint: ticket.tier.tint)
-            }
 
-            HStack(alignment: .bottom) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Original price")
-                        .font(.sarena(.caption2, weight: .semibold))
-                        .foregroundStyle(.secondary)
-                    Text(verbatim: ticket.originalPrice.omr(locale))
-                        .font(.sarena(.subheadline, weight: .semibold))
-                        .strikethrough(true, color: Theme.Palette.danger)
-                        .foregroundStyle(.secondary)
-                }
-                Spacer()
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text("Member price")
-                        .font(.sarena(.caption2, weight: .bold))
-                        .foregroundStyle(Theme.Palette.orange)
-                    Text(verbatim: ticket.memberPrice.omr(locale))
-                        .font(.sarena(.title2, weight: .heavy))
-                        .foregroundStyle(Theme.brandGradient)
+                HStack(spacing: Theme.Spacing.s) {
+                    GlassBadge(text: "Save \(ticket.savings.omr(locale))", systemImage: "arrow.down.circle.fill", tint: Theme.Palette.success)
+                    GlassBadge(text: "−\(ticket.discountPercent.localizedPercent(locale))", tint: Theme.Palette.orange)
+                    Spacer(minLength: 0)
+                    if ticket.isSoldOut {
+                        GlassBadge(text: "Sold out", systemImage: "xmark.circle.fill", tint: Theme.Palette.danger)
+                    } else if ticket.isLowStock, let remaining = ticket.remaining {
+                        GlassBadge(text: "Only \(remaining) left", systemImage: "flame.fill", tint: Theme.Palette.danger)
+                            .contentTransition(.numericText())
+                    }
                 }
             }
-
-            HStack(spacing: Theme.Spacing.s) {
-                GlassBadge(text: "Save \(ticket.savings.omr(locale))", systemImage: "arrow.down.circle.fill", tint: Theme.Palette.success)
-                GlassBadge(text: "−\(ticket.discountPercent.localizedPercent(locale))", tint: Theme.Palette.orange)
-                Spacer(minLength: 0)
-                if ticket.isLowStock, let remaining = ticket.remaining {
-                    GlassBadge(text: "Only \(remaining) left", systemImage: "flame.fill", tint: Theme.Palette.danger)
+            .padding(Theme.Spacing.l)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .glassSurface(isSelected
+                ? .tinted(Theme.Palette.orange, opacity: 0.18, cornerRadius: Theme.Radius.tile, shadow: .floating)
+                : .tile)
+            .overlay {
+                if isSelected {
+                    RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
+                        .strokeBorder(Theme.brandGradient, lineWidth: 1.5)
                 }
             }
+            .opacity(ticket.isSoldOut ? 0.55 : 1)
         }
-        .padding(Theme.Spacing.l)
-        .glassSurface(.tinted(ticket.tier.tint, opacity: 0.2, cornerRadius: Theme.Radius.tile, shadow: .floating))
-        .overlay {
-            RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
-                .strokeBorder(Theme.brandGradient, lineWidth: 1.5)
-        }
+        .buttonStyle(.glassPress)
+        .disabled(ticket.isSoldOut)
         .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
@@ -385,7 +419,7 @@ struct PlanOfferCard: View {
 private struct VenueDetailViewPreview: View {
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
-    @Environment(SubscriptionStore.self) private var subscription
+    @Environment(MembershipStore.self) private var membership
 
     var body: some View {
         VenueDetailView(viewModel: VenueDetailViewModel(
@@ -393,7 +427,7 @@ private struct VenueDetailViewPreview: View {
             booking: AppServices.preview.booking,
             session: session,
             wallet: wallet,
-            subscription: subscription
+            membership: membership
         ))
     }
 }

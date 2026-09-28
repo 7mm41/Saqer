@@ -3,7 +3,7 @@ import SwiftUI
 /// Apple-Card-style floating glass membership card.
 struct MemberCard: View {
     let user: User
-    let plan: MembershipPlan
+    let isActiveMember: Bool
     @Environment(\.locale) private var locale
 
     var body: some View {
@@ -16,7 +16,11 @@ struct MemberCard: View {
                 Text("Sarena")
                     .font(.system(.title3, design: .rounded, weight: .black))
                 Spacer()
-                GlassBadge(verbatim: plan.label(locale), tint: plan.tint, prominent: true)
+                if isActiveMember {
+                    GlassBadge(text: "Member", systemImage: "crown.fill", tint: Theme.Palette.gold, prominent: true)
+                } else {
+                    GlassBadge(text: "Not a member yet", systemImage: "sparkles", tint: .white)
+                }
             }
 
             HStack(spacing: Theme.Spacing.m) {

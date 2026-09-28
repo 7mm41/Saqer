@@ -50,8 +50,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Standard show",
+          "ar": "عرض عادي"
         },
         "perks": [
           {
@@ -61,6 +61,44 @@
         ],
         "originalPriceBaisa": 4500,
         "memberPriceBaisa": 2900,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "VIP hall",
+          "ar": "قاعة كبار الشخصيات"
+        },
+        "perks": [
+          {
+            "en": "Recliner in VIP hall",
+            "ar": "مقعد في قاعة كبار الشخصيات"
+          },
+          {
+            "en": "Popcorn & drink combo",
+            "ar": "وجبة فشار ومشروب"
+          }
+        ],
+        "originalPriceBaisa": 9000,
+        "memberPriceBaisa": 5500,
+        "remaining": 12
+      },
+      {
+        "title": {
+          "en": "Group of 4",
+          "ar": "مجموعة ٤ أشخاص"
+        },
+        "perks": [
+          {
+            "en": "4 tickets, same show",
+            "ar": "٤ تذاكر لنفس العرض"
+          },
+          {
+            "en": "2 kids' snack boxes",
+            "ar": "وجبتان خفيفتان للأطفال"
+          }
+        ],
+        "originalPriceBaisa": 16000,
+        "memberPriceBaisa": 9900,
         "remaining": null
       }
     ]
@@ -116,8 +154,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Solo ride",
+          "ar": "جولة فردية"
         },
         "perks": [
           {
@@ -131,6 +169,44 @@
         ],
         "originalPriceBaisa": 25000,
         "memberPriceBaisa": 15000,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "Guided coast ride",
+          "ar": "جولة ساحلية بمرشد"
+        },
+        "perks": [
+          {
+            "en": "60-minute guided coast ride",
+            "ar": "رحلة ساحلية ٦٠ دقيقة مع مرشد"
+          },
+          {
+            "en": "GoPro footage",
+            "ar": "تصوير بكاميرا GoPro"
+          }
+        ],
+        "originalPriceBaisa": 45000,
+        "memberPriceBaisa": 27000,
+        "remaining": 6
+      },
+      {
+        "title": {
+          "en": "Two jet skis",
+          "ar": "دراجتان مائيتان"
+        },
+        "perks": [
+          {
+            "en": "2 jet skis · 30 minutes",
+            "ar": "دراجتان مائيتان · ٣٠ دقيقة"
+          },
+          {
+            "en": "Kids ride with an instructor",
+            "ar": "الأطفال يركبون مع مدرب"
+          }
+        ],
+        "originalPriceBaisa": 48000,
+        "memberPriceBaisa": 29500,
         "remaining": null
       }
     ]
@@ -182,8 +258,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Quick ride",
+          "ar": "جولة سريعة"
         },
         "perks": [
           {
@@ -194,6 +270,44 @@
         "originalPriceBaisa": 18000,
         "memberPriceBaisa": 11500,
         "remaining": null
+      },
+      {
+        "title": {
+          "en": "Private cove tour",
+          "ar": "جولة الخلجان الخاصة"
+        },
+        "perks": [
+          {
+            "en": "40-minute private cove tour",
+            "ar": "جولة خاصة ٤٠ دقيقة في الخلجان"
+          },
+          {
+            "en": "Omani coffee on the beach",
+            "ar": "قهوة عُمانية على الشاطئ"
+          }
+        ],
+        "originalPriceBaisa": 35000,
+        "memberPriceBaisa": 22000,
+        "remaining": 8
+      },
+      {
+        "title": {
+          "en": "Three jet skis",
+          "ar": "ثلاث دراجات مائية"
+        },
+        "perks": [
+          {
+            "en": "3 jet skis · 40 minutes",
+            "ar": "٣ دراجات مائية · ٤٠ دقيقة"
+          },
+          {
+            "en": "Beach stop included",
+            "ar": "توقف على الشاطئ"
+          }
+        ],
+        "originalPriceBaisa": 50000,
+        "memberPriceBaisa": 30000,
+        "remaining": 9
       }
     ]
   },
@@ -244,8 +358,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Pistol lane",
+          "ar": "ممر المسدس"
         },
         "perks": [
           {
@@ -255,6 +369,44 @@
         ],
         "originalPriceBaisa": 12000,
         "memberPriceBaisa": 7500,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "Full range experience",
+          "ar": "تجربة الميدان الكاملة"
+        },
+        "perks": [
+          {
+            "en": "Pistol, rifle & clay",
+            "ar": "مسدس وبندقية وأطباق"
+          },
+          {
+            "en": "Private range officer",
+            "ar": "مشرف خاص"
+          }
+        ],
+        "originalPriceBaisa": 30000,
+        "memberPriceBaisa": 19000,
+        "remaining": 8
+      },
+      {
+        "title": {
+          "en": "Group of 4",
+          "ar": "مجموعة ٤ رماة"
+        },
+        "perks": [
+          {
+            "en": "Up to 4 shooters",
+            "ar": "حتى ٤ رماة"
+          },
+          {
+            "en": "100 rounds shared",
+            "ar": "١٠٠ طلقة مشتركة"
+          }
+        ],
+        "originalPriceBaisa": 40000,
+        "memberPriceBaisa": 26000,
         "remaining": null
       }
     ]
@@ -310,8 +462,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Karting session",
+          "ar": "جلسة كارتينج"
         },
         "perks": [
           {
@@ -321,6 +473,44 @@
         ],
         "originalPriceBaisa": 10000,
         "memberPriceBaisa": 6500,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "Drift hot laps",
+          "ar": "لفات الدريفت"
+        },
+        "perks": [
+          {
+            "en": "3 drift hot laps",
+            "ar": "٣ لفات دريفت"
+          },
+          {
+            "en": "Onboard video",
+            "ar": "فيديو من داخل السيارة"
+          }
+        ],
+        "originalPriceBaisa": 60000,
+        "memberPriceBaisa": 39000,
+        "remaining": 4
+      },
+      {
+        "title": {
+          "en": "Group karting",
+          "ar": "كارتينج جماعي"
+        },
+        "perks": [
+          {
+            "en": "2 adults + 2 juniors",
+            "ar": "بالغان + ناشئان"
+          },
+          {
+            "en": "Junior track access",
+            "ar": "دخول حلبة الناشئين"
+          }
+        ],
+        "originalPriceBaisa": 30000,
+        "memberPriceBaisa": 19500,
         "remaining": null
       }
     ]
@@ -372,8 +562,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "General stand",
+          "ar": "المدرج العام"
         },
         "perks": [
           {
@@ -383,6 +573,40 @@
         ],
         "originalPriceBaisa": 5000,
         "memberPriceBaisa": 3000,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "Barrier-side seat",
+          "ar": "مقعد بجانب الحاجز"
+        },
+        "perks": [
+          {
+            "en": "Barrier-side seat",
+            "ar": "مقعد بجانب الحاجز"
+          },
+          {
+            "en": "Refreshments",
+            "ar": "مرطبات"
+          }
+        ],
+        "originalPriceBaisa": 15000,
+        "memberPriceBaisa": 9500,
+        "remaining": 14
+      },
+      {
+        "title": {
+          "en": "4 seats together",
+          "ar": "٤ مقاعد متجاورة"
+        },
+        "perks": [
+          {
+            "en": "4 seats together",
+            "ar": "٤ مقاعد متجاورة"
+          }
+        ],
+        "originalPriceBaisa": 16000,
+        "memberPriceBaisa": 10000,
         "remaining": null
       }
     ]
@@ -434,8 +658,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "100 game credits",
+          "ar": "١٠٠ رصيد ألعاب"
         },
         "perks": [
           {
@@ -446,6 +670,44 @@
         "originalPriceBaisa": 10000,
         "memberPriceBaisa": 6000,
         "remaining": null
+      },
+      {
+        "title": {
+          "en": "Unlimited + VR",
+          "ar": "غير محدود مع الواقع الافتراضي"
+        },
+        "perks": [
+          {
+            "en": "3 hours unlimited",
+            "ar": "٣ ساعات غير محدودة"
+          },
+          {
+            "en": "VR included",
+            "ar": "الواقع الافتراضي مشمول"
+          }
+        ],
+        "originalPriceBaisa": 20000,
+        "memberPriceBaisa": 12000,
+        "remaining": 20
+      },
+      {
+        "title": {
+          "en": "Group of 4",
+          "ar": "مجموعة ٤ لاعبين"
+        },
+        "perks": [
+          {
+            "en": "4 players · 2 hours unlimited",
+            "ar": "٤ لاعبين · ساعتان غير محدودة"
+          },
+          {
+            "en": "Kids' VR zone",
+            "ar": "منطقة واقع افتراضي للأطفال"
+          }
+        ],
+        "originalPriceBaisa": 32000,
+        "memberPriceBaisa": 19000,
+        "remaining": 5
       }
     ]
   },
@@ -500,8 +762,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Entry + fast lane",
+          "ar": "دخول ومسار سريع"
         },
         "perks": [
           {
@@ -511,6 +773,44 @@
         ],
         "originalPriceBaisa": 3000,
         "memberPriceBaisa": 1500,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "Main-stage seat",
+          "ar": "مقعد المسرح الرئيسي"
+        },
+        "perks": [
+          {
+            "en": "Reserved main-stage seat",
+            "ar": "مقعد محجوز أمام المسرح"
+          },
+          {
+            "en": "Lounge access",
+            "ar": "دخول الصالة"
+          }
+        ],
+        "originalPriceBaisa": 12000,
+        "memberPriceBaisa": 7500,
+        "remaining": 10
+      },
+      {
+        "title": {
+          "en": "Entry for 4",
+          "ar": "دخول ٤ أشخاص"
+        },
+        "perks": [
+          {
+            "en": "Entry for 4",
+            "ar": "دخول ٤ أشخاص"
+          },
+          {
+            "en": "Kids' zone wristbands",
+            "ar": "أساور منطقة الأطفال"
+          }
+        ],
+        "originalPriceBaisa": 9000,
+        "memberPriceBaisa": 5500,
         "remaining": null
       }
     ]
@@ -562,8 +862,8 @@
     "offers": [
       {
         "title": {
-          "en": "Member ticket",
-          "ar": "تذكرة الأعضاء"
+          "en": "Festival entry",
+          "ar": "دخول المهرجان"
         },
         "perks": [
           {
@@ -573,6 +873,40 @@
         ],
         "originalPriceBaisa": 2000,
         "memberPriceBaisa": 1000,
+        "remaining": null
+      },
+      {
+        "title": {
+          "en": "Majlis seating",
+          "ar": "جلسة المجلس"
+        },
+        "perks": [
+          {
+            "en": "Majlis seating",
+            "ar": "جلسة في المجلس"
+          },
+          {
+            "en": "Omani coffee & dates",
+            "ar": "قهوة عُمانية وتمر"
+          }
+        ],
+        "originalPriceBaisa": 10000,
+        "memberPriceBaisa": 6500,
+        "remaining": 15
+      },
+      {
+        "title": {
+          "en": "Entry for 4",
+          "ar": "دخول ٤ أشخاص"
+        },
+        "perks": [
+          {
+            "en": "Entry for 4",
+            "ar": "دخول ٤ أشخاص"
+          }
+        ],
+        "originalPriceBaisa": 6000,
+        "memberPriceBaisa": 3500,
         "remaining": null
       }
     ]

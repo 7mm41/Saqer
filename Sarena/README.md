@@ -10,16 +10,22 @@ Sarena is an iOS app for exclusive discounts and bookings in Oman. It is for mem
 2. Select the **Sarena** target → *Signing & Capabilities* → choose your Team.
 3. Run on an iPhone simulator or device (iOS 17+).
 
+## Backend: on-device demo or the Sarena API
+
+* **No setup:** when `Info.plist › SarenaAPIBaseURL` is empty, the app runs on an on-device demo backend (`AppServices.mock`).
+* **Real server:** start the API in `../backend` (`npm install && npm start`), then either set `SarenaAPIBaseURL` (for example `https://api.sarena.om`) or add the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000`. Every service then goes through `APIClient`, and the token is kept in the Keychain.
+* **Live updates:** changes made in the dashboard reach the app without signing out and back in. That includes new events, prices, photos, the membership price, a membership granted by an admin, and a code redeemed at the venue. The app re-checks everything each time it returns to the foreground; ETags keep that cheap. While it is open, it also listens to the server's event stream (`GET /v1/live`, see `Stores/LiveSync.swift`).
+
 ## 🧪 Demo account (testing only)
 
-The app ships with a mock backend (`AppServices.mock`) that seeds this member:
+Both the on-device backend and the API (with `DEMO_MODE` on) seed this member:
 
 | Sign-in method | Credentials |
 | --- | --- |
 | Mobile number | **+968 9123 4567** → SMS code **123456** |
 | Email | **demo@sarena.om** / **Sarena2026** |
 
-The demo member starts on the **👑 Gold** package. Package switches are simulated, and no payment is taken. In production they would go through a StoreKit 2 auto-renewable subscription.
+The demo member starts with an active **annual membership**. In demo mode, subscribing and renewing are simulated and no payment is taken.
 
 The login screen also has a **Demo account** card with a **Use demo account** button. It fills in the details (and the SMS code) for you. The card only appears while `AppServices.isDemo` is `true`, so it goes away once you switch to the real API. With the mock backend, every registered number accepts `123456` as its SMS code.
 
@@ -38,8 +44,8 @@ The login screen also has a **Demo account** card with a **Use demo account** bu
 | Auth | Phone OTP (SMS AutoFill), email/password, registration with live validation (Omani numbers, Arabic-Indic digits, password strength), Keychain-backed session |
 | Dashboard | Savings banner, 3D "cover-flow" featured carousel with live countdowns, the 7 category cards, a "Biggest savings" list, search |
 | Categories | Cinema · Jet Ski · Oman Shooting Club · Oman Automobile Association · Ibri Arena · Video Game Arcades · Oman Festivals (Ibri & Muscat Nights) |
-| Venue detail | Hero art with a floating discount medallion, description, highlights, MapKit `Map` with a marker and directions, **your package's price** (struck-through original price vs member price, scarcity) with a "Change package" link, quantity, floating **Book Now** bar |
-| My Account (حسابي) | One tab for everything about the member: the membership card (with the package, e.g. «👑 الذهبية»), **member savings** (total saved, ready and redeemed codes, a link to the Wallet), **subscription info** (current package, renewal date, monthly price) and the **packages**: ⭐️ Regular (free), 👑 Gold and 👨‍👩‍👧‍👦 Family, with perks, prices and a switch confirmation. Venue prices follow the package |
+| Venue detail | Hero photo (uploaded from the dashboard) or category art, with a floating discount medallion. Also: event dates, description, highlights, and a MapKit `Map` with a marker and directions. **Ticket options** show the struck-through original price vs the member price, with live scarcity. Then quantity and a floating **Book Now** bar; without a membership that bar shows **Become a member** instead |
+| My Account (حسابي) | Membership card, **member savings** (total saved, ready and redeemed codes, a link to the Wallet) and the **Sarena membership**. There is one plan: **15 OMR a year**, set in the dashboard. The screen shows its status, valid-until date, days left, progress, perks and a **Subscribe / Renew** button, whose confirmation is anchored to the button. Renewing adds a year to the current expiry date |
 | Wallet | Glass segmented control **Active Codes / Used Codes**, ticket-shaped cards, QR sheet, copy code, mark as used |
 | Language switch | Changing the language shows a short branded **"Changing language…" screen** (logo in a filling timer ring, the target language with its flag). The switch happens behind it, so the layout never flips between LTR and RTL in view. The same screen appears when the language is picked on first launch |
 | Settings | **Language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), **app icon picker**, appearance, floating-motion toggle, **Log Out** |
@@ -51,16 +57,16 @@ Sarena/
 ├── App/            SarenaApp (entry point), RootView (auth gate), MainTabView
 ├── DesignSystem/   Theme tokens, GlassSurface modifier, FloatingGlass (motion),
 │                   GlassBackground, buttons / text field / segmented control, brand views
-├── Models/         User, OfferCategory, Venue + TicketOption, MembershipPlan + Subscription, PromoCode, AppPreferences, sample data
-├── Services/       AuthService (email + OTP), CatalogService, BookingService, SubscriptionService, KeychainStore, AppServices (DI)
-├── Stores/         SessionStore, WalletStore, SubscriptionStore, LanguageCoordinator, AppRouter  (@Observable, @MainActor)
+├── Models/         User, OfferCategory, Venue + TicketOption, MembershipPlan + Membership, PromoCode, AppPreferences, sample data
+├── Services/       Auth, Catalog, Booking, Membership (mock + API), APIClient, LiveUpdates (SSE), KeychainStore, AppServices (DI)
+├── Stores/         SessionStore, CatalogStore, WalletStore, MembershipStore, LiveSync, LanguageCoordinator, AppRouter  (@Observable, @MainActor)
 ├── ViewModels/     Login, Register, Home, VenueDetail, Wallet, Account, Settings
 ├── Views/          Onboarding, Auth, Home, Detail, Wallet, Account, Settings, Shared
 └── Resources/      Assets.xcassets, Localizable.xcstrings, InfoPlist.xcstrings, Info.plist
 ```
 
 * Views get services from `@Environment(\.services)` and **inject them into their view models**, so every view model can be tested with fakes (see `SarenaTests`).
-* To go live, add URLSession-backed types that conform to `AuthServicing`, `CatalogServicing` and `BookingServicing`, and replace `AppServices.mock` in `SarenaApp`. No view needs to change.
+* `AppServices.configured()` picks the on-device demo services or the URLSession-backed API services (`Services/APIServices.swift`). No view depends on which one is used.
 
 ## The glass design system
 

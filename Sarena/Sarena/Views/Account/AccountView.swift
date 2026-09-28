@@ -1,16 +1,14 @@
 import SwiftUI
 
-/// "حسابي" — one place for the member's profile, member savings, subscription
-/// info and the packages (Regular / Gold / Family).
+/// "حسابي" — one place for the member's profile, member savings and the
+/// Sarena membership (a single annual plan).
 struct AccountView: View {
     @State private var viewModel: AccountViewModel
     @Environment(\.locale) private var locale
     @Environment(AppRouter.self) private var router: AppRouter?
 
-    init(service: any SubscriptionServicing, store: SubscriptionStore, session: SessionStore, wallet: WalletStore, isDemo: Bool) {
-        _viewModel = State(initialValue: AccountViewModel(
-            service: service, store: store, session: session, wallet: wallet, isDemo: isDemo
-        ))
+    init(store: MembershipStore, session: SessionStore, wallet: WalletStore, isDemo: Bool) {
+        _viewModel = State(initialValue: AccountViewModel(store: store, session: session, wallet: wallet, isDemo: isDemo))
     }
 
     var body: some View {
@@ -18,7 +16,7 @@ struct AccountView: View {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xl) {
                     if let user = viewModel.user {
-                        MemberCard(user: user, plan: viewModel.current.plan)
+                        MemberCard(user: user, isActiveMember: viewModel.isActive)
                     }
 
                     SavingsCard(
@@ -29,22 +27,17 @@ struct AccountView: View {
                         router?.selectedTab = .wallet
                     }
 
-                    SectionHeader(title: "Subscription", subtitle: "Your package and renewal")
-                        .padding(.top, Theme.Spacing.s)
-                    currentPlanCard
-
-                    SectionHeader(title: "Choose your package", subtitle: "Switch anytime. Your prices update instantly.")
+                    SectionHeader(title: "Membership", subtitle: "One plan · every member price, all year")
                         .padding(.top, Theme.Spacing.s)
 
-                    ForEach(viewModel.plans) { plan in
-                        PlanCard(
-                            plan: plan,
-                            isCurrent: viewModel.isCurrent(plan),
-                            isProcessing: viewModel.processingPlan == plan
-                        ) {
-                            viewModel.choose(plan)
-                        }
-                    }
+                    MembershipCard(
+                        plan: viewModel.plan,
+                        membership: viewModel.membership,
+                        progress: viewModel.progress(),
+                        isLoading: viewModel.isLoading
+                    )
+
+                    subscribeButton
 
                     if viewModel.isDemo {
                         Label("Demo mode — no payment is taken.", systemImage: "info.circle")
@@ -58,74 +51,105 @@ struct AccountView: View {
             .sarenaScreenBackground()
             .navigationTitle("My Account")
             .toolbarBackground(.hidden, for: .navigationBar)
-            .confirmationDialog(
-                confirmationTitle,
-                isPresented: isConfirming,
-                titleVisibility: .visible,
-                presenting: viewModel.pendingPlan
-            ) { plan in
-                Button("Confirm") { Task { await viewModel.confirm(plan) } }
-                Button("Cancel", role: .cancel) {}
-            } message: { plan in
-                if plan.monthlyPrice > 0 {
-                    Text("\(plan.monthlyPrice.omr(locale)) / month · renews monthly")
-                } else {
-                    Text("The free package — member prices at every venue.")
-                }
-            }
-            .alert("Couldn't change your package", isPresented: $viewModel.didFail) {
+            .alert("Couldn't complete the subscription", isPresented: isShowingFailure, presenting: viewModel.failure) { _ in
                 Button("OK", role: .cancel) {}
-            } message: {
-                Text("Please try again in a moment.")
+            } message: { failure in
+                Text(failure.message)
             }
-            .sensoryFeedback(.success, trigger: viewModel.justSubscribed)
+            .sensoryFeedback(.success, trigger: viewModel.subscribedAt)
+        }
+    }
+
+    private var isShowingFailure: Binding<Bool> {
+        Binding(
+            get: { viewModel.failure != nil },
+            set: { if !$0 { viewModel.failure = nil } }
+        )
+    }
+
+    // MARK: Subscribe / renew
+
+    private var subscribeButton: some View {
+        Button {
+            viewModel.requestSubscription()
+        } label: {
+            if viewModel.isProcessing {
+                ProgressView().tint(.white)
+            } else if viewModel.isRenewal {
+                Label("Renew for \(viewModel.plan.price.omr(locale)) / year", systemImage: "arrow.clockwise")
+            } else {
+                Label("Subscribe for \(viewModel.plan.price.omr(locale)) / year", systemImage: "crown.fill")
+            }
+        }
+        .buttonStyle(viewModel.isActive && !(viewModel.membership?.isEndingSoon() ?? false)
+            ? SarenaButtonStyle(kind: .glass)
+            : SarenaButtonStyle(kind: .prominent))
+        .disabled(viewModel.isProcessing || viewModel.isLoading)
+        // Attached to the button so it appears right next to it (iOS 26 shows it as a popover).
+        .confirmationDialog(confirmationTitle, isPresented: $viewModel.isConfirming, titleVisibility: .visible) {
+            Button("Confirm") { Task { await viewModel.confirmSubscription() } }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            if viewModel.isActive {
+                Text("\(viewModel.plan.price.omr(locale)) for one more year. It starts when your current membership ends, so you keep every remaining day.")
+            } else {
+                Text("\(viewModel.plan.price.omr(locale)) for one year of member prices at every Sarena venue and event.")
+            }
         }
     }
 
     private var confirmationTitle: Text {
-        guard let plan = viewModel.pendingPlan else { return Text(verbatim: "") }
-        return Text("Switch to \(plan.label(locale))?")
+        viewModel.isRenewal ? Text("Renew your membership?") : Text("Become a Sarena member?")
     }
+}
 
-    private var isConfirming: Binding<Bool> {
-        Binding(
-            get: { viewModel.pendingPlan != nil },
-            set: { if !$0 { viewModel.pendingPlan = nil } }
-        )
-    }
+/// The annual membership: status, validity with a progress bar, price and perks.
+struct MembershipCard: View {
+    let plan: MembershipPlan
+    let membership: Membership?
+    let progress: Double
+    var isLoading = false
 
-    // MARK: Current package
+    @Environment(\.locale) private var locale
 
-    private var currentPlanCard: some View {
-        let subscription = viewModel.current
-        let plan = subscription.plan
-        return VStack(alignment: .leading, spacing: Theme.Spacing.m) {
+    private var isActive: Bool { membership?.isActive() ?? false }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.l) {
             HStack(alignment: .center, spacing: Theme.Spacing.m) {
-                Text(verbatim: plan.emoji)
-                    .font(.system(size: 40))
-                    .frame(width: 72, height: 72)
+                Image(systemName: "crown.fill")
+                    .font(.system(size: 30, weight: .bold))
+                    .frame(width: 64, height: 64)
                     .background(Circle().fill(.white.opacity(0.25)))
                     .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: 1))
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Your package")
-                        .font(.sarena(.caption, weight: .semibold))
-                        .opacity(0.85)
+                VStack(alignment: .leading, spacing: 4) {
                     Text(verbatim: plan.name(locale))
-                        .font(.sarena(.largeTitle, weight: .heavy))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                        .font(.sarena(.title3, weight: .heavy))
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                    statusBadge
                 }
                 Spacer(minLength: 0)
             }
-            Text(verbatim: plan.tagline(locale))
-                .font(.sarena(.subheadline, weight: .medium))
-                .opacity(0.9)
-            HStack(spacing: Theme.Spacing.s) {
-                if let renewsAt = subscription.renewsAt {
-                    GlassBadge(text: "Renews on \(renewsAt.shortDate(locale))", systemImage: "arrow.clockwise", tint: .white)
-                    GlassBadge(text: "\(plan.monthlyPrice.omr(locale)) / month", tint: .white)
-                } else {
-                    GlassBadge(text: "Free forever", systemImage: "gift.fill", tint: .white)
+
+            if isLoading {
+                ProgressView()
+                    .tint(.white)
+                    .frame(maxWidth: .infinity)
+            } else if let membership, isActive {
+                validity(membership)
+            } else {
+                priceBlock
+            }
+
+            VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+                ForEach(plan.perks, id: \.self) { perk in
+                    Label {
+                        Text(verbatim: perk(locale))
+                    } icon: {
+                        Image(systemName: "checkmark.circle.fill")
+                    }
+                    .font(.sarena(.subheadline, weight: .medium))
                 }
             }
         }
@@ -134,108 +158,79 @@ struct AccountView: View {
         .padding(Theme.Spacing.xl)
         .background {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                .fill(LinearGradient(colors: gradient(for: plan), startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(LinearGradient(
+                    colors: isActive
+                        ? [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember]
+                        : [Theme.Palette.orange.opacity(0.9), Theme.Palette.ember, Theme.Palette.festivalPink.opacity(0.85)],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                ))
         }
-        .glassSurface(.tinted(plan.tint, opacity: 0.2, cornerRadius: Theme.Radius.hero))
-        .animation(.smooth, value: plan)
+        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: Theme.Radius.hero))
+        .animation(.smooth, value: membership)
         .accessibilityElement(children: .combine)
     }
 
-    private func gradient(for plan: MembershipPlan) -> [Color] {
-        switch plan {
-        case .regular: [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember]
-        case .gold: [Color(hex: 0xFFE08A), Theme.Palette.gold, Color(hex: 0xE39B00)]
-        case .family: [Color(hex: 0x7FE3F0), Theme.Palette.lagoon, Color(hex: 0x1565C0)]
+    @ViewBuilder
+    private var statusBadge: some View {
+        switch membership.map({ $0.isActive() ? Membership.Status.active : ($0.status == .cancelled ? .cancelled : .expired) }) {
+        case .active:
+            GlassBadge(text: "Active", systemImage: "checkmark.seal.fill", tint: .white)
+        case .expired:
+            GlassBadge(text: "Expired", systemImage: "clock.badge.exclamationmark", tint: .white)
+        case .cancelled:
+            GlassBadge(text: "Cancelled", systemImage: "xmark.circle", tint: .white)
+        case nil:
+            GlassBadge(text: "Not a member yet", systemImage: "sparkles", tint: .white)
         }
     }
-}
 
-/// One package: emoji + name, monthly price, perks and the call to action.
-private struct PlanCard: View {
-    let plan: MembershipPlan
-    let isCurrent: Bool
-    let isProcessing: Bool
-    let onChoose: () -> Void
-
-    @Environment(\.locale) private var locale
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            HStack(alignment: .center, spacing: Theme.Spacing.m) {
-                Text(verbatim: plan.emoji)
-                    .font(.system(size: 26))
-                    .frame(width: 50, height: 50)
-                    .background(Circle().fill(plan.tint.opacity(0.22)))
-                    .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))
+    private func validity(_ membership: Membership) -> some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(verbatim: plan.name(locale))
-                        .font(.sarena(.title3, weight: .heavy))
-                    Text(verbatim: plan.tagline(locale))
-                        .font(.sarena(.caption))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                    Text("Valid until")
+                        .font(.sarena(.caption, weight: .semibold))
+                        .opacity(0.85)
+                    Text(verbatim: membership.expiresAt.shortDate(locale))
+                        .font(.sarena(.title2, weight: .heavy))
                 }
-                Spacer(minLength: 0)
-                price
-            }
-
-            VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
-                ForEach(plan.perks, id: \.self) { perk in
-                    Label {
-                        Text(verbatim: perk(locale))
-                    } icon: {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(plan.tint)
-                    }
-                    .font(.sarena(.subheadline))
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(verbatim: membership.daysRemaining().localizedNumber(locale))
+                        .font(.sarena(.title2, weight: .heavy))
+                        .contentTransition(.numericText())
+                    Text("days left")
+                        .font(.sarena(.caption, weight: .semibold))
+                        .opacity(0.85)
                 }
             }
-
-            Button(action: onChoose) {
-                if isProcessing {
-                    ProgressView().tint(.white)
-                } else if isCurrent {
-                    Label("Your current package", systemImage: "checkmark.seal.fill")
-                } else {
-                    Text("Choose this package")
-                }
-            }
-            .buttonStyle(isCurrent ? SarenaButtonStyle(kind: .glass) : SarenaButtonStyle(kind: .prominent))
-            .disabled(isCurrent || isProcessing)
-        }
-        .padding(Theme.Spacing.l)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .glassSurface(isCurrent ? .tinted(plan.tint, opacity: 0.22, cornerRadius: Theme.Radius.card, shadow: .floating) : .card)
-        .overlay {
-            if isCurrent {
-                RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                    .strokeBorder(plan.tint, lineWidth: 2)
+            ProgressView(value: progress)
+                .tint(.white)
+                .background(Capsule().fill(.white.opacity(0.25)))
+            if membership.isEndingSoon() {
+                Label("Ending soon — renew to keep your member prices.", systemImage: "exclamationmark.circle.fill")
+                    .font(.sarena(.caption, weight: .bold))
             }
         }
-        .overlay(alignment: .topTrailing) {
-            if plan.isFeatured && !isCurrent {
-                GlassBadge(text: "Most popular", systemImage: "flame.fill", tint: Theme.Palette.gold, prominent: true)
-                    .padding(.trailing, Theme.Spacing.l)
-                    .offset(y: -12)
-            }
-        }
-        .accessibilityElement(children: .contain)
     }
 
-    private var price: some View {
-        VStack(alignment: .trailing, spacing: 0) {
-            if plan.monthlyPrice > 0 {
-                Text(verbatim: plan.monthlyPrice.omr(locale))
-                    .font(.sarena(.headline, weight: .heavy))
-                    .foregroundStyle(Theme.brandGradient)
-                Text("per month")
-                    .font(.sarena(.caption2))
-                    .foregroundStyle(.secondary)
-            } else {
-                Text("Free")
-                    .font(.sarena(.headline, weight: .heavy))
-                    .foregroundStyle(Theme.Palette.success)
+    private var priceBlock: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(verbatim: plan.price.omr(locale))
+                    .font(.system(size: 40, weight: .heavy, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                Text(plan.isYearly ? "/ year" : "/ period")
+                    .font(.sarena(.headline, weight: .semibold))
+                    .opacity(0.85)
             }
+            Text("Just \(plan.monthlyEquivalent.omr(locale)) a month")
+                .font(.sarena(.subheadline, weight: .semibold))
+                .opacity(0.9)
+            Text(verbatim: plan.description(locale))
+                .font(.sarena(.caption))
+                .opacity(0.85)
         }
     }
 }
@@ -248,10 +243,10 @@ private struct PlanCard: View {
 
 private struct AccountViewPreview: View {
     @Environment(SessionStore.self) private var session
-    @Environment(SubscriptionStore.self) private var store
+    @Environment(MembershipStore.self) private var store
     @Environment(WalletStore.self) private var wallet
 
     var body: some View {
-        AccountView(service: AppServices.preview.subscriptions, store: store, session: session, wallet: wallet, isDemo: true)
+        AccountView(store: store, session: session, wallet: wallet, isDemo: true)
     }
 }

@@ -52,9 +52,20 @@ final class WalletViewModel {
         }
     }
 
-    /// Demo stand-in for the venue scanning the code.
-    func markUsed(_ code: PromoCode) {
-        wallet.markUsed(code.id)
-        presentedCode = nil
+    var didFailToMarkUsed = false
+
+    /// The member confirms the venue accepted the code. Codes scanned by
+    /// venue staff move to "Used" on their own (live update).
+    func markUsed(_ code: PromoCode) async {
+        do {
+            try await wallet.markUsed(code)
+            presentedCode = nil
+        } catch {
+            didFailToMarkUsed = true
+        }
+    }
+
+    func refresh() async {
+        await wallet.refresh()
     }
 }
