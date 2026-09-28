@@ -51,7 +51,7 @@ export async function memberAdminRoutes(admin: FastifyInstance) {
     return {
       member: serializeUser(user),
       memberships: history.map((h) => serializeMembership(h.membership, h.plan)),
-      bookings: codes.map(serializeBooking),
+      bookings: codes.map((b) => serializeBooking(b)),
     };
   });
 

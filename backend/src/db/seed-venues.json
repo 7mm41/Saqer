@@ -813,7 +813,12 @@
         "memberPriceBaisa": 5500,
         "remaining": null
       }
-    ]
+    ],
+    "event": {
+      "startsInDays": 12,
+      "startHour": 17,
+      "days": 21
+    }
   },
   {
     "slug": "ibri-festival",
@@ -909,6 +914,11 @@
         "memberPriceBaisa": 3500,
         "remaining": null
       }
-    ]
+    ],
+    "event": {
+      "startsInDays": 30,
+      "startHour": 16,
+      "days": 7
+    }
   }
 ]

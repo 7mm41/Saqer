@@ -118,7 +118,7 @@ before(async () => {
   });
   database = await openDatabase({ inMemory: true });
   await seed(database.db, config, () => {});
-  app = await buildApp({ config, db: database.db, logger: false, rateLimit: false });
+  app = await buildApp({ config, db: database.db, logger: false, rateLimit: false, scheduler: false });
   baseUrl = await app.listen({ port: 0, host: '127.0.0.1' });
 });
 
@@ -133,7 +133,8 @@ describe('public', () => {
     assert.deepEqual((await call('GET', '/health')).body, { ok: true });
     const config = await call('GET', '/v1/public/config');
     assert.equal(config.status, 200);
-    assert.ok('appStoreUrl' in config.body);
+    assert.ok('appStoreUrl' in config.body.links);
+    assert.equal(config.body.reminders.hoursBefore, 5);
   });
 
   test('a single annual plan at 15 OMR, served with an ETag', async () => {

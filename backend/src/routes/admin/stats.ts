@@ -1,6 +1,6 @@
 import { and, count, desc, eq, gt, gte, sql, sum } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
-import { bookings, memberships, users } from '../../db/schema.ts';
+import { bookings, devices, memberships, notifications, users } from '../../db/schema.ts';
 
 const DAY = 86_400_000;
 
@@ -34,6 +34,13 @@ export async function statsRoutes(admin: FastifyInstance) {
       .where(gte(bookings.createdAt, since))
       .groupBy(bookings.venueName).orderBy(desc(count())).limit(5);
 
+    const [deviceCount] = await db.select({ n: count() }).from(devices);
+    const [pushes30] = await db.select({ n: count() }).from(notifications)
+      .where(and(eq(notifications.status, 'sent'), gte(notifications.sentAt, since)));
+    const [expiring30] = await db.select({ n: count() }).from(memberships).where(and(
+      eq(memberships.status, 'active'), gt(memberships.expiresAt, now), sql`${memberships.expiresAt} <= ${new Date(now.getTime() + 30 * DAY)}`,
+    ));
+
     const byDate = new Map(signups.map((s) => [s.date, s.count]));
     const series = Array.from({ length: 30 }, (_, i) => {
       const date = new Date(now.getTime() - (29 - i) * DAY).toISOString().slice(0, 10);
@@ -49,6 +56,10 @@ export async function statsRoutes(admin: FastifyInstance) {
       bookings30d: bookings30?.n ?? 0,
       redemptions30d: redeemed30?.n ?? 0,
       memberSavingsBaisa: savings?.n ?? 0,
+      pushDevices: deviceCount?.n ?? 0,
+      notificationsSent30d: pushes30?.n ?? 0,
+      membershipsEndingIn30d: expiring30?.n ?? 0,
+      pushConfigured: admin.notifier.pushConfigured,
       signups: series,
       topVenues,
     };

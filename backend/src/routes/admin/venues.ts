@@ -77,6 +77,7 @@ export async function venueAdminRoutes(admin: FastifyInstance) {
     if (existing) throw new ApiError(409, 'slug_taken', 'Another venue already uses this link name.');
     const [venue] = await db.insert(venues).values(body).returning();
     changed();
+    await admin.notifier.scheduleNewEvent(venue!);
     const [result] = await venuesWithOffers(db, [venue!], false);
     return reply.status(201).send({ venue: result });
   });
@@ -87,6 +88,8 @@ export async function venueAdminRoutes(admin: FastifyInstance) {
     const [venue] = await db.update(venues).set({ ...body, updatedAt: new Date() }).where(eq(venues.id, id)).returning();
     if (!venue) throw errors.notFound('Venue');
     changed();
+    // Publishing a draft announces it (once per venue).
+    if (body.isPublished === true) await admin.notifier.scheduleNewEvent(venue);
     const [result] = await venuesWithOffers(db, [venue], false);
     return { venue: result };
   });

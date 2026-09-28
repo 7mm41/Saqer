@@ -30,6 +30,8 @@ type SeedVenue = {
   slug: string; category: Category; name: Localized; area: Localized; summary: Localized; about: Localized;
   highlights: Localized[]; openingHours: Localized; latitude: number; longitude: number; rating: number;
   reviewCount: number; isFeatured: boolean; dealEndsInHours: number | null; sortOrder: number;
+  /** Festivals: starts `startsInDays` from today at `startHour` (Oman time) and runs `days` days. */
+  event?: { startsInDays: number; startHour: number; days: number };
   offers: { title: Localized; perks: Localized[]; originalPriceBaisa: number; memberPriceBaisa: number; remaining: number | null }[];
 };
 
@@ -71,13 +73,22 @@ export async function seed(db: Database, config: Config, log: (message: string) 
   if ((venueCount?.n ?? 0) === 0) {
     const file = resolve(import.meta.dirname, 'seed-venues.json');
     const data = JSON.parse(readFileSync(file, 'utf8')) as SeedVenue[];
-    for (const { offers: venueOffers, dealEndsInHours, ...venue } of data) {
+    for (const { offers: venueOffers, dealEndsInHours, event, ...venue } of data) {
+      const eventStartsAt = event ? omanDate(event.startsInDays, event.startHour) : null;
       const [row] = await db.insert(venues).values({
         ...venue,
         dealEndsAt: dealEndsInHours ? new Date(Date.now() + dealEndsInHours * 3_600_000) : null,
+        eventStartsAt,
+        eventEndsAt: event && eventStartsAt ? new Date(eventStartsAt.getTime() + event.days * 86_400_000) : null,
       }).returning();
       await db.insert(offers).values(venueOffers.map((offer, index) => ({ ...offer, venueId: row!.id, sortOrder: index })));
     }
     log(`Seeded ${data.length} venues and events.`);
   }
+}
+
+/** `days` from today at `hour`:00 Oman time (UTC+4). */
+function omanDate(days: number, hour: number) {
+  const now = new Date(Date.now() + 4 * 3_600_000);
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + days, hour - 4));
 }

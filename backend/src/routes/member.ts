@@ -2,11 +2,12 @@ import { and, desc, eq, gte, sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAuthContext } from '../auth.ts';
-import { bookings, offers, plans, venues, type Booking } from '../db/schema.ts';
+import { bookings, devices, offers, plans, venues, type Booking } from '../db/schema.ts';
 import { bookingCode } from '../lib/codes.ts';
 import { ApiError, errors } from '../lib/errors.ts';
 import { live } from '../lib/live.ts';
 import { activeMembership, grantMembership } from '../lib/memberships.ts';
+import { effectivePriceBaisa } from '../lib/plans.ts';
 import { parse, uuidParam } from '../lib/validation.ts';
 import { serializeBooking, serializeMembership, serializeUser } from '../serializers.ts';
 
@@ -33,15 +34,17 @@ export async function memberRoutes(api: FastifyInstance) {
     if (config.paymentsMode !== 'demo') throw errors.paymentsDisabled();
     const [plan] = await db.select().from(plans).where(and(eq(plans.id, planId), eq(plans.isActive, true))).limit(1);
     if (!plan) throw errors.notFound('Plan');
-    const granted = await grantMembership(db, { userId: user.id, planId, source: 'demo', paidBaisa: plan.priceBaisa });
+    const granted = await grantMembership(db, { userId: user.id, planId, source: 'demo', paidBaisa: effectivePriceBaisa(plan) });
     api.live.publish(...live.membershipChanged(user.id));
     return { membership: serializeMembership(granted.membership, granted.plan) };
   });
 
   api.get('/me/bookings', signedIn, async (request) => {
     const { user } = requireAuthContext(request);
-    const rows = await db.select().from(bookings).where(eq(bookings.userId, user.id)).orderBy(desc(bookings.createdAt));
-    return { bookings: rows.map(serializeBooking) };
+    const rows = await db.select({ booking: bookings, eventStartsAt: venues.eventStartsAt }).from(bookings)
+      .leftJoin(venues, eq(venues.id, bookings.venueId))
+      .where(eq(bookings.userId, user.id)).orderBy(desc(bookings.createdAt));
+    return { bookings: rows.map((r) => serializeBooking(r.booking, r.eventStartsAt)) };
   });
 
   api.post('/bookings', signedIn, async (request, reply) => {
@@ -49,7 +52,7 @@ export async function memberRoutes(api: FastifyInstance) {
     const body = parse(z.object({ offerId: z.uuid(), quantity: z.number().int().min(1).max(10) }), request.body);
     if (!(await activeMembership(db, user.id))) throw errors.membershipRequired();
 
-    const { booking, remaining } = await db.transaction(async (tx) => {
+    const { booking, remaining, eventStartsAt } = await db.transaction(async (tx) => {
       const [row] = await tx.select({ offer: offers, venue: venues }).from(offers)
         .innerJoin(venues, eq(venues.id, offers.venueId))
         .where(and(eq(offers.id, body.offerId), eq(offers.isActive, true), eq(venues.isPublished, true)))
@@ -78,7 +81,7 @@ export async function memberRoutes(api: FastifyInstance) {
         const [existing] = await tx.select({ id: bookings.id }).from(bookings).where(eq(bookings.code, code)).limit(1);
         if (existing) continue;
         const [created] = await tx.insert(bookings).values({ ...values, code }).returning();
-        return { booking: created as Booking, remaining };
+        return { booking: created as Booking, remaining, eventStartsAt: venue.eventStartsAt };
       }
       throw new ApiError(500, 'server_error', 'Could not generate a code.');
     });
@@ -86,7 +89,7 @@ export async function memberRoutes(api: FastifyInstance) {
     if (remaining !== null && booking.offerId && booking.venueId) {
       api.live.publish(live.offerRemaining(booking.offerId, booking.venueId, remaining));
     }
-    return reply.status(201).send({ booking: serializeBooking(booking) });
+    return reply.status(201).send({ booking: serializeBooking(booking, eventStartsAt) });
   });
 
   /** The member confirms the venue accepted the code (staff can also redeem it from the dashboard). */
@@ -99,5 +102,26 @@ export async function memberRoutes(api: FastifyInstance) {
     if (!updated) throw errors.notFound('Booking');
     api.live.publish(...live.bookingsChanged(user.id));
     return { booking: serializeBooking(updated) };
+  });
+
+  /** Registers this app's push token (APNs / FCM); a token moves to whoever signed in last. */
+  api.post('/me/devices', signedIn, async (request) => {
+    const { user } = requireAuthContext(request);
+    const body = parse(z.object({
+      token: z.string().trim().min(16).max(512),
+      platform: z.enum(['ios', 'android']),
+      locale: z.string().transform((v) => (v.toLowerCase().startsWith('en') ? 'en' as const : 'ar' as const)).default('ar'),
+    }), request.body);
+    await db.insert(devices).values({ userId: user.id, ...body })
+      .onConflictDoUpdate({ target: devices.token, set: { userId: user.id, platform: body.platform, locale: body.locale, lastSeenAt: new Date() } });
+    return { ok: true };
+  });
+
+  /** Called on sign-out so this phone stops receiving the member's notifications. */
+  api.delete('/me/devices/:token', signedIn, async (request) => {
+    const { user } = requireAuthContext(request);
+    const { token } = parse(z.object({ token: z.string().min(16).max(512) }), request.params);
+    await db.delete(devices).where(and(eq(devices.token, token), eq(devices.userId, user.id)));
+    return { ok: true };
   });
 }

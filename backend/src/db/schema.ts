@@ -60,6 +60,11 @@ export const plans = pgTable('plans', {
   priceBaisa: integer('price_baisa').notNull(),
   durationDays: integer('duration_days').notNull(),
   perks: jsonb('perks').$type<Localized[]>().notNull().default(sql`'[]'::jsonb`),
+  /** Limited-time discount on the plan (e.g. National Day: 12 OMR instead of 15). */
+  promoPriceBaisa: integer('promo_price_baisa'),
+  promoLabel: jsonb('promo_label').$type<Localized>(),
+  promoStartsAt: timestamp('promo_starts_at', { withTimezone: true }),
+  promoEndsAt: timestamp('promo_ends_at', { withTimezone: true }),
   isActive: boolean('is_active').notNull().default(true),
   sortOrder: integer('sort_order').notNull().default(0),
   createdAt: createdAt(),
@@ -146,11 +151,83 @@ export const bookings = pgTable('bookings', {
   createdAt: createdAt(),
 }, (t) => [uniqueIndex('bookings_code_idx').on(t.code), index('bookings_user_idx').on(t.userId)]);
 
+// ---------------------------------------------------------------- App look & notifications
+
+/** Seasonal looks: bundled home-screen icons the app can offer (App Store rule 4.6: the member taps to apply). */
+export const themeIcons = ['AppIcon-NationalDay', 'AppIcon-Ramadan', 'AppIcon-Eid'] as const;
+
+/**
+ * Seasonal branding (National Day, Ramadan, Eid...): the in-app logo, a
+ * greeting and home banner, and optionally a bundled home-screen icon.
+ * Active between `startsAt` and `endsAt` (open-ended when null).
+ */
+export const themes = pgTable('themes', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: text('name').notNull(),
+  logoUrl: text('logo_url'),
+  bannerUrl: text('banner_url'),
+  greeting: jsonb('greeting').$type<Localized>(),
+  /** Hex colour, e.g. "#C8102E". */
+  accentColor: text('accent_color'),
+  iconName: text('icon_name', { enum: themeIcons }),
+  startsAt: timestamp('starts_at', { withTimezone: true }),
+  endsAt: timestamp('ends_at', { withTimezone: true }),
+  isEnabled: boolean('is_enabled').notNull().default(true),
+  createdAt: createdAt(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Push-notification tokens, one per installed app. */
+export const devices = pgTable('devices', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  platform: text('platform', { enum: ['ios', 'android'] }).notNull(),
+  token: text('token').notNull().unique(),
+  locale: text('locale', { enum: ['ar', 'en'] }).notNull().default('ar'),
+  createdAt: createdAt(),
+  lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
+}, (t) => [index('devices_user_idx').on(t.userId)]);
+
+export const notificationKinds = [
+  'broadcast', 'new_event', 'event_day', 'plan_promo', 'membership_expiring', 'membership_expired',
+] as const;
+export const audiences = ['all', 'members', 'non_members', 'user'] as const;
+
+/** Every push the server sends (automatic or from the dashboard). `dedupeKey` makes automatic ones fire once. */
+export const notifications = pgTable('notifications', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  kind: text('kind', { enum: notificationKinds }).notNull(),
+  dedupeKey: text('dedupe_key').unique(),
+  title: jsonb('title').$type<Localized>().notNull(),
+  body: jsonb('body').$type<Localized>().notNull(),
+  audience: text('audience', { enum: audiences }).notNull(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  /** Opens this venue when tapped. */
+  venueId: uuid('venue_id').references(() => venues.id, { onDelete: 'set null' }),
+  status: text('status', { enum: ['scheduled', 'sending', 'sent', 'cancelled', 'failed'] }).notNull().default('scheduled'),
+  scheduledFor: timestamp('scheduled_for', { withTimezone: true }).notNull(),
+  sentAt: timestamp('sent_at', { withTimezone: true }),
+  recipients: integer('recipients').notNull().default(0),
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: createdAt(),
+}, (t) => [index('notifications_due_idx').on(t.status, t.scheduledFor)]);
+
+/** Small key/value settings edited from the dashboard. */
+export const settings = pgTable('settings', {
+  key: text('key').primaryKey(),
+  value: jsonb('value').notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
 export type User = typeof users.$inferSelect;
 export type Plan = typeof plans.$inferSelect;
 export type Membership = typeof memberships.$inferSelect;
 export type Venue = typeof venues.$inferSelect;
 export type Offer = typeof offers.$inferSelect;
 export type Booking = typeof bookings.$inferSelect;
+export type Theme = typeof themes.$inferSelect;
+export type Device = typeof devices.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;
+export type Audience = (typeof audiences)[number];
 export type Role = (typeof roles)[number];
 export type Category = (typeof categories)[number];

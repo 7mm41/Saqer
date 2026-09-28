@@ -1,9 +1,9 @@
-import { createHash } from 'node:crypto';
 import { and, asc, eq, inArray } from 'drizzle-orm';
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import type { Database } from '../db/client.ts';
 import { offers, plans, venues, type Offer, type Venue } from '../db/schema.ts';
 import { errors } from '../lib/errors.ts';
+import { sendCached } from '../lib/http.ts';
 import { parse, uuidParam } from '../lib/validation.ts';
 import { serializePlan, serializeVenue } from '../serializers.ts';
 
@@ -18,26 +18,13 @@ export async function venuesWithOffers(db: Database, rows: Venue[], activeOnly: 
   return rows.map((v) => serializeVenue(v, all.filter((o) => o.venueId === v.id)));
 }
 
-/**
- * Sends JSON with an ETag, answering 304 when the client already has it.
- * Apps re-check the catalogue on every foreground and live event, so an
- * unchanged catalogue costs one query and an empty response.
- */
-function sendCached(request: FastifyRequest, reply: FastifyReply, payload: unknown) {
-  const body = JSON.stringify(payload);
-  const etag = `W/"${createHash('sha1').update(body).digest('base64url')}"`;
-  reply.header('ETag', etag).header('Cache-Control', 'private, no-cache');
-  if (request.headers['if-none-match'] === etag) return reply.status(304).send();
-  return reply.type('application/json; charset=utf-8').send(body);
-}
-
 export async function catalogRoutes(api: FastifyInstance) {
   const { db } = api;
 
   /** Public: shown on the website and before subscribing. */
   api.get('/plans', async (request, reply) => {
     const rows = await db.select().from(plans).where(eq(plans.isActive, true)).orderBy(asc(plans.sortOrder));
-    return sendCached(request, reply, { plans: rows.map(serializePlan) });
+    return sendCached(request, reply, { plans: rows.map((p) => serializePlan(p)) });
   });
 
   /** Members-only: prices are visible to signed-in accounts only. */

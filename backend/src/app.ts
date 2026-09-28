@@ -10,9 +10,12 @@ import type { Database } from './db/client.ts';
 import type { Role } from './db/schema.ts';
 import { ApiError } from './lib/errors.ts';
 import { LiveHub } from './lib/live.ts';
+import { Notifier } from './lib/notifier.ts';
+import { createPushSender, type PushSender } from './lib/push.ts';
 import { createSmsSender, type SmsSender } from './lib/sms.ts';
 import { createTokenService, type TokenService } from './lib/tokens.ts';
 import { adminRoutes } from './routes/admin/index.ts';
+import { appConfigRoutes } from './routes/app-config.ts';
 import { authRoutes } from './routes/auth.ts';
 import { catalogRoutes } from './routes/catalog.ts';
 import { liveRoutes } from './routes/live.ts';
@@ -25,6 +28,7 @@ declare module 'fastify' {
     tokens: TokenService;
     sms: SmsSender;
     live: LiveHub;
+    notifier: Notifier;
     /** `preHandler: app.guard()` (any signed-in user) or `app.guard('admin')`. */
     guard: (...roles: Role[]) => preHandlerHookHandler;
   }
@@ -35,12 +39,16 @@ export type BuildOptions = {
   db: Database;
   /** Live-update hub; defaults to a single-process hub. */
   live?: LiveHub;
+  /** Push provider; defaults to APNs when configured. */
+  push?: PushSender;
+  /** Runs the notification scheduler (tests call `app.notifier.tick()` themselves). */
+  scheduler?: boolean;
   logger?: boolean;
   rateLimit?: boolean;
 };
 
 export async function buildApp({
-  config, db, live = new LiveHub(), logger = true, rateLimit: limitRequests = true,
+  config, db, live = new LiveHub(), push, scheduler = config.scheduler, logger = true, rateLimit: limitRequests = true,
 }: BuildOptions): Promise<FastifyInstance> {
   const app = Fastify({
     logger: logger ? { level: config.production ? 'info' : 'debug' } : false,
@@ -55,10 +63,16 @@ export async function buildApp({
   app.decorate('sms', createSmsSender(config.sms, app.log));
   app.decorate('guard', makeGuard(db, tokens) as FastifyInstance['guard']);
   app.decorate('live', live);
+  const notifier = new Notifier({ db, push: push ?? createPushSender(config, app.log), live, config, log: app.log });
+  app.decorate('notifier', notifier);
   app.decorateRequest('auth', null);
   await live.start();
+  if (scheduler) app.addHook('onReady', async () => notifier.start());
   // End open event streams first, or closing the server would wait on them.
-  app.addHook('preClose', async () => live.stop());
+  app.addHook('preClose', async () => {
+    await notifier.stop();
+    await live.stop();
+  });
 
   await app.register(helmet, {
     contentSecurityPolicy: {
@@ -104,12 +118,8 @@ export async function buildApp({
     await memberRoutes(api);
     await adminRoutes(api);
     await liveRoutes(api);
+    await appConfigRoutes(api);
   }, { prefix: '/v1' });
-
-  app.get('/v1/public/config', async () => ({
-    appStoreUrl: config.links.appStore,
-    googlePlayUrl: config.links.googlePlay,
-  }));
 
   // Uploaded images, the public website and the admin dashboard (a PWA).
   mkdirSync(config.uploadsDir, { recursive: true });

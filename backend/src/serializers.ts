@@ -1,5 +1,6 @@
-import type { Booking, Membership, Offer, Plan, User, Venue } from './db/schema.ts';
+import type { Booking, Membership, Notification, Offer, Plan, Theme, User, Venue } from './db/schema.ts';
 import { membershipStatus } from './lib/memberships.ts';
+import { activePromo } from './lib/plans.ts';
 
 const iso = (date: Date | null) => (date ? date.toISOString() : null);
 
@@ -14,14 +15,57 @@ export const serializeUser = (u: User) => ({
   status: u.status,
 });
 
-export const serializePlan = (p: Plan) => ({
-  id: p.id,
-  name: p.name,
-  description: p.description,
-  priceBaisa: p.priceBaisa,
-  durationDays: p.durationDays,
-  perks: p.perks,
-  isActive: p.isActive,
+/** Public shape: `promo` is present only while the discount runs. */
+export const serializePlan = (p: Plan, now = new Date()) => {
+  const promo = activePromo(p, now);
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    priceBaisa: p.priceBaisa,
+    durationDays: p.durationDays,
+    perks: p.perks,
+    isActive: p.isActive,
+    promo: promo ? { priceBaisa: promo.priceBaisa, label: promo.label, endsAt: iso(promo.endsAt) } : null,
+  };
+};
+
+/** Dashboard shape, with the discount settings as stored. */
+export const serializePlanAdmin = (p: Plan) => ({
+  ...serializePlan(p),
+  promoPriceBaisa: p.promoPriceBaisa,
+  promoLabel: p.promoLabel,
+  promoStartsAt: iso(p.promoStartsAt),
+  promoEndsAt: iso(p.promoEndsAt),
+  sortOrder: p.sortOrder,
+});
+
+export const serializeTheme = (t: Theme) => ({
+  id: t.id,
+  name: t.name,
+  logoUrl: t.logoUrl,
+  bannerUrl: t.bannerUrl,
+  greeting: t.greeting,
+  accentColor: t.accentColor,
+  iconName: t.iconName,
+  startsAt: iso(t.startsAt),
+  endsAt: iso(t.endsAt),
+  isEnabled: t.isEnabled,
+});
+
+export const serializeNotification = (n: Notification) => ({
+  id: n.id,
+  kind: n.kind,
+  title: n.title,
+  body: n.body,
+  audience: n.audience,
+  userId: n.userId,
+  venueId: n.venueId,
+  status: n.status,
+  scheduledFor: iso(n.scheduledFor),
+  sentAt: iso(n.sentAt),
+  recipients: n.recipients,
+  createdAt: iso(n.createdAt),
 });
 
 export const serializeMembership = (m: Membership, plan: Plan) => ({
@@ -66,7 +110,8 @@ export const serializeVenue = (v: Venue, offers: Offer[]) => ({
   offers: offers.map(serializeOffer),
 });
 
-export const serializeBooking = (b: Booking) => ({
+/** `eventStartsAt` comes from the venue (so a rescheduled event moves the app's reminders). */
+export const serializeBooking = (b: Booking, eventStartsAt: Date | null = null) => ({
   id: b.id,
   code: b.code,
   venueId: b.venueId,
@@ -80,4 +125,5 @@ export const serializeBooking = (b: Booking) => ({
   purchasedAt: iso(b.createdAt),
   expiresAt: iso(b.expiresAt),
   usedAt: iso(b.usedAt),
+  eventStartsAt: iso(eventStartsAt),
 });

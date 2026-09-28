@@ -1,4 +1,5 @@
 import { randomBytes } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -48,6 +49,22 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
     links: {
       appStore: env.APP_STORE_URL ?? '',
       googlePlay: env.GOOGLE_PLAY_URL ?? '',
+      whatsapp: env.SUPPORT_WHATSAPP ?? '',
+      email: env.SUPPORT_EMAIL ?? '',
+      instagram: env.INSTAGRAM_URL ?? '',
     },
+    /** Apple Push Notification service (token auth with a .p8 key from developer.apple.com). */
+    apns: {
+      keyId: env.APNS_KEY_ID ?? '',
+      teamId: env.APNS_TEAM_ID ?? '',
+      bundleId: env.APNS_BUNDLE_ID ?? 'om.sarena.app',
+      privateKey: env.APNS_KEY ?? (env.APNS_KEY_FILE ? readFileSync(resolve(root, env.APNS_KEY_FILE), 'utf8') : ''),
+      /** false = the sandbox gateway used by Xcode / TestFlight-less development builds. */
+      production: bool(env.APNS_PRODUCTION, production),
+    },
+    /** Oman is UTC+4 all year (no daylight saving). */
+    timezoneOffsetMinutes: Number(env.TIMEZONE_OFFSET_MINUTES ?? 240),
+    /** Runs automatic notifications and theme changes (turn off on all but one instance if you prefer). */
+    scheduler: bool(env.SCHEDULER, true),
   };
 }

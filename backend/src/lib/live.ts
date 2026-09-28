@@ -15,6 +15,7 @@ import type { Role } from '../db/schema.ts';
  *   catalog     venues/offers/events changed          → every signed-in client
  *   offer       { offerId, venueId, remaining }        → every signed-in client (scarcity counter)
  *   plans       membership plans changed               → every signed-in client
+ *   config      seasonal theme / reminder settings      → every signed-in client
  *   membership  this member's membership changed       → that member
  *   bookings    this member's codes changed            → that member
  *   account     profile/status/role changed            → that member (re-fetch /me; 401/403 → signed out)
@@ -24,14 +25,14 @@ import type { Role } from '../db/schema.ts';
  * an `account` event with `{ revoked: true }`), on every instance.
  */
 export type LiveEvent =
-  | { type: 'catalog' | 'plans'; audience: 'all' }
+  | { type: 'catalog' | 'plans' | 'config'; audience: 'all' }
   | { type: 'offer'; audience: 'all'; data: { offerId: string; venueId: string; remaining: number | null } }
   | { type: 'membership' | 'bookings' | 'account'; audience: 'user'; userId: string }
   | { type: 'admin'; audience: 'staff'; data: { topic: AdminTopic } }
   | { type: 'revoke'; audience: 'user'; userId: string }
   | { type: 'revoke'; audience: 'session'; sessionId: string };
 
-export type AdminTopic = 'members' | 'memberships' | 'bookings' | 'catalog' | 'plans';
+export type AdminTopic = 'members' | 'memberships' | 'bookings' | 'catalog' | 'plans' | 'themes' | 'notifications';
 
 type Client = { id: string; userId: string; sessionId: string; role: Role; stream: ServerResponse };
 
@@ -130,6 +131,10 @@ export const live = {
   plansChanged: (): LiveEvent[] => [
     { type: 'plans', audience: 'all' },
     { type: 'admin', audience: 'staff', data: { topic: 'plans' } },
+  ],
+  configChanged: (): LiveEvent[] => [
+    { type: 'config', audience: 'all' },
+    { type: 'admin', audience: 'staff', data: { topic: 'themes' } },
   ],
   membershipChanged: (userId: string): LiveEvent[] => [
     { type: 'membership', audience: 'user', userId },
