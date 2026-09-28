@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @State private var viewModel: SettingsViewModel
@@ -10,6 +11,7 @@ struct SettingsView: View {
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.openURL) private var openURL
     @Environment(LanguageCoordinator.self) private var languageCoordinator
+    @State private var notifications = NotificationsManager.shared
 
     init(session: SessionStore) {
         _viewModel = State(initialValue: SettingsViewModel(session: session))
@@ -20,6 +22,7 @@ struct SettingsView: View {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xl) {
                     languageSection
+                    notificationsSection
                     appIconSection
                     experienceSection
                     aboutSection
@@ -31,6 +34,8 @@ struct SettingsView: View {
             .sarenaScreenBackground()
             .navigationTitle("Settings")
             .toolbarBackground(.hidden, for: .navigationBar)
+            .onAppear { viewModel.refreshIcon() }
+            .task { await notifications.refreshAuthorization() }
             .alert("Couldn't change the icon", isPresented: $viewModel.iconChangeFailed) {
                 Button("OK", role: .cancel) {}
             } message: {
@@ -116,6 +121,41 @@ struct SettingsView: View {
                 Text("Alternate icons aren't available on this device.")
                     .font(.sarena(.caption))
                     .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: Notifications
+
+    private var notificationsSection: some View {
+        SettingsSection(title: "Notifications", systemImage: "bell.badge.fill") {
+            HStack(alignment: .center, spacing: Theme.Spacing.m) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(notifications.isAuthorized ? "Notifications are on" : "Notifications are off")
+                        .font(.sarena(.subheadline, weight: .semibold))
+                    Text("New events, member discounts and reminders before the events you booked.")
+                        .font(.sarena(.caption))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer(minLength: 0)
+                if notifications.isAuthorized {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(Theme.Palette.success)
+                }
+            }
+            if !notifications.isAuthorized {
+                Button {
+                    if notifications.authorization == .denied {
+                        if let url = URL(string: UIApplication.openNotificationSettingsURLString) { openURL(url) }
+                    } else {
+                        Task { await notifications.requestAuthorization() }
+                    }
+                } label: {
+                    Label("Turn on notifications", systemImage: "bell.fill")
+                }
+                .buttonStyle(.sarenaGlass)
             }
         }
     }

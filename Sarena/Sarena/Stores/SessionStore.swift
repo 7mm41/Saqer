@@ -19,6 +19,10 @@ final class SessionStore {
         return nil
     }
 
+    /// Runs before signing out while the session is still valid (e.g. to
+    /// unlink this phone's push token from the member).
+    @ObservationIgnored var beforeSignOut: (@MainActor () async -> Void)?
+
     private let auth: any AuthServicing
     private let keychain: KeychainStore
     private static let sessionAccount = "current-session"
@@ -69,6 +73,7 @@ final class SessionStore {
     }
 
     func signOut() async {
+        await beforeSignOut?()
         await auth.signOut()
         endSession()
     }

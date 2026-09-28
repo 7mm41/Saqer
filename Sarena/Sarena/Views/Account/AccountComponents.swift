@@ -9,9 +9,7 @@ struct MemberCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.l) {
             HStack {
-                Image("SarenaLogo")
-                    .resizable()
-                    .scaledToFit()
+                BrandMark()
                     .frame(width: 34, height: 34)
                 Text("Sarena")
                     .font(.system(.title3, design: .rounded, weight: .black))

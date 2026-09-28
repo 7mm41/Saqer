@@ -3,6 +3,7 @@
   Sarena — 3D glass logo renderer.
   Rendered headlessly by render.sh. Query parameters:
     v    = classic | glass | midnight | frost      (visual variant)
+           nationalday | ramadan | eid               (seasonal icons, offered by the dashboard)
     mode = icon | mark | lockup | lockup-dark       (layout)
     tint = 1                                         (grayscale, for the iOS "tinted" icon)
   Every layer is plain CSS/SVG so designers can tweak and re-render.
@@ -88,6 +89,26 @@
              --hole: radial-gradient(circle at 40% 35%, #FFB463 0 20%, #FF7900 70%, #D85500);
              --hole-shadow: inset 0 calc(var(--s)*.01) calc(var(--s)*.02) rgba(90,30,0,.45); }
 
+  /* Seasonal: Oman National Day (flag red, white, green), Ramadan (night gold), Eid (emerald & gold). */
+  .nationalday { --fill: linear-gradient(150deg, #FF5A62 0%, #E0182D 45%, #B30D22 100%);
+                 --depth-lo: rgba(90,0,10,.5); --depth-hi: rgba(255,255,255,.3); --gloss: .5; --streak: .26;
+                 --shadow-col: rgba(200,16,46,.55);
+                 --hole: radial-gradient(circle at 35% 30%, #fff 0 32%, #F3F3F3 60%, #D9D9D9 100%);
+                 --hole-shadow: inset 0 calc(var(--s)*.012) calc(var(--s)*.02) rgba(90,0,10,.45), 0 calc(var(--s)*.006) 0 rgba(255,255,255,.6); }
+  .ramadan     { --fill: linear-gradient(150deg, #FFE7A3 0%, #F2C14E 40%, #D99A1E 70%, #A86B06 100%);
+                 --depth-lo: rgba(90,50,0,.5); --depth-hi: rgba(255,255,255,.35); --gloss: .55; --streak: .3;
+                 --shadow-col: rgba(242,193,78,.5);
+                 --hole: radial-gradient(circle at 40% 35%, #3A3470 0 25%, #1B1446 70%, #0E1033);
+                 --hole-shadow: inset 0 calc(var(--s)*.012) calc(var(--s)*.02) rgba(0,0,0,.55);
+                 --rim: linear-gradient(145deg, rgba(255,250,225,.98), rgba(255,220,140,.2) 40%, rgba(255,220,140,.08) 60%, rgba(255,235,170,.8)); }
+  .eid         { --fill: linear-gradient(150deg, rgba(255,255,255,.7), rgba(255,255,255,.32) 55%, rgba(220,255,240,.5));
+                 --backdrop: blur(26px) saturate(160%);
+                 --depth-lo: rgba(0,80,60,.3); --depth-hi: rgba(255,255,255,.45); --gloss: .6;
+                 --shadow-col: rgba(0,60,45,.5);
+                 --hole: radial-gradient(circle at 40% 35%, #FFE7A3 0 20%, #F2C14E 65%, #B8860B);
+                 --hole-shadow: inset 0 calc(var(--s)*.01) calc(var(--s)*.02) rgba(80,50,0,.45); }
+  .deco { position: absolute; pointer-events: none; }
+
   .tinted .stage { filter: grayscale(1) contrast(1.05); }
 
   /* ---------- wordmark ---------- */
@@ -144,6 +165,9 @@
     glass:    ["#FFFFFF", "#FFE7D1"],
     midnight: ["#FFC27A", "#FF6A00"],
     frost:    ["#FF8A1F", "#D94A00"],
+    nationalday: ["#FFFFFF", "#F4F4F4"],
+    ramadan:  ["#241B5C", "#0E1033"],
+    eid:      ["#0E7C66", "#07463B"],
   }[v];
   document.body.style.setProperty("--g1", glyphInk[0]);
   document.body.style.setProperty("--g2", glyphInk[1]);
@@ -152,6 +176,9 @@
     glass:    "drop-shadow(0 6px 10px rgba(140,40,0,.45))",
     midnight: "drop-shadow(0 0 14px rgba(255,121,0,.85))",
     frost:    "drop-shadow(0 5px 8px rgba(150,40,0,.35))",
+    nationalday: "drop-shadow(0 6px 8px rgba(90,0,10,.45))",
+    ramadan:  "drop-shadow(0 2px 1px rgba(255,240,200,.6))",
+    eid:      "drop-shadow(0 5px 8px rgba(0,60,45,.35))",
   }[v];
   document.body.style.setProperty("--glyph-filter", glyphFilter);
 
@@ -191,6 +218,44 @@
       orb(230, 210, 420, "rgba(255,236,200,.85)", 100);
       orb(860, 860, 480, "rgba(255,60,90,.55)", 110);
       orb(870, 170, 240, "rgba(255,255,255,.55)", 80);
+    },
+    // Oman's flag: a red band at the hoist, then white, red and green stripes — softened into glass.
+    nationalday() {
+      stage.style.background = "linear-gradient(180deg, #FFFFFF 0 33.3%, #D8142C 33.3% 66.6%, #0A8A3A 66.6% 100%)";
+      const band = document.createElement("div");
+      band.className = "deco";
+      Object.assign(band.style, { left: 0, top: 0, width: "27%", height: "100%", background: "#C8102E" });
+      stage.appendChild(band);
+      orb(240, 170, 420, "rgba(255,255,255,.55)", 120);
+      orb(860, 880, 460, "rgba(0,120,50,.45)", 120);
+      orb(820, 520, 360, "rgba(255,80,90,.45)", 110);
+    },
+    // Night sky with a golden crescent and stars.
+    ramadan() {
+      stage.style.background = "radial-gradient(110% 90% at 70% 20%, #2B2470 0%, #171046 45%, #0B0A26 100%)";
+      orb(760, 230, 360, "rgba(242,193,78,.35)", 120);
+      orb(200, 860, 420, "rgba(90,70,200,.45)", 120);
+      stage.insertAdjacentHTML("beforeend", `
+        <svg class="deco" viewBox="0 0 1024 1024" style="inset:0;width:100%;height:100%">
+          <defs><linearGradient id="moon" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FFF1BF"/><stop offset="1" stop-color="#E0A526"/></linearGradient></defs>
+          <path d="M835 110a150 150 0 1 0 95 250a122 122 0 1 1 -95 -250z" fill="url(#moon)" opacity=".95"/>
+          ${[[140,150,9],[300,90,6],[610,120,7],[95,420,6],[930,560,8],[160,700,5],[880,860,6],[520,930,5],[380,210,4]]
+            .map(([x,y,r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#FFF3C9" opacity=".9"/>`).join("")}
+        </svg>`);
+    },
+    // Emerald with gold confetti.
+    eid() {
+      stage.style.background = "linear-gradient(155deg, #19A383 0%, #0E7C66 45%, #07463B 100%)";
+      orb(230, 200, 420, "rgba(255,231,163,.55)", 110);
+      orb(860, 860, 480, "rgba(242,193,78,.45)", 120);
+      orb(880, 160, 260, "rgba(255,255,255,.4)", 80);
+      const bits = [[120,180,-20],[260,80,30],[860,300,15],[930,620,-35],[110,760,40],[300,920,-10],[700,930,25],[520,70,-40],[80,470,10],[950,880,-15]];
+      stage.insertAdjacentHTML("beforeend", `<svg class="deco" viewBox="0 0 1024 1024" style="inset:0;width:100%;height:100%">
+        ${bits.map(([x,y,a],i) => i % 3 === 0
+          ? `<path d="M${x} ${y-22}l7 15 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2z" fill="#FFE08A"/>`
+          : `<rect x="${x}" y="${y}" width="30" height="12" rx="4" fill="${i % 2 ? '#F2C14E' : '#FFFFFF'}" opacity=".9" transform="rotate(${a} ${x} ${y})"/>`).join("")}
+      </svg>`);
     },
   };
 

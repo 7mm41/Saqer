@@ -81,6 +81,26 @@
         }
       }
     },
+    "Allow" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السماح"
+          }
+        }
+      }
+    },
+    "Allow notifications and we'll remind you before it starts." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فعّل الإشعارات وسنذكّرك قبل أن تبدأ."
+          }
+        }
+      }
+    },
     "Alternate icons aren't available on this device." : {
       "localizations" : {
         "ar" : {
@@ -117,6 +137,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "المظهر"
+          }
+        }
+      }
+    },
+    "Apply" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تطبيق"
           }
         }
       }
@@ -501,12 +531,32 @@
         }
       }
     },
+    "Don't miss it" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا تفوّتها"
+          }
+        }
+      }
+    },
     "Done" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "تم"
+          }
+        }
+      }
+    },
+    "Eid" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العيد"
           }
         }
       }
@@ -717,6 +767,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ابدأ الآن"
+          }
+        }
+      }
+    },
+    "Get the %@ icon on your home screen" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ضع أيقونة %@ على شاشتك الرئيسية"
           }
         }
       }
@@ -1081,6 +1141,26 @@
         }
       }
     },
+    "National Day" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العيد الوطني"
+          }
+        }
+      }
+    },
+    "New events, member discounts and reminders before the events you booked." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الفعاليات الجديدة وخصومات الأعضاء وتذكيرات قبل الفعاليات التي حجزتها."
+          }
+        }
+      }
+    },
     "New to Sarena?" : {
       "localizations" : {
         "ar" : {
@@ -1137,6 +1217,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ليس الآن"
+          }
+        }
+      }
+    },
+    "Notifications" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإشعارات"
+          }
+        }
+      }
+    },
+    "Notifications are off" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإشعارات متوقفة"
+          }
+        }
+      }
+    },
+    "Notifications are on" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإشعارات مفعّلة"
           }
         }
       }
@@ -1371,6 +1481,16 @@
         }
       }
     },
+    "Ramadan" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمضان"
+          }
+        }
+      }
+    },
     "Read more" : {
       "localizations" : {
         "ar" : {
@@ -1397,6 +1517,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "مستخدم"
+          }
+        }
+      }
+    },
+    "Reminder set" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم ضبط التذكير"
           }
         }
       }
@@ -1681,6 +1811,16 @@
         }
       }
     },
+    "Switch back" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العودة"
+          }
+        }
+      }
+    },
     "System" : {
       "localizations" : {
         "ar" : {
@@ -1737,6 +1877,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "فريق سرينا سعيد بانضمامك. أفضل التجارب في عُمان بأسعار حصرية للأعضاء."
+          }
+        }
+      }
+    },
+    "The season is over. Switch back to the classic icon?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتهى الموسم. هل تريد العودة إلى الأيقونة الكلاسيكية؟"
           }
         }
       }
@@ -1831,12 +1981,32 @@
         }
       }
     },
+    "Turn on notifications" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تفعيل الإشعارات"
+          }
+        }
+      }
+    },
     "Unlock member prices" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "افتح أسعار الأعضاء"
+          }
+        }
+      }
+    },
+    "Until %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حتى %@"
           }
         }
       }

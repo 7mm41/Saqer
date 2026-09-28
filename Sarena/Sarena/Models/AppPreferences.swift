@@ -17,6 +17,12 @@ enum AppIcon: String, CaseIterable, Identifiable {
     case midnight
     /// White frosted glass on a sunset gradient.
     case frost
+    /// Seasonal: Oman National Day (flag colours).
+    case nationalDay
+    /// Seasonal: Ramadan (night sky, golden crescent).
+    case ramadan
+    /// Seasonal: Eid (emerald and gold).
+    case eid
 
     var id: String { rawValue }
 
@@ -27,6 +33,17 @@ enum AppIcon: String, CaseIterable, Identifiable {
         case .glass: "AppIcon-Glass"
         case .midnight: "AppIcon-Midnight"
         case .frost: "AppIcon-Frost"
+        case .nationalDay: "AppIcon-NationalDay"
+        case .ramadan: "AppIcon-Ramadan"
+        case .eid: "AppIcon-Eid"
+        }
+    }
+
+    /// Offered by the dashboard's seasonal themes.
+    var isSeasonal: Bool {
+        switch self {
+        case .nationalDay, .ramadan, .eid: true
+        default: false
         }
     }
 
@@ -36,6 +53,9 @@ enum AppIcon: String, CaseIterable, Identifiable {
         case .glass: "Glassmorphism Logo"
         case .midnight: "Midnight Glass"
         case .frost: "Frost Glass"
+        case .nationalDay: "National Day"
+        case .ramadan: "Ramadan"
+        case .eid: "Eid"
         }
     }
 
@@ -46,6 +66,9 @@ enum AppIcon: String, CaseIterable, Identifiable {
         case .glass: "IconPreview-Glass"
         case .midnight: "IconPreview-Midnight"
         case .frost: "IconPreview-Frost"
+        case .nationalDay: "IconPreview-NationalDay"
+        case .ramadan: "IconPreview-Ramadan"
+        case .eid: "IconPreview-Eid"
         }
     }
 

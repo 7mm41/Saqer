@@ -66,7 +66,8 @@ actor MockBookingService: BookingServicing {
             originalTotal: ticket.originalPrice * Decimal(quantity),
             purchasedAt: now,
             expiresAt: now.addingTimeInterval(validity),
-            status: .active
+            status: .active,
+            eventStartsAt: venue.eventStartsAt
         )
         save([code] + load(for: user), for: user)
         return code

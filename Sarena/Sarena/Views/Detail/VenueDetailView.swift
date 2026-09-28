@@ -259,7 +259,7 @@ struct VenueDetailView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Unlock member prices")
                     .font(.sarena(.headline, weight: .bold))
-                Text("\(viewModel.plan.price.omr(locale)) / year · every venue, all year")
+                Text("\(viewModel.plan.effectivePrice.omr(locale)) / year · every venue, all year")
                     .font(.sarena(.caption))
                     .foregroundStyle(.secondary)
             }

@@ -9,8 +9,10 @@ enum LiveEvent: Equatable, Sendable {
     case catalog
     /// A ticket option's remaining member-price allocation changed.
     case offerRemaining(offerID: String, remaining: Int?)
-    /// Membership plans (price, perks) changed.
+    /// Membership plans (price, perks, discount) changed.
     case plans
+    /// Seasonal theme or reminder timings changed.
+    case config
     /// This member's membership changed (granted, renewed, cancelled).
     case membership
     /// This member's codes changed (booked on another device, redeemed at the venue).
@@ -48,6 +50,7 @@ struct ServerSentEventParser {
         case "ready": return .ready
         case "catalog": return .catalog
         case "plans": return .plans
+        case "config": return .config
         case "membership": return .membership
         case "bookings": return .bookings
         case "account": return .account(revoked: object["revoked"] as? Bool ?? false)

@@ -3,12 +3,14 @@ import SwiftUI
 /// Sarena · سرينا — exclusive, members-only discounts and bookings in Oman.
 @main
 struct SarenaApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     private let services: AppServices
     @State private var session: SessionStore
     @State private var wallet: WalletStore
     @State private var membership: MembershipStore
     @State private var catalog: CatalogStore
     @State private var liveSync: LiveSync
+    @State private var appConfig: AppConfigStore
     @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
 
@@ -22,13 +24,19 @@ struct SarenaApp: App {
         let wallet = WalletStore(booking: services.booking)
         let membership = MembershipStore(service: services.membership)
         let catalog = CatalogStore(catalog: services.catalog)
+        let appConfig = AppConfigStore(service: services.config)
         _session = State(initialValue: session)
+        _appConfig = State(initialValue: appConfig)
         _wallet = State(initialValue: wallet)
         _membership = State(initialValue: membership)
         _catalog = State(initialValue: catalog)
         _liveSync = State(initialValue: LiveSync(
-            live: services.live, session: session, catalog: catalog, membership: membership, wallet: wallet
+            live: services.live, session: session, catalog: catalog, membership: membership, wallet: wallet,
+            appConfig: appConfig
         ))
+        // Push notifications and on-phone event reminders.
+        NotificationsManager.shared.activate(registration: services.push)
+        session.beforeSignOut = { await NotificationsManager.shared.sessionChanged(signedIn: false) }
         _motion = State(initialValue: MotionManager())
         _languageCoordinator = State(initialValue: LanguageCoordinator())
     }
@@ -42,6 +50,7 @@ struct SarenaApp: App {
                 .environment(membership)
                 .environment(catalog)
                 .environment(liveSync)
+                .environment(appConfig)
                 .environment(motion)
                 .environment(languageCoordinator)
                 .appLanguage(languageCoordinator.language)

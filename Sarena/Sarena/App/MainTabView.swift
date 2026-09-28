@@ -7,6 +7,7 @@ struct MainTabView: View {
     @Environment(MembershipStore.self) private var membership
     @Environment(CatalogStore.self) private var catalog
     @State private var router = AppRouter()
+    @State private var notifications = NotificationsManager.shared
 
     var body: some View {
         TabView(selection: $router.selectedTab) {
@@ -34,6 +35,18 @@ struct MainTabView: View {
         }
         .environment(router)
         .sensoryFeedback(.selection, trigger: router.selectedTab)
+        // Tapped notifications: a venue opens on Discover, a reminder opens the Wallet.
+        .onChange(of: notifications.pendingVenueID, initial: true) { _, venueID in
+            guard let venueID else { return }
+            router.selectedTab = .discover
+            router.pendingVenueID = venueID
+            notifications.pendingVenueID = nil
+        }
+        .onChange(of: notifications.opensWallet, initial: true) { _, opens in
+            guard opens else { return }
+            router.selectedTab = .wallet
+            notifications.opensWallet = false
+        }
     }
 }
 

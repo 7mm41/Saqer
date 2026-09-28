@@ -21,6 +21,7 @@ final class LiveSync {
     @ObservationIgnored private let catalog: CatalogStore
     @ObservationIgnored private let membership: MembershipStore
     @ObservationIgnored private let wallet: WalletStore
+    @ObservationIgnored private let appConfig: AppConfigStore?
     @ObservationIgnored private var catalogReload: Task<Void, Never>?
     @ObservationIgnored private let sleep: @Sendable (Duration) async throws -> Void
 
@@ -30,6 +31,7 @@ final class LiveSync {
         catalog: CatalogStore,
         membership: MembershipStore,
         wallet: WalletStore,
+        appConfig: AppConfigStore? = nil,
         sleep: @escaping @Sendable (Duration) async throws -> Void = { try await Task.sleep(for: $0) }
     ) {
         self.live = live
@@ -37,6 +39,7 @@ final class LiveSync {
         self.catalog = catalog
         self.membership = membership
         self.wallet = wallet
+        self.appConfig = appConfig
         self.sleep = sleep
     }
 
@@ -48,7 +51,12 @@ final class LiveSync {
         async let current: Void = membership.refresh()
         async let plans: Void = membership.reloadPlans()
         async let codes: Void = wallet.refresh()
-        _ = await (profile, venues, current, plans, codes)
+        async let look: Void = refreshConfig()
+        _ = await (profile, venues, current, plans, codes, look)
+    }
+
+    private func refreshConfig() async {
+        await appConfig?.refresh()
     }
 
     /// Runs until cancelled (the scene leaves the foreground or the member signs out).
@@ -92,6 +100,8 @@ final class LiveSync {
             catalog.updateRemaining(offerID: offerID, remaining: remaining)
         case .plans:
             await membership.reloadPlans()
+        case .config:
+            await appConfig?.refresh()
         case .membership:
             await membership.refresh()
         case .bookings:

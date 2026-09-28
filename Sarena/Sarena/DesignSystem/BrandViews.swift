@@ -1,5 +1,25 @@
 import SwiftUI
 
+/// The Sarena logo — or, while a seasonal theme runs (National Day, Ramadan,
+/// Eid...), the logo uploaded for it in the dashboard.
+struct BrandMark: View {
+    @Environment(AppConfigStore.self) private var appConfig: AppConfigStore?
+
+    var body: some View {
+        if let url = appConfig?.theme?.logoURL {
+            AsyncImage(url: url, transaction: Transaction(animation: .easeOut(duration: 0.3))) { phase in
+                if let image = phase.image {
+                    image.resizable().scaledToFit()
+                } else {
+                    Image("SarenaLogo").resizable().scaledToFit()
+                }
+            }
+        } else {
+            Image("SarenaLogo").resizable().scaledToFit()
+        }
+    }
+}
+
 /// The 3D glass Sarena price tag (rendered artwork in `SarenaLogo`), with an
 /// orange halo so it glows over the scene.
 struct SarenaLogoView: View {
@@ -9,9 +29,7 @@ struct SarenaLogoView: View {
     var floats = false
 
     var body: some View {
-        let logo = Image("SarenaLogo")
-            .resizable()
-            .scaledToFit()
+        let logo = BrandMark()
             .frame(width: size, height: size)
             .background {
                 // Radial gradient instead of a blur filter: same glow, no per-frame blur.

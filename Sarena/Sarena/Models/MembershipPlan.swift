@@ -11,6 +11,17 @@ struct MembershipPlan: Identifiable, Hashable, Sendable {
     let price: Decimal
     let durationDays: Int
     let perks: [LocalizedText]
+    /// A limited-time discount running now (set in the dashboard).
+    var promo: Promo? = nil
+
+    struct Promo: Hashable, Sendable {
+        let price: Decimal
+        let label: LocalizedText
+        let endsAt: Date?
+    }
+
+    /// What subscribing costs right now.
+    var effectivePrice: Decimal { promo?.price ?? price }
 
     /// Launch plan: 15 OMR a year. Used by the mock backend and as a fallback.
     static let annual = MembershipPlan(
@@ -33,12 +44,16 @@ struct MembershipPlan: Identifiable, Hashable, Sendable {
     var isYearly: Bool { (360...370).contains(durationDays) }
 
     /// Price per month, for the "only X a month" marketing line.
-    var monthlyEquivalent: Decimal { price * 30 / Decimal(max(durationDays, 1)) }
+    var monthlyEquivalent: Decimal { effectivePrice * 30 / Decimal(max(durationDays, 1)) }
 }
 
 extension MembershipPlan: Codable {
     private enum CodingKeys: String, CodingKey {
-        case id, name, description, priceBaisa, durationDays, perks
+        case id, name, description, priceBaisa, durationDays, perks, promo
+    }
+
+    private enum PromoKeys: String, CodingKey {
+        case priceBaisa, label, endsAt
     }
 
     init(from decoder: Decoder) throws {
@@ -49,6 +64,14 @@ extension MembershipPlan: Codable {
         price = .baisa(try container.decode(Int.self, forKey: .priceBaisa))
         durationDays = try container.decode(Int.self, forKey: .durationDays)
         perks = try container.decodeIfPresent([LocalizedText].self, forKey: .perks) ?? []
+        if (try? container.decodeNil(forKey: .promo)) == false, container.contains(.promo) {
+            let promo = try container.nestedContainer(keyedBy: PromoKeys.self, forKey: .promo)
+            self.promo = Promo(
+                price: .baisa(try promo.decode(Int.self, forKey: .priceBaisa)),
+                label: try promo.decode(LocalizedText.self, forKey: .label),
+                endsAt: try promo.decodeIfPresent(Date.self, forKey: .endsAt)
+            )
+        }
     }
 
     func encode(to encoder: Encoder) throws {
@@ -59,6 +82,12 @@ extension MembershipPlan: Codable {
         try container.encode(price.baisaValue, forKey: .priceBaisa)
         try container.encode(durationDays, forKey: .durationDays)
         try container.encode(perks, forKey: .perks)
+        if let promo {
+            var nested = container.nestedContainer(keyedBy: PromoKeys.self, forKey: .promo)
+            try nested.encode(promo.price.baisaValue, forKey: .priceBaisa)
+            try nested.encode(promo.label, forKey: .label)
+            try nested.encodeIfPresent(promo.endsAt, forKey: .endsAt)
+        }
     }
 }
 

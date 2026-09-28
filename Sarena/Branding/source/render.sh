@@ -30,6 +30,10 @@ shot icon-classic.png  1024 1024 "v=classic&mode=icon"
 shot icon-glass.png    1024 1024 "v=glass&mode=icon"
 shot icon-midnight.png 1024 1024 "v=midnight&mode=icon"
 shot icon-frost.png    1024 1024 "v=frost&mode=icon"
+# Seasonal icons (the dashboard's themes offer them; the member taps to apply)
+shot icon-nationalday.png 1024 1024 "v=nationalday&mode=icon"
+shot icon-ramadan.png     1024 1024 "v=ramadan&mode=icon"
+shot icon-eid.png         1024 1024 "v=eid&mode=icon"
 
 # iOS 18+ dark / tinted appearances of the primary icon (transparent background)
 shot icon-dark.png     1024 1024 "v=classic&mode=mark&s=620"

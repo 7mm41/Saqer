@@ -42,11 +42,35 @@ final class SettingsViewModel {
         changingIcon = icon
         defer { changingIcon = nil }
         do {
-            try await Self.setAlternateIconName(icon.alternateIconName)
+            try await AppIconSwitcher.apply(icon)
             currentIcon = icon
         } catch {
             iconChangeFailed = true
         }
+    }
+
+    /// Re-reads the icon (it may have been changed from the seasonal banner).
+    func refreshIcon() {
+        currentIcon = AppIconSwitcher.current
+    }
+
+    // MARK: Session
+
+    func signOut() async {
+        isSigningOut = true
+        await session.signOut()
+        isSigningOut = false
+    }
+}
+
+/// Changes the Home Screen icon. Always called from a tap: App Store rule 4.6
+/// requires every icon change to be initiated by the member.
+@MainActor
+enum AppIconSwitcher {
+    static var current: AppIcon { AppIcon(alternateIconName: UIApplication.shared.alternateIconName) }
+
+    static func apply(_ icon: AppIcon) async throws {
+        try await setAlternateIconName(icon.alternateIconName)
     }
 
     /// Bridges `setAlternateIconName(_:completionHandler:)` to async/await.
@@ -64,13 +88,5 @@ final class SettingsViewModel {
                 }
             }
         }
-    }
-
-    // MARK: Session
-
-    func signOut() async {
-        isSigningOut = true
-        await session.signOut()
-        isSigningOut = false
     }
 }

@@ -9,6 +9,8 @@ extension AppServices {
             catalog: APICatalogService(client: client),
             booking: APIBookingService(client: client),
             membership: APIMembershipService(client: client),
+            config: APIAppConfigService(client: client),
+            push: APIPushRegistration(client: client),
             live: ServerSentEventsClient(client: client),
             isDemo: false
         )

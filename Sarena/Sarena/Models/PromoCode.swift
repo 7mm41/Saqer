@@ -22,6 +22,8 @@ struct PromoCode: Identifiable, Hashable, Sendable {
     let expiresAt: Date
     var status: Status
     var usedAt: Date?
+    /// For events: when it starts (the venue's current date), for on-phone reminders.
+    var eventStartsAt: Date? = nil
 
     var savings: Decimal { originalTotal - paidTotal }
 
@@ -36,7 +38,7 @@ struct PromoCode: Identifiable, Hashable, Sendable {
 
 extension PromoCode: Codable {
     private enum CodingKeys: String, CodingKey {
-        case id, code, category, offerTitle, quantity, status, purchasedAt, expiresAt, usedAt, venueName
+        case id, code, category, offerTitle, quantity, status, purchasedAt, expiresAt, usedAt, venueName, eventStartsAt
         case venueID = "venueId"
         case paidTotal = "paidTotalBaisa"
         case originalTotal = "originalTotalBaisa"
@@ -58,6 +60,7 @@ extension PromoCode: Codable {
         purchasedAt = try c.decode(Date.self, forKey: .purchasedAt)
         expiresAt = try c.decode(Date.self, forKey: .expiresAt)
         usedAt = try c.decodeIfPresent(Date.self, forKey: .usedAt)
+        eventStartsAt = try c.decodeIfPresent(Date.self, forKey: .eventStartsAt)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -75,5 +78,6 @@ extension PromoCode: Codable {
         try c.encode(purchasedAt, forKey: .purchasedAt)
         try c.encode(expiresAt, forKey: .expiresAt)
         try c.encodeIfPresent(usedAt, forKey: .usedAt)
+        try c.encodeIfPresent(eventStartsAt, forKey: .eventStartsAt)
     }
 }

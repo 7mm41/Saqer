@@ -47,6 +47,8 @@ The login screen also has a **Demo account** card with a **Use demo account** bu
 | Venue detail | Hero photo (uploaded from the dashboard) or category art, with a floating discount medallion. Also: event dates, description, highlights, and a MapKit `Map` with a marker and directions. **Ticket options** show the struck-through original price vs the member price, with live scarcity. Then quantity and a floating **Book Now** bar; without a membership that bar shows **Become a member** instead |
 | My Account (حسابي) | Membership card, **member savings** (total saved, ready and redeemed codes, a link to the Wallet) and the **Sarena membership**. There is one plan: **15 OMR a year**, set in the dashboard. The screen shows its status, valid-until date, days left, progress, perks and a **Subscribe / Renew** button, whose confirmation is anchored to the button. Renewing adds a year to the current expiry date |
 | Wallet | Glass segmented control **Active Codes / Used Codes**, ticket-shaped cards, QR sheet, copy code, mark as used |
+| Seasonal looks | While a dashboard **theme** runs (National Day, Ramadan, Eid...), the in-app logo changes to the one uploaded in the dashboard, and Home shows the theme's greeting and banner. Home also offers the matching **home-screen icon** (bundled: 🇴🇲 National Day, 🌙 Ramadan, ✨ Eid) with a one-tap *Apply*, and offers *Switch back* when the season ends. Apple requires the member to tap for every icon change (App Store rule 4.6), so the app offers the change and never switches the icon by itself |
+| Notifications | **Push** (APNs): the server sends new events, the morning an event starts, membership discounts, membership ending and dashboard broadcasts. Tapping one about a venue opens it. **On-phone reminders** for booked events work offline: the morning of the event, and always at least 5 hours before it starts (or the evening before for early events), plus a last nudge 1 hour before. Timings come from the dashboard. Permission is asked after booking an event, or from Settings › Notifications |
 | Language switch | Changing the language shows a short branded **"Changing language…" screen** (logo in a filling timer ring, the target language with its flag). The switch happens behind it, so the layout never flips between LTR and RTL in view. The same screen appears when the language is picked on first launch |
 | Settings | **Language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), **app icon picker**, appearance, floating-motion toggle, **Log Out** |
 
@@ -97,6 +99,7 @@ The style names use a `Sarena`/`glassSurface` prefix on purpose. iOS 26 adds its
 
 | Icon | Asset | Notes |
 | --- | --- | --- |
+| National Day · Ramadan · Eid | `AppIcon-NationalDay` / `-Ramadan` / `-Eid` | Seasonal icons, offered on Home while the dashboard theme runs, and always available in Settings |
 | Sarena Classic | `AppIcon` | Primary icon, with iOS 18 dark and tinted variants |
 | **Glassmorphism Logo** | `AppIcon-Glass` | Frosted orange glass floating over colour orbs |
 | Midnight Glass | `AppIcon-Midnight` | Smoked glass with a neon rim |

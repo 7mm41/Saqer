@@ -504,6 +504,176 @@ final class LiveSyncTests: XCTestCase {
     }
 }
 
+// MARK: - Seasonal themes, discounts & reminders
+
+final class AppConfigTests: XCTestCase {
+    func testDecodesThemeRemindersAndPlanDiscount() throws {
+        let json = #"""
+        {"theme":{"id":"t1","name":"National Day 2026","logoUrl":"https://sarena.om/uploads/nd.png","bannerUrl":null,
+          "greeting":{"en":"Happy National Day","ar":"عيد وطني سعيد"},"accentColor":"#C8102E","iconName":"AppIcon-NationalDay",
+          "startsAt":null,"endsAt":"2026-11-21T20:00:00.000Z","isEnabled":true},
+         "reminders":{"morningHour":9,"hoursBefore":6,"finalReminderMinutes":30},
+         "links":{"appStoreUrl":"","googlePlayUrl":"","whatsapp":"96890000000","email":"","instagram":""},"timeZone":"Asia/Muscat"}
+        """#
+        let config = try APIClient.decoder.decode(AppConfig.self, from: Data(json.utf8))
+        XCTAssertEqual(config.theme?.icon, .nationalDay)
+        XCTAssertEqual(config.theme?.logoURL?.lastPathComponent, "nd.png")
+        XCTAssertNil(config.theme?.bannerURL)
+        XCTAssertEqual(config.reminders, ReminderSettings(morningHour: 9, hoursBefore: 6, finalReminderMinutes: 30))
+
+        let plan = #"""
+        {"id":"p1","name":{"en":"Annual","ar":"سنوي"},"description":{"en":"d","ar":"د"},"priceBaisa":15000,"durationDays":365,
+         "perks":[],"isActive":true,"promo":{"priceBaisa":12000,"label":{"en":"National Day offer","ar":"عرض العيد الوطني"},"endsAt":null}}
+        """#
+        let decoded = try APIClient.decoder.decode(MembershipPlan.self, from: Data(plan.utf8))
+        XCTAssertEqual(decoded.price, 15)
+        XCTAssertEqual(decoded.effectivePrice, 12)
+        XCTAssertEqual(decoded.promo?.label.en, "National Day offer")
+        let noPromo = try APIClient.decoder.decode(MembershipPlan.self, from: Data(plan.replacingOccurrences(
+            of: #""promo":{"priceBaisa":12000,"label":{"en":"National Day offer","ar":"عرض العيد الوطني"},"endsAt":null}"#,
+            with: #""promo":null"#).utf8))
+        XCTAssertNil(noPromo.promo)
+        XCTAssertEqual(noPromo.effectivePrice, 15)
+    }
+}
+
+@MainActor
+final class SeasonalIconTests: XCTestCase {
+    private func store(theme: SeasonalTheme?) async -> AppConfigStore {
+        let service = MockAppConfigService(config: AppConfig(theme: theme, reminders: .standard, links: .init()))
+        let store = AppConfigStore(service: service, defaults: Fixtures.defaults())
+        await store.refresh()
+        return store
+    }
+
+    func testOffersTheSeasonalIconOnceUntilDismissed() async {
+        let theme = SeasonalTheme(id: "nd", name: "National Day", iconName: "AppIcon-NationalDay")
+        let store = await store(theme: theme)
+        XCTAssertEqual(store.iconSuggestion(currentIconName: nil), .apply(.nationalDay))
+        XCTAssertNil(store.iconSuggestion(currentIconName: "AppIcon-NationalDay"))
+        store.dismiss(.apply(.nationalDay))
+        XCTAssertNil(store.iconSuggestion(currentIconName: nil))
+    }
+
+    func testOffersToSwitchBackAfterTheSeason() async {
+        let store = await store(theme: nil)
+        XCTAssertEqual(store.iconSuggestion(currentIconName: "AppIcon-Ramadan"), .restore(from: .ramadan))
+        XCTAssertNil(store.iconSuggestion(currentIconName: "AppIcon-Glass"), "a member's own choice is left alone")
+        XCTAssertNil(store.iconSuggestion(currentIconName: nil))
+    }
+
+    func testCachesTheLastConfig() async {
+        let defaults = Fixtures.defaults()
+        let theme = SeasonalTheme(id: "r", name: "Ramadan", greeting: LocalizedText("Ramadan Kareem", ar: "رمضان كريم"))
+        let first = AppConfigStore(service: MockAppConfigService(config: AppConfig(theme: theme, reminders: .standard, links: .init())),
+                                   defaults: defaults)
+        await first.refresh()
+        let offline = AppConfigStore(service: MockAppConfigService(), defaults: defaults)
+        XCTAssertEqual(offline.theme?.greeting?.ar, "رمضان كريم", "shown from the first frame on the next launch")
+    }
+}
+
+final class ReminderPlannerTests: XCTestCase {
+    private var calendar: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Muscat")!
+        return calendar
+    }()
+
+    private func date(_ day: Int, _ hour: Int, _ minute: Int = 0) -> Date {
+        calendar.date(from: DateComponents(year: 2026, month: 9, day: day, hour: hour, minute: minute))!
+    }
+
+    private func code(startingAt start: Date?, id: String = "c1", status: PromoCode.Status = .active) -> PromoCode {
+        PromoCode(id: id, code: "SRN-AB12-CD34", venueID: "v", venueName: LocalizedText("Muscat Nights", ar: "ليالي مسقط"),
+                  category: .festivals, offerTitle: LocalizedText("Entry", ar: "دخول"), quantity: 1,
+                  paidTotal: 1, originalTotal: 2, purchasedAt: date(1, 10), expiresAt: date(28, 23),
+                  status: status, eventStartsAt: start)
+    }
+
+    func testMorningOfTheEventWhenItIsFarEnoughAhead() {
+        let main = ReminderPlanner.mainReminder(start: date(18, 20), settings: .standard, calendar: calendar)
+        XCTAssertEqual(main.date, date(18, 8))
+        XCTAssertFalse(main.isEveningBefore)
+    }
+
+    func testAtLeastFiveHoursBeforeAMiddayEvent() {
+        let main = ReminderPlanner.mainReminder(start: date(18, 12), settings: .standard, calendar: calendar)
+        XCTAssertEqual(main.date, date(18, 7))
+    }
+
+    func testEveningBeforeAnEarlyEvent() {
+        let main = ReminderPlanner.mainReminder(start: date(18, 10), settings: .standard, calendar: calendar)
+        XCTAssertEqual(main.date, date(17, 20))
+        XCTAssertTrue(main.isEveningBefore)
+    }
+
+    func testPlansMainAndFinalRemindersInTheAppLanguage() {
+        let plan = ReminderPlanner.plan(codes: [code(startingAt: date(18, 20))], settings: .standard,
+                                        now: date(10, 12), calendar: calendar, locale: Locale(identifier: "ar"))
+        XCTAssertEqual(plan.map(\.fireDate), [date(18, 8), date(18, 19)])
+        XCTAssertEqual(plan.first?.title, "اليوم: ليالي مسقط")
+        XCTAssertEqual(plan.last?.title, "ليالي مسقط تبدأ بعد ساعة")
+        XCTAssertTrue(plan.allSatisfy { $0.id.hasPrefix(ReminderPlanner.prefix) })
+    }
+
+    func testSkipsPastUsedAndNonEventCodesGetAnExpiryReminder() {
+        let codes = [
+            code(startingAt: date(5, 20), id: "past"),
+            code(startingAt: date(18, 20), id: "used", status: .used),
+            code(startingAt: nil, id: "plain"),
+        ]
+        let plan = ReminderPlanner.plan(codes: codes, settings: .standard, now: date(10, 12), calendar: calendar,
+                                        locale: Locale(identifier: "en"))
+        XCTAssertEqual(plan.map(\.id), ["\(ReminderPlanner.prefix)plain.expiry"])
+        XCTAssertEqual(plan.first?.fireDate, date(26, 8))
+    }
+
+    func testFinalReminderCanBeTurnedOff() {
+        var settings = ReminderSettings.standard
+        settings.finalReminderMinutes = 0
+        let plan = ReminderPlanner.plan(codes: [code(startingAt: date(18, 20))], settings: settings,
+                                        now: date(10, 12), calendar: calendar, locale: Locale(identifier: "en"))
+        XCTAssertEqual(plan.count, 1)
+    }
+}
+
+private actor FakeNotificationCenter: LocalNotificationScheduling {
+    var pending: [String: PlannedReminder] = [:]
+
+    func pendingIdentifiers() async -> [String] { Array(pending.keys) }
+    func add(_ reminder: PlannedReminder) async { pending[reminder.id] = reminder }
+    func remove(identifiers: [String]) async { identifiers.forEach { pending[$0] = nil } }
+    func insertForeign(_ id: String) { pending[id] = PlannedReminder(id: id, fireDate: .now, title: "", body: "") }
+}
+
+@MainActor
+final class ReminderSchedulerTests: XCTestCase {
+    func testKeepsPendingRemindersInStepWithTheWallet() async {
+        let center = FakeNotificationCenter()
+        await center.insertForeign("someone-else")
+        let scheduler = ReminderScheduler(center: center)
+        let start = Date.now.addingTimeInterval(10 * 86_400)
+        var code = PromoCode(id: "c1", code: "SRN-AB12-CD34", venueID: "v", venueName: LocalizedText("Arena", ar: "الساحة"),
+                             category: .ibriArena, offerTitle: LocalizedText("Seat", ar: "مقعد"), quantity: 1, paidTotal: 1,
+                             originalTotal: 2, purchasedAt: .now, expiresAt: start.addingTimeInterval(86_400),
+                             status: .active, eventStartsAt: start)
+        await scheduler.sync(codes: [code], settings: .standard, locale: Locale(identifier: "en"))
+        var ids = await center.pendingIdentifiers()
+        XCTAssertEqual(ids.filter { $0.hasPrefix(ReminderPlanner.prefix) }.count, 2)
+
+        // Redeemed at the venue (live update) → its reminders go away.
+        code.status = .used
+        await scheduler.sync(codes: [code], settings: .standard, locale: Locale(identifier: "en"))
+        ids = await center.pendingIdentifiers()
+        XCTAssertEqual(ids, ["someone-else"])
+
+        await scheduler.clear()
+        ids = await center.pendingIdentifiers()
+        XCTAssertEqual(ids, ["someone-else"])
+    }
+}
+
 // MARK: - Language
 
 @MainActor

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Members' dashboard: savings, featured deals, the seven categories and top discounts.
 struct HomeView: View {
@@ -9,15 +10,19 @@ struct HomeView: View {
     @Environment(CatalogStore.self) private var catalog
     @Environment(AppRouter.self) private var router: AppRouter?
     @Environment(\.locale) private var locale
+    @Environment(AppConfigStore.self) private var appConfig
 
     @State private var viewModel: HomeViewModel
+    @State private var path: [HomeRoute] = []
+    @State private var currentIconName: String? = UIApplication.shared.alternateIconName
+    @State private var isApplyingIcon = false
 
     init(catalog: CatalogStore) {
         _viewModel = State(initialValue: HomeViewModel(catalog: catalog))
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: Theme.Spacing.xxl) {
                     header
@@ -42,6 +47,40 @@ struct HomeView: View {
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: HomeRoute.self) { destination(for: $0) }
             .task { await viewModel.loadIfNeeded() }
+            .onAppear { currentIconName = UIApplication.shared.alternateIconName }
+            // A tapped notification about a venue opens it here.
+            .onChange(of: router?.pendingVenueID, initial: true) { openPendingVenue() }
+            .onChange(of: viewModel.venues) { openPendingVenue() }
+        }
+    }
+
+    private func openPendingVenue() {
+        guard let id = router?.pendingVenueID, let venue = viewModel.venues.first(where: { $0.id == id }) else { return }
+        router?.pendingVenueID = nil
+        path = [.venue(venue)]
+    }
+
+    // MARK: Seasonal theme
+
+    private var iconSuggestion: AppConfigStore.IconSuggestion? {
+        appConfig.iconSuggestion(currentIconName: currentIconName)
+    }
+
+    private var showsSeasonalBanner: Bool {
+        appConfig.theme?.greeting != nil || appConfig.theme?.bannerURL != nil || iconSuggestion != nil
+    }
+
+    private func applySuggestedIcon() {
+        guard let suggestion = iconSuggestion else { return }
+        let icon: AppIcon = switch suggestion {
+        case .apply(let icon): icon
+        case .restore: .classic
+        }
+        isApplyingIcon = true
+        Task {
+            try? await AppIconSwitcher.apply(icon)
+            currentIconName = UIApplication.shared.alternateIconName
+            isApplyingIcon = false
         }
     }
 
@@ -77,6 +116,16 @@ struct HomeView: View {
 
     private var dashboard: some View {
         VStack(spacing: Theme.Spacing.xxl) {
+            if showsSeasonalBanner {
+                SeasonalBanner(
+                    theme: appConfig.theme,
+                    suggestion: iconSuggestion,
+                    isApplying: isApplyingIcon,
+                    onApply: applySuggestedIcon,
+                    onDismiss: { if let suggestion = iconSuggestion { appConfig.dismiss(suggestion) } }
+                )
+                .padding(.horizontal, Theme.gutter)
+            }
             // Tapping the banner opens "My Account", where member savings live.
             Button {
                 router?.selectedTab = .account

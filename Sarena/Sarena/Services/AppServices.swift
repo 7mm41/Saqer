@@ -8,6 +8,10 @@ struct AppServices: Sendable {
     let catalog: any CatalogServicing
     let booking: any BookingServicing
     let membership: any MembershipServicing
+    /// Seasonal theme and reminder timings from the dashboard.
+    var config: any AppConfigServicing = MockAppConfigService()
+    /// Push-notification token registration.
+    var push: any PushRegistrationServicing = NoPushRegistration()
     /// Server push for live updates; nil for the on-device mock backend.
     var live: (any LiveUpdatesServicing)?
     /// True while the app runs on the mock backend: enables the demo-account shortcut.

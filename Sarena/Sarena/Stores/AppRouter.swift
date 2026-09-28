@@ -12,6 +12,8 @@ enum AppTab: Hashable {
 @MainActor
 final class AppRouter {
     var selectedTab: AppTab = .discover
+    /// A venue to open on Discover (e.g. from a tapped notification).
+    var pendingVenueID: String?
 
     nonisolated init() {}
 }

@@ -118,6 +118,51 @@ actor APICatalogService: CatalogServicing {
     }
 }
 
+/// `GET /v1/app/config` (public), ETag-cached like the catalogue.
+actor APIAppConfigService: AppConfigServicing {
+    private let client: APIClient
+    private var cached: (etag: String, config: AppConfig)?
+
+    init(client: APIClient) {
+        self.client = client
+    }
+
+    func fetchConfig() async throws -> AppConfig {
+        var request = client.makeRequest("GET", "app/config")
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        if let cached {
+            request.setValue(cached.etag, forHTTPHeaderField: "If-None-Match")
+        }
+        let (data, response) = try await client.data(for: request)
+        if response.statusCode == 304, let cached {
+            return cached.config
+        }
+        guard (200..<300).contains(response.statusCode) else {
+            throw APIClient.error(from: data, status: response.statusCode)
+        }
+        let config = try APIClient.decoder.decode(AppConfig.self, from: data)
+        if let etag = response.value(forHTTPHeaderField: "ETag") {
+            cached = (etag, config)
+        }
+        return config
+    }
+}
+
+struct APIPushRegistration: PushRegistrationServicing {
+    let client: APIClient
+
+    func register(token: String, locale: String) async throws {
+        struct Body: Encodable { let token: String; let platform = "ios"; let locale: String }
+        struct OK: Decodable {}
+        _ = try await client.post("me/devices", body: Body(token: token, locale: locale), as: OK.self)
+    }
+
+    func unregister(token: String) async {
+        struct OK: Decodable {}
+        _ = try? await client.send(client.makeRequest("DELETE", "me/devices/\(token)")) as OK
+    }
+}
+
 struct APIMembershipService: MembershipServicing {
     let client: APIClient
 

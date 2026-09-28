@@ -18,7 +18,7 @@ ROOT = File.expand_path('..', __dir__)
 PROJECT_PATH = File.join(ROOT, 'Sarena.xcodeproj')
 DEPLOYMENT_TARGET = '17.0'
 BUNDLE_ID = 'om.sarena.app'
-ALTERNATE_ICONS = %w[AppIcon-Glass AppIcon-Midnight AppIcon-Frost].freeze
+ALTERNATE_ICONS = %w[AppIcon-Glass AppIcon-Midnight AppIcon-Frost AppIcon-NationalDay AppIcon-Ramadan AppIcon-Eid].freeze
 RESOURCE_EXTENSIONS = %w[.xcassets .xcstrings].freeze
 # Folder-like bundles that must be referenced as a single file.
 BUNDLE_EXTENSIONS = %w[.xcassets].freeze
@@ -84,6 +84,8 @@ app.build_configurations.each do |config|
   settings['ENABLE_PREVIEWS'] = 'YES'
   settings['CODE_SIGN_STYLE'] = 'Automatic'
   settings['DEVELOPMENT_TEAM'] = '' # Set your team in Signing & Capabilities.
+  # Push notifications (aps-environment).
+  settings['CODE_SIGN_ENTITLEMENTS'] = 'Sarena/Sarena.entitlements'
   settings['LD_RUNPATH_SEARCH_PATHS'] = ['$(inherited)', '@executable_path/Frameworks']
 
   # Info.plist: generated keys merged with Sarena/Resources/Info.plist

@@ -19,6 +19,7 @@ struct PreviewContainer<Content: View>: View {
     @State private var membership: MembershipStore
     @State private var catalog: CatalogStore
     @State private var liveSync: LiveSync
+    @State private var appConfig: AppConfigStore
     @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
     private let content: Content
@@ -37,6 +38,8 @@ struct PreviewContainer<Content: View>: View {
         _wallet = State(initialValue: wallet)
         _membership = State(initialValue: membership)
         _catalog = State(initialValue: catalog)
+        _appConfig = State(initialValue: AppConfigStore(service: services.config,
+                                                        defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard))
         _liveSync = State(initialValue: LiveSync(
             live: nil, session: session, catalog: catalog, membership: membership, wallet: wallet
         ))
@@ -55,6 +58,7 @@ struct PreviewContainer<Content: View>: View {
             .environment(membership)
             .environment(catalog)
             .environment(liveSync)
+            .environment(appConfig)
             .environment(motion)
             .environment(languageCoordinator)
             .appLanguage(languageCoordinator.language)

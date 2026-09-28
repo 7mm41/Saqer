@@ -49,6 +49,10 @@ struct BookingConfirmationView: View {
                 .padding(.vertical, Theme.Spacing.m)
                 .glassSurface(.tinted(Theme.Palette.success, opacity: 0.16, cornerRadius: 99, shadow: .none), in: Capsule())
 
+                if let startsAt = code.eventStartsAt, startsAt > .now {
+                    ReminderCard(eventStartsAt: startsAt)
+                }
+
                 VStack(spacing: Theme.Spacing.m) {
                     Button {
                         onViewWallet()
@@ -93,5 +97,54 @@ struct BookingConfirmationView: View {
         .scaleEffect(appeared ? 1 : 0.4)
         .opacity(appeared ? 1 : 0)
         .accessibilityHidden(true)
+    }
+}
+
+/// "We'll remind you" — asks for notification permission at the moment it
+/// clearly helps (right after booking an event), then shows when it fires.
+private struct ReminderCard: View {
+    let eventStartsAt: Date
+
+    @Environment(AppConfigStore.self) private var appConfig
+    @Environment(\.locale) private var locale
+    @State private var notifications = NotificationsManager.shared
+
+    private var reminderDate: Date {
+        ReminderPlanner.mainReminder(start: eventStartsAt, settings: appConfig.reminders, calendar: .current).date
+    }
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.m) {
+            Image(systemName: notifications.isAuthorized ? "bell.badge.fill" : "bell.fill")
+                .font(.title2)
+                .foregroundStyle(Theme.Palette.orange)
+                .symbolEffect(.bounce, value: notifications.isAuthorized)
+            VStack(alignment: .leading, spacing: 2) {
+                if notifications.isAuthorized {
+                    Text("Reminder set")
+                        .font(.sarena(.subheadline, weight: .bold))
+                    Text(verbatim: reminderDate.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(locale)))
+                        .font(.sarena(.caption))
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("Don't miss it")
+                        .font(.sarena(.subheadline, weight: .bold))
+                    Text("Allow notifications and we'll remind you before it starts.")
+                        .font(.sarena(.caption))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer(minLength: 0)
+            if !notifications.isAuthorized, notifications.authorization != .denied {
+                Button("Allow") {
+                    Task { await notifications.requestAuthorization() }
+                }
+                .font(.sarena(.subheadline, weight: .bold))
+                .foregroundStyle(Theme.Palette.orange)
+            }
+        }
+        .padding(Theme.Spacing.l)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassSurface(.card)
     }
 }

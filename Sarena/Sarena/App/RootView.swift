@@ -9,6 +9,9 @@ struct RootView: View {
     @Environment(MembershipStore.self) private var membership
     @Environment(CatalogStore.self) private var catalog
     @Environment(LiveSync.self) private var liveSync
+    @Environment(AppConfigStore.self) private var appConfig
+    @Environment(\.locale) private var locale
+    @State private var notifications = NotificationsManager.shared
     @Environment(MotionManager.self) private var motion
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -17,6 +20,14 @@ struct RootView: View {
     @State private var launchFinished = false
     /// The member whose data was last loaded; later activations re-sync it.
     @State private var syncedUserID: User.ID?
+
+    /// Reminders follow the wallet, the dashboard's timings, the language and permission.
+    private struct ReminderKey: Equatable {
+        let codes: [PromoCode]
+        let settings: ReminderSettings
+        let language: String
+        let authorized: Bool
+    }
 
     /// Live updates run while a member is signed in and the app is on screen.
     private struct SyncKey: Equatable {
@@ -60,6 +71,8 @@ struct RootView: View {
         // Opacity only: scaling a full screen exposes black edges around it.
         .animation(.easeInOut(duration: 0.45), value: screen)
         .task {
+            // The seasonal look (logo, greeting): cached from last time, refreshed now.
+            Task { await appConfig.refresh() }
             await session.restore()
             // Arrive on a filled Home rather than on loading placeholders.
             if let user = session.user {
@@ -73,6 +86,7 @@ struct RootView: View {
             let user = session.user
             if userID == nil { catalog.reset() }
             Task {
+                await notifications.sessionChanged(signedIn: user != nil)
                 async let codes: Void = wallet.load(for: user)
                 async let current: Void = membership.load(for: user)
                 if userID != nil { await catalog.loadIfNeeded() }
@@ -88,7 +102,16 @@ struct RootView: View {
             } else {
                 syncedUserID = userID
             }
+            await notifications.refreshAuthorization()
             await liveSync.run()
+        }
+        .task(id: ReminderKey(codes: wallet.codes, settings: appConfig.reminders,
+                              language: locale.identifier, authorized: notifications.isAuthorized)) {
+            guard notifications.isAuthorized, session.user != nil else { return }
+            // Let quick successive changes settle first.
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            await notifications.reminders.sync(codes: wallet.codes, settings: appConfig.reminders, locale: locale)
         }
         .onChange(of: motionAllowed, initial: true) { _, allowed in
             // The sensor itself only runs while a `.parallax()` view is on screen.

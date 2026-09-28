@@ -27,6 +27,9 @@ ICONS = {
     "AppIcon-Glass":    ("icon-glass.png",    "IconPreview-Glass"),
     "AppIcon-Midnight": ("icon-midnight.png", "IconPreview-Midnight"),
     "AppIcon-Frost":    ("icon-frost.png",    "IconPreview-Frost"),
+    "AppIcon-NationalDay": ("icon-nationalday.png", "IconPreview-NationalDay"),
+    "AppIcon-Ramadan":     ("icon-ramadan.png",     "IconPreview-Ramadan"),
+    "AppIcon-Eid":         ("icon-eid.png",         "IconPreview-Eid"),
 }
 INFO = {"author": "xcode", "version": 1}
 

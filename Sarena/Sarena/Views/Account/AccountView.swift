@@ -76,9 +76,9 @@ struct AccountView: View {
             if viewModel.isProcessing {
                 ProgressView().tint(.white)
             } else if viewModel.isRenewal {
-                Label("Renew for \(viewModel.plan.price.omr(locale)) / year", systemImage: "arrow.clockwise")
+                Label("Renew for \(viewModel.plan.effectivePrice.omr(locale)) / year", systemImage: "arrow.clockwise")
             } else {
-                Label("Subscribe for \(viewModel.plan.price.omr(locale)) / year", systemImage: "crown.fill")
+                Label("Subscribe for \(viewModel.plan.effectivePrice.omr(locale)) / year", systemImage: "crown.fill")
             }
         }
         .buttonStyle(viewModel.isActive && !(viewModel.membership?.isEndingSoon() ?? false)
@@ -91,9 +91,9 @@ struct AccountView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             if viewModel.isActive {
-                Text("\(viewModel.plan.price.omr(locale)) for one more year. It starts when your current membership ends, so you keep every remaining day.")
+                Text("\(viewModel.plan.effectivePrice.omr(locale)) for one more year. It starts when your current membership ends, so you keep every remaining day.")
             } else {
-                Text("\(viewModel.plan.price.omr(locale)) for one year of member prices at every Sarena venue and event.")
+                Text("\(viewModel.plan.effectivePrice.omr(locale)) for one year of member prices at every Sarena venue and event.")
             }
         }
     }
@@ -130,6 +130,10 @@ struct MembershipCard: View {
                     statusBadge
                 }
                 Spacer(minLength: 0)
+            }
+
+            if let promo = plan.promo {
+                promoBadge(promo)
             }
 
             if isLoading {
@@ -214,10 +218,37 @@ struct MembershipCard: View {
         }
     }
 
+    /// A discount set in the dashboard (e.g. National Day): label, old price, end date.
+    private func promoBadge(_ promo: MembershipPlan.Promo) -> some View {
+        HStack(spacing: Theme.Spacing.s) {
+            Label {
+                Text(verbatim: promo.label(locale))
+            } icon: {
+                Image(systemName: "gift.fill")
+            }
+            .font(.sarena(.caption, weight: .heavy))
+            .padding(.horizontal, Theme.Spacing.m)
+            .padding(.vertical, 6)
+            .background(Capsule().fill(.white.opacity(0.28)))
+            .overlay(Capsule().strokeBorder(.white.opacity(0.5), lineWidth: 1))
+            if let endsAt = promo.endsAt {
+                Text("Until \(endsAt.shortDate(locale))")
+                    .font(.sarena(.caption, weight: .semibold))
+                    .opacity(0.9)
+            }
+        }
+    }
+
     private var priceBlock: some View {
         VStack(alignment: .leading, spacing: 2) {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+            if plan.promo != nil {
                 Text(verbatim: plan.price.omr(locale))
+                    .font(.sarena(.headline, weight: .semibold))
+                    .strikethrough(true, color: .white)
+                    .opacity(0.75)
+            }
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(verbatim: plan.effectivePrice.omr(locale))
                     .font(.system(size: 40, weight: .heavy, design: .rounded))
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)

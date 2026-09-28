@@ -5,6 +5,15 @@ import Foundation
 
 private func t(_ en: String, _ ar: String) -> LocalizedText { LocalizedText(en, ar: ar) }
 
+/// Festival dates relative to today, at a local hour.
+enum SampleDates {
+    static func oman(daysFromNow days: Int, hour: Int) -> Date {
+        let calendar = Calendar.current
+        let day = calendar.date(byAdding: .day, value: days, to: calendar.startOfDay(for: .now)) ?? .now
+        return calendar.date(bySettingHour: hour, minute: 0, second: 0, of: day) ?? day
+    }
+}
+
 extension Venue {
     static let samples: [Venue] = {
         let now = Date.now
@@ -209,7 +218,9 @@ extension Venue {
                                  perks: [t("Entry for 4", "دخول ٤ أشخاص"), t("Kids' zone wristbands", "أساور منطقة الأطفال")], remaining: nil),
                 ],
                 isFeatured: true,
-                dealEndsAt: now.addingTimeInterval(hour * 9)
+                dealEndsAt: now.addingTimeInterval(hour * 9),
+                eventStartsAt: SampleDates.oman(daysFromNow: 12, hour: 17),
+                eventEndsAt: SampleDates.oman(daysFromNow: 33, hour: 23)
             ),
             Venue(
                 id: "ibri-festival",
@@ -234,7 +245,9 @@ extension Venue {
                                  perks: [t("Entry for 4", "دخول ٤ أشخاص")], remaining: nil),
                 ],
                 isFeatured: false,
-                dealEndsAt: nil
+                dealEndsAt: nil,
+                eventStartsAt: SampleDates.oman(daysFromNow: 30, hour: 16),
+                eventEndsAt: SampleDates.oman(daysFromNow: 37, hour: 23)
             ),
         ]
     }()
@@ -257,7 +270,8 @@ extension PromoCode {
                 paidTotal: ticket.memberPrice * Decimal(quantity), originalTotal: ticket.originalPrice * Decimal(quantity),
                 purchasedAt: purchased, expiresAt: purchased.addingTimeInterval(validDays * day),
                 status: usedDaysAgo == nil ? .active : .used,
-                usedAt: usedDaysAgo.map { now.addingTimeInterval(-$0 * day) }
+                usedAt: usedDaysAgo.map { now.addingTimeInterval(-$0 * day) },
+                eventStartsAt: venue.eventStartsAt
             )
         }
 
