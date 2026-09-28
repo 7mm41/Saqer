@@ -11,7 +11,7 @@ struct HomeView: View {
 
     @State private var viewModel: HomeViewModel
 
-    init(catalog: any CatalogServicing) {
+    init(catalog: CatalogStore) {
         _viewModel = State(initialValue: HomeViewModel(catalog: catalog))
     }
 
@@ -26,7 +26,7 @@ struct HomeView: View {
                         searchResults
                     } else {
                         switch viewModel.state {
-                        case .idle, .loading: loadingPlaceholder
+                        case .idle, .loading: DelayedPlaceholder { loadingPlaceholder }
                         case .failed: failureState
                         case .loaded: dashboard
                         }
@@ -227,14 +227,19 @@ struct HomeView: View {
 
 #Preview {
     PreviewContainer {
-        HomeView(catalog: AppServices.preview.catalog)
+        HomeViewPreview()
     }
 }
 
 #Preview("Arabic · Dark") {
     PreviewContainer {
-        HomeView(catalog: AppServices.preview.catalog)
+        HomeViewPreview()
     }
     .appLanguage(.arabic)
     .preferredColorScheme(.dark)
+}
+
+private struct HomeViewPreview: View {
+    @Environment(CatalogStore.self) private var catalog
+    var body: some View { HomeView(catalog: catalog) }
 }

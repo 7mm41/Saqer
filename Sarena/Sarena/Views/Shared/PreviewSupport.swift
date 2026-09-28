@@ -17,6 +17,7 @@ struct PreviewContainer<Content: View>: View {
     @State private var session: SessionStore
     @State private var wallet: WalletStore
     @State private var subscription: SubscriptionStore
+    @State private var catalog: CatalogStore
     @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
     private let content: Content
@@ -37,6 +38,7 @@ struct PreviewContainer<Content: View>: View {
         _session = State(initialValue: session)
         _wallet = State(initialValue: wallet)
         _subscription = State(initialValue: subscription)
+        _catalog = State(initialValue: CatalogStore(catalog: AppServices.preview.catalog))
         _motion = State(initialValue: MotionManager())
         _languageCoordinator = State(initialValue: LanguageCoordinator(
             defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard
@@ -50,6 +52,7 @@ struct PreviewContainer<Content: View>: View {
             .environment(session)
             .environment(wallet)
             .environment(subscription)
+            .environment(catalog)
             .environment(motion)
             .environment(languageCoordinator)
             .appLanguage(languageCoordinator.language)

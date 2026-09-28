@@ -9,19 +9,18 @@ enum HomeRoute: Hashable {
 @Observable
 @MainActor
 final class HomeViewModel {
-    enum LoadState: Equatable {
-        case idle, loading, loaded, failed
-    }
+    typealias LoadState = CatalogStore.LoadState
 
-    private(set) var venues: [Venue] = []
-    private(set) var state: LoadState = .idle
     var searchText = ""
 
-    private let catalog: any CatalogServicing
+    private let catalog: CatalogStore
 
-    init(catalog: any CatalogServicing) {
+    init(catalog: CatalogStore) {
         self.catalog = catalog
     }
+
+    var venues: [Venue] { catalog.venues }
+    var state: LoadState { catalog.state }
 
     // MARK: Derived content
 
@@ -66,19 +65,10 @@ final class HomeViewModel {
     // MARK: Loading
 
     func loadIfNeeded() async {
-        guard state == .idle else { return }
-        await load()
+        await catalog.loadIfNeeded()
     }
 
     func load() async {
-        if venues.isEmpty { state = .loading }
-        do {
-            venues = try await catalog.fetchVenues()
-            state = .loaded
-        } catch is CancellationError {
-            if venues.isEmpty { state = .idle }
-        } catch {
-            state = venues.isEmpty ? .failed : .loaded
-        }
+        await catalog.reload()
     }
 }

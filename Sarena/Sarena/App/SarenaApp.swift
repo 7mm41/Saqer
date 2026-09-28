@@ -7,6 +7,7 @@ struct SarenaApp: App {
     @State private var session: SessionStore
     @State private var wallet: WalletStore
     @State private var subscription: SubscriptionStore
+    @State private var catalog: CatalogStore
     @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
 
@@ -19,6 +20,7 @@ struct SarenaApp: App {
         _session = State(initialValue: SessionStore(auth: services.auth))
         _wallet = State(initialValue: WalletStore())
         _subscription = State(initialValue: SubscriptionStore())
+        _catalog = State(initialValue: CatalogStore(catalog: services.catalog))
         _motion = State(initialValue: MotionManager())
         _languageCoordinator = State(initialValue: LanguageCoordinator())
     }
@@ -30,6 +32,7 @@ struct SarenaApp: App {
                 .environment(session)
                 .environment(wallet)
                 .environment(subscription)
+                .environment(catalog)
                 .environment(motion)
                 .environment(languageCoordinator)
                 .appLanguage(languageCoordinator.language)

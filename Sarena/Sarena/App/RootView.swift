@@ -7,34 +7,64 @@ struct RootView: View {
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
     @Environment(SubscriptionStore.self) private var subscription
+    @Environment(CatalogStore.self) private var catalog
     @Environment(MotionManager.self) private var motion
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage(PreferenceKeys.floatingMotion) private var floatingMotion = true
     @AppStorage(PreferenceKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
+    @State private var launchFinished = false
+
+    private enum Screen: Equatable { case splash, onboarding, login, main }
+
+    private var screen: Screen {
+        guard launchFinished else { return .splash }
+        switch session.phase {
+        case .restoring: return .splash
+        case .signedOut: return hasCompletedOnboarding ? .login : .onboarding
+        case .signedIn: return .main
+        }
+    }
 
     var body: some View {
         ZStack {
-            switch session.phase {
-            case .restoring:
+            // One constant backdrop behind every screen: cross-fades never reveal
+            // the black window underneath.
+            GlassBackground()
+
+            switch screen {
+            case .splash:
                 SplashView()
                     .transition(.opacity)
-            case .signedOut where !hasCompletedOnboarding:
+            case .onboarding:
                 OnboardingFlowView()
                     .transition(.opacity)
-            case .signedOut:
+            case .login:
                 LoginView(auth: services.auth, session: session, isDemo: services.isDemo)
-                    .transition(.asymmetric(insertion: .opacity, removal: .opacity.combined(with: .scale(scale: 1.04))))
-            case .signedIn:
+                    .transition(.opacity)
+            case .main:
                 MainTabView()
-                    .transition(.opacity.combined(with: .scale(scale: 0.96)))
+                    .transition(.opacity)
             }
         }
-        .animation(.smooth(duration: 0.55), value: session.phase)
-        .task { await session.restore() }
+        // Opacity only: scaling a full screen exposes black edges around it.
+        .animation(.easeInOut(duration: 0.45), value: screen)
+        .task {
+            await session.restore()
+            // Arrive on a filled Home rather than on loading placeholders.
+            if session.user != nil {
+                await catalog.loadIfNeeded()
+            }
+            launchFinished = true
+        }
         .onChange(of: session.user?.id, initial: true) { _, userID in
             wallet.load(for: userID)
             subscription.load(for: session.user)
+            if userID == nil {
+                catalog.reset()
+            } else {
+                Task { await catalog.loadIfNeeded() }
+            }
         }
         .onChange(of: motionAllowed, initial: true) { _, allowed in
             // The sensor itself only runs while a `.parallax()` view is on screen.
@@ -47,23 +77,28 @@ struct RootView: View {
     }
 }
 
-/// Launch moment: the glass tag floats in while the session restores.
+/// A pixel-for-pixel continuation of the system launch screen (same colour, same
+/// `LaunchLogo` image at its natural size, centred in the safe area), so the
+/// hand-off from iOS to the app is invisible. A spinner fades in only if
+/// loading takes unusually long.
 struct SplashView: View {
-    @State private var appeared = false
+    @State private var showsSpinner = false
 
     var body: some View {
-        VStack(spacing: Theme.Spacing.l) {
-            SarenaWordmark(logoSize: 132)
-            Text("Exclusive deals. Members only.")
-                .font(.sarena(.subheadline, weight: .semibold))
-                .foregroundStyle(.secondary)
+        ZStack {
+            Color("LaunchBackground")
+                .ignoresSafeArea()
+            Image("LaunchLogo")
+                .accessibilityLabel(Text("Sarena"))
+            ProgressView()
+                .tint(Theme.Palette.orange)
+                .offset(y: 170)
+                .opacity(showsSpinner ? 1 : 0)
+                .animation(.easeIn(duration: 0.3), value: showsSpinner)
         }
-        .scaleEffect(appeared ? 1 : 0.85)
-        .opacity(appeared ? 1 : 0)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .sarenaScreenBackground()
-        .onAppear {
-            withAnimation(.spring(response: 0.7, dampingFraction: 0.7)) { appeared = true }
+        .task {
+            try? await Task.sleep(for: .milliseconds(1_500))
+            showsSpinner = true
         }
     }
 }

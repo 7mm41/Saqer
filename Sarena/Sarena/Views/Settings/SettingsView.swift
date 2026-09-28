@@ -31,13 +31,6 @@ struct SettingsView: View {
             .sarenaScreenBackground()
             .navigationTitle("Settings")
             .toolbarBackground(.hidden, for: .navigationBar)
-            .confirmationDialog("Log out of Sarena?", isPresented: $viewModel.isConfirmingSignOut, titleVisibility: .visible) {
-                Button("Log Out", role: .destructive) {
-                    Task { await viewModel.signOut() }
-                }
-            } message: {
-                Text("Your codes stay safe in your Wallet and will be waiting when you sign back in.")
-            }
             .alert("Couldn't change the icon", isPresented: $viewModel.iconChangeFailed) {
                 Button("OK", role: .cancel) {}
             } message: {
@@ -182,6 +175,15 @@ struct SettingsView: View {
         }
         .buttonStyle(.sarenaDestructive)
         .disabled(viewModel.isSigningOut)
+        // Attached to the button itself: on iOS 26 the dialog is a popover that
+        // points at the view it is attached to.
+        .confirmationDialog("Log out of Sarena?", isPresented: $viewModel.isConfirmingSignOut, titleVisibility: .visible) {
+            Button("Log Out", role: .destructive) {
+                Task { await viewModel.signOut() }
+            }
+        } message: {
+            Text("Your codes stay safe in your Wallet and will be waiting when you sign back in.")
+        }
     }
 }
 

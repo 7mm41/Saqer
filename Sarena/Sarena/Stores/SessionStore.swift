@@ -28,11 +28,11 @@ final class SessionStore {
         self.keychain = keychain
     }
 
-    /// Restores a persisted session at launch. The short pause lets the
-    /// animated splash play once instead of flashing.
-    func restore(splashDuration: Duration = .milliseconds(1_200)) async {
+    /// Restores a persisted session at launch. The brief minimum keeps the
+    /// splash on screen long enough to read as intentional, not as a flicker.
+    func restore(minimumSplash: Duration = .milliseconds(600)) async {
         guard phase == .restoring else { return }
-        try? await Task.sleep(for: splashDuration)
+        try? await Task.sleep(for: minimumSplash)
         if let data = keychain.data(for: Self.sessionAccount),
            let user = try? JSONDecoder().decode(User.self, from: data) {
             phase = .signedIn(user)

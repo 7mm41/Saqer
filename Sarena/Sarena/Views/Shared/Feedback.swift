@@ -84,3 +84,21 @@ struct ShimmerPlaceholder: View {
             .accessibilityHidden(true)
     }
 }
+
+/// Shows its content only if it is still on screen after a short delay, so
+/// fast loads never flash skeletons.
+struct DelayedPlaceholder<Content: View>: View {
+    var delay: Duration = .milliseconds(350)
+    @ViewBuilder var content: Content
+    @State private var isVisible = false
+
+    var body: some View {
+        content
+            .opacity(isVisible ? 1 : 0)
+            .animation(.easeIn(duration: 0.25), value: isVisible)
+            .task {
+                try? await Task.sleep(for: delay)
+                isVisible = true
+            }
+    }
+}

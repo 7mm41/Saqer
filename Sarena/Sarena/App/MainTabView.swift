@@ -5,11 +5,12 @@ struct MainTabView: View {
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
     @Environment(SubscriptionStore.self) private var subscription
+    @Environment(CatalogStore.self) private var catalog
     @State private var router = AppRouter()
 
     var body: some View {
         TabView(selection: $router.selectedTab) {
-            HomeView(catalog: services.catalog)
+            HomeView(catalog: catalog)
                 .glassTabBar()
                 .tabItem { Label("Discover", systemImage: "sparkles") }
                 .tag(AppTab.discover)

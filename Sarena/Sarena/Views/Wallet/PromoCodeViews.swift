@@ -191,6 +191,11 @@ struct PromoCodeSheet: View {
                         Label("Mark as Used", systemImage: "checkmark.seal.fill")
                     }
                     .buttonStyle(.sarenaGlass)
+                    .confirmationDialog("Mark this code as used?", isPresented: $isConfirmingUse, titleVisibility: .visible) {
+                        Button("Mark as Used", role: .destructive) { onMarkUsed() }
+                    } message: {
+                        Text("Only do this once the venue has accepted the code. It will move to your history.")
+                    }
 
                     Button("Close") { dismiss() }
                         .buttonStyle(.sarenaProminent)
@@ -204,11 +209,6 @@ struct PromoCodeSheet: View {
         .presentationDragIndicator(.visible)
         .presentationCornerRadius(Theme.Radius.hero)
         .presentationBackground(.ultraThinMaterial)
-        .confirmationDialog("Mark this code as used?", isPresented: $isConfirmingUse, titleVisibility: .visible) {
-            Button("Mark as Used", role: .destructive) { onMarkUsed() }
-        } message: {
-            Text("Only do this once the venue has accepted the code. It will move to your history.")
-        }
     }
 
     private var details: some View {
