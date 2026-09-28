@@ -2,7 +2,7 @@ import { and, desc, eq, gte, sql } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAuthContext } from '../auth.ts';
-import { bookings, devices, offers, plans, venues, type Booking } from '../db/schema.ts';
+import { bookings, devices, offers, plans, users, venues, type Booking } from '../db/schema.ts';
 import { bookingCode } from '../lib/codes.ts';
 import { ApiError, errors } from '../lib/errors.ts';
 import { live } from '../lib/live.ts';
@@ -102,6 +102,21 @@ export async function memberRoutes(api: FastifyInstance) {
     if (!updated) throw errors.notFound('Booking');
     api.live.publish(...live.bookingsChanged(user.id));
     return { booking: serializeBooking(updated) };
+  });
+
+  /**
+   * Deletes the member's account and everything linked to it (sessions,
+   * memberships, codes, devices). Required by the App Store for apps that
+   * create accounts. Staff and admin accounts are removed from the dashboard.
+   */
+  api.delete('/me', signedIn, async (request) => {
+    const { user } = requireAuthContext(request);
+    if (user.role !== 'member') {
+      throw new ApiError(403, 'forbidden', 'Staff and admin accounts are managed from the dashboard.');
+    }
+    await db.delete(users).where(eq(users.id, user.id));
+    api.live.publish(live.revokeUser(user.id), live.admin('members'));
+    return { ok: true };
   });
 
   /** Registers this app's push token (APNs / FCM); a token moves to whoever signed in last. */

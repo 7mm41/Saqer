@@ -12,6 +12,8 @@ protocol AuthServicing: Sendable {
     func register(_ form: RegistrationForm) async throws -> User
     /// The member's latest profile (name, status...). Throws `APIError` 401 once the session has ended.
     func refreshed(_ user: User) async throws -> User
+    /// Permanently deletes the signed-in account (App Store requirement).
+    func deleteAccount(_ user: User) async throws
     func signOut() async
 }
 
@@ -138,6 +140,13 @@ actor MockAuthService: AuthServicing {
 
     func refreshed(_ user: User) async throws -> User {
         accounts.values.first { $0.user.id == user.id }?.user ?? user
+    }
+
+    func deleteAccount(_ user: User) async throws {
+        try await Task.sleep(for: latency)
+        guard let email = accounts.first(where: { $0.value.user.id == user.id })?.key else { return }
+        accounts[email] = nil
+        Self.save(accounts, to: defaults)
     }
 
     func signOut() async {

@@ -27,6 +27,7 @@ struct SettingsView: View {
                     experienceSection
                     aboutSection
                     signOutButton
+                    deleteAccountButton
                 }
                 .padding(.horizontal, Theme.gutter)
                 .padding(.bottom, Theme.Spacing.xxl)
@@ -223,6 +224,34 @@ struct SettingsView: View {
             }
         } message: {
             Text("Your codes stay safe in your Wallet and will be waiting when you sign back in.")
+        }
+    }
+
+    private var deleteAccountButton: some View {
+        Button(role: .destructive) {
+            viewModel.isConfirmingDeletion = true
+        } label: {
+            if viewModel.isDeleting {
+                ProgressView()
+            } else {
+                Text("Delete account")
+                    .font(.sarena(.footnote, weight: .semibold))
+            }
+        }
+        .foregroundStyle(Theme.Palette.danger)
+        .disabled(viewModel.isDeleting)
+        // Anchored to the button (iOS 26 shows it as a popover pointing here).
+        .confirmationDialog("Delete your Sarena account?", isPresented: $viewModel.isConfirmingDeletion, titleVisibility: .visible) {
+            Button("Delete account", role: .destructive) {
+                Task { await viewModel.deleteAccount() }
+            }
+        } message: {
+            Text("Your profile, membership and codes are erased permanently. This can't be undone.")
+        }
+        .alert("Couldn't delete the account", isPresented: $viewModel.deletionFailed) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Please try again in a moment.")
         }
     }
 }

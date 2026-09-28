@@ -56,6 +56,16 @@ struct APIAuthService: AuthServicing {
         return response.user
     }
 
+    func deleteAccount(_ user: User) async throws {
+        struct OK: Decodable {}
+        do {
+            let _: OK = try await client.send(client.makeRequest("DELETE", "me"))
+        } catch let error as APIError {
+            throw Self.authError(error)
+        }
+        client.tokens.clear()
+    }
+
     func signOut() async {
         struct OK: Decodable {}
         _ = try? await client.post("auth/logout", as: OK.self)

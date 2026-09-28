@@ -78,6 +78,14 @@ final class SessionStore {
         endSession()
     }
 
+    /// Deletes the account for good (Settings › Delete account).
+    func deleteAccount() async throws {
+        guard let user else { return }
+        await beforeSignOut?()
+        try await auth.deleteAccount(user)
+        endSession()
+    }
+
     /// Clears the local session without calling the server.
     func endSession() {
         guard phase != .signedOut else { return }

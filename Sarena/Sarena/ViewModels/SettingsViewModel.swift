@@ -9,6 +9,9 @@ final class SettingsViewModel {
     var iconChangeFailed = false
     var isConfirmingSignOut = false
     private(set) var isSigningOut = false
+    var isConfirmingDeletion = false
+    private(set) var isDeleting = false
+    var deletionFailed = false
 
     let supportsAlternateIcons: Bool
 
@@ -60,6 +63,16 @@ final class SettingsViewModel {
         isSigningOut = true
         await session.signOut()
         isSigningOut = false
+    }
+
+    func deleteAccount() async {
+        isDeleting = true
+        defer { isDeleting = false }
+        do {
+            try await session.deleteAccount()
+        } catch {
+            deletionFailed = true
+        }
     }
 }
 

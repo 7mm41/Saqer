@@ -421,6 +421,16 @@
         }
       }
     },
+    "Couldn't delete the account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر حذف الحساب"
+          }
+        }
+      }
+    },
     "Couldn't load offers" : {
       "localizations" : {
         "ar" : {
@@ -487,6 +497,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "يوماً متبقياً"
+          }
+        }
+      }
+    },
+    "Delete account" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف الحساب"
+          }
+        }
+      }
+    },
+    "Delete your Sarena account?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد حذف حسابك في سرينا؟"
           }
         }
       }
@@ -2343,6 +2373,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "أسعار الأعضاء متاحة لك الآن"
+          }
+        }
+      }
+    },
+    "Your profile, membership and codes are erased permanently. This can't be undone." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سيتم حذف ملفك وعضويتك وأكوادك نهائياً، ولا يمكن التراجع عن ذلك."
           }
         }
       }

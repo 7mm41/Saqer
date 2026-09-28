@@ -210,6 +210,27 @@ final class AuthServiceTests: XCTestCase {
         }
     }
 
+    @MainActor
+    func testDeletingTheAccountSignsOutAndRemovesIt() async throws {
+        let defaults = Fixtures.defaults()
+        let service = MockAuthService(latency: .zero, defaults: defaults)
+        let user = try await service.register(RegistrationForm(fullName: "Temp Member", email: "temp@sarena.om",
+                                                               phone: "93334444", password: "sarena2026"))
+        let session = SessionStore(auth: service, keychain: KeychainStore(service: "SarenaTests.\(UUID().uuidString)"))
+        session.didAuthenticate(user)
+        var unlinkedPush = false
+        session.beforeSignOut = { unlinkedPush = true }
+        try await session.deleteAccount()
+        XCTAssertNil(session.user)
+        XCTAssertTrue(unlinkedPush)
+        do {
+            _ = try await service.signIn(email: "temp@sarena.om", password: "sarena2026")
+            XCTFail("The account should be gone")
+        } catch {
+            XCTAssertEqual(error as? AuthError, .invalidCredentials)
+        }
+    }
+
     func testRegistrationRejectsDuplicates() async throws {
         let service = makeService()
         let form = RegistrationForm(fullName: "New Member", email: "new@sarena.om", phone: "92223333", password: "sarena2026")

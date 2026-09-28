@@ -267,6 +267,14 @@ describe('members', () => {
     assert.equal(body.error.code, 'phone_not_registered');
   });
 
+  test('members can delete their account', async () => {
+    const { token, user } = await register();
+    assert.equal((await call('DELETE', '/v1/me', { token })).status, 200);
+    assert.equal((await call('GET', '/v1/me', { token })).status, 401);
+    const again = await call('POST', '/v1/auth/login', { body: { email: user.email, password: 'Passw0rd!' } });
+    assert.equal(again.status, 401);
+  });
+
   test('logging out revokes the token', async () => {
     const { token } = await register();
     assert.equal((await call('GET', '/v1/me', { token })).status, 200);
