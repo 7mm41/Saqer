@@ -1,0 +1,28 @@
+# Production-like stack: Sarena + PostgreSQL.
+#   cp backend/.env.example backend/.env   # set JWT_SECRET, ADMIN_EMAIL/PASSWORD, APNS_*, SMS...
+#   docker compose up -d --build
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sarena
+      POSTGRES_USER: sarena
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on: [db]
+    env_file: backend/.env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://sarena:${POSTGRES_PASSWORD:-change-me}@db:5432/sarena
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/backend/data
+volumes:
+  pgdata:
+  uploads:

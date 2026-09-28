@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>سرينا · Sarena — أفضل تجارب عُمان بأسعار الأعضاء</title>
+  <meta name="description" content="سرينا عضوية سنوية واحدة بـ ١٥ ريالاً تفتح لك أسعاراً حصرية في السينما والجيت سكي والرماية والسيارات والمهرجانات في عُمان.">
+  <meta name="theme-color" content="#FF7900">
+  <meta property="og:title" content="Sarena · سرينا">
+  <meta property="og:description" content="Oman's best experiences at members-only prices. One membership, 15 OMR a year.">
+  <meta property="og:image" content="/assets/og.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/main.js"></script>
+</head>
+<body>
+  <header class="nav-wrap">
+    <nav class="glass nav" aria-label="Sarena">
+      <a class="brand" href="#top">
+        <img class="brand-logo" data-theme-logo src="/assets/logo.png" alt="" width="40" height="40">
+        <span data-i18n="brand">سرينا</span>
+      </a>
+      <div class="nav-links">
+        <a href="#categories" data-i18n="navExperiences">التجارب</a>
+        <a href="#how" data-i18n="navHow">كيف تعمل</a>
+        <a href="#pricing" data-i18n="navPricing">السعر</a>
+        <a href="#partners" data-i18n="navPartners">للشركاء</a>
+        <a href="#faq" data-i18n="navFaq">الأسئلة</a>
+      </div>
+      <div class="nav-actions">
+        <button class="chip" type="button" id="lang-toggle" data-i18n="langSwitch">English</button>
+        <a class="chip" href="/admin/" data-i18n="dashboard">لوحة التحكم</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- Seasonal greeting from the dashboard (National Day, Ramadan, Eid...) -->
+    <div class="season glass" id="season" hidden>
+      <img data-theme-logo src="/assets/logo.png" alt="" width="36" height="36">
+      <strong id="season-greeting"></strong>
+    </div>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="pill" data-i18n="heroPill">للأعضاء فقط · في كل عُمان</span>
+        <h1 data-i18n="heroTitle">أفضل تجارب عُمان<br><span class="grad">بأسعار الأعضاء</span></h1>
+        <p class="lead" data-i18n="heroLead">اشتراك سنوي واحد يفتح لك أسعاراً حصرية في السينما والجيت سكي ونادي الرماية والسيارات وساحة عبري وصالات الألعاب ومهرجانات عُمان. احجز من التطبيق واعرض الكود عند المدخل.</p>
+        <div class="stores">
+          <a class="store glass" id="app-store" href="#" aria-label="App Store">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.64c-.02-2.36 1.93-3.5 2.02-3.55-1.1-1.61-2.82-1.83-3.43-1.85-1.46-.15-2.85.86-3.59.86-.74 0-1.88-.84-3.09-.82-1.59.02-3.06.93-3.88 2.35-1.65 2.87-.42 7.12 1.19 9.45.79 1.14 1.72 2.42 2.95 2.37 1.18-.05 1.63-.77 3.06-.77 1.43 0 1.83.77 3.08.74 1.28-.02 2.08-1.16 2.86-2.3.9-1.32 1.27-2.6 1.29-2.66-.03-.01-2.47-.95-2.49-3.77ZM14.02 5.7c.65-.79 1.09-1.89.97-2.99-.94.04-2.08.63-2.75 1.41-.6.7-1.13 1.82-.99 2.9 1.05.08 2.12-.53 2.77-1.32Z"/></svg>
+            <span><small data-i18n="appStoreSmall">حمّله من</small><strong>App Store</strong></span>
+          </a>
+          <a class="store glass" id="google-play" href="#" aria-label="Google Play">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.2c-.23.25-.36.63-.36 1.12v17.36c0 .49.13.87.37 1.12l.06.05 9.72-9.72v-.23L3.66 2.15l-.06.05Z" fill="#00D7FE"/><path d="m16.63 15.37-3.24-3.24v-.23l3.24-3.24.07.04 3.84 2.18c1.1.62 1.1 1.64 0 2.27l-3.84 2.18-.07.04Z" fill="#FFCE00"/><path d="m16.7 15.33-3.31-3.31-9.79 9.79c.36.38.96.43 1.63.05l11.47-6.53" fill="#FF3A44"/><path d="M16.7 8.7 5.23 2.18c-.67-.38-1.27-.33-1.63.05l9.79 9.79 3.31-3.32Z" fill="#00F076"/></svg>
+            <span><small data-i18n="googlePlaySmall">احصل عليه من</small><strong>Google Play</strong></span>
+            <em class="soon" id="google-soon" data-i18n="soon" hidden>قريباً</em>
+          </a>
+        </div>
+        <p class="price-note"><span data-i18n="priceNote">اشتراك واحد فقط</span> · <strong class="num" data-price>١٥ ر.ع.</strong> <span data-i18n="perYear">سنوياً</span></p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="phone glass">
+          <img src="/assets/onboarding-deals.jpg" alt="" width="390" height="480">
+        </div>
+        <div class="float-chip glass c1"><span>🎬</span><b dir="ltr">−35%</b></div>
+        <div class="float-chip glass c2"><span>🌊</span><b dir="ltr">−40%</b></div>
+        <div class="float-chip glass c3"><span>🎆</span><b dir="ltr">−50%</b></div>
+        <div class="float-card glass">
+          <img data-theme-logo src="/assets/logo.png" alt="" width="42" height="42">
+          <div><small data-i18n="youSaved">وفّرت هذا الشهر</small><strong class="num" data-omr="18400">١٨٫٤٠٠ ر.ع.</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="section">
+      <h2 data-i18n="catTitle">سبع تجارب. عضوية واحدة.</h2>
+      <p class="sub" data-i18n="catSub">أماكن وفعاليات مختارة في مسقط وعبري وكل عُمان، تُضاف باستمرار.</p>
+      <div class="cats" id="cats"></div>
+    </section>
+
+    <section id="how" class="section">
+      <h2 data-i18n="howTitle">كيف تعمل سرينا</h2>
+      <div class="steps">
+        <article class="glass step">
+          <span class="step-no">١</span>
+          <h3 data-i18n="step1Title">اشترك مرة واحدة</h3>
+          <p data-i18n="step1Text">عضوية سنوية واحدة تفتح لك كل أسعار الأعضاء طوال السنة.</p>
+        </article>
+        <article class="glass step">
+          <span class="step-no">٢</span>
+          <h3 data-i18n="step2Title">احجز بسعر الأعضاء</h3>
+          <p data-i18n="step2Text">اختر التذكرة، وشاهد السعر الأصلي مشطوباً وسعرك الحصري بجانبه.</p>
+        </article>
+        <article class="glass step">
+          <span class="step-no">٣</span>
+          <h3 data-i18n="step3Title">اعرض الكود واستمتع</h3>
+          <p data-i18n="step3Text">يصلك كود QR في المحفظة فوراً، ونذكّرك قبل موعد الفعالية حتى لا تفوتك.</p>
+        </article>
+      </div>
+      <div class="shots" aria-hidden="true">
+        <img class="glass" src="/assets/onboarding-welcome.jpg" alt="" loading="lazy" width="390" height="480">
+        <img class="glass" src="/assets/onboarding-deals.jpg" alt="" loading="lazy" width="390" height="480">
+        <img class="glass" src="/assets/onboarding-codes.jpg" alt="" loading="lazy" width="390" height="480">
+      </div>
+    </section>
+
+    <section id="pricing" class="section">
+      <h2 data-i18n="priceTitle">سعر واحد. سنة كاملة.</h2>
+      <div class="plan glass tinted">
+        <div class="plan-head">
+          <span class="crown">👑</span>
+          <div>
+            <h3 id="plan-name" data-i18n="planName">عضوية سرينا السنوية</h3>
+            <span class="promo" id="plan-promo" hidden></span>
+          </div>
+        </div>
+        <div class="plan-price">
+          <del class="num" id="plan-old" hidden></del>
+          <strong class="num" data-price>١٥ ر.ع.</strong>
+          <span data-i18n="perYearSlash">/ سنوياً</span>
+        </div>
+        <p id="plan-monthly" class="plan-monthly"></p>
+        <ul id="plan-perks">
+          <li data-i18n="perk1">أسعار الأعضاء في كل أماكن وفعاليات سرينا</li>
+          <li data-i18n="perk2">أكواد حجز فورية بلا طباعة ولا طوابير</li>
+          <li data-i18n="perk3">وصول مبكر للمهرجانات والأماكن الجديدة</li>
+        </ul>
+        <a class="btn-white" href="#top" data-i18n="getApp">حمّل التطبيق</a>
+      </div>
+    </section>
+
+    <section id="partners" class="section">
+      <div class="partner glass">
+        <div>
+          <h2 data-i18n="partnerTitle">صاحب مكان أو فعالية؟</h2>
+          <p class="sub" data-i18n="partnerText">انضم إلى سرينا واملأ مقاعدك الفارغة بأعضاء جاهزين للحجز. بلا رسوم مقدّمة، ولوحة تحكم لمتابعة الحجوزات واستخدام الأكواد عند المدخل.</p>
+        </div>
+        <div class="partner-actions">
+          <a class="btn-brand" id="whatsapp" href="#" data-i18n="contactWhatsapp">تواصل عبر واتساب</a>
+          <a class="chip" id="email" href="#" data-i18n="contactEmail">راسلنا</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <h2 data-i18n="faqTitle">أسئلة شائعة</h2>
+      <div class="faq">
+        <details class="glass"><summary data-i18n="q1">كم سعر الاشتراك؟</summary><p data-i18n="a1">اشتراك سنوي واحد فقط، يغطي كل الأماكن والفعاليات طوال السنة.</p></details>
+        <details class="glass"><summary data-i18n="q2">كيف أستخدم الخصم؟</summary><p data-i18n="a2">احجز من التطبيق، ويصلك كود QR في المحفظة. اعرضه عند المدخل ويُطبّق سعر الأعضاء مباشرة.</p></details>
+        <details class="glass"><summary data-i18n="q3">هل يتجدد الاشتراك تلقائياً؟</summary><p data-i18n="a3">لا. نذكّرك قبل انتهاء عضويتك بأسبوع، والتجديد يضيف سنة إلى تاريخ انتهائك الحالي فلا تخسر أي يوم.</p></details>
+        <details class="glass"><summary data-i18n="q4">هل سأعرف بالفعاليات الجديدة؟</summary><p data-i18n="a4">نعم، يرسل لك التطبيق إشعاراً عند إضافة فعالية جديدة أو خصم، ويذكّرك صباح يوم الفعالية التي حجزتها.</p></details>
+        <details class="glass"><summary data-i18n="q5">هل التطبيق متوفر على أندرويد؟</summary><p data-i18n="a5">التطبيق متوفر على iPhone، ونسخة أندرويد قادمة قريباً.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="glass foot">
+      <a class="brand" href="#top"><img data-theme-logo src="/assets/logo.png" alt="" width="32" height="32"><span data-i18n="brand">سرينا</span></a>
+      <nav>
+        <a href="/privacy.html" data-i18n="privacy">سياسة الخصوصية</a>
+        <a href="/admin/" data-i18n="dashboard">لوحة التحكم</a>
+      </nav>
+      <small class="muted">© <span id="year">2026</span> Sarena · <span data-i18n="madeIn">صُنع في عُمان 🇴🇲</span></small>
+    </div>
+  </footer>
+</body>
+</html>
