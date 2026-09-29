@@ -1,8 +1,9 @@
 #!/bin/bash
-# Sets a new control panel password and prints the sign-in details.
-#   bash admin-password.sh                  a new password
-#   bash admin-password.sh MyPassword2026   your own (8+ characters, letters and numbers)
+# Sets the password of the control panel's owner (saqer@sarena.tech) on this computer's
+# server. It is typed hidden, twice, and never shown or saved in clear.
+#   bash admin-password.sh
 # Stop the server first. Works even when this Terminal can't find `node` or `npm`.
+# (On the VPS: sudo bash deploy/install.sh --password)
 cd "$(dirname "$0")/backend" || exit 1
 
 # Node 22.18 or newer runs the server's TypeScript files directly.

@@ -20,6 +20,8 @@ export const errors = {
   phoneNotRegistered: () => new ApiError(404, 'phone_not_registered', 'No account uses this number yet.'),
   invalidCode: () => new ApiError(400, 'invalid_code', 'That code is not right or has expired.'),
   tooManyRequests: (message = 'Please wait a moment before trying again.') => new ApiError(429, 'too_many_requests', message),
+  tooManyAttempts: (waitMs: number) => new ApiError(429, 'too_many_attempts',
+    `Too many wrong attempts. Try again in ${Math.max(1, Math.ceil(waitMs / 60_000))} minutes.`),
   suspended: () => new ApiError(403, 'account_suspended', 'This account is suspended. Contact Sarena support.'),
   membershipRequired: () => new ApiError(402, 'membership_required', 'An active Sarena membership is required to book.'),
   soldOut: () => new ApiError(409, 'sold_out', 'This offer just sold out at the member price.'),

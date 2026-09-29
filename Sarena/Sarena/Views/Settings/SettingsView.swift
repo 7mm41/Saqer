@@ -11,8 +11,6 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @Environment(LanguageCoordinator.self) private var languageCoordinator
     @State private var notifications = NotificationsManager.shared
-    @Environment(\.services) private var services
-    @Environment(LiveSync.self) private var liveSync
 
     init(session: SessionStore) {
         _viewModel = State(initialValue: SettingsViewModel(session: session))
@@ -175,7 +173,6 @@ struct SettingsView: View {
                     .environment(\.layoutDirection, .leftToRight)
             }
             .font(.sarena(.subheadline, weight: .medium))
-            serverRow
             if viewModel.usesAlternateIcon {
                 // Icons are set by Sarena now; someone who picked one earlier can go back.
                 Button {
@@ -191,30 +188,6 @@ struct SettingsView: View {
                 .disabled(viewModel.isRestoringIcon)
             }
         }
-    }
-
-    /// Which server the app talks to, and whether live updates are flowing.
-    private var serverRow: some View {
-        HStack(spacing: 8) {
-            Text("Server")
-            Spacer()
-            if services.isDemo {
-                Text("Demo (on this device)")
-                    .foregroundStyle(.secondary)
-            } else {
-                Circle()
-                    .fill(liveSync.isConnected ? Theme.Palette.orange : Theme.Palette.steel)
-                    .frame(width: 7, height: 7)
-                Text(verbatim: ServerAddress.current()?.host() ?? "—")
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-                    .environment(\.layoutDirection, .leftToRight)
-            }
-        }
-        .font(.sarena(.subheadline, weight: .medium))
-        .accessibilityElement(children: .combine)
-        .accessibilityValue(services.isDemo ? Text(verbatim: "") : liveSync.isConnected ? Text("Live") : Text("Reconnecting"))
     }
 
     private var signOutButton: some View {

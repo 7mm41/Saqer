@@ -348,13 +348,26 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
   const admin = state.users.find((user) => user.id === DEMO_ADMIN_ID)!;
 
   // ---- auth
-  if (a === 'auth' && b === 'login') return { token: 'demo', user: admin };
+  if (a === 'auth' && b === 'login') return { token: 'demo', user: admin, panel: true };
   if (a === 'auth' && b === 'logout') return { ok: true };
-  if (a === 'me' && !b) return { user: admin, membership: null };
+  if (a === 'me' && !b) return { user: admin, membership: null, panel: true };
   if (a !== 'admin') throw notFound('Route');
 
   // ---- overview
   if (b === 'stats') return stats();
+
+  // ---- sign-in history (sample)
+  if (b === 'security' && c === 'sign-ins') {
+    const ago = (minutes: number) => new Date(Date.now() - minutes * 60_000).toISOString();
+    const safari = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+    const items = [
+      { id: 's1', kind: 'sign_in', at: ago(1), device: safari, ip: '5.36.10.21', panel: true, current: true, active: true },
+      { id: 's2', kind: 'sign_in', at: ago(60 * 20), device: 'Sarena/1 CFNetwork/1568 Darwin/24.0.0', ip: '5.36.10.21', panel: false, current: false, active: true },
+      { id: 's3', kind: 'sign_in', at: ago(60 * 26), device: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15', ip: '5.36.10.21', panel: true, current: false, active: false },
+    ];
+    return { items, lastPanelSignIn: { at: items[2]!.at, device: items[2]!.device, ip: items[2]!.ip }, failuresSinceLastSignIn: 0 };
+  }
+  if (b === 'security' && c === 'sign-out-others') return { ended: 1 };
 
   // ---- members
   if (b === 'members' && !c && method === 'GET') {
@@ -379,34 +392,24 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
       active: Boolean(current), membership: current ? membershipOut(current) : null,
     };
   }
-  if (b === 'members' && !c && method === 'POST') {
-    const email = String(body.email ?? '').trim().toLowerCase();
-    const phone = String(body.phone ?? '').replace(/\D/g, '').replace(/^968/, '');
-    if (String(body.fullName ?? '').trim().length < 3) throw bad('fullName: at least 3 characters.');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw bad('email: enter a valid email address.');
-    if (phone && !/^[79]\d{7}$/.test(phone)) throw bad('phone: Omani mobile numbers have 8 digits and start with 7 or 9.');
-    const password = String(body.password ?? '');
-    if (password.length < 8 || !/\d/.test(password) || !/\p{L}/u.test(password)) throw bad('password: at least 8 characters with letters and numbers.');
-    if (state.users.some((u) => u.email === email)) throw new ApiError(409, 'email_taken', 'An account with this email already exists.');
-    if (phone && state.users.some((u) => u.phone === phone)) throw new ApiError(409, 'phone_taken', 'An account with this phone number already exists.');
-    const user: User = {
-      id: uid(), fullName: String(body.fullName).trim(), email, phone, role: body.role ?? 'admin', status: 'active',
-      memberNumber: `SRN-${300_000 + state.users.length}`, memberSince: new Date().toISOString(),
-    };
-    state.users.push(user);
-    emitLive('members');
-    return { member: user };
-  }
   if (b === 'members' && c && !d) {
     const user = state.users.find((u) => u.id === c);
     if (!user) throw notFound('Member');
     if (method === 'PATCH') {
-      if (user.id === DEMO_ADMIN_ID && (body.status === 'suspended' || (body.role && body.role !== 'admin'))) {
-        throw new ApiError(400, 'cannot_modify_self', 'You cannot suspend or demote your own account.');
+      if (user.id === DEMO_ADMIN_ID && body.status === 'suspended') {
+        throw new ApiError(400, 'cannot_modify_self', 'You cannot suspend your own account.');
       }
-      Object.assign(user, pick(body, ['fullName', 'status', 'role']));
+      Object.assign(user, pick(body, ['fullName', 'status']));
       emitLive('members');
       return { member: user };
+    }
+    if (method === 'DELETE') {
+      if (user.id === DEMO_ADMIN_ID) throw new ApiError(400, 'cannot_delete_owner', "The owner's account can't be deleted.");
+      state.users = state.users.filter((u) => u.id !== c);
+      state.memberships = state.memberships.filter((m) => m.userId !== c);
+      state.bookings = state.bookings.filter((bk) => bk.userId !== c);
+      emitLive('members');
+      return { ok: true };
     }
     return {
       member: user,

@@ -123,7 +123,7 @@ function ThemeEditor({ initial, onClose, onSaved }: { initial: Draft; onClose: (
         </div>
         <small className="muted">{t('lookDatesHint')}</small>
         <Toggle label={t('enabled')} checked={theme.isEnabled} onChange={(value) => set('isEnabled', value)} />
-        <div className="row between">
+        <div className="row between modal-actions">
           <div className="row">
             <button className="btn primary" disabled={busy}>{busy ? t('loading') : t('save')}</button>
             <button type="button" className="btn" onClick={onClose}>{t('close')}</button>

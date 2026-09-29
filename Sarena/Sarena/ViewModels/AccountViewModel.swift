@@ -12,16 +12,14 @@ final class AccountViewModel {
     /// Changes after a successful purchase, for the success haptic.
     private(set) var subscribedAt: Date?
 
-    let isDemo: Bool
     private let store: MembershipStore
     private let session: SessionStore
     private let wallet: WalletStore
 
-    init(store: MembershipStore, session: SessionStore, wallet: WalletStore, isDemo: Bool = false) {
+    init(store: MembershipStore, session: SessionStore, wallet: WalletStore) {
         self.store = store
         self.session = session
         self.wallet = wallet
-        self.isDemo = isDemo
     }
 
     // MARK: Profile & member savings

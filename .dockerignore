@@ -6,3 +6,4 @@ Sarena
 .git
 backend/certs
 .env
+backups

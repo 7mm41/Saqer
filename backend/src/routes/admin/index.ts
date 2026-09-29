@@ -3,11 +3,12 @@ import { bookingAdminRoutes } from './bookings.ts';
 import { memberAdminRoutes } from './members.ts';
 import { notificationAdminRoutes } from './notifications.ts';
 import { planAdminRoutes } from './plans.ts';
+import { securityAdminRoutes } from './security.ts';
 import { statsRoutes } from './stats.ts';
 import { themeAdminRoutes } from './themes.ts';
 import { venueAdminRoutes } from './venues.ts';
 
-/** Dashboard API. Admins manage everything; staff (venue cashiers) can only redeem codes. */
+/** Control panel API: only its owner, signed in from its secret address (see auth.ts). */
 export async function adminRoutes(api: FastifyInstance) {
   await api.register(async (admin) => {
     await statsRoutes(admin);
@@ -17,5 +18,6 @@ export async function adminRoutes(api: FastifyInstance) {
     await bookingAdminRoutes(admin);
     await themeAdminRoutes(admin);
     await notificationAdminRoutes(admin);
+    await securityAdminRoutes(admin);
   }, { prefix: '/admin' });
 }

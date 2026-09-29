@@ -5,15 +5,15 @@ import { themeIcons, themes } from '../../db/schema.ts';
 import { ApiError, errors } from '../../lib/errors.ts';
 import { live } from '../../lib/live.ts';
 import { activeTheme } from '../../lib/themes.ts';
-import { localized, parse, uuidParam } from '../../lib/validation.ts';
+import { imageUrl, localized, parse, uuidParam } from '../../lib/validation.ts';
 import { serializeTheme } from '../../serializers.ts';
 
 const isoDate = z.iso.datetime({ offset: true }).transform((v) => new Date(v)).nullable();
 
 const themeBody = z.object({
   name: z.string().trim().min(2).max(80),
-  logoUrl: z.string().max(500).nullable(),
-  bannerUrl: z.string().max(500).nullable(),
+  logoUrl: imageUrl,
+  bannerUrl: imageUrl,
   greeting: localized.nullable(),
   accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a colour like #C8102E.').nullable(),
   iconName: z.enum(themeIcons).nullable(),

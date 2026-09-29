@@ -9,8 +9,8 @@ struct AccountView: View {
     @Environment(\.services) private var services
     @Environment(AppConfigStore.self) private var appConfig
 
-    init(store: MembershipStore, session: SessionStore, wallet: WalletStore, isDemo: Bool) {
-        _viewModel = State(initialValue: AccountViewModel(store: store, session: session, wallet: wallet, isDemo: isDemo))
+    init(store: MembershipStore, session: SessionStore, wallet: WalletStore) {
+        _viewModel = State(initialValue: AccountViewModel(store: store, session: session, wallet: wallet))
     }
 
     var body: some View {
@@ -50,12 +50,6 @@ struct AccountView: View {
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
                         }
-                    }
-
-                    if viewModel.isDemo {
-                        Label("Demo mode — no payment is taken.", systemImage: "info.circle")
-                            .font(.sarena(.caption))
-                            .foregroundStyle(.secondary)
                     }
                 }
                 .padding(.horizontal, Theme.gutter)
@@ -282,6 +276,6 @@ private struct AccountViewPreview: View {
     @Environment(WalletStore.self) private var wallet
 
     var body: some View {
-        AccountView(store: store, session: session, wallet: wallet, isDemo: true)
+        AccountView(store: store, session: session, wallet: wallet)
     }
 }

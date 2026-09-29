@@ -55,6 +55,7 @@ export async function createTestApp(options: { wallet?: WalletSigner | null } = 
     UPLOADS_DIR: uploadsDir,
     WEBSITE_DIR: join(uploadsDir, 'no-website'),
     DASHBOARD_DIR: join(uploadsDir, 'no-dashboard'),
+    PAYMENTS_MODE: 'demo',
   });
   const database = await openDatabase({ inMemory: true });
   await seed(database.db, config, () => {});
@@ -73,8 +74,9 @@ export async function createTestApp(options: { wallet?: WalletSigner | null } = 
     return { status: response.statusCode, body: (response.body ? response.json() : {}) as Json, headers: response.headers };
   }
 
+  /** Signs in from the control panel (sending its secret address). */
   async function signIn(email: string, password: string): Promise<string> {
-    const { status, body } = await call('POST', '/v1/auth/login', { body: { email, password } });
+    const { status, body } = await call('POST', '/v1/auth/login', { body: { email, password }, headers: { 'x-sarena-panel': config.panelPath } });
     assert.equal(status, 200, JSON.stringify(body));
     return body.token;
   }

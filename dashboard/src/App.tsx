@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { ApiError, DEMO, IS_DEMO_BUILD, get, post, session, setDemo, type User } from './api';
+import { ApiError, BASE, DEMO, get, post, session, type SignInHistory, type User } from './api';
 import logo from './assets/logo.png';
 import { useI18n } from './i18n';
 import { Icon } from './icons';
@@ -11,23 +11,21 @@ import { NotificationsPage } from './pages/Notifications';
 import { OverviewPage } from './pages/Overview';
 import { PlanPage } from './pages/Plan';
 import { RedeemPage } from './pages/Redeem';
+import { SecurityPage } from './pages/Security';
 import { ThemesPage } from './pages/Themes';
 import { VenuesPage } from './pages/Venues';
-import { ConnectAppModal } from './connect';
 import { CommandPalette } from './search';
-import { Loading, initials, useConfirm, useErrorText } from './ui';
+import { Loading, initials, useConfirm, useErrorText, useLoad } from './ui';
 import { applyAppearance, storedAppearance, type Appearance } from './appearance';
 
 const IS_MAC = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
-const BASE = '/admin/';
-
-// Pages live at /admin/<page>; the standalone demo file (opened from disk or
-// shared as a single page) uses #<page> instead.
-const USE_HASH = !location.pathname.startsWith(BASE);
+// Pages live at /<secret>/<page>; the standalone demo file (opened from disk or
+// shared as a single page) and `npm run dev` use #<page> instead.
+const USE_HASH = BASE === null || !location.pathname.startsWith(BASE);
 
 function currentRoute(): Route {
-  const slug = USE_HASH
+  const slug = USE_HASH || BASE === null
     ? location.hash.slice(1)
     : location.pathname.slice(BASE.length).split('/')[0];
   return (NAV_ITEMS.find((item) => item.route === slug)?.route) ?? 'overview';
@@ -53,10 +51,11 @@ export function App() {
   useEffect(() => {
     if (!token) { setUser(null); stopLive(); return; }
     let cancelled = false;
-    get<{ user: User }>('me')
-      .then(({ user }) => {
+    get<{ user: User; panel?: boolean }>('me')
+      .then(({ user, panel }) => {
         if (cancelled) return;
-        if (user.role === 'member') { session.set(null); return; }
+        // Only the owner's sign-ins made here can manage anything.
+        if (!panel && !DEMO) { session.set(null); return; }
         setUser(user);
         startLive();
         if (DEMO) void import('./demo/server').then(({ startDemoActivity }) => startDemoActivity());
@@ -71,7 +70,7 @@ export function App() {
 }
 
 function Shell({ user }: { user: User }) {
-  const { t, lang, setLang } = useI18n();
+  const { t, lang, setLang, dateTime, number } = useI18n();
   const connected = useLiveConnected();
   const confirmAction = useConfirm();
   const { isDark, toggle: toggleAppearance } = useAppearance();
@@ -80,7 +79,7 @@ function Shell({ user }: { user: User }) {
   const [intent, setIntent] = useState<Intent>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [connectOpen, setConnectOpen] = useState(false);
+  const { data: signIns } = useLoad(() => get<SignInHistory>('admin/security/sign-ins'), []);
 
   const navigate = useCallback((next: Route, nextIntent: Intent = null) => {
     setRoute(next);
@@ -88,7 +87,7 @@ function Shell({ user }: { user: User }) {
     setMenuOpen(false);
     try {
       if (USE_HASH) history.pushState(null, '', next === 'overview' ? location.pathname : `#${next}`);
-      else history.pushState(null, '', next === 'overview' ? BASE : `${BASE}${next}`);
+      else history.pushState(null, '', next === 'overview' ? BASE! : `${BASE}${next}`);
     } catch {
       // Some embedded viewers forbid history changes; navigation still works.
     }
@@ -179,13 +178,7 @@ function Shell({ user }: { user: User }) {
                 <button type="button" className="btn small" onClick={() => void resetDemoData()}>
                   <Icon name="refresh" size={15} /> {t('resetDemo')}
                 </button>
-                {!IS_DEMO_BUILD && <button type="button" className="btn small ghost" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
               </div>
-            )}
-            {!isStaff && (
-              <button type="button" className="nav-item connect-item" onClick={() => { setMenuOpen(false); setConnectOpen(true); }}>
-                <Icon name="phone" />{t('connectApp')}
-              </button>
             )}
             <div className="user-row">
               <span className="avatar">{initials(user.fullName)}</span>
@@ -194,6 +187,15 @@ function Shell({ user }: { user: User }) {
                 <span className="muted small ltr">{user.email}</span>
               </div>
             </div>
+            {signIns && (
+              <button type="button" className={`last-sign-in${signIns.failuresSinceLastSignIn ? ' warn' : ''}`} onClick={() => navigate('security')}>
+                <Icon name={signIns.failuresSinceLastSignIn ? 'alert' : 'clock'} size={15} />
+                <span>
+                  {signIns.lastPanelSignIn ? t('lastSignIn', { when: dateTime(signIns.lastPanelSignIn.at) }) : t('firstSignIn')}
+                  {signIns.failuresSinceLastSignIn > 0 && <><br />{t('failedSince', { n: number(signIns.failuresSinceLastSignIn) })}</>}
+                </span>
+              </button>
+            )}
             <div className="foot-actions">
               <button type="button" className="icon-btn" title={t('language')} aria-label={t('language')} onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>
                 <Icon name="globe" size={18} />
@@ -239,11 +241,11 @@ function Shell({ user }: { user: User }) {
             {page === 'themes' && <ThemesPage />}
             {page === 'notifications' && <NotificationsPage />}
             {page === 'redeem' && <RedeemPage />}
+            {page === 'security' && <SecurityPage />}
           </main>
         </div>
       </div>
       <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} isStaff={isStaff} />
-      {connectOpen && <ConnectAppModal onClose={() => setConnectOpen(false)} />}
     </NavContext.Provider>
   );
 }
@@ -268,7 +270,6 @@ function Login() {
             <p className="muted" style={{ marginTop: 10 }}>{t('demoHint')}</p>
           </div>
           <button className="btn primary" type="button" onClick={() => session.set('demo')}>{t('enterDemo')}</button>
-          {!IS_DEMO_BUILD && <button className="btn ghost small" type="button" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
           <button className="btn ghost small" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}><Icon name="globe" size={16} /> {t('language')}</button>
         </div>
       </div>
@@ -280,17 +281,19 @@ function Login() {
     setBusy(true);
     setError('');
     try {
-      const result = await post<{ token: string; user: User }>('auth/login', { email, password });
-      if (result.user.role === 'member') {
+      const result = await post<{ token: string; user: User; panel?: boolean }>('auth/login', { email, password });
+      if (!result.panel && !DEMO) {
         session.set(result.token);
         await post('auth/logout').catch(() => {});
         session.set(null);
-        setError(t('membersOnlyApp'));
+        setError(t('notThePanelAccount'));
         return;
       }
       session.set(result.token);
     } catch (err) {
-      setError(err instanceof ApiError && err.code === 'invalid_credentials' ? t('wrongLogin') : errorText(err));
+      setError(err instanceof ApiError && err.code === 'invalid_credentials' ? t('wrongLogin')
+        : err instanceof ApiError && err.code === 'too_many_attempts' ? t('tooManyAttempts', { minutes: err.message.match(/\d+/)?.[0] ?? '15' })
+        : errorText(err));
     } finally {
       setBusy(false);
     }
@@ -322,7 +325,6 @@ function Login() {
         </div>
         {error && <p role="alert" style={{ color: 'var(--danger)', fontWeight: 700 }}>{error}</p>}
         <button className="btn primary" type="submit" disabled={busy}>{busy ? t('loading') : t('signIn')}</button>
-        <button className="btn small" type="button" onClick={() => setDemo(true)}><Icon name="flask" size={16} /> {t('tryDemo')}</button>
         <button className="btn ghost small" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}><Icon name="globe" size={16} /> {t('language')}</button>
       </form>
     </div>

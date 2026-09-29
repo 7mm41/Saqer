@@ -86,7 +86,9 @@ describe('Apple Wallet', () => {
   });
 
   test('the membership card is a signed pass whose QR proves the membership', async () => {
-    const token = await t.signIn('demo@sarena.om', 'Sarena2026');
+    const { token } = await t.register('Wallet Member');
+    const plan = (await t.call('GET', '/v1/plans')).body.plans[0];
+    await t.call('POST', '/v1/membership/subscribe', { token, body: { planId: plan.id } });
     const pass = await download('/v1/me/wallet/membership.pkpass?lang=ar', token);
     assert.equal(pass.status, 200);
     assert.equal(pass.type, 'application/vnd.apple.pkpass');
@@ -111,7 +113,7 @@ describe('Apple Wallet', () => {
     const json = JSON.parse(files['pass.json']!.toString()) as Json;
     assert.equal(json.passTypeIdentifier, 'pass.om.sarena.test');
     assert.equal(json.teamIdentifier, 'TEAM123456');
-    assert.equal(json.generic.primaryFields[0].value, 'Sarena Demo');
+    assert.equal(json.generic.primaryFields[0].value, 'Wallet Member');
     assert.equal(json.generic.secondaryFields[1].value, 'ACTIVE');
     assert.match(files['ar.lproj/pass.strings']!.toString(), /"ACTIVE" = "فعّالة";/);
     const qr = json.barcodes[0].message as string;
@@ -122,7 +124,7 @@ describe('Apple Wallet', () => {
     const verified = await t.call('POST', '/v1/admin/members/verify', { token: staffToken, body: { qr } });
     assert.equal(verified.status, 200, JSON.stringify(verified.body));
     assert.equal(verified.body.active, true);
-    assert.equal(verified.body.member.fullName, 'Sarena Demo');
+    assert.equal(verified.body.member.fullName, 'Wallet Member');
     assert.ok(verified.body.membership.expiresAt);
 
     // A card with a guessed or edited signature is refused; other codes are not cards.
@@ -146,7 +148,9 @@ describe('Apple Wallet', () => {
   });
 
   test('each booking code becomes a pass with the same QR as the app, voided once used', async () => {
-    const token = await t.signIn('demo@sarena.om', 'Sarena2026');
+    const { token } = await t.register('Wallet Member');
+    const plan = (await t.call('GET', '/v1/plans')).body.plans[0];
+    await t.call('POST', '/v1/membership/subscribe', { token, body: { planId: plan.id } });
     const venues = (await t.call('GET', '/v1/venues', { token })).body.venues as Json[];
     const venue = venues.find((v) => v.offers.length > 0)!;
     const booked = await t.call('POST', '/v1/bookings', { token, body: { offerId: venue.offers[0].id, quantity: 2 } });
@@ -177,7 +181,7 @@ describe('Apple Wallet without a certificate', () => {
     const plain = await createTestApp();
     try {
       assert.equal((await plain.call('GET', '/v1/app/config')).body.wallet.enabled, false);
-      const token = await plain.signIn('demo@sarena.om', 'Sarena2026');
+      const { token } = await plain.register();
       const refused = await plain.call('GET', '/v1/me/wallet/membership.pkpass', { token });
       assert.equal(refused.status, 503);
       assert.equal(refused.body.error.code, 'wallet_unavailable');

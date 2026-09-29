@@ -4,7 +4,7 @@ extension User {
     static let preview = User(
         id: UUID(uuidString: "5A7E1A00-0000-4000-8000-000000000001")!,
         fullName: "Saqer Al Balushi",
-        email: "demo@sarena.om",
+        email: "member@example.com",
         phone: "91234567",
         memberNumber: "SRN-204851",
         memberSince: Date(timeIntervalSince1970: 1_767_225_600)

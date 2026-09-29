@@ -9,9 +9,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Sarena Admin" />
-    <link rel="manifest" href="/admin/manifest.webmanifest" />
-    <link rel="icon" href="/admin/icons/icon-192.png" />
-    <link rel="apple-touch-icon" href="/admin/icons/icon-192.png" />
+    <!-- Built with relative paths: the server serves the panel at its secret address with <base href>. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>لوحة تحكم سرينا · Sarena Admin</title>
     <style>
       /* Shown only if the app never starts, e.g. this source file opened straight from disk. */
@@ -26,10 +27,10 @@
       <div class="boot-help">
         <strong>هذا ملف المصدر للوحة التحكم، ولا يعمل عند فتحه مباشرة.</strong><br>
         للتجربة بدون خادم افتح الملف <code>dashboard/demo/sarena-admin-demo.html</code><br>
-        وللتشغيل الكامل شغّل الخادم ثم افتح <code>http://localhost:3000/admin/</code>
+        وللتشغيل الكامل شغّل الخادم ثم افتح رابط لوحة التحكم الخاص بك
         <hr style="border: 0; border-top: 1px solid #FFD2A8; margin: 16px 0">
         <div dir="ltr">This is the dashboard's source file and doesn't run on its own. To try it without a server, open
-          <code>dashboard/demo/sarena-admin-demo.html</code>. For the full version, start the server and open <code>http://localhost:3000/admin/</code>.</div>
+          <code>dashboard/demo/sarena-admin-demo.html</code>. For the full version, start the server and open your control panel's private address.</div>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>

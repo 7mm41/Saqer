@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean, doublePrecision, index, integer, jsonb, pgTable, real, serial, text, timestamp, uniqueIndex, uuid,
 } from 'drizzle-orm/pg-core';
+import { encryptedText } from '../lib/sealed.ts';
 
 /** Bilingual content, e.g. `{ en: "Ibri Arena", ar: "ساحة عبري للاستعراض" }`. */
 export type Localized = { en: string; ar: string };
@@ -15,13 +16,17 @@ const createdAt = () => timestamp('created_at', { withTimezone: true }).notNull(
 
 // ---------------------------------------------------------------- Accounts
 
+// Names, emails and phone numbers are stored encrypted (lib/sealed.ts); the
+// *_index columns (keyed hashes) find an account by email or number.
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
-  fullName: text('full_name').notNull(),
+  fullName: encryptedText('full_name').notNull(),
   /** Lower-cased. */
-  email: text('email').notNull().unique(),
-  /** Omani mobile, 8 digits without +968 (optional for staff/admin accounts). */
-  phone: text('phone').unique(),
+  email: encryptedText('email').notNull(),
+  emailIndex: text('email_index').unique(),
+  /** Omani mobile, 8 digits without +968 (optional for the owner's account). */
+  phone: encryptedText('phone'),
+  phoneIndex: text('phone_index').unique(),
   passwordHash: text('password_hash').notNull(),
   role: text('role', { enum: roles }).notNull().default('member'),
   status: text('status', { enum: ['active', 'suspended'] }).notNull().default('active'),
@@ -33,14 +38,29 @@ export const users = pgTable('users', {
 export const sessions = pgTable('sessions', {
   id: uuid('id').primaryKey().defaultRandom(),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  userAgent: text('user_agent'),
+  userAgent: encryptedText('user_agent'),
+  /** Where the sign-in came from, for the owner's sign-in history. */
+  ip: encryptedText('ip'),
+  /** Signed in from the control panel (not the app). */
+  panel: boolean('panel').notNull().default(false),
   createdAt: createdAt(),
   revokedAt: timestamp('revoked_at', { withTimezone: true }),
 }, (t) => [index('sessions_user_idx').on(t.userId)]);
 
+/** Wrong passwords given for the owner's account: shown in the control panel's sign-in history. */
+export const signInFailures = pgTable('sign_in_failures', {
+  id: serial('id').primaryKey(),
+  emailIndex: text('email_index').notNull(),
+  ip: encryptedText('ip'),
+  userAgent: encryptedText('user_agent'),
+  panel: boolean('panel').notNull().default(false),
+  createdAt: createdAt(),
+}, (t) => [index('sign_in_failures_email_idx').on(t.emailIndex, t.createdAt)]);
+
 /** SMS sign-in codes (stored hashed). */
 export const otpCodes = pgTable('otp_codes', {
   id: serial('id').primaryKey(),
+  /** The number's lookup index (lib/sealed.ts), not the number. */
   phone: text('phone').notNull(),
   codeHash: text('code_hash').notNull(),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),

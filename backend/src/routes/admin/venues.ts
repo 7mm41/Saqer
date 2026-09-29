@@ -1,15 +1,13 @@
 import { randomUUID } from 'node:crypto';
-import { createWriteStream } from 'node:fs';
-import { unlink } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { pipeline } from 'node:stream/promises';
 import { asc, eq } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { categories, offers, venues } from '../../db/schema.ts';
 import { ApiError, errors } from '../../lib/errors.ts';
 import { live } from '../../lib/live.ts';
-import { localized, localizedList, parse, uuidParam } from '../../lib/validation.ts';
+import { imageUrl, localized, localizedList, parse, uuidParam } from '../../lib/validation.ts';
 import { serializeOffer } from '../../serializers.ts';
 import { venuesWithOffers } from '../catalog.ts';
 
@@ -28,7 +26,7 @@ const venueBody = z.object({
   longitude: z.number().min(-180).max(180),
   rating: z.number().min(0).max(5),
   reviewCount: z.number().int().min(0),
-  imageUrl: z.string().max(500).nullable(),
+  imageUrl,
   isFeatured: z.boolean(),
   isPublished: z.boolean(),
   dealEndsAt: isoDate,
@@ -48,6 +46,13 @@ const offerBody = z.object({
 });
 
 const IMAGE_TYPES: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+
+/** Checks the file's first bytes (its "magic number") against its type. */
+function looksLike(extension: string, data: Buffer) {
+  if (extension === 'jpg') return data.subarray(0, 3).equals(Buffer.from([0xFF, 0xD8, 0xFF]));
+  if (extension === 'png') return data.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]));
+  return data.subarray(0, 4).toString('latin1') === 'RIFF' && data.subarray(8, 12).toString('latin1') === 'WEBP';
+}
 
 export async function venueAdminRoutes(admin: FastifyInstance) {
   const { db, config } = admin;
@@ -142,13 +147,16 @@ export async function venueAdminRoutes(admin: FastifyInstance) {
       file.file.resume();
       throw new ApiError(415, 'unsupported_image', 'Upload a JPEG, PNG or WebP image.');
     }
-    const name = `${randomUUID()}.${extension}`;
-    const target = join(config.uploadsDir, name);
-    await pipeline(file.file, createWriteStream(target));
-    if (file.file.truncated) {
-      await unlink(target);
+    let data: Buffer;
+    try {
+      data = await file.toBuffer();
+    } catch {
       throw new ApiError(413, 'image_too_large', 'Images must be 5 MB or smaller.');
     }
+    // The file itself must be the image it claims to be (not a script renamed .png).
+    if (!looksLike(extension, data)) throw new ApiError(415, 'unsupported_image', 'Upload a JPEG, PNG or WebP image.');
+    const name = `${randomUUID()}.${extension}`;
+    await writeFile(join(config.uploadsDir, name), data, { flag: 'wx' });
     return reply.status(201).send({ url: `/uploads/${name}` });
   });
 }

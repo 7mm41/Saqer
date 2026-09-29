@@ -4,13 +4,15 @@ import SwiftUI
 @main
 struct SarenaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    /// Everything that talks to the server; rebuilt when the app is connected to another one.
+    /// Everything that talks to the server (always https://sarena.tech).
     @State private var container = AppContainer(services: .configured())
     @State private var languageCoordinator = LanguageCoordinator()
-    /// A server offered by a `sarena://connect?server=…` link, awaiting confirmation.
-    @State private var offeredServer: URL?
 
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
+
+    init() {
+        ServerAddress.forgetLegacySettings()
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -22,47 +24,19 @@ struct SarenaApp: App {
                 .environment(container.catalog)
                 .environment(container.liveSync)
                 .environment(container.appConfig)
-                // A fresh screen tree (and fresh stores) for a new server.
-                .id(container.id)
                 .environment(languageCoordinator)
                 .appLanguage(languageCoordinator.language)
                 // Branded "changing language" cover, so the switch never flips the UI in view.
                 .languageTransitionCover(languageCoordinator)
                 .preferredColorScheme(appearance.colorScheme)
                 .tint(Theme.Palette.orange)
-                .onOpenURL { url in
-                    guard ServerAddress.linksAllowed(), let server = ServerAddress.fromConnectLink(url) else { return }
-                    offeredServer = server
-                }
-                .alert(
-                    Text("Connect Sarena to this server?"),
-                    isPresented: Binding(get: { offeredServer != nil }, set: { if !$0 { offeredServer = nil } }),
-                    presenting: offeredServer
-                ) { server in
-                    Button("Connect") { connect(to: server) }
-                    Button("Cancel", role: .cancel) {}
-                } message: { server in
-                    Text("\(server.host() ?? server.absoluteString)\nYou will sign in again on this server.")
-                }
         }
-    }
-
-    /// Switches every store to `server`. The old server's sign-in and cached
-    /// look are dropped first, so nothing of one server is sent to another.
-    private func connect(to server: URL) {
-        guard server != ServerAddress.current() || container.services.isDemo else { return }
-        container.session.endSession()
-        TokenStore().clear()
-        AppConfigStore.clearCache()
-        ServerAddress.save(server)
-        container = AppContainer(services: .configured())
     }
 }
 
 /// The server-facing half of the app: its services and the stores built on them.
 @MainActor
 final class AppContainer {
-    let id = UUID()
     let services: AppServices
     let session: SessionStore
     let wallet: WalletStore

@@ -47,13 +47,13 @@ actor MockMembershipService: MembershipServicing {
            let stored = try? JSONDecoder().decode(Membership.self, from: data) {
             return stored
         }
-        guard user.email == DemoAccount.email else { return nil }
-        // The demo member joined a few weeks ago.
+        guard user.id == User.preview.id else { return nil }
+        // SwiftUI previews show a member who joined a few weeks ago.
         let started = Date.now.addingTimeInterval(-40 * 86_400)
-        let demo = Membership(id: UUID().uuidString, plan: plan, status: .active, startsAt: started,
-                              expiresAt: started.addingTimeInterval(TimeInterval(plan.durationDays) * 86_400))
-        save(demo, for: user)
-        return demo
+        let membership = Membership(id: UUID().uuidString, plan: plan, status: .active, startsAt: started,
+                                    expiresAt: started.addingTimeInterval(TimeInterval(plan.durationDays) * 86_400))
+        save(membership, for: user)
+        return membership
     }
 
     func subscribe(to plan: MembershipPlan, for user: User) async throws -> Membership {

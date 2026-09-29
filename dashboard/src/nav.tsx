@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import type { IconName } from './icons';
 import type { StringKey } from './i18n';
 
-export type Route = 'overview' | 'members' | 'memberships' | 'venues' | 'plan' | 'themes' | 'notifications' | 'redeem';
+export type Route = 'overview' | 'members' | 'memberships' | 'venues' | 'plan' | 'themes' | 'notifications' | 'redeem' | 'security';
 
 /** What a page should open when it is reached from search (a member, a venue, a code). */
 export type Intent = { memberId?: string; venueId?: string; code?: string } | null;
@@ -27,7 +27,13 @@ export const NAV_GROUPS: { label: StringKey; items: NavItem[] }[] = [
     ],
   },
   { label: 'navEngage', items: [{ route: 'notifications', icon: 'bell', label: 'notifications', hint: 'notificationsHint' }] },
-  { label: 'navOps', items: [{ route: 'redeem', icon: 'scan', label: 'redeem', hint: 'redeemHint', staff: true }] },
+  {
+    label: 'navOps',
+    items: [
+      { route: 'redeem', icon: 'scan', label: 'redeem', hint: 'redeemHint', staff: true },
+      { route: 'security', icon: 'shield', label: 'security', hint: 'securityHint' },
+    ],
+  },
 ];
 
 export const NAV_ITEMS = NAV_GROUPS.flatMap((group) => group.items);

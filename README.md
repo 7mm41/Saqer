@@ -6,32 +6,31 @@ Exclusive, members-only prices in Oman — **one annual membership (15 OMR)**, b
 | --- | --- |
 | [`Sarena/`](Sarena/README.md) | The iOS app (SwiftUI + MVVM, calm white-card design, Arabic/English) |
 | [`backend/`](backend/.env.example) | The API server and database: accounts (email + SMS code), memberships, venues & events, bookings, logo & seasonal looks, discounts, push notifications, live updates |
-| [`dashboard/`](dashboard/README.md) | The control panel (installable web app) at `/admin/` |
+| [`dashboard/`](dashboard/README.md) | The control panel (installable web app) at a private address that nothing links to |
 | [`website/`](website/index.html) | The public website at `/`, with App Store / Google Play buttons |
 | [`REQUIREMENTS.txt`](REQUIREMENTS.txt) | What the project needs to launch (OTP/SMS, server, accounts, payments...), approximate prices, and the plan for success |
 
-## Try it without a server · جرّب بدون خادم
+## Security · الحماية
 
-| Open this file | What you get |
-| --- | --- |
-| **`dashboard/demo/sarena-admin-demo.html`** | The full control panel with sample data, saved on your device. Double-click it, or send it to your phone |
-| **`website/index.html`** | The website (its dashboard button opens the demo above) |
+* **One account runs everything:** the owner, `saqer@sarena.tech` (`ADMIN_EMAIL`). It opens the control panel and also signs in to the app (with a membership). There are no demo, default or staff accounts, and the control panel can't create any; members sign up in the app. The first start of this version deletes every older test account once.
+* **Passwords are never shown, printed or stored in clear.** The owner's password is typed hidden (`sudo bash deploy/install.sh --password` on the server, `bash admin-password.sh` on a Mac) and kept only as a scrypt hash. SMS codes are hashed too, and there are no fixed test codes.
+* **The control panel has a private address,** `https://sarena.tech/<ADMIN_PATH>/`, printed only by the installer. The website doesn't link to it, search engines are told to skip it, and `/admin` is a plain "not found". Only sign-ins made from that address can manage anything: the same account signed in from the app is just a member.
+* **Password guessing is stopped:** 5 wrong passwords lock that account's sign-in for 15 minutes, then 30, 1 hour… up to a day, whatever address the guesses come from. 20 wrong attempts lock the address too, and every address is limited to 10 sign-in attempts and 600 requests a minute. Wrong passwords for the owner's account are recorded.
+* **Sign-in history:** the control panel shows when you last signed in to it (bottom of the menu) and lists every sign-in (time, device, address, app or panel) and wrong password. *Sign out everywhere else* ends any sign-in you don't recognise.
+* **Encrypted data:** names, emails, phone numbers and sign-in details are stored encrypted (AES-256-GCM) in the database, found by keyed hashes. Everything travels over HTTPS. Every night `deploy/backup.sh` saves an encrypted copy of the database (AES-256) in `backups/`, keeping 14.
+* **The app always talks to `https://sarena.tech`**, over HTTPS only. There is no server setting, link or screen that shows or changes it.
+* **Keep the code private:** make this GitHub repository private (Settings › General › Danger Zone › Change visibility). The server's code runs only on the server; the iPhone app is compiled, and Apple encrypts App Store apps; the website and control panel files are minified.
 
-افتح **`dashboard/demo/sarena-admin-demo.html`** لتجربة لوحة التحكم كاملة ببيانات تجريبية. أما `dashboard/index.html` فهو ملف المصدر، ولا يعمل عند فتحه مباشرة.
-
-## Run everything locally
+## Run it on your Mac (development)
 
 ```bash
-cd backend && npm start      # http://localhost:3000  (website)  ·  /admin/  (control panel)
+cd backend && npm start      # http://localhost:3000  (website)  ·  http://localhost:3000/admin/  (control panel, development only)
+bash admin-password.sh       # first time: choose the owner's password (typed hidden)
 ```
 
-`npm start` installs missing packages and builds the control panel on the first start, and again after an update changes them, so a fresh download or a `git pull` needs nothing else. It reads `backend/.env` if there is one. The address works in any letter case (`/Admin/` opens `/admin/`).
+`npm start` installs missing packages and builds the control panel on the first start, and again after an update changes them. It reads `backend/.env` if there is one. In development the control panel is at `/admin/`; on the server it has its private address.
 
-**Sign in to the control panel** with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `backend/.env`. Without `ADMIN_PASSWORD`, the server prints a password when it first creates the admin. **Forgot it?** Stop the server and run `bash admin-password.sh` in the project folder: it prints the admin's email and a new password (or sets yours: `bash admin-password.sh MyPassword2026`). It finds Node itself, even when the Terminal says `npm: command not found`; `cd backend && npm run admin-password` does the same. Setting `ADMIN_PASSWORD` also resets it on the next start. More admins and venue staff: *Members › New account*. A demo member is seeded: `demo@sarena.om` / `Sarena2026`, or +968 9123 4567 with SMS code `123456`.
-
-**Connect the iPhone app:** open the control panel on the iPhone, choose *Connect the app* and tap *Open in the Sarena app*. For local testing in Xcode, set the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000`.
-
-**Share it from your Mac:** `cloudflared tunnel --url http://localhost:3000` prints a public `https://….trycloudflare.com` address for the website, the control panel (`/admin/`) and the app. That address changes whenever the tunnel restarts: tap *Connect the app* again afterwards, or use a named Cloudflare tunnel on your own domain for a permanent address.
+`dashboard/demo/sarena-admin-demo.html` is a stand-alone demo of the control panel with made-up data and no server behind it.
 
 ## Deploy
 
@@ -41,15 +40,15 @@ Sarena needs a server that runs Node.js and a database around the clock: a **VPS
 2. Copy this folder to the VPS (`git clone`, or upload the zip), then inside it:
 
 ```bash
-sudo bash deploy/install.sh     # asks for the domain once (or: --domain sarena.fun), then does the rest
+sudo bash deploy/install.sh --domain sarena.tech
 ```
 
-It installs Docker, creates the settings (random database password, `JWT_SECRET` and admin password), and starts Sarena, PostgreSQL and **Caddy**, which gets and renews the HTTPS certificate by itself. It then prints the website, control panel and admin sign-in. Run it again after an update; settings and data are kept.
+It installs Docker and creates the settings: a random database password, `JWT_SECRET`, `DATA_KEY` and the panel's private address. It then starts Sarena, PostgreSQL and **Caddy**, which gets and renews the HTTPS certificate by itself. The first time, it asks for the owner's password (hidden). Finally it prints the website and the private control panel link, and sets up the nightly encrypted backup. Run it again after an update; settings and data are kept.
 
-* Website `https://<domain>/` · control panel `/admin/` · API `/v1/`. Live updates stream straight through Caddy (never compressed).
+* Website `https://<domain>/` · control panel `https://<domain>/<ADMIN_PATH>/` · API `/v1/`. Live updates stream straight through Caddy (never compressed).
+* Change the owner's password: `sudo bash deploy/install.sh --password`.
 * The APNs key and Wallet certificates go in `backend/certs/`, which is mounted read-only and never built into the image.
-* Connect the iPhone app from the control panel (*Connect the app*). App Store builds: set `SarenaAPIBaseURL` to `https://<domain>`.
-* By hand: `backend/.env` from `.env.example`, `SARENA_DOMAIN=<domain>` in `.env`, then `docker compose up -d --build`.
+* Never change `JWT_SECRET` or `DATA_KEY` once there is data: the encrypted fields would become unreadable (the server then refuses to start and says why).
 
 ## Tests
 

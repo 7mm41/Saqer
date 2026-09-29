@@ -333,13 +333,14 @@ export function Modal({ title, onClose, children, narrow }: { title: string; onC
   }, [onClose]);
   // On <body>, so an animated or blurred page around it can never clip or offset it.
   return createPortal(
-    <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+    <div className={`modal-backdrop${narrow ? ' narrow' : ''}`} onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <div className={`glass modal${narrow ? ' narrow' : ''}`} role="dialog" aria-modal="true" aria-label={title}>
-        <div className="row between" style={{ marginBottom: 18 }}>
+        {/* The title and ✕ stay at the top while the rest scrolls. */}
+        <div className="modal-head">
           <h2>{title}</h2>
           <button type="button" className="icon-btn" aria-label={t('close')} onClick={onClose}><Icon name="close" size={16} /></button>
         </div>
-        {children}
+        <div className="modal-body">{children}</div>
       </div>
     </div>,
     document.body,

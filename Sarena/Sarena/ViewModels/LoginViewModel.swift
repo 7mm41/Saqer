@@ -32,14 +32,12 @@ final class LoginViewModel {
     private(set) var isLoading = false
     var error: AuthError?
 
-    let isDemo: Bool
     private let auth: any AuthServicing
     private let session: SessionStore
 
-    init(auth: any AuthServicing, session: SessionStore, isDemo: Bool = false) {
+    init(auth: any AuthServicing, session: SessionStore) {
         self.auth = auth
         self.session = session
-        self.isDemo = isDemo
     }
 
     // MARK: Validation
@@ -101,21 +99,6 @@ final class LoginViewModel {
     func switchMethod(to method: Method) {
         self.method = method
         error = nil
-    }
-
-    /// Fills the seeded demo member for the current method (demo backend only).
-    func useDemoAccount() async {
-        guard isDemo else { return }
-        error = nil
-        switch method {
-        case .email:
-            email = DemoAccount.email
-            password = DemoAccount.password
-        case .phone:
-            phone = DemoAccount.phone
-            await requestCode()
-            if challenge != nil { code = DemoAccount.otp }
-        }
     }
 
     private func perform(_ operation: @escaping () async throws -> User) async {

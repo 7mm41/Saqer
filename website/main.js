@@ -10,7 +10,6 @@ const STRINGS = {
   navPartners: ['Partners', 'للشركاء'],
   navFaq: ['FAQ', 'الأسئلة'],
   langSwitch: ['العربية', 'English'],
-  dashboard: ['Dashboard', 'لوحة التحكم'],
   heroPill: ['Members only · all over Oman', 'للأعضاء فقط · في كل عُمان'],
   heroTitle: ["Oman's best experiences<br><span class=\"grad\">at member prices</span>", 'أفضل تجارب عُمان<br><span class="grad">بأسعار الأعضاء</span>'],
   heroLead: [
@@ -42,7 +41,7 @@ const STRINGS = {
   monthly: ['That’s just {price} a month', 'أي ما يعادل {price} شهرياً فقط'],
   until: ['until {date}', 'حتى {date}'],
   partnerTitle: ['Own a venue or run an event?', 'صاحب مكان أو فعالية؟'],
-  partnerText: ['Join Sarena and fill empty seats with members ready to book. No upfront fees, plus a dashboard to follow bookings and redeem codes at the door.', 'انضم إلى سرينا واملأ مقاعدك الفارغة بأعضاء جاهزين للحجز. بلا رسوم مقدّمة، ولوحة تحكم لمتابعة الحجوزات واستخدام الأكواد عند المدخل.'],
+  partnerText: ['Join Sarena and fill empty seats with members ready to book. No upfront fees, and every member shows a code you check at the door.', 'انضم إلى سرينا واملأ مقاعدك الفارغة بأعضاء جاهزين للحجز. بلا رسوم مقدّمة، وكل عضو يعرض كوداً تتحقق منه عند المدخل.'],
   contactWhatsapp: ['Chat on WhatsApp', 'تواصل عبر واتساب'],
   contactEmail: ['Email us', 'راسلنا'],
   faqTitle: ['Questions', 'أسئلة شائعة'],
@@ -183,11 +182,6 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
   applyLanguage();
 });
 document.getElementById('year').textContent = String(new Date().getFullYear());
-
-// Opened straight from the folder (no server): the dashboard links open its demo file instead.
-if (location.protocol === 'file:') {
-  for (const link of document.querySelectorAll('a[href="/admin/"]')) link.href = '../dashboard/demo/sarena-admin-demo.html';
-}
 
 applyLanguage();
 void refresh();

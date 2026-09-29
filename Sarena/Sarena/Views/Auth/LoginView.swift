@@ -10,10 +10,10 @@ struct LoginView: View {
     private let auth: any AuthServicing
     private let session: SessionStore
 
-    init(auth: any AuthServicing, session: SessionStore, isDemo: Bool = false) {
+    init(auth: any AuthServicing, session: SessionStore) {
         self.auth = auth
         self.session = session
-        _viewModel = State(initialValue: LoginViewModel(auth: auth, session: session, isDemo: isDemo))
+        _viewModel = State(initialValue: LoginViewModel(auth: auth, session: session))
     }
 
     var body: some View {
@@ -22,11 +22,6 @@ struct LoginView: View {
                 VStack(spacing: Theme.Spacing.xxl) {
                     hero
                     signInPanel
-                    if viewModel.isDemo {
-                        DemoAccountCard {
-                            Task { await viewModel.useDemoAccount() }
-                        }
-                    }
                     benefits
                     registrationPrompt
                 }
@@ -248,46 +243,6 @@ struct LoginView: View {
     }
 }
 
-/// Testing-only card with the seeded demo member's credentials.
-/// Shown only while the app runs on the mock backend (`AppServices.isDemo`).
-private struct DemoAccountCard: View {
-    let onUse: () -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.m) {
-            HStack {
-                Label("Demo account", systemImage: "testtube.2")
-                    .font(.sarena(.headline, weight: .bold))
-                Spacer()
-                GlassBadge(text: "Testing only", tint: Theme.Palette.steel)
-            }
-            Grid(alignment: .leading, horizontalSpacing: Theme.Spacing.l, verticalSpacing: Theme.Spacing.s) {
-                row("Mobile", LoginView.displayPhone(DemoAccount.phone))
-                row("SMS code", DemoAccount.otp)
-                row("Email", DemoAccount.email)
-                row("Password", DemoAccount.password)
-            }
-            Button(action: onUse) {
-                Label("Use demo account", systemImage: "wand.and.stars")
-            }
-            .buttonStyle(.sarenaGlass)
-        }
-        .padding(Theme.Spacing.l)
-        .glassSurface(.tinted(Theme.Palette.steel, opacity: 0.12, cornerRadius: Theme.Radius.card, shadow: .floating))
-    }
-
-    private func row(_ title: LocalizedStringKey, _ value: String) -> some View {
-        GridRow {
-            Text(title)
-                .font(.sarena(.caption, weight: .semibold))
-                .foregroundStyle(.secondary)
-            Text(verbatim: value)
-                .font(.system(.subheadline, design: .monospaced).weight(.bold))
-                .textSelection(.enabled)
-        }
-    }
-}
-
 private struct BenefitTile: View {
     let title: LocalizedStringKey
     let systemImage: String
@@ -311,13 +266,13 @@ private struct BenefitTile: View {
 
 #Preview("Login") {
     PreviewContainer(signedIn: false) {
-        LoginView(auth: AppServices.preview.auth, session: SessionStore(auth: AppServices.preview.auth), isDemo: true)
+        LoginView(auth: AppServices.preview.auth, session: SessionStore(auth: AppServices.preview.auth))
     }
 }
 
 #Preview("Login · Arabic") {
     PreviewContainer(signedIn: false) {
-        LoginView(auth: AppServices.preview.auth, session: SessionStore(auth: AppServices.preview.auth), isDemo: true)
+        LoginView(auth: AppServices.preview.auth, session: SessionStore(auth: AppServices.preview.auth))
     }
     .appLanguage(.arabic)
 }

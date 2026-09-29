@@ -18,6 +18,11 @@ export function parse<T extends z.ZodType>(schema: T, input: unknown): z.infer<T
   return result.data;
 }
 
+/** An image: a file uploaded here (/uploads/…) or a web address (http/https only, never javascript: or data:). */
+export const imageUrl = z.string().trim().max(500)
+  .regex(/^(\/uploads\/[A-Za-z0-9._-]+|https?:\/\/[^\s"'<>]+)$/, 'Upload an image, or use an https:// address.')
+  .nullable();
+
 export const localized = z.object({ en: z.string().trim().min(1).max(4000), ar: z.string().trim().min(1).max(4000) });
 export const localizedList = z.array(localized).max(20);
 export const uuidParam = z.object({ id: z.uuid() });

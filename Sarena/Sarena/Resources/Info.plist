@@ -22,32 +22,5 @@
 	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<!-- The Sarena server (its website, control panel and API), e.g. https://sarena.om.
-	     Empty = the on-device demo backend. The SARENA_API_BASE_URL scheme environment
-	     variable overrides it (e.g. http://localhost:3000), and so does a server chosen from
-	     the control panel's "Connect the app" link (sarena://connect?server=…). -->
-	<key>SarenaAPIBaseURL</key>
-	<string>https://tiger-urls-reseller-consultancy.trycloudflare.com</string>
-	<!-- Lets sarena://connect links point the app at another server (after asking).
-	     Set to NO for the App Store build once the server has its permanent address. -->
-	<key>SarenaAllowServerLinks</key>
-	<true/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>om.sarena.app</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>sarena</string>
-			</array>
-		</dict>
-	</array>
-	<!-- Lets the simulator reach a development server on this Mac over http. -->
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
-	</dict>
 </dict>
 </plist>

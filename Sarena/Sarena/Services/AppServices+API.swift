@@ -1,7 +1,7 @@
 import Foundation
 
 extension AppServices {
-    /// The Sarena API at `baseURL` (e.g. `https://sarena.om`), with live updates.
+    /// The Sarena API at `baseURL`, with live updates.
     static func api(baseURL: URL) -> AppServices {
         let client = APIClient(baseURL: baseURL)
         return AppServices(
@@ -12,20 +12,12 @@ extension AppServices {
             config: APIAppConfigService(client: client),
             push: APIPushRegistration(client: client),
             live: ServerSentEventsClient(client: client),
-            walletPasses: APIWalletPasses(client: client),
-            isDemo: false
+            walletPasses: APIWalletPasses(client: client)
         )
     }
 
-    /// The API at `ServerAddress.current`, or the on-device demo backend when none is set.
-    static func configured(
-        bundle: Bundle = .main,
-        environment: [String: String] = ProcessInfo.processInfo.environment,
-        defaults: UserDefaults = .standard
-    ) -> AppServices {
-        guard let url = ServerAddress.current(bundle: bundle, environment: environment, defaults: defaults) else {
-            return .mock
-        }
-        return .api(baseURL: url)
+    /// The Sarena API at https://sarena.tech: the only server the app ever uses.
+    static func configured() -> AppServices {
+        .api(baseURL: ServerAddress.production)
     }
 }

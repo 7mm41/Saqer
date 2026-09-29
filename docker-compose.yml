@@ -1,6 +1,6 @@
 # Production stack: Sarena + PostgreSQL + Caddy (automatic HTTPS).
 # On a new Ubuntu server, `sudo bash deploy/install.sh` does all of this for you. By hand:
-#   cp backend/.env.example backend/.env   # set JWT_SECRET, ADMIN_EMAIL/PASSWORD, PUBLIC_URL, APNS_*, SMS...
+#   cp backend/.env.example backend/.env   # set JWT_SECRET, ADMIN_PATH, PUBLIC_URL, APNS_*, SMS...
 #   echo "SARENA_DOMAIN=sarena.fun" > .env # the domain whose DNS points at this server
 #   docker compose up -d --build
 name: sarena

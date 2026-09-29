@@ -4,8 +4,13 @@
 #
 #   1. Point the domain's DNS "A" record (@, and www) at this server's IP.
 #   2. Copy this folder to the server, then inside it run:  sudo bash deploy/install.sh
-#      (or  sudo bash deploy/install.sh --domain sarena.fun  to skip the question,
+#      (or  sudo bash deploy/install.sh --domain sarena.tech  to skip the question,
 #       or to move to another domain later)
+#
+# The control panel's owner is ADMIN_EMAIL (saqer@sarena.tech). The first run asks
+# for its password — typed hidden, never shown or saved in clear — and gives the
+# panel a secret address, printed at the end. To change the password later:
+#   sudo bash deploy/install.sh --password
 #
 # Safe to run again: existing settings, passwords and data are kept. To update
 # later, replace the folder's files (or `git pull`) and run it again.
@@ -40,10 +45,12 @@ replace() {
 bare_domain() { echo "$1" | sed -E 's#^https?://##; s#/.*$##; s#^www\.##' | tr 'A-Z' 'a-z'; }
 
 requested_domain=""
+change_password=false
 while [ $# -gt 0 ]; do
   case $1 in
     --domain) requested_domain=$(bare_domain "${2:-}"); shift 2 ;;
-    *) echo "Unknown option: $1 (use --domain <domain>)"; exit 1 ;;
+    --password) change_password=true; shift ;;
+    *) echo "Unknown option: $1 (use --domain <domain> or --password)"; exit 1 ;;
   esac
 done
 
@@ -66,17 +73,25 @@ ensure .env POSTGRES_PASSWORD "$(random 32)"
 
 # 3. Server settings (backend/.env), kept if already filled in
 mkdir -p backend/certs
+fresh=false
 if [ ! -f backend/.env ]; then
   cp backend/.env.example backend/.env
-fi
-new_password=""
-if [ -z "$(current backend/.env ADMIN_PASSWORD)" ]; then
-  new_password=$(random 12)
+  fresh=true
 fi
 ensure backend/.env JWT_SECRET "$(random 48)"
+# The key that encrypts personal data in the database. Only on a new install: on an
+# existing one the data is already encrypted with the key derived from JWT_SECRET.
+$fresh && ensure backend/.env DATA_KEY "$(random 48)"
 replace backend/.env PUBLIC_URL "https://$domain"
-ensure backend/.env ADMIN_EMAIL "admin@$domain"
-[ -n "$new_password" ] && ensure backend/.env ADMIN_PASSWORD "$new_password"
+# The owner: saqer@sarena.tech (replaces the admin@… default of earlier versions).
+case "$(current backend/.env ADMIN_EMAIL)" in
+  "" | admin@*) replace backend/.env ADMIN_EMAIL "saqer@sarena.tech" ;;
+esac
+# The control panel's secret address (lowercase letters and digits).
+ensure backend/.env ADMIN_PATH "$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom 2>/dev/null | head -c 24 || true)"
+# Passwords are never kept in clear: set below (hidden) and stored only as a hash.
+sed -i '/^ADMIN_PASSWORD=/d; /^DEMO_MODE=/d' backend/.env
+replace backend/.env PAYMENTS_MODE disabled
 chmod 600 .env backend/.env
 
 # 4. Is the domain pointing here yet? (HTTPS works once it does; Caddy keeps retrying.)
@@ -139,25 +154,51 @@ if ! healthy; then
   exit 1
 fi
 
-admin_email=$(current backend/.env ADMIN_EMAIL)
+# 8. The owner's password: asked the first time (or with --password), typed hidden.
+owner_email=$(current backend/.env ADMIN_EMAIL)
+owner_exists() { docker compose exec -T app node scripts/admin-password.ts --check >/dev/null 2>&1; }
+if $change_password || ! owner_exists; then
+  say "Choose the password for $owner_email (control panel and app)."
+  echo "  8+ characters with letters and numbers. Nothing shows while you type."
+  while true; do
+    read -rsp "  Password: " first; echo
+    read -rsp "  Again:    " second; echo
+    if [ "$first" != "$second" ]; then echo "  The two are different. Try again."; continue; fi
+    if printf '%s\n' "$first" | docker compose exec -T app node scripts/admin-password.ts --stdin >/dev/null; then
+      break
+    fi
+    echo "  Use 8 or more characters, with letters and numbers."
+  done
+  unset first second
+fi
+
+# 9. An encrypted copy of the database every night (deploy/backup.sh).
+printf '17 3 * * * root cd %s && bash deploy/backup.sh >/dev/null 2>&1\n' "$(pwd)" >/etc/cron.d/sarena-backup
+chmod 644 /etc/cron.d/sarena-backup
+bash deploy/backup.sh >/dev/null 2>&1 || echo "Note: the first backup didn't run; check with: bash deploy/backup.sh"
+
+panel_path=$(current backend/.env ADMIN_PATH)
 cat <<DONE
 
 ────────────────────────────────────────────────────────────
   Sarena is running.
 
   Website        https://$domain/
-  Control panel  https://$domain/admin/
-  Admin email    $admin_email
-  Password       ${new_password:-(unchanged: ADMIN_PASSWORD in backend/.env)}
+  Control panel  https://$domain/$panel_path/
+                 (private: don't share or post this link)
+  Owner          $owner_email
+  Password       the one you chose (never shown or saved in clear)
 
-  Connect the iPhone app: open the control panel on the phone and
-  tap "Connect the app". App Store builds: set SarenaAPIBaseURL to
-  https://$domain in the app's Info.plist.
+  The iPhone app always uses https://sarena.tech.
+  Wrong passwords lock sign-in for a while; see every sign-in
+  in the control panel under "Sign-in history".
 
+  Backups: encrypted, every night, in $(pwd)/backups
   Push notifications: put the AuthKey_XXXXXXXXXX.p8 file in
   backend/certs/, fill APNS_* in backend/.env, then run this again.
 
-  Logs:    cd $(pwd) && docker compose logs -f app
-  Update:  cd $(pwd) && git pull && bash deploy/install.sh
+  Logs:      cd $(pwd) && docker compose logs -f app
+  Update:    cd $(pwd) && git pull && bash deploy/install.sh
+  Password:  cd $(pwd) && bash deploy/install.sh --password
 ────────────────────────────────────────────────────────────
 DONE

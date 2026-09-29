@@ -48,23 +48,10 @@ enum AuthError: Error, Equatable {
     }
 }
 
-/// Test-only member seeded by the mock backend so the app can be explored
-/// without registering. Never ship these credentials against the real API.
-enum DemoAccount {
-    static let fullName = "Demo Member"
-    static let email = "demo@sarena.om"
-    static let password = "Sarena2026"
-    static let phone = "91234567"
-    /// The mock backend accepts this SMS code for every registered number.
-    static let otp = "123456"
-}
 
-/// Local stand-in for the Sarena identity API.
-///
-/// DEMO ONLY: accounts are stored on-device with a salted SHA-256 hash and SMS
-/// codes are simulated, so the sign-in / sign-up flows behave realistically.
-/// Production must authenticate against the backend (which sends the real SMS)
-/// and keep only the session token, in the Keychain.
+/// Local stand-in for the Sarena identity API, for SwiftUI previews and tests
+/// only (the app always signs in against the server). It starts with no
+/// accounts, and each SMS code is random (`sentCode(to:)` reads it in tests).
 actor MockAuthService: AuthServicing {
     private struct StoredAccount: Codable {
         var user: User
@@ -77,18 +64,12 @@ actor MockAuthService: AuthServicing {
     private let defaults: UserDefaults
     /// Keyed by normalised email.
     private var accounts: [String: StoredAccount]
+    /// The last code "sent" to each number.
+    private var codes: [String: String] = [:]
 
     init(latency: Duration = .milliseconds(900), defaults: UserDefaults = .standard) {
-        var accounts = defaults.data(forKey: Self.storageKey)
+        let accounts = defaults.data(forKey: Self.storageKey)
             .flatMap { try? JSONDecoder().decode([String: StoredAccount].self, from: $0) } ?? [:]
-        if accounts[DemoAccount.email] == nil {
-            // Seed (and persist, so the demo member keeps the same id and wallet across launches).
-            accounts[DemoAccount.email] = Self.makeAccount(
-                RegistrationForm(fullName: DemoAccount.fullName, email: DemoAccount.email,
-                                 phone: DemoAccount.phone, password: DemoAccount.password)
-            )
-            Self.save(accounts, to: defaults)
-        }
         self.latency = latency
         self.defaults = defaults
         self.accounts = accounts
@@ -112,14 +93,22 @@ actor MockAuthService: AuthServicing {
         let digits = Validation.normalizedOmaniPhone(phone)
         guard account(forPhone: digits) != nil else { throw AuthError.phoneNotRegistered }
         // The real backend sends an SMS here.
-        return OTPChallenge(phone: digits, codeLength: DemoAccount.otp.count, resendAvailableAt: .now.addingTimeInterval(30))
+        let code = String(format: "%06d", Int.random(in: 0...999_999))
+        codes[digits] = code
+        return OTPChallenge(phone: digits, codeLength: code.count, resendAvailableAt: .now.addingTimeInterval(30))
+    }
+
+    /// The code last "sent" to `phone` (tests stand in for the SMS).
+    func sentCode(to phone: String) -> String? {
+        codes[Validation.normalizedOmaniPhone(phone)]
     }
 
     func verifyCode(_ code: String, phone: String) async throws -> User {
         try await Task.sleep(for: latency)
         let digits = Validation.normalizedOmaniPhone(phone)
         guard let account = account(forPhone: digits) else { throw AuthError.phoneNotRegistered }
-        guard Validation.normalizedDigits(code) == DemoAccount.otp else { throw AuthError.invalidCode }
+        guard let sent = codes[digits], Validation.normalizedDigits(code) == sent else { throw AuthError.invalidCode }
+        codes[digits] = nil
         return account.user
     }
 

@@ -59,7 +59,7 @@ struct RootView: View {
                 OnboardingFlowView()
                     .transition(.opacity)
             case .login:
-                LoginView(auth: services.auth, session: session, isDemo: services.isDemo)
+                LoginView(auth: services.auth, session: session)
                     .transition(.opacity)
             case .main:
                 MainTabView()

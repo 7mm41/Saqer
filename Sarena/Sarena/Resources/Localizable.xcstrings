@@ -1,16 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@\nYou will sign in again on this server." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@\nستحتاج إلى تسجيل الدخول من جديد على هذا الخادم."
-          }
-        }
-      }
-    },
     "%@ / year · every venue, all year" : {
       "localizations" : {
         "ar" : {
@@ -371,26 +361,6 @@
         }
       }
     },
-    "Connect" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ربط"
-          }
-        }
-      }
-    },
-    "Connect Sarena to this server?" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ربط سرينا بهذا الخادم؟"
-          }
-        }
-      }
-    },
     "Continue" : {
       "localizations" : {
         "ar" : {
@@ -547,36 +517,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هل تريد حذف حسابك في سرينا؟"
-          }
-        }
-      }
-    },
-    "Demo (on this device)" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تجريبي (على هذا الجهاز)"
-          }
-        }
-      }
-    },
-    "Demo account" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "حساب تجريبي"
-          }
-        }
-      }
-    },
-    "Demo mode — no payment is taken." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "وضع تجريبي — لا يتم خصم أي مبلغ."
           }
         }
       }
@@ -951,16 +891,6 @@
         }
       }
     },
-    "Live" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "متصل مباشرة"
-          }
-        }
-      }
-    },
     "Live shows & stunts" : {
       "localizations" : {
         "ar" : {
@@ -1107,16 +1037,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "العضوية"
-          }
-        }
-      }
-    },
-    "Mobile" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الجوال"
           }
         }
       }
@@ -1511,16 +1431,6 @@
         }
       }
     },
-    "Reconnecting" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "جارٍ إعادة الاتصال"
-          }
-        }
-      }
-    },
     "Redeemed" : {
       "localizations" : {
         "ar" : {
@@ -1661,16 +1571,6 @@
         }
       }
     },
-    "Server" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الخادم"
-          }
-        }
-      }
-    },
     "Settings" : {
       "localizations" : {
         "ar" : {
@@ -1771,16 +1671,6 @@
         }
       }
     },
-    "SMS code" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "رمز SMS"
-          }
-        }
-      }
-    },
     "Sold out" : {
       "localizations" : {
         "ar" : {
@@ -1837,16 +1727,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "النظام"
-          }
-        }
-      }
-    },
-    "Testing only" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "للتجربة فقط"
           }
         }
       }
@@ -2047,16 +1927,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "استخدم ٨ أحرف على الأقل تتضمن حروفاً وأرقاماً."
-          }
-        }
-      }
-    },
-    "Use demo account" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "استخدم الحساب التجريبي"
           }
         }
       }

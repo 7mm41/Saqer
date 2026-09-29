@@ -19,9 +19,10 @@ export async function memberRoutes(api: FastifyInstance) {
   const signedIn = { preHandler: api.guard() };
 
   api.get('/me', signedIn, async (request) => {
-    const { user } = requireAuthContext(request);
+    const { user, panel } = requireAuthContext(request);
     const active = await activeMembership(db, user.id);
-    return { user: serializeUser(user), membership: active ? serializeMembership(active.membership, active.plan) : null };
+    // `panel`: this sign-in can open the control panel (the owner, signed in from it).
+    return { user: serializeUser(user), membership: active ? serializeMembership(active.membership, active.plan) : null, panel };
   });
 
   /**
@@ -143,12 +144,12 @@ export async function memberRoutes(api: FastifyInstance) {
   /**
    * Deletes the member's account and everything linked to it (sessions,
    * memberships, codes, devices). Required by the App Store for apps that
-   * create accounts. Staff and admin accounts are removed from the dashboard.
+   * create accounts. The owner's account can't be deleted.
    */
   api.delete('/me', signedIn, async (request) => {
     const { user } = requireAuthContext(request);
     if (user.role !== 'member') {
-      throw new ApiError(403, 'forbidden', 'Staff and admin accounts are managed from the dashboard.');
+      throw new ApiError(403, 'forbidden', "The owner's account can't be deleted.");
     }
     await db.delete(users).where(eq(users.id, user.id));
     api.live.publish(live.revokeUser(user.id), live.admin('members'));

@@ -182,7 +182,7 @@ function VenueEditor({ initial, onClose, onSaved }: { initial: VenueDraft; onClo
           <Field label={t('longitude')}><input className="input num ltr" type="number" step="any" required value={venue.longitude} onChange={(e) => set('longitude', Number(e.target.value))} /></Field>
           <Field label={t('rating')}><input className="input num ltr" type="number" step="0.1" min={0} max={5} value={venue.rating} onChange={(e) => set('rating', Number(e.target.value))} /></Field>
         </div>
-        <div className="row between">
+        <div className="row between modal-actions">
           <div className="row">
             <button className="btn primary" disabled={busy}>{busy ? t('loading') : t('save')}</button>
             <button type="button" className="btn" onClick={onClose}>{t('close')}</button>

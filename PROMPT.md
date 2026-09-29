@@ -9,7 +9,7 @@ Paste this into an AI coding assistant to rebuild, extend or audit the Sarena pr
 You are a senior full-stack and iOS engineer. Build **Sarena (سرينا)**, a members-only discounts and bookings platform for **Oman**. It has four parts in one repository, all connected through one API:
 
 1. `Sarena/`: the **iPhone app** (SwiftUI).
-2. `backend/`: the **server and database**. It serves the API, the website at `/`, and the control panel at `/admin/`.
+2. `backend/`: the **server and database**. It serves the API, the website at `/`, and the control panel at a **private address** (`/<ADMIN_PATH>/`).
 3. `dashboard/`: the **control panel**, an installable web app (PWA).
 4. `website/`: the **public website**.
 
@@ -199,17 +199,9 @@ Arabic comes first, and English is always available. Write production-quality co
 
 **Backend connection:**
 
-* `AppServices.configured()` picks the on-device **demo backend** (mock services) or the **API**.
-* The server address is chosen in this order:
-  1. the Xcode scheme variable `SARENA_API_BASE_URL`;
-  2. a server chosen from a **`sarena://connect?server=https://…`** link, the control panel's "Connect the app" button;
-  3. `Info.plist › SarenaAPIBaseURL`.
-* Register the `sarena` URL scheme.
-* **Connecting from a link:**
-  * confirm with an alert showing the host;
-  * sign out locally, clear the old token and the cached look;
-  * save the address and rebuild all stores (an `AppContainer`, with the view tree keyed by its id), so nothing from one server is sent to another.
-* `Info.plist › SarenaAllowServerLinks` (default YES) turns links off for the App Store build.
+* `AppServices.configured()` is always the **API at `https://sarena.tech`** (`ServerAddress.production`). No scheme variable, link, setting or screen can show or change it; no URL scheme is registered; HTTPS only (no ATS exceptions).
+* On launch, erase what older versions stored: `sarena.serverURL` and the mock accounts.
+* On-device mock services exist only for SwiftUI previews and tests (`AppServices.preview`): no seeded accounts, and each SMS code is random (`sentCode(to:)` for tests).
 * **Image links** from the API may be relative paths (`/uploads/x.jpg`). Resolve them against the API address with a decoder `userInfo` key. Links saved as `http://localhost…/uploads/…` are also moved to the API address.
 
 **Live updates** (`LiveSync`):
@@ -242,11 +234,7 @@ Arabic comes first, and English is always available. Write production-quality co
 * `AddToAppleWallet` wraps Apple's own `PKAddPassButton`. It downloads the signed pass from the server with the member's token and the app language, then shows `PKAddPassesViewController`.
 * It appears only when `/app/config` says `wallet.enabled`, the services have `walletPasses` (not on the on-device demo), and the device can add passes.
 
-**Demo account** (on-device demo and server demo mode):
-
-* `demo@sarena.om` / `Sarena2026`;
-* or `+968 9123 4567` with SMS code `123456`;
-* starts with an active annual membership.
+**Accounts:** none are built in. Members register in the app; the owner's account (`saqer@sarena.tech`) also signs in here and has a membership.
 
 **Tests:** XCTest for the view models and stores, using the mock services. Cover:
 
@@ -268,16 +256,22 @@ Arabic comes first, and English is always available. Write production-quality co
 * Database:
   * **PGlite** (embedded) when `DATABASE_URL` is empty;
   * **PostgreSQL** in production, with `docker compose up -d --build` running Sarena and Postgres on port 3000.
-* Serves `website/` at `/` and `dashboard/dist` at `/admin/`, with an SPA fallback to `index.html`.
+* Serves `website/` at `/` and `dashboard/dist` at the panel's **private address** `/<ADMIN_PATH>/` (any letter case redirects to it), injecting `<base href="/<ADMIN_PATH>/">` into its `index.html`, with an SPA fallback, `X-Robots-Tag: noindex`, `Cache-Control: no-store`. `/admin` is a plain 404 (except in development, where `ADMIN_PATH` defaults to `admin`); in production without `ADMIN_PATH` the address is derived from `JWT_SECRET`. `robots.txt` never names it.
 * **Security:**
+  * **one owner account** (`ADMIN_EMAIL`, default `saqer@sarena.tech`) is the only one that can manage anything, and only with a **panel sign-in**: the panel sends its address in `X-Sarena-Panel` when signing in, and the token then carries `pnl` (7-day expiry). The same account signed in from the app is a member. Every other account is demoted to member on start; on the first start of this version every non-owner account is deleted once (`accounts-cleanup-v1`);
+  * no passwords generated or printed anywhere; the owner's is set with `npm run admin-password` (hidden prompt, `--stdin`, `--check`) and stored as a scrypt hash; changing it signs the owner out everywhere; `ADMIN_PASSWORD`, if present, is applied on start without being printed;
+  * **password guessing:** 5 wrong passwords lock that email for 15 min, doubling up to a day (panel and app sign-ins counted apart, so guesses without the panel address can't lock the owner out of it); 20 wrong attempts lock the address; SMS codes: 10 wrong per number; unknown emails answer the same way and take as long (a decoy hash); wrong passwords for the owner are recorded (`sign_in_failures`, 90 days);
+  * `trustProxy` counts hops (`TRUST_PROXY`, default 1 = Caddy), so a forged `X-Forwarded-For` can't dodge limits;
+  * **personal data encrypted at rest:** names, emails, phones (`users`) and sign-in addresses/devices are AES-256-GCM (`enc1:` prefix, key from `DATA_KEY` or `JWT_SECRET` via HKDF), looked up by HMAC indexes (`email_index`, `phone_index`, OTP rows store the phone's index). Admin search decrypts in memory. On start, rows saved in clear are encrypted, and a stored check value stops the server with a clear message if the key changed;
+  * uploads must really be JPEG/PNG/WebP (magic bytes); image fields accept only `/uploads/…` or http(s) URLs;
   * helmet with a strict CSP (images `self data: blob:`), **without `upgrade-insecure-requests`**: Safari applies it to `http://localhost` and the pages would load blank. HTTPS belongs to the proxy;
-  * rate limits on sign-in, OTP and the public stream;
+  * rate limits: 600 requests/min per address, 10/min on sign-in and OTP, 30/min on the public stream, at most 20 open live streams per address;
   * JSON errors `{ error: { code, message } }`.
 
 **Data model:**
 
-* `users`: role `member | staff | admin`, status `active | suspended`, member number `SRN-######`.
-* `sessions` and `otp_codes`.
+* `users`: encrypted name/email/phone with `email_index`/`phone_index`, role `member | admin` (the owner), status `active | suspended`, member number `SRN-######`.
+* `sessions` (encrypted device and address, `panel` flag), `sign_in_failures`, and `otp_codes`.
 * `plans`: price, duration, bilingual name/description/perks, promo price/label/start/end.
 * `memberships`: source `app_store | web | admin | demo`, starts/expires, paid.
 * `venues`: bilingual fields, category, coordinates, rating, image, featured/published, event and deal dates.
@@ -295,8 +289,8 @@ Arabic comes first, and English is always available. Write production-quality co
   * `GET /live/public` (SSE: catalog, plans, config, offer only).
 * **Auth:**
   * `POST /auth/register`, `/auth/login`, `/auth/otp/request`, `/auth/otp/verify`, `/auth/logout`;
-  * SMS provider: `console` or `twilio`;
-  * demo mode accepts code `123456` for the demo number.
+  * SMS provider: `console` or `twilio`; codes are always random (no test codes);
+  * sign-in answers include `panel` (true only for the owner signing in from the panel).
 * **Member:**
   * `GET /me`, `DELETE /me`;
   * `POST /me/devices`, `DELETE /me/devices/:token`;
@@ -304,12 +298,11 @@ Arabic comes first, and English is always available. Write production-quality co
   * `POST /membership/subscribe` (demo payments until a real gateway is added; renewing extends from the current expiry);
   * `POST /bookings`, `GET /me/bookings`, `POST /me/bookings/:id/mark-used`;
   * `GET /live` (SSE with the token).
-* **Admin** (`/admin/*`, admins; staff only redeem):
+* **Admin** (`/admin/*`: the owner, signed in from the panel):
   * `GET /stats`: members, active memberships, revenue (30 days and total), bookings, redemptions, member savings, ending within 30 days, push devices, 30-day sign-ups, top venues.
   * Members:
-    * `GET /members?q=&status=` (search name, email, phone, member number);
-    * **`POST /members`**: create an admin, staff or member account with a password; 409 on a duplicate email or phone;
-    * `GET/PATCH /members/:id` (role, status; suspending signs the account out everywhere; admins cannot suspend or demote themselves);
+    * `GET /members?q=&status=` (search name, email, phone, member number; each with `lastSignInAt`);
+    * no account creation and no roles: `GET/PATCH /members/:id` (name, status; suspending signs the account out everywhere; the owner can't suspend itself), `DELETE /members/:id` (not the owner);
     * `POST /members/:id/memberships` (grant or extend).
   * Memberships: `GET /memberships?q=&status=`, `POST /memberships/:id/cancel`.
   * Plans: `GET/POST/PATCH /plans` (promo price must be below the price; end after start).
@@ -317,6 +310,7 @@ Arabic comes first, and English is always available. Write production-quality co
     * `GET/POST/PATCH/DELETE /venues`, `POST /venues/:id/offers`, `PATCH/DELETE /offers/:id`;
     * `POST /uploads`: JPEG, PNG or WebP up to 5 MB. Returns a **relative** `/uploads/<uuid>.<ext>`, so links survive a change of address. Old `http://localhost…/uploads/…` links are served as paths.
   * Themes: `GET/POST/PATCH/DELETE /themes`.
+  * Sign-in history: `GET /security/sign-ins` (the owner's last 30 sign-ins and wrong passwords, `lastPanelSignIn`, `failuresSinceLastSignIn`), `POST /security/sign-out-others`.
   * Notifications:
     * `GET /notifications?q=&origin=written|automatic&kind=&status=`;
     * `POST /notifications` (now or scheduled);
@@ -378,18 +372,15 @@ Arabic comes first, and English is always available. Write production-quality co
 
 * **A blank line means "not set"**, e.g. `JWT_SECRET=` as copied from `.env.example`. Otherwise an empty secret breaks every sign-in.
 * `JWT_SECRET` is required in production (at least 32 characters).
-* `ADMIN_EMAIL` / `ADMIN_PASSWORD`:
-  * the first admin is created on first start, and a generated password is printed if none is given;
-  * **setting `ADMIN_PASSWORD` also resets the admin's password on the next start**;
-  * an admin left with a blank password gets a new generated one.
+* `ADMIN_EMAIL` (the owner), `ADMIN_PATH` (the panel's private address), `DATA_KEY`, `TRUST_PROXY`. `ADMIN_PASSWORD` is optional and never written by the installer.
 * Other settings:
-  * `DEMO_MODE`, `PAYMENTS_MODE`;
+  * `PAYMENTS_MODE` (`demo` only in tests);
   * `SMS_PROVIDER` and the Twilio keys;
   * `APNS_*`;
   * store and support links;
   * `PUBLIC_URL`: optional, shown in the start-up message.
 
-**Seed data:** the plan (15 OMR), the admin, the demo member (in demo mode), and sample venues for all 7 categories.
+**Seed data:** the plan (15 OMR), the owner (with a 10-year membership, once its password is set), and sample venues for all 7 categories. No demo accounts.
 
 **Tests** (`node --test`) must cover:
 
@@ -406,7 +397,7 @@ Arabic comes first, and English is always available. Write production-quality co
 
 ## 5. The control panel (`dashboard/`)
 
-**Stack:** React 18, TypeScript, Vite 6, an installable **PWA** at `/admin/` with a service worker and manifest.
+**Stack:** React 18, TypeScript, Vite 6 (relative `base`), an installable **PWA** at the private address with a service worker and manifest (relative paths, scope `./`).
 
 * Arabic-first, with an English switch, **light and dark** (remembered), and Western digits.
 * Live updates through `/v1/live`: every page reloads by itself when its data changes.
@@ -415,7 +406,7 @@ Arabic comes first, and English is always available. Write production-quality co
 
 * The menu sits **on the right** (inline-start in RTL; on the left in English).
 * It is grouped: Main · Content · Members · Engagement · At the venue.
-* At the bottom: the demo card (in demo mode), **Connect the app**, the user row, and language / appearance / sign-out buttons.
+* At the bottom: the user row, **your last sign-in to the panel** (red when wrong passwords were given since; opens *Sign-in history*), and language / appearance / sign-out buttons.
 * **Below 1100 px** the menu becomes a **drawer sliding in from the right**:
   * a blurred backdrop and a staggered entrance;
   * a close button, and Esc closes it;
@@ -478,20 +469,11 @@ Arabic comes first, and English is always available. Write production-quality co
    * recent codes, with a lookup for any code or member;
    * scanning a **membership card** (from Apple Wallet or the app) shows "Active member — member prices apply" with the name, number and valid-until date, or "no active membership", without using anything up. A hand scanner typing the link keeps its case.
 
-**Connect the app:**
+**Sign-in:** only the owner from the private address; any other account is told it can't open the panel; a lock shows "try again in N minutes". A show-password button. Windows on phones fill the screen in the surface colour (no dark strips from Safari's bars) with the title pinned at the top and Save/Close pinned at the bottom.
 
-* A window showing this server's address with a copy button.
-* A button linking to `sarena://connect?server=<this origin>`.
-* A note that trycloudflare addresses change whenever the tunnel restarts.
-* In demo mode, it explains that there is no server to connect to.
+**Sign-in history** page: last panel sign-in, a warning after wrong passwords, a table of sign-ins and wrong passwords (time, status, app or panel, device, address), and *Sign out everywhere else*.
 
-**Demo mode (no server):**
-
-* An in-browser mock of the whole admin API, saved in `localStorage`.
-* Sample members, venues, codes and notifications, with simulated live activity.
-* Sample data can be reset.
-* `npm run build:demo` builds **one self-contained HTML file** (fonts, icons and scripts inlined; hash routing so it runs from `file://`): `dashboard/demo/sarena-admin-demo.html`.
-* Opening the source `index.html` directly shows a help message instead of a blank page.
+**Stand-alone demo:** `npm run build:demo` builds **one self-contained HTML file** with an in-browser mock of the admin API and sample data (`dashboard/demo/sarena-admin-demo.html`). The real panel has no demo mode.
 
 ---
 
@@ -511,7 +493,7 @@ Arabic comes first, and English is always available. Write production-quality co
 **Portability:**
 
 * Relative paths only.
-* When opened from the folder (`file://`), its control panel links open the demo file.
+* No link to the control panel anywhere.
 * `[hidden]{display:none!important}`, so empty bars stay hidden.
 
 ---
@@ -519,22 +501,17 @@ Arabic comes first, and English is always available. Write production-quality co
 ## 7. Running and sharing
 
 ```bash
-cd backend && npm start     # website http://localhost:3000 · control panel /admin/
-cloudflared tunnel --url http://localhost:3000   # public https://….trycloudflare.com for the phone
+cd backend && npm start     # website http://localhost:3000 · control panel /admin/ (development only)
+bash admin-password.sh      # the owner's password, typed hidden
 ```
 
 * `npm start` first runs `backend/scripts/prepare.ts`: it installs packages when `node_modules` is missing or older than `package.json`/`package-lock.json`, and builds the control panel when `dashboard/dist` is missing or older than its source. It only warns on failure. The server loads `backend/.env` with `--env-file-if-exists`.
-* `bash admin-password.sh [password]` (repo root) finds Node 22.18+ even off the PATH (Homebrew, installer, Volta, nvm, fnm, or a copy under the home folder) and runs the same script.
-* `npm run admin-password [-- password]` resets the dashboard admin (the ADMIN_EMAIL account, else the first admin; created if none) to the given password, ADMIN_PASSWORD, or a new readable one, and prints the email and password. With the built-in database it refuses while the server answers on PORT. Generated passwords avoid look-alike characters (0/O, 1/l/I). Sign-in also accepts a password with spaces a phone keyboard added around it, and the dashboard sign-in has a show-password button.
-* `/Admin`, `/ADMIN/…` redirect to `/admin/…`; without a build, `/admin/` shows a bilingual page with the build command (503) and the server logs a warning.
-* The app's `Info.plist › SarenaAPIBaseURL` holds the public address.
-* After a tunnel restart, open the control panel on the iPhone → **Connect the app**.
-* For a permanent address, use a named Cloudflare tunnel or HTTPS hosting on your own domain.
+* `bash admin-password.sh` (repo root) finds Node 22.18+ even off the PATH and runs `npm run admin-password`: the owner's new password, typed twice and hidden, never printed. With the built-in database it refuses while the server answers on PORT. Sign-in also accepts a password with spaces a phone keyboard added around it.
 
 **Production (a VPS; shared web hosting can't run Node.js):**
 
 * `docker-compose.yml`: `db` (PostgreSQL 17), `app` (no port on the server itself, so nothing clashes; `backend/certs` mounted read-only), and `caddy` (ports 80/443, automatic HTTPS for `SARENA_DOMAIN`, `www.` redirects to the bare domain; compresses everything except `/v1/live*`, so live updates stream at once).
-* `deploy/install.sh` (run as root on Ubuntu/Debian, safe to re-run): installs Docker; asks for the domain once; fills only empty settings (random `POSTGRES_PASSWORD`, `JWT_SECRET`, admin password; `PUBLIC_URL`); warns if the domain's DNS doesn't point at the server yet; if other Docker apps (e.g. Traefik) hold ports 80/443, lists them and stops them only if you answer yes; refuses if a non-Docker web server (Apache/nginx) holds them; `--domain <domain>` skips the question or moves to another domain; builds and starts, waits for `/health` (checked inside the container), then prints the website, control panel and admin sign-in.
+* `deploy/install.sh` (run as root on Ubuntu/Debian, safe to re-run): installs Docker; asks for the domain once; fills only empty settings (random `POSTGRES_PASSWORD`, `JWT_SECRET`, `ADMIN_PATH`, and `DATA_KEY` on a new install; `PUBLIC_URL`; the owner `saqer@sarena.tech` replaces an old `admin@…`; removes `ADMIN_PASSWORD`/`DEMO_MODE`); warns if the domain's DNS doesn't point at the server yet; if other Docker apps (e.g. Traefik) hold ports 80/443, lists them and stops them only if you answer yes; refuses if a non-Docker web server (Apache/nginx) holds them; `--domain <domain>` skips the question or moves to another domain; builds and starts, waits for `/health` (checked inside the container); the first time (or with `--password`) asks for the owner's password hidden, twice, and sets it inside the container; installs a nightly cron for `deploy/backup.sh` (an AES-256-encrypted `pg_dump` in `backups/`, key `backups/.key`, 14 kept); then prints the website and the private panel link, never a password. Caddy hides its `Server` header.
 
 ---
 

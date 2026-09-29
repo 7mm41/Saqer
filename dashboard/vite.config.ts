@@ -11,14 +11,15 @@ const standaloneDemo = (): Plugin => ({
     .replace(/<title>[^<]*<\/title>/, '<title>لوحة تحكم سرينا</title>'),
 });
 
-// Served by the API at /admin/ (see backend/src/app.ts). In development,
+// Served by the API at the panel's secret address, which it gives the page with
+// <base href> (see backend/src/app.ts), so every path here is relative. In development,
 // `npm run dev` proxies the API running on :3000.
 // `npm run build:demo` → demo/sarena-admin-demo.html: the whole dashboard with
 // an in-browser pretend API (src/demo/server.ts), openable with no server.
 export default defineConfig(({ mode }) => {
   const demo = mode === 'demo';
   return {
-    base: demo ? './' : '/admin/',
+    base: './',
     plugins: demo ? [react(), viteSingleFile(), standaloneDemo()] : [react()],
     server: {
       port: 5173,

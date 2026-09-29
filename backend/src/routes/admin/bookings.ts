@@ -1,4 +1,4 @@
-import { and, count, desc, eq, ilike, or, type SQL } from 'drizzle-orm';
+import { and, count, desc, eq, ilike, inArray, or, type SQL } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAuthContext } from '../../auth.ts';
@@ -6,6 +6,7 @@ import { bookings, users } from '../../db/schema.ts';
 import { ApiError, errors } from '../../lib/errors.ts';
 import { live } from '../../lib/live.ts';
 import { activeMembership } from '../../lib/memberships.ts';
+import { searchUserIds } from '../../lib/people.ts';
 import { pagination, parse } from '../../lib/validation.ts';
 import { checkMemberSignature, parseMemberQr } from '../../lib/wallet.ts';
 import { serializeBooking, serializeMembership } from '../../serializers.ts';
@@ -13,14 +14,17 @@ import { serializeBooking, serializeMembership } from '../../serializers.ts';
 export async function bookingAdminRoutes(admin: FastifyInstance) {
   const { db } = admin;
 
-  admin.get('/bookings', { preHandler: admin.guard('admin', 'staff') }, async (request) => {
+  admin.get('/bookings', { preHandler: admin.guard('admin') }, async (request) => {
     const query = parse(pagination.extend({
       status: z.enum(['active', 'used', 'cancelled']).optional(),
       q: z.string().trim().max(60).optional(),
     }), request.query);
     const filters: SQL[] = [];
     if (query.status) filters.push(eq(bookings.status, query.status));
-    if (query.q) filters.push(or(ilike(bookings.code, `%${query.q}%`), ilike(users.fullName, `%${query.q}%`))!);
+    if (query.q) {
+      const people = await searchUserIds(db, query.q);
+      filters.push(or(ilike(bookings.code, `%${query.q}%`), ...(people.length ? [inArray(bookings.userId, people)] : []))!);
+    }
     const where = filters.length ? and(...filters) : undefined;
     const [total] = await db.select({ n: count() }).from(bookings).innerJoin(users, eq(users.id, bookings.userId)).where(where);
     const rows = await db.select({ booking: bookings, user: users }).from(bookings)
@@ -37,7 +41,7 @@ export async function bookingAdminRoutes(admin: FastifyInstance) {
    * person an active Sarena member? Checked live, so a renewed or cancelled
    * membership is always current whatever the card shows.
    */
-  admin.post('/members/verify', { preHandler: admin.guard('admin', 'staff') }, async (request) => {
+  admin.post('/members/verify', { preHandler: admin.guard('admin') }, async (request) => {
     const { qr } = parse(z.object({ qr: z.string().trim().min(10).max(300) }), request.body);
     const card = parseMemberQr(qr);
     if (!card) throw new ApiError(400, 'not_a_member_card', 'This is not a Sarena membership card.');
@@ -54,7 +58,7 @@ export async function bookingAdminRoutes(admin: FastifyInstance) {
   });
 
   /** Venue staff scan or type the member's code at the entrance. */
-  admin.post('/bookings/redeem', { preHandler: admin.guard('admin', 'staff') }, async (request) => {
+  admin.post('/bookings/redeem', { preHandler: admin.guard('admin') }, async (request) => {
     const { code } = parse(z.object({ code: z.string().trim().toUpperCase().min(6).max(20) }), request.body);
     const { user: staff } = requireAuthContext(request);
     const normalized = code.startsWith('SRN-') ? code : `SRN-${code}`;

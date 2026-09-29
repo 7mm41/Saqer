@@ -1,8 +1,8 @@
+import { createHmac } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { normalizePem } from './lib/push.ts';
-import { readablePassword } from './lib/passwords.ts';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -22,6 +22,27 @@ function readApnsKey(env: NodeJS.ProcessEnv): { privateKey: string; keyError: st
   } catch {
     return { privateKey: '', keyError: `APNS_KEY_FILE: there is no file at ${path}. Put the AuthKey_XXXXXXXXXX.p8 file there, or write its full path.` };
   }
+}
+
+/** The only account that can open the control panel (and also signs in to the app). */
+export const OWNER_EMAIL = 'saqer@sarena.tech';
+
+/**
+ * The control panel's secret address: https://<domain>/<panelPath>/. Nothing links to
+ * it, and only sign-ins made from it can manage anything. ADMIN_PATH when set (the
+ * installer writes a random one); in production otherwise derived from JWT_SECRET, so
+ * it stays secret and the same across restarts; "admin" for local development.
+ */
+function panelPath(env: NodeJS.ProcessEnv, production: boolean, jwtSecret: string): string {
+  const chosen = env.ADMIN_PATH?.trim().replace(/^\/+|\/+$/g, '').toLowerCase();
+  if (chosen) {
+    if (!/^[a-z0-9-]{12,64}$/.test(chosen)) {
+      throw new Error('ADMIN_PATH must be 12–64 lowercase letters, digits or dashes (e.g. the random one the installer writes).');
+    }
+    return chosen;
+  }
+  if (!production) return 'admin';
+  return createHmac('sha256', jwtSecret).update('sarena-control-panel').digest('hex').slice(0, 24);
 }
 
 export type Config = ReturnType<typeof loadConfig>;
@@ -53,14 +74,20 @@ export function loadConfig(input: NodeJS.ProcessEnv = process.env) {
     dashboardDir: resolve(root, env.DASHBOARD_DIR ?? '../dashboard/dist'),
     jwtSecret,
     tokenTtlDays: Number(env.TOKEN_TTL_DAYS ?? 30),
-    adminEmail: (env.ADMIN_EMAIL ?? 'admin@sarena.local').toLowerCase(),
-    /** Initial admin password; generated (and printed once) when not provided. */
-    adminPassword: env.ADMIN_PASSWORD ?? readablePassword(),
-    adminPasswordGenerated: !env.ADMIN_PASSWORD,
-    /** Seeds the demo member and accepts the fixed demo SMS code. Never enable in production. */
-    demoMode: bool(env.DEMO_MODE, !production),
-    /** "demo" grants memberships without payment; anything else requires a real payment integration. */
-    paymentsMode: (env.PAYMENTS_MODE ?? (production ? 'disabled' : 'demo')) as 'demo' | 'disabled',
+    /** The owner's email: the only account that can open the control panel. */
+    adminEmail: (env.ADMIN_EMAIL ?? OWNER_EMAIL).trim().toLowerCase(),
+    /**
+     * Optional: sets the owner's password on start. The installer never writes it;
+     * it asks for the password (hidden) and stores only its hash in the database.
+     */
+    adminPassword: env.ADMIN_PASSWORD ?? null,
+    panelPath: panelPath(env, production, jwtSecret),
+    /** Encrypts personal data in the database (lib/sealed.ts). Never change it once data is stored. */
+    dataKey: env.DATA_KEY ?? jwtSecret,
+    /** Proxies in front of the server (Caddy = 1): the client's address is taken from the last one. */
+    trustProxy: Number(env.TRUST_PROXY ?? 1),
+    /** "demo" grants memberships without payment (tests only); off unless set. */
+    paymentsMode: (env.PAYMENTS_MODE === 'demo' ? 'demo' : 'disabled') as 'demo' | 'disabled',
     sms: {
       provider: (env.SMS_PROVIDER ?? 'console') as 'console' | 'twilio',
       twilioAccountSid: env.TWILIO_ACCOUNT_SID ?? '',

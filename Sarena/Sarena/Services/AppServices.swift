@@ -16,17 +16,14 @@ struct AppServices: Sendable {
     var live: (any LiveUpdatesServicing)?
     /// Apple Wallet passes; nil for the on-device mock backend (nothing to sign them).
     var walletPasses: (any WalletPassServicing)? = nil
-    /// True while the app runs on the mock backend: enables the demo-account shortcut.
-    var isDemo = false
 
-    /// On-device implementations, used when no API address is configured.
+    /// On-device stand-ins for SwiftUI previews and tests; the app itself always uses the API.
     static let mock = AppServices(
         auth: MockAuthService(),
         catalog: MockCatalogService(),
         booking: MockBookingService(),
         membership: MockMembershipService(),
-        live: nil,
-        isDemo: true
+        live: nil
     )
 
     /// Instant responses for SwiftUI previews.
@@ -37,8 +34,7 @@ struct AppServices: Sendable {
                                     directory: .temporaryDirectory.appending(path: "SarenaPreview", directoryHint: .isDirectory),
                                     defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard),
         membership: MockMembershipService(latency: .zero, defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard),
-        live: nil,
-        isDemo: true
+        live: nil
     )
 }
 

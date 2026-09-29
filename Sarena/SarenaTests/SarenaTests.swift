@@ -122,7 +122,7 @@ final class APIDecodingTests: XCTestCase {
 
     func testDecodesMembershipAndBooking() throws {
         let json = #"""
-        {"user":{"id":"5A7E1A00-0000-4000-8000-000000000001","fullName":"Demo","email":"demo@sarena.om","phone":"91234567",
+        {"user":{"id":"5A7E1A00-0000-4000-8000-000000000001","fullName":"Demo","email":"member@example.com","phone":"91234567",
           "memberNumber":"SRN-204851","memberSince":"2026-01-01T00:00:00.000Z","role":"member","status":"active"},
          "membership":{"id":"m1","plan":{"id":"p1","name":{"en":"Sarena Annual Membership","ar":"عضوية سرينا السنوية"},
            "description":{"en":"d","ar":"د"},"priceBaisa":15000,"durationDays":365,"perks":[],"isActive":true},
@@ -182,26 +182,51 @@ final class AuthServiceTests: XCTestCase {
         MockAuthService(latency: .zero, defaults: Fixtures.defaults())
     }
 
-    func testDemoAccountSignsInWithEmail() async throws {
-        let user = try await makeService().signIn(email: DemoAccount.email, password: DemoAccount.password)
-        XCTAssertEqual(user.email, DemoAccount.email)
+    private let member = RegistrationForm(fullName: "Test Member", email: "member@example.com", phone: "91234567", password: "Passw0rd2026")
+
+    func testNoAccountExistsUntilSomeoneRegisters() async {
+        do {
+            _ = try await makeService().signIn(email: "demo@sarena.om", password: "Sarena2026")
+            XCTFail("There are no built-in accounts")
+        } catch {
+            XCTAssertEqual(error as? AuthError, .invalidCredentials)
+        }
     }
 
-    func testWrongPasswordIsRejected() async {
+    func testRegisteredMemberSignsInWithEmail() async throws {
+        let service = makeService()
+        _ = try await service.register(member)
+        let user = try await service.signIn(email: "Member@Example.com", password: member.password)
+        XCTAssertEqual(user.email, member.email)
+    }
+
+    func testWrongPasswordIsRejected() async throws {
+        let service = makeService()
+        _ = try await service.register(member)
         do {
-            _ = try await makeService().signIn(email: DemoAccount.email, password: "nope")
+            _ = try await service.signIn(email: member.email, password: "nope")
             XCTFail("Expected invalid credentials")
         } catch {
             XCTAssertEqual(error as? AuthError, .invalidCredentials)
         }
     }
 
-    func testDemoAccountSignsInWithPhoneCode() async throws {
+    func testSignsInWithTheCodeSentByText() async throws {
         let service = makeService()
-        let challenge = try await service.requestCode(phone: "+968 " + DemoAccount.phone)
-        XCTAssertEqual(challenge.phone, DemoAccount.phone)
-        let user = try await service.verifyCode(DemoAccount.otp, phone: challenge.phone)
-        XCTAssertEqual(user.phone, DemoAccount.phone)
+        _ = try await service.register(member)
+        let challenge = try await service.requestCode(phone: "+968 " + member.phone)
+        XCTAssertEqual(challenge.phone, member.phone)
+        let sent = await service.sentCode(to: member.phone)
+        let code = try XCTUnwrap(sent)
+        let wrong = code == "000000" ? "111111" : "000000"
+        do {
+            _ = try await service.verifyCode(wrong, phone: challenge.phone)
+            XCTFail("Only the code that was sent works")
+        } catch {
+            XCTAssertEqual(error as? AuthError, .invalidCode)
+        }
+        let user = try await service.verifyCode(code, phone: challenge.phone)
+        XCTAssertEqual(user.phone, member.phone)
     }
 
     func testUnknownPhoneCannotRequestCode() async {
@@ -253,9 +278,9 @@ final class AuthServiceTests: XCTestCase {
 
 @MainActor
 final class MembershipTests: XCTestCase {
-    func testDemoMemberIsActiveNewMembersAreNot() async {
+    func testPreviewMemberIsActiveNewMembersAreNot() async {
         let store = MembershipStore(service: Fixtures.membershipService())
-        await store.load(for: User.preview) // demo@sarena.om
+        await store.load(for: User.preview)
         XCTAssertTrue(store.isActive)
         XCTAssertEqual(store.plan, .annual)
 
@@ -540,34 +565,17 @@ final class LiveSyncTests: XCTestCase {
 // MARK: - Server address & images
 
 final class ServerAddressTests: XCTestCase {
-    func testNormalizesWhateverIsPasted() {
-        XCTAssertEqual(ServerAddress.normalized("roll-participated-enable-lions.trycloudflare.com")?.absoluteString,
-                       "https://roll-participated-enable-lions.trycloudflare.com")
-        XCTAssertEqual(ServerAddress.normalized(" https://Sarena.om/admin/#/venues ")?.absoluteString, "https://sarena.om")
-        XCTAssertEqual(ServerAddress.normalized("http://192.168.1.20:3000/")?.absoluteString, "http://192.168.1.20:3000")
-        XCTAssertNil(ServerAddress.normalized("ftp://sarena.om"))
-        XCTAssertNil(ServerAddress.normalized("   "))
+    func testTheAppOnlyTalksToSarenaTech() {
+        XCTAssertEqual(ServerAddress.production.absoluteString, "https://sarena.tech")
     }
 
-    func testReadsOnlyConnectLinks() {
-        let link = URL(string: "sarena://connect?server=https%3A%2F%2Fnew-tunnel.trycloudflare.com%2Fadmin%2F")!
-        XCTAssertEqual(ServerAddress.fromConnectLink(link)?.absoluteString, "https://new-tunnel.trycloudflare.com")
-        XCTAssertNil(ServerAddress.fromConnectLink(URL(string: "sarena://redeem?code=SRN-AB12-CD34")!))
-        XCTAssertNil(ServerAddress.fromConnectLink(URL(string: "https://connect?server=https://evil.example")!))
-        XCTAssertNil(ServerAddress.fromConnectLink(URL(string: "sarena://connect?server=javascript:alert(1)")!))
-    }
-
-    func testTheSchemeThenTheLinkedServerThenInfoPlist() {
-        // The test bundle has no SarenaAPIBaseURL (the app's Info.plist does).
-        let bundle = Bundle(for: ServerAddressTests.self)
+    func testSettingsFromEarlierVersionsAreForgotten() {
         let defaults = Fixtures.defaults()
-        XCTAssertNil(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults))
-        ServerAddress.save(URL(string: "https://linked.example"), defaults: defaults)
-        XCTAssertEqual(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults)?.absoluteString, "https://linked.example")
-        XCTAssertEqual(ServerAddress.current(bundle: bundle, environment: ["SARENA_API_BASE_URL": "http://localhost:3000"], defaults: defaults)?
-            .absoluteString, "http://localhost:3000")
-        ServerAddress.save(nil, defaults: defaults)
-        XCTAssertNil(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults))
+        defaults.set("https://old-tunnel.trycloudflare.com", forKey: "sarena.serverURL")
+        defaults.set(Data([1, 2, 3]), forKey: "sarena.mock.accounts")
+        ServerAddress.forgetLegacySettings(defaults: defaults)
+        XCTAssertNil(defaults.object(forKey: "sarena.serverURL"))
+        XCTAssertNil(defaults.object(forKey: "sarena.mock.accounts"))
     }
 }
 

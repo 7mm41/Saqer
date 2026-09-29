@@ -25,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
 // Installable (Add to Home Screen / Install app) and opens instantly.
 if ('serviceWorker' in navigator && import.meta.env.PROD && !DEMO) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' }).catch(() => {});
+    // Relative to <base href>: the panel's secret address.
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
   });
 }

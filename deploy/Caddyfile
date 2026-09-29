@@ -1,9 +1,11 @@
-# HTTPS for the website (/), the control panel (/admin/) and the app's API (/v1/).
+# HTTPS for the website (/), the control panel (at its private address) and the app's API (/v1/).
 # Caddy gets and renews the certificate by itself once the domain's DNS points here.
 {$SARENA_DOMAIN} {
 	# Live updates (/v1/live…) are a stream: never hold them back to compress them.
 	@compressible not path /v1/live*
 	encode @compressible zstd gzip
+	# Don't tell visitors which web server this is.
+	header -Server
 	reverse_proxy app:3000
 }
 

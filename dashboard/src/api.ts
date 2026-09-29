@@ -9,6 +9,18 @@ export type Category = (typeof CATEGORIES)[number];
 export type User = {
   id: string; fullName: string; email: string; phone: string; memberNumber: string;
   memberSince: string; role: Role; status: 'active' | 'suspended';
+  /** When the account last signed in (members list and details). */
+  lastSignInAt?: string | null;
+};
+/** One line of the owner's sign-in history. */
+export type SignInEvent = {
+  id: string; kind: 'sign_in' | 'wrong_password'; at: string; device: string | null; ip: string | null;
+  panel: boolean; current: boolean; active: boolean;
+};
+export type SignInHistory = {
+  items: SignInEvent[];
+  lastPanelSignIn: { at: string; device: string | null; ip: string | null } | null;
+  failuresSinceLastSignIn: number;
 };
 export type Plan = {
   id: string; name: Localized; description: Localized; priceBaisa: number; durationDays: number; perks: Localized[];
@@ -80,23 +92,21 @@ export class ApiError extends Error {
 }
 
 /**
- * Demo mode: the whole API runs inside the browser with sample data kept on
- * this device (src/demo/server.ts) — no server needed. On in the demo build
- * (`npm run build:demo`), or from the "Try without a server" button.
+ * The standalone demo file (`npm run build:demo`): the whole API runs inside
+ * the browser with sample data (src/demo/server.ts). Never part of the real panel.
  */
-const DEMO_KEY = 'sarena.admin.demo.on';
-export const IS_DEMO_BUILD = import.meta.env.VITE_DEMO === '1';
-export const DEMO = IS_DEMO_BUILD || (() => {
-  try { return localStorage.getItem(DEMO_KEY) === '1'; } catch { return false; }
-})();
+export const DEMO = import.meta.env.VITE_DEMO === '1';
 
-export function setDemo(on: boolean) {
-  try {
-    if (on) localStorage.setItem(DEMO_KEY, '1'); else localStorage.removeItem(DEMO_KEY);
-    localStorage.removeItem('sarena.admin.token');
-  } catch { /* storage blocked */ }
-  location.reload();
-}
+/**
+ * Where the panel lives: the server serves it at a secret address and tells it
+ * with <base href="/<secret>/">. Null when opened without one (the demo file, `npm run dev`).
+ */
+export const BASE = (() => {
+  const base = document.querySelector('base');
+  return base ? new URL(base.href).pathname : null;
+})();
+/** Sent with sign-ins: only sign-ins made from the panel's secret address can manage anything. */
+const PANEL_KEY = BASE?.split('/').filter(Boolean)[0] ?? 'admin';
 
 const TOKEN_KEY = 'sarena.admin.token';
 let token: string | null = null;
@@ -123,7 +133,7 @@ export async function api<T>(method: string, path: string, body?: unknown): Prom
     const { demoRequest } = await import('./demo/server');
     return demoRequest<T>(method, path, body);
   }
-  const headers: Record<string, string> = { Accept: 'application/json' };
+  const headers: Record<string, string> = { Accept: 'application/json', 'X-Sarena-Panel': PANEL_KEY };
   if (token) headers.Authorization = `Bearer ${token}`;
   let payload: BodyInit | undefined;
   if (body instanceof FormData) payload = body;

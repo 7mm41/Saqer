@@ -1,4 +1,4 @@
-# Sarena: API + website (/) + control panel (/admin/) in one container.
+# Sarena: API + website (/) + control panel (at its private address) in one container.
 #   docker build -t sarena .
 #   docker run -p 3000:3000 --env-file backend/.env -v sarena-data:/app/backend/data sarena
 
@@ -7,7 +7,7 @@ WORKDIR /build/dashboard
 COPY dashboard/package.json dashboard/package-lock.json ./
 RUN npm ci
 COPY dashboard/ ./
-# The "try without a server" demo inside the panel shows the sample venues from the server's seed.
+# The panel's stand-alone demo (built from the same source) reads the sample venues from the server's seed.
 COPY backend/src/db/seed-venues.json /build/backend/src/db/seed-venues.json
 RUN npm run build
 

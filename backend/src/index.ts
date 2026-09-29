@@ -12,14 +12,14 @@ const app = await buildApp({ config, db: database.db, live: new LiveHub(database
 
 await seed(database.db, config, (message) => app.log.info(message));
 if (!config.databaseUrl) app.log.info(`Using the embedded database in ${config.dataDir}/pglite (set DATABASE_URL for PostgreSQL).`);
-if (config.demoMode && config.production) app.log.warn('DEMO_MODE is on in production: turn it off before launch.');
 
 await app.listen({ port: config.port, host: config.host });
-const local = `http://localhost:${config.port}`;
-app.log.info(`Website ${config.publicUrl || local}/ · control panel ${config.publicUrl || local}/admin/`);
-app.log.info('Forgot the control panel password? Stop the server and run: npm run admin-password');
+const address = config.publicUrl || `http://localhost:${config.port}`;
+app.log.info(`Website ${address}/`);
+// The control panel's address is secret: only shown on the owner's own computer.
+if (!config.production) app.log.info(`Control panel ${address}/${config.panelPath}/`);
 if (!existsSync(join(config.dashboardDir, 'index.html'))) {
-  app.log.warn(`The control panel isn't built, so /admin/ can't open: start the server with "npm start" (it builds it), or run "cd dashboard && npm install && npm run build".`);
+  app.log.warn(`The control panel isn't built: start the server with "npm start" (it builds it), or run "cd dashboard && npm install && npm run build".`);
 }
 
 let closing = false;

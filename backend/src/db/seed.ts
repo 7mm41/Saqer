@@ -1,14 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { asc, count, eq } from 'drizzle-orm';
+import { and, count, eq, ne } from 'drizzle-orm';
 import type { Config } from '../config.ts';
 import { memberNumber } from '../lib/codes.ts';
-import { grantMembership } from '../lib/memberships.ts';
+import { activeMembership, grantMembership } from '../lib/memberships.ts';
 import { hashPassword, verifyPassword } from '../lib/passwords.ts';
+import { emailIndex, protectStoredData } from '../lib/people.ts';
+import { setDataKey } from '../lib/sealed.ts';
 import type { Database } from './client.ts';
-import { offers, plans, users, venues, type Category, type Localized } from './schema.ts';
-
-export const DEMO_MEMBER = { fullName: 'Sarena Demo', email: 'demo@sarena.om', password: 'Sarena2026', phone: '91234567' };
+import { offers, plans, sessions, settings, users, venues, type Category, type Localized } from './schema.ts';
 
 /** Sarena launches with one plan: 15 OMR a year. */
 export const ANNUAL_PLAN = {
@@ -40,45 +40,30 @@ type SeedVenue = {
  * is skipped once it exists, so dashboard edits are never overwritten.
  */
 export async function seed(db: Database, config: Config, log: (message: string) => void = console.log) {
+  setDataKey(config.dataKey);
+  await protectStoredData(db, log);
   let [plan] = await db.select().from(plans).limit(1);
   if (!plan) {
     [plan] = await db.insert(plans).values(ANNUAL_PLAN).returning();
     log('Seeded the annual membership plan (15 OMR / year).');
   }
 
-  const [admin] = await db.select({ id: users.id, passwordHash: users.passwordHash }).from(users)
-    .where(eq(users.email, config.adminEmail)).limit(1);
-  if (admin) {
-    // ADMIN_PASSWORD, when set, is the admin's password (a way back in if it is lost).
-    // An admin created with a blank ADMIN_PASSWORD line (older versions) gets a real one.
-    const blank = !admin.passwordHash || await verifyPassword('', admin.passwordHash);
-    const outdated = !config.adminPasswordGenerated && !(admin.passwordHash && await verifyPassword(config.adminPassword, admin.passwordHash));
-    if (blank || outdated) {
-      await db.update(users).set({ passwordHash: await hashPassword(config.adminPassword) }).where(eq(users.id, admin.id));
-      log(config.adminPasswordGenerated
-        ? `Set a password for the dashboard admin ${config.adminEmail}: ${config.adminPassword}  (set ADMIN_PASSWORD to choose one)`
-        : `Updated the dashboard admin ${config.adminEmail}'s password from ADMIN_PASSWORD.`);
-    }
-  } else {
-    await db.insert(users).values({
-      fullName: 'Sarena Admin', email: config.adminEmail, phone: null, role: 'admin',
-      passwordHash: await hashPassword(config.adminPassword), memberNumber: memberNumber(),
-    });
-    log(config.adminPasswordGenerated
-      ? `Created the dashboard admin ${config.adminEmail} with password: ${config.adminPassword}  (set ADMIN_PASSWORD to choose one)`
-      : `Created the dashboard admin ${config.adminEmail}.`);
+  // Test and default accounts from earlier versions are removed once (before launch,
+  // every account was a test); from then on, no account but the owner's can be an admin.
+  const [cleaned] = await db.select({ key: settings.key }).from(settings).where(eq(settings.key, CLEANUP_KEY)).limit(1);
+  if (!cleaned) {
+    const removed = await db.delete(users).where(ne(users.emailIndex, emailIndex(config.adminEmail))).returning({ id: users.id });
+    await db.insert(settings).values({ key: CLEANUP_KEY, value: { at: new Date().toISOString(), removed: removed.length } });
+    if (removed.length) log(`Removed ${removed.length} test and default accounts: only ${config.adminEmail} is kept.`);
   }
+  await db.update(users).set({ role: 'member' }).where(and(ne(users.role, 'member'), ne(users.emailIndex, emailIndex(config.adminEmail))));
 
-  if (config.demoMode) {
-    const [demo] = await db.select({ id: users.id }).from(users).where(eq(users.email, DEMO_MEMBER.email)).limit(1);
-    if (!demo) {
-      const [created] = await db.insert(users).values({
-        fullName: DEMO_MEMBER.fullName, email: DEMO_MEMBER.email, phone: DEMO_MEMBER.phone,
-        passwordHash: await hashPassword(DEMO_MEMBER.password), memberNumber: memberNumber(),
-      }).returning();
-      await grantMembership(db, { userId: created!.id, planId: plan!.id, source: 'demo', paidBaisa: 0 });
-      log(`Created the demo member ${DEMO_MEMBER.email} / ${DEMO_MEMBER.password} (SMS code 123456 for +968 ${DEMO_MEMBER.phone}).`);
-    }
+  const owner = await ensureOwner(db, config);
+  if (owner === 'missing') {
+    log(`The control panel account ${config.adminEmail} has no password yet. Set it with: npm run admin-password`
+      + ' (on a server: bash deploy/install.sh).');
+  } else if (owner === 'updated') {
+    log(`Set ${config.adminEmail}'s password from ADMIN_PASSWORD. Delete that line from .env now: the password is stored hashed.`);
   }
 
   const [venueCount] = await db.select({ n: count() }).from(venues);
@@ -105,26 +90,68 @@ function omanDate(days: number, hour: number) {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + days, hour - 4));
 }
 
+const CLEANUP_KEY = 'accounts-cleanup-v1';
+/** The owner's membership, so the same account also works fully in the app. */
+const OWNER_MEMBERSHIP_DAYS = 3650;
+
+/** "saqer@sarena.tech" → "Saqer". */
+const ownerName = (email: string) => {
+  const name = email.split('@')[0]!.replace(/[._-]+/g, ' ').trim();
+  return name ? name.replace(/\b\p{L}/gu, (letter) => letter.toUpperCase()) : 'Sarena';
+};
+
 /**
- * `npm run admin-password`: gives the dashboard admin a new password and returns
- * the sign-in details. The password is `password` if given, else ADMIN_PASSWORD
- * from .env (the next start applies it anyway), else a new readable one. The admin
- * is the ADMIN_EMAIL account, or the first admin if that email has changed since;
- * it is created if there is none.
+ * The owner (ADMIN_EMAIL) is an active admin with a membership. ADMIN_PASSWORD,
+ * when set, becomes its password; otherwise it keeps the one set with
+ * `npm run admin-password`. "missing" = there is no owner account yet (no password to give it).
  */
-export async function resetAdminPassword(db: Database, config: Config, password = config.adminPassword) {
-  const columns = { id: users.id, email: users.email };
-  const [admin] = [
-    ...await db.select(columns).from(users).where(eq(users.email, config.adminEmail)).limit(1),
-    ...await db.select(columns).from(users).where(eq(users.role, 'admin')).orderBy(asc(users.createdAt)).limit(1),
-  ];
-  const passwordHash = await hashPassword(password);
-  if (admin) {
-    await db.update(users).set({ passwordHash, role: 'admin', status: 'active' }).where(eq(users.id, admin.id));
-    return { email: admin.email, password, created: false };
+async function ensureOwner(db: Database, config: Config): Promise<'ok' | 'updated' | 'missing'> {
+  const [owner] = await db.select().from(users).where(eq(users.emailIndex, emailIndex(config.adminEmail))).limit(1);
+  let result: 'ok' | 'updated' = 'ok';
+  let id = owner?.id;
+  if (!owner) {
+    if (!config.adminPassword) return 'missing';
+    id = (await setOwnerPassword(db, config, config.adminPassword)).id;
+    result = 'updated';
+  } else {
+    if (owner.role !== 'admin' || owner.status !== 'active') {
+      await db.update(users).set({ role: 'admin', status: 'active' }).where(eq(users.id, owner.id));
+    }
+    if (config.adminPassword && !(await verifyPassword(config.adminPassword, owner.passwordHash))) {
+      await setOwnerPassword(db, config, config.adminPassword);
+      result = 'updated';
+    }
   }
-  await db.insert(users).values({
-    fullName: 'Sarena Admin', email: config.adminEmail, phone: null, role: 'admin', passwordHash, memberNumber: memberNumber(),
-  });
-  return { email: config.adminEmail, password, created: true };
+  const [plan] = await db.select({ id: plans.id }).from(plans).limit(1);
+  if (plan && !(await activeMembership(db, id!))) {
+    await grantMembership(db, { userId: id!, planId: plan.id, source: 'admin', paidBaisa: 0, days: OWNER_MEMBERSHIP_DAYS });
+  }
+  return result;
+}
+
+/** Whether the owner account exists (with a password): `npm run admin-password -- --check`. */
+export async function ownerExists(db: Database, config: Config) {
+  setDataKey(config.dataKey);
+  const [owner] = await db.select({ id: users.id }).from(users).where(eq(users.emailIndex, emailIndex(config.adminEmail))).limit(1);
+  return Boolean(owner);
+}
+
+/**
+ * Gives the owner (ADMIN_EMAIL) a new password, creating the account if needed,
+ * and signs it out everywhere. The password is never printed or stored in clear.
+ */
+export async function setOwnerPassword(db: Database, config: Config, password: string) {
+  setDataKey(config.dataKey);
+  const passwordHash = await hashPassword(password);
+  const [owner] = await db.select({ id: users.id }).from(users).where(eq(users.emailIndex, emailIndex(config.adminEmail))).limit(1);
+  if (owner) {
+    await db.update(users).set({ passwordHash, role: 'admin', status: 'active' }).where(eq(users.id, owner.id));
+    await db.update(sessions).set({ revokedAt: new Date() }).where(eq(sessions.userId, owner.id));
+    return { id: owner.id, email: config.adminEmail, created: false };
+  }
+  const [created] = await db.insert(users).values({
+    fullName: ownerName(config.adminEmail), email: config.adminEmail, emailIndex: emailIndex(config.adminEmail), phone: null,
+    role: 'admin', passwordHash, memberNumber: memberNumber(),
+  }).returning({ id: users.id });
+  return { id: created!.id, email: config.adminEmail, created: true };
 }

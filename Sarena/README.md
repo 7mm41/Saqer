@@ -10,27 +10,12 @@ Sarena is an iOS app for exclusive discounts and bookings in Oman. It is for mem
 2. Select the **Sarena** target → *Signing & Capabilities* → choose your Team.
 3. Run on an iPhone simulator or device (iOS 17+).
 
-## Backend: on-device demo or the Sarena API
+## Server
 
-* **Real server (default):** `Info.plist › SarenaAPIBaseURL` points at the Sarena server (now `https://tiger-urls-reseller-consultancy.trycloudflare.com`). Every service goes through `APIClient`, and the token is kept in the Keychain.
-* **Switch server without rebuilding:** in the control panel choose **ربط التطبيق · Connect the app** on the iPhone and tap *Open in the Sarena app*. The app asks, then moves to that server (link `sarena://connect?server=https://…`). Settings › About shows the server and a green dot while live updates flow. Set `SarenaAllowServerLinks` to `NO` for the App Store build.
-* **Local testing:** the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000` wins over both.
-* **No setup:** with `SarenaAPIBaseURL` empty (and no linked server), the app runs on an on-device demo backend (`AppServices.mock`).
-* **Live:** changes made in the control panel reach the open app within about a second (Server-Sent Events): venues and events, prices and tickets, the membership plan and discounts, seasonal looks, memberships and codes. Before sign-in, the welcome and sign-in screens follow the seasonal look the same way.
-* **Live updates:** changes made in the dashboard reach the app without signing out and back in. That includes new events, prices, photos, the membership price, a membership granted by an admin, and a code redeemed at the venue. The app re-checks everything each time it returns to the foreground; ETags keep that cheap. While it is open, it also listens to the server's event stream (`GET /v1/live`, see `Stores/LiveSync.swift`).
-
-## 🧪 Demo account (testing only)
-
-Both the on-device backend and the API (with `DEMO_MODE` on) seed this member:
-
-| Sign-in method | Credentials |
-| --- | --- |
-| Mobile number | **+968 9123 4567** → SMS code **123456** |
-| Email | **demo@sarena.om** / **Sarena2026** |
-
-The demo member starts with an active **annual membership**. In demo mode, subscribing and renewing are simulated and no payment is taken.
-
-The login screen also has a **Demo account** card with a **Use demo account** button. It fills in the details (and the SMS code) for you. The card only appears while `AppServices.isDemo` is `true`, so it goes away once you switch to the real API. With the mock backend, every registered number accepts `123456` as its SMS code.
+* **Always `https://sarena.tech`** (`Services/ServerAddress.swift`). Nothing can change or show it: no setting, no link, no screen. It's HTTPS only, and the sign-in token is kept in the Keychain. Settings from earlier versions (a linked tunnel server, demo accounts) are erased on launch.
+* **Accounts:** there are no built-in or demo accounts. Members create one in the app; the owner's account (`saqer@sarena.tech`) also works here, with a membership.
+* **Live:** changes made in the control panel reach the open app within about a second (Server-Sent Events): venues and events, prices and tickets, the membership plan and discounts, seasonal looks, memberships and codes. Before sign-in, the welcome and sign-in screens follow the seasonal look the same way. The app also re-checks everything each time it returns to the foreground; ETags keep that cheap (`Stores/LiveSync.swift`).
+* **Previews and tests** use on-device stand-ins (`AppServices.preview`), which start with no accounts and send random SMS codes.
 
 ## First launch flow
 
@@ -72,7 +57,7 @@ Sarena/
 ```
 
 * Views get services from `@Environment(\.services)` and **inject them into their view models**, so every view model can be tested with fakes (see `SarenaTests`).
-* `AppServices.configured()` picks the on-device demo services or the URLSession-backed API services (`Services/APIServices.swift`). No view depends on which one is used.
+* `AppServices.configured()` is the URLSession-backed API at https://sarena.tech (`Services/APIServices.swift`); previews and tests swap in on-device stand-ins. No view depends on which one is used.
 
 ## The design system
 
@@ -144,7 +129,6 @@ Every `.swift` file under `Sarena/` and `SarenaTests/` is picked up automaticall
 **سرينا** تطبيق iOS لعروض وحجوزات حصرية في عُمان للأعضاء فقط، مبني بـ SwiftUI ونمط MVVM، بتصميم الزجاج العائم، ويدعم العربية (من اليمين لليسار) والإنجليزية بالكامل.
 
 * افتح `Sarena.xcodeproj` في Xcode، واختر فريق التوقيع، ثم شغّل التطبيق.
-* **الحساب التجريبي (للتجربة فقط):**
-  * بالجوال: `‎+968 9123 4567` ثم رمز التحقق `123456`
-  * بالبريد: `demo@sarena.om` وكلمة المرور `Sarena2026`
+* التطبيق يتصل دائماً بـ `https://sarena.tech` فقط، ولا يوجد أي إعداد أو رابط يُظهر الخادم أو يغيّره.
+* لا توجد حسابات تجريبية: ينشئ الأعضاء حساباتهم من التطبيق، وحساب المالك `saqer@sarena.tech` يعمل في التطبيق أيضاً.
 * عند أول تشغيل: شاشة الشعار، ثم اختيار اللغة، ثم ثلاث شاشات تعريفية فيها «المتابعة» و«تخطي»، ثم تسجيل الدخول بالجوال أو البريد، أو إنشاء حساب جديد.

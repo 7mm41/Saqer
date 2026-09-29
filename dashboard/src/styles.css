@@ -380,15 +380,14 @@ tr.clickable:hover td { background: var(--surface-sunk); }
 .phone-preview { border-radius: 16px; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; background: var(--surface-strong); border: 1px solid var(--line); box-shadow: var(--shadow); }
 .phone-preview img { width: 36px; height: 36px; border-radius: 9px; }
 
-/* ---------- accounts & connecting the app ---------- */
-.credentials { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 0; padding: 14px 16px; border-radius: var(--radius-s); background: var(--surface-sunk); border: 1px solid var(--line); }
-.credentials dt { color: var(--muted); font-size: 13px; }
-.credentials dd { margin: 0; font-weight: 600; word-break: break-all; }
-.copy-row { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border-radius: var(--radius-s); background: var(--surface-sunk); border: 1px solid var(--line); }
-[dir="rtl"] .copy-row { padding: 8px 14px 8px 8px; }
-.copy-row code { flex: 1; min-width: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; word-break: break-all; }
-.side-foot .connect-item { border: 1px dashed var(--accent-line); color: var(--ember); }
-.side-foot .connect-item .icon { color: var(--orange); }
+/* ---------- sign-in history ---------- */
+.last-sign-in {
+  display: flex; align-items: flex-start; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 10px; text-align: start;
+  border: 1px solid var(--line); background: var(--surface-sunk); color: var(--muted); font-size: 12.5px; line-height: 1.45; cursor: pointer;
+}
+.last-sign-in .icon { margin-top: 1px; }
+.last-sign-in.warn { color: var(--danger); border-color: rgba(217,59,65,.3); background: rgba(217,59,65,.07); }
+tr.row-warn td { background: rgba(217,59,65,.05); }
 
 /* ---------- membership preview ---------- */
 .plan-preview { border-radius: 28px; padding: 24px; gap: 16px; }
@@ -424,8 +423,46 @@ tr.clickable:hover td { background: var(--surface-sunk); }
 
 /* ---------- overlays ---------- */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(18,12,20,.38); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: grid; place-items: center; padding: 16px; z-index: 70; animation: fade .18s ease; }
-.modal { width: min(920px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; background: var(--surface-strong); padding: 22px; animation: pop .22s cubic-bezier(.22, 1, .36, 1); }
+/* A column: the title row stays put, the body scrolls. dvh = the part of the screen Safari's bars leave visible. */
+.modal {
+  --modal-pad: 22px;
+  width: min(920px, 100%); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+  display: flex; flex-direction: column; overflow: hidden; padding: 0;
+  background: var(--surface-strong); animation: pop .22s cubic-bezier(.22, 1, .36, 1);
+}
 .modal.narrow { width: min(460px, 100%); }
+.modal-head {
+  flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px var(--modal-pad) 14px; border-bottom: 1px solid var(--line);
+}
+.modal-head h2 { min-width: 0; overflow-wrap: anywhere; }
+.modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 18px var(--modal-pad) var(--modal-pad); }
+.modal.narrow .modal-head { border-bottom: 0; padding-bottom: 0; }
+/* Save / Close / Delete stay in view at the bottom of long forms. */
+.modal-actions {
+  position: sticky; bottom: calc(-1 * var(--modal-pad)); z-index: 2;
+  margin: 4px calc(-1 * var(--modal-pad)) calc(-1 * var(--modal-pad)); padding: 12px var(--modal-pad) var(--modal-pad);
+  background: var(--surface-strong); border-top: 1px solid var(--line);
+}
+/* Phones: a window fills the screen in the page's own colour. iPhone Safari paints its
+   status-bar and toolbar areas from what touches the screen's edges, so there are no
+   dark strips above or below, and the buttons sit just above Safari's toolbar. */
+@media (max-width: 640px) {
+  .modal-backdrop { padding: 0; place-items: stretch; background: var(--surface-strong); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .modal { --modal-pad: 16px; width: 100%; height: 100%; max-height: none; border: 0; border-radius: 0; box-shadow: none; animation: sheetIn .26s cubic-bezier(.22, 1, .36, 1); }
+  .modal-head { padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
+  .modal-body { padding-bottom: calc(var(--modal-pad) + env(safe-area-inset-bottom, 0px)); }
+  .modal-actions {
+    bottom: calc(-1 * (var(--modal-pad) + env(safe-area-inset-bottom, 0px)));
+    margin-bottom: calc(-1 * (var(--modal-pad) + env(safe-area-inset-bottom, 0px)));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+  /* Short questions ("Delete this?") stay a small card, on the page colour. */
+  .modal-backdrop.narrow { padding: 16px; place-items: center; background: var(--bg); }
+  .modal.narrow { width: 100%; height: auto; max-height: calc(100dvh - 32px); border: 1px solid var(--rim); border-radius: var(--radius); box-shadow: var(--shadow-lift); animation: pop .22s cubic-bezier(.22, 1, .36, 1); }
+  .modal.narrow .modal-head { padding-top: 16px; }
+}
+@keyframes sheetIn { from { opacity: 0; transform: translateY(24px); } }
 .toast-stack { position: fixed; bottom: 22px; inset-inline-start: 50%; transform: translateX(-50%); z-index: 90; display: flex; flex-direction: column; gap: 10px; align-items: center; }
 [dir="rtl"] .toast-stack { transform: translateX(50%); }
 .toast { padding: 11px 16px; border-radius: 12px; font-weight: 600; background: var(--ink); color: var(--bg); box-shadow: var(--shadow-lift); animation: rise .25s ease; }

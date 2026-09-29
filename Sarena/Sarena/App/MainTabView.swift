@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @Environment(\.services) private var services
     @Environment(SessionStore.self) private var session
     @Environment(WalletStore.self) private var wallet
     @Environment(MembershipStore.self) private var membership
@@ -23,7 +22,7 @@ struct MainTabView: View {
                 .tag(AppTab.wallet)
 
             // "حسابي": member savings + the annual membership in one place.
-            AccountView(store: membership, session: session, wallet: wallet, isDemo: services.isDemo)
+            AccountView(store: membership, session: session, wallet: wallet)
             .glassTabBar()
             .tabItem { Label("My Account", systemImage: "person.crop.circle.fill") }
             .tag(AppTab.account)

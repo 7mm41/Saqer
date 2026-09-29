@@ -5,7 +5,7 @@ import helmet from '@fastify/helmet';
 import multipart from '@fastify/multipart';
 import rateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
-import Fastify, { type FastifyInstance, type preHandlerHookHandler } from 'fastify';
+import Fastify, { type FastifyInstance, type FastifyReply, type preHandlerHookHandler } from 'fastify';
 import { makeGuard } from './auth.ts';
 import type { Config } from './config.ts';
 import type { Database } from './db/client.ts';
@@ -14,6 +14,7 @@ import { ApiError } from './lib/errors.ts';
 import { LiveHub } from './lib/live.ts';
 import { Notifier } from './lib/notifier.ts';
 import { createPushSender, type PushSender } from './lib/push.ts';
+import { setDataKey } from './lib/sealed.ts';
 import { createSmsSender, type SmsSender } from './lib/sms.ts';
 import { createTokenService, type TokenService } from './lib/tokens.ts';
 import { adminRoutes } from './routes/admin/index.ts';
@@ -46,6 +47,8 @@ export type BuildOptions = {
   live?: LiveHub;
   /** Push provider; defaults to APNs when configured. */
   push?: PushSender;
+  /** SMS sender; defaults to the provider in the config (tests pass their own). */
+  sms?: SmsSender;
   /** Wallet pass signer; defaults to the certificate in the config (tests pass their own). */
   wallet?: WalletSigner | null;
   /** Runs the notification scheduler (tests call `app.notifier.tick()` themselves). */
@@ -55,20 +58,23 @@ export type BuildOptions = {
 };
 
 export async function buildApp({
-  config, db, live = new LiveHub(), push, wallet, scheduler = config.scheduler, logger = true, rateLimit: limitRequests = true,
+  config, db, live = new LiveHub(), push, sms, wallet, scheduler = config.scheduler, logger = true, rateLimit: limitRequests = true,
 }: BuildOptions): Promise<FastifyInstance> {
   const app = Fastify({
     logger: logger ? { level: config.production ? 'info' : 'debug' } : false,
-    trustProxy: true,
+    // Hops, not "any": a made-up X-Forwarded-For can't pass for another address
+    // (and so can't dodge the sign-in limits).
+    trustProxy: (_address: string, hop: number) => hop < config.trustProxy,
     bodyLimit: 1_000_000,
   });
 
+  setDataKey(config.dataKey);
   const tokens = createTokenService(config.jwtSecret, config.tokenTtlDays);
   app.decorate('db', db);
   app.decorate('config', config);
   app.decorate('tokens', tokens);
-  app.decorate('sms', createSmsSender(config.sms, app.log));
-  app.decorate('guard', makeGuard(db, tokens) as FastifyInstance['guard']);
+  app.decorate('sms', sms ?? createSmsSender(config.sms, app.log));
+  app.decorate('guard', makeGuard(db, tokens, config.adminEmail) as FastifyInstance['guard']);
   app.decorate('live', live);
   const notifier = new Notifier({ db, push: push ?? createPushSender(config, app.log), live, config, log: app.log });
   app.decorate('notifier', notifier);
@@ -103,7 +109,8 @@ export async function buildApp({
     },
     crossOriginResourcePolicy: { policy: 'same-site' },
   });
-  await app.register(rateLimit, { global: false, max: limitRequests ? 100 : 1_000_000, timeWindow: '1 minute' });
+  // Every address: 600 requests a minute (far more than the app or the panel need); sign-ins: 10.
+  await app.register(rateLimit, { global: true, max: limitRequests ? 600 : 1_000_000, timeWindow: '1 minute' });
   await app.register(multipart, { limits: { fileSize: 5 * 1024 * 1024, files: 1 } });
 
   app.setErrorHandler((error, request, reply) => {
@@ -133,29 +140,51 @@ export async function buildApp({
     await appConfigRoutes(api);
   }, { prefix: '/v1' });
 
-  // Uploaded images, the public website and the admin dashboard (a PWA).
+  // Uploaded images, the public website and the control panel (a PWA).
   mkdirSync(config.uploadsDir, { recursive: true });
   await app.register(fastifyStatic, {
-    root: config.uploadsDir, prefix: '/uploads/', decorateReply: false, maxAge: '30d', immutable: true,
+    root: config.uploadsDir, prefix: '/uploads/', decorateReply: false, maxAge: '30d', immutable: true, dotfiles: 'deny', index: false,
   });
+  // The control panel lives at a secret address (config.panelPath): nothing links to it,
+  // search engines are told to skip it, and any other address (/admin…) is a plain 404.
+  const panel = `/${config.panelPath}/`;
+  const privateHeaders = (reply: FastifyReply) => reply.header('X-Robots-Tag', 'noindex, nofollow').header('Referrer-Policy', 'no-referrer');
   if (existsSync(config.dashboardDir)) {
-    await app.register(fastifyStatic, { root: config.dashboardDir, prefix: '/admin/', decorateReply: false });
+    await app.register(fastifyStatic, {
+      root: config.dashboardDir, prefix: panel, decorateReply: false, index: false, dotfiles: 'deny', setHeaders: privateHeaders,
+    });
   }
   if (existsSync(config.websiteDir)) {
-    await app.register(fastifyStatic, { root: config.websiteDir, prefix: '/' });
+    await app.register(fastifyStatic, { root: config.websiteDir, prefix: '/', dotfiles: 'deny' });
   }
+  app.get('/robots.txt', async (_request, reply) => reply.type('text/plain').send('User-agent: *\nDisallow: /v1/\nDisallow: /uploads/\n'));
+
+  /** The panel's page, told where it lives (`<base>`) so its files and links resolve under the secret address. */
+  const dashboardIndex = join(config.dashboardDir, 'index.html');
+  const panelPage = async () => {
+    const html = await readFile(dashboardIndex, 'utf8');
+    const base = `<base href="${panel}">`;
+    return /<head[^>]*>/i.test(html)
+      ? html.replace(/<head[^>]*>/i, (tag) => tag + base)
+      : html.replace(/^(<!doctype[^>]*>)?/i, (doctype) => doctype + base);
+  };
+
+  const sendPanel = async (reply: FastifyReply) => {
+    if (!existsSync(dashboardIndex)) {
+      return reply.status(503).type('text/html; charset=utf-8').header('Cache-Control', 'no-store').send(DASHBOARD_NOT_BUILT);
+    }
+    return privateHeaders(reply).type('text/html; charset=utf-8').header('Cache-Control', 'no-store').send(await panelPage());
+  };
+  app.get(panel, async (_request, reply) => sendPanel(reply));
 
   app.setNotFoundHandler(async (request, reply) => {
-    const { url } = request;
-    if (request.method === 'GET' && /^\/admin(?=[/?]|$)/i.test(url)) {
-      // /admin, /Admin/ or /ADMIN/members (typed by hand, or capitalised by the phone) → /admin/…
-      if (!url.startsWith('/admin/')) return reply.redirect(`/admin/${url.slice('/admin'.length).replace(/^\//, '')}`);
-      // Client-side routes of the dashboard (/admin/venues...) fall back to its index.html.
-      const dashboardIndex = join(config.dashboardDir, 'index.html');
-      if (existsSync(dashboardIndex)) {
-        return reply.type('text/html; charset=utf-8').header('Cache-Control', 'no-cache').send(await readFile(dashboardIndex));
-      }
-      return reply.status(503).type('text/html; charset=utf-8').header('Cache-Control', 'no-store').send(DASHBOARD_NOT_BUILT);
+    const path = request.url.split('?')[0]!;
+    const lower = path.toLowerCase();
+    if (request.method === 'GET' && (lower === panel.slice(0, -1) || lower.startsWith(panel))) {
+      // /<secret> or a capitalised /<Secret>/… (typed by hand, or by a phone) → /<secret>/…
+      if (!path.startsWith(panel)) return reply.redirect(panel + request.url.slice(panel.length - 1).replace(/^\//, ''));
+      // The panel's pages (/<secret>/venues…) all open its index.html.
+      return sendPanel(reply);
     }
     return reply.status(404).send({ error: { code: 'not_found', message: 'Not found.' } });
   });
