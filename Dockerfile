@@ -7,6 +7,8 @@ WORKDIR /build/dashboard
 COPY dashboard/package.json dashboard/package-lock.json ./
 RUN npm ci
 COPY dashboard/ ./
+# The "try without a server" demo inside the panel shows the sample venues from the server's seed.
+COPY backend/src/db/seed-venues.json /build/backend/src/db/seed-venues.json
 RUN npm run build
 
 FROM node:22-alpine
