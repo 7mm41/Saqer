@@ -324,6 +324,15 @@ describe('dashboard', () => {
     assert.equal(cancelled.body.membership.status, 'cancelled');
     const list = await call('GET', '/v1/admin/memberships?status=cancelled', { token: adminToken });
     assert.ok(list.body.items.some((m: Json) => m.id === granted.body.membership.id));
+
+    // The memberships list searches by the member's name or number.
+    const byName = await call('GET', '/v1/admin/memberships?q=hinai', { token: adminToken });
+    assert.equal(byName.status, 200, JSON.stringify(byName.body));
+    assert.equal(byName.body.total, 1);
+    assert.equal(byName.body.items[0].member.id, user.id);
+    const byNumber = await call('GET', `/v1/admin/memberships?q=${encodeURIComponent(user.memberNumber)}&status=cancelled`, { token: adminToken });
+    assert.equal(byNumber.body.total, 1);
+    assert.equal((await call('GET', '/v1/admin/memberships?q=nobody-by-this-name', { token: adminToken })).body.total, 0);
   });
 
   test('suspending a member signs them out everywhere', async () => {

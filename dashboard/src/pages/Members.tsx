@@ -1,9 +1,12 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { fromOMR, get, patch, post, type Booking, type Membership, type Page, type Plan, type Role, type User } from '../api';
 import { useI18n } from '../i18n';
+import { Icon } from '../icons';
 import { useLive } from '../live';
+import { useNav } from '../nav';
 import {
-  Empty, Field, Loading, LocalizedField, Modal, PageHead, Pager, Segmented, StatusBadge, initials, useConfirm, useErrorText, useLoad, useToast,
+  Empty, Field, Loading, LocalizedField, Modal, PageHead, Pager, SearchField, Segmented, StatusBadge, initials, useConfirm,
+  useDebounced, useErrorText, useLoad, useToast,
 } from '../ui';
 
 type MemberRow = User & { membership: Membership | null };
@@ -14,27 +17,34 @@ export function MembersPage() {
   const [status, setStatus] = useState<'' | 'active' | 'suspended'>('');
   const [page, setPage] = useState(1);
   const [openID, setOpenID] = useState<string | null>(null);
+  const { intent, clearIntent } = useNav();
+  const search = useDebounced(query.trim());
+
+  // Opened from search: show that member.
+  useEffect(() => {
+    if (!intent?.memberId) return;
+    setOpenID(intent.memberId);
+    clearIntent();
+  }, [intent, clearIntent]);
 
   const params = new URLSearchParams({ page: String(page), pageSize: '25' });
-  if (query.trim()) params.set('q', query.trim());
+  if (search) params.set('q', search);
   if (status) params.set('status', status);
   const { data, reload } = useLoad(() => get<Page<MemberRow>>(`admin/members?${params}`), [params.toString()]);
   useLive(['members', 'memberships'], () => void reload());
 
   return (
     <>
-      <PageHead title={t('members')} hint={t('membersHint')}>
-        <span className="badge num">{number(data?.total ?? 0)}</span>
-      </PageHead>
+      <PageHead title={t('members')} hint={t('membersHint')} />
       <section className="glass card stack">
-        <div className="row">
-          <input className="input" style={{ flex: '1 1 260px' }} type="search" placeholder={t('searchMembers')} value={query}
-            onChange={(event) => { setQuery(event.target.value); setPage(1); }} />
+        <div className="toolbar">
+          <SearchField value={query} onChange={(value) => { setQuery(value); setPage(1); }} placeholder={t('searchMembers')} />
           <Segmented value={status} onChange={(value) => { setStatus(value); setPage(1); }} options={[
             { value: '', label: t('all') }, { value: 'active', label: t('active') }, { value: 'suspended', label: t('suspended') },
           ]} />
+          {data && <span className="muted small num toolbar-count">{t('results', { n: number(data.total) })}</span>}
         </div>
-        {!data ? <Loading /> : data.items.length === 0 ? <Empty /> : (
+        {!data ? <Loading /> : data.items.length === 0 ? <Empty text={search ? t('noMatches') : undefined} /> : (
           <div className="table-wrap">
             <table>
               <thead><tr><th>{t('member')}</th><th>{t('phone')}</th><th>{t('membership')}</th><th>{t('role')}</th><th>{t('joined')}</th></tr></thead>
@@ -42,21 +52,21 @@ export function MembersPage() {
                 {data.items.map((member) => (
                   <tr key={member.id} className="clickable" onClick={() => setOpenID(member.id)}>
                     <td>
-                      <div className="row" style={{ flexWrap: 'nowrap' }}>
+                      <div className="person">
                         <span className="avatar">{initials(member.fullName)}</span>
-                        <div>
+                        <div className="person-text">
                           <strong>{member.fullName}</strong>
-                          <div className="muted small ltr">{member.email}</div>
+                          <span className="muted small ltr">{member.email}</span>
                         </div>
                         {member.status === 'suspended' && <StatusBadge status="suspended" />}
                       </div>
                     </td>
                     <td className="ltr num">{member.phone ? `+968 ${member.phone}` : '—'}</td>
                     <td>{member.membership
-                      ? <span className="badge green">👑 {t('until')} {date(member.membership.expiresAt)}</span>
+                      ? <span className="badge green"><Icon name="crown" size={12} />{t('until')} {date(member.membership.expiresAt)}</span>
                       : <span className="badge">{t('noMembership')}</span>}</td>
                     <td><RoleBadge role={member.role} /></td>
-                    <td className="muted">{date(member.memberSince)}</td>
+                    <td className="muted num">{date(member.memberSince)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -80,7 +90,7 @@ function RoleBadge({ role }: { role: Role }) {
 type MemberDetail = { member: User; memberships: Membership[]; bookings: Booking[] };
 
 function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
-  const { t, date, money, L } = useI18n();
+  const { t, date, money, L, number } = useI18n();
   const toast = useToast();
   const errorText = useErrorText();
   const confirmAction = useConfirm();
@@ -120,7 +130,7 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
       <div className="stack">
         <div className="row between">
           <div className="row">
-            <span className="avatar" style={{ width: 54, height: 54, fontSize: 20 }}>{initials(member.fullName)}</span>
+            <span className="avatar large">{initials(member.fullName)}</span>
             <div>
               <div className="ltr">{member.email}</div>
               <div className="muted small ltr num">{member.phone ? `+968 ${member.phone}` : ''} · {member.memberNumber}</div>
@@ -140,11 +150,11 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
         </div>
 
         <form className="glass card stack" onSubmit={grant}>
-          <h3>👑 {t('grantMembership')}</h3>
+          <h3 className="with-icon"><Icon name="crown" size={18} />{t('grantMembership')}</h3>
           <p className="muted small">{t('grantHint')}</p>
           <div className="triple">
-            <Field label={t('days')}><input className="input num" type="number" min={1} max={3650} value={days} onChange={(e) => setDays(e.target.value)} /></Field>
-            <Field label={t('amountPaid')}><input className="input num" inputMode="decimal" value={paid} onChange={(e) => setPaid(e.target.value)} /></Field>
+            <Field label={t('days')}><input className="input num ltr" type="number" min={1} max={3650} value={days} onChange={(e) => setDays(e.target.value)} /></Field>
+            <Field label={t('amountPaid')}><input className="input num ltr" inputMode="decimal" value={paid} onChange={(e) => setPaid(e.target.value)} /></Field>
             <div className="field"><span>&nbsp;</span><button className="btn primary" disabled={busy || !plan}>{t('grantMembership')}</button></div>
           </div>
         </form>
@@ -158,8 +168,8 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
                 <tr key={m.id}>
                   <td><StatusBadge status={m.status} /></td>
                   <td className="muted">{m.source}</td>
-                  <td>{date(m.startsAt)}</td>
-                  <td>{date(m.expiresAt)}</td>
+                  <td className="num">{date(m.startsAt)}</td>
+                  <td className="num">{date(m.expiresAt)}</td>
                   <td>{m.status === 'active' && (
                     <button className="btn small ghost" disabled={busy} onClick={async () => { if (await confirmAction(`${t('cancelMembership')}?`, { action: t('cancelMembership') })) void run(() => post(`admin/memberships/${m.id}/cancel`)); }}>{t('cancelMembership')}</button>
                   )}</td>
@@ -173,12 +183,12 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
           <h3>{t('codes')}</h3>
           {data.bookings.length === 0 ? <p className="muted">{t('empty')}</p> : (
             <div className="table-wrap"><table>
-              <thead><tr><th>Code</th><th>{t('venues')}</th><th>{t('quantity')}</th><th>{t('paid')}</th><th>{t('status')}</th></tr></thead>
+              <thead><tr><th>{t('codes')}</th><th>{t('venues')}</th><th>{t('quantity')}</th><th>{t('paid')}</th><th>{t('status')}</th></tr></thead>
               <tbody>{data.bookings.map((b) => (
                 <tr key={b.id}>
                   <td className="ltr num"><strong>{b.code}</strong></td>
                   <td>{L(b.venueName)} · <span className="muted">{L(b.offerTitle)}</span></td>
-                  <td className="num">{b.quantity}</td>
+                  <td className="num">{number(b.quantity)}</td>
                   <td className="num">{money(b.paidTotalBaisa)}</td>
                   <td><StatusBadge status={b.status} /></td>
                 </tr>
@@ -188,7 +198,7 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
         </section>
 
         <form className="glass card stack" onSubmit={notify}>
-          <h3>🔔 {t('notifyMember')}</h3>
+          <h3 className="with-icon"><Icon name="bell" size={18} />{t('notifyMember')}</h3>
           <LocalizedField label={t('title')} value={message.title} onChange={(title) => setMessage({ ...message, title })} />
           <LocalizedField label={t('message')} multiline value={message.body} onChange={(body) => setMessage({ ...message, body })} />
           <div className="row"><button className="btn primary" disabled={busy}>{t('send')}</button></div>

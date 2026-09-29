@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ApiError, DEMO, get, post, type Booking, type Localized, type Page } from '../api';
 import { useI18n } from '../i18n';
+import { Icon } from '../icons';
 import { useLive } from '../live';
-import { Empty, Loading, PageHead, StatusBadge, useErrorText, useLoad } from '../ui';
+import { useNav } from '../nav';
+import { Empty, Loading, PageHead, SearchField, StatusBadge, useDebounced, useErrorText, useLoad } from '../ui';
 
 type Result =
   | { ok: true; booking: Booking & { offerTitle: Localized }; member: { fullName: string; memberNumber: string } }
@@ -28,7 +30,23 @@ export function RedeemPage() {
   const [busy, setBusy] = useState(false);
   const [scanning, setScanning] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
-  const { data: recent, reload } = useLoad(() => get<Page<Booking>>('admin/bookings?status=used&pageSize=8'), []);
+  const input = useRef<HTMLInputElement>(null);
+  const { intent, clearIntent } = useNav();
+  // Recent redemptions, or any code matching the search.
+  const [lookup, setLookup] = useState('');
+  const search = useDebounced(lookup.trim());
+  const { data: recent, reload } = useLoad(() => get<Page<Booking>>(search
+    ? `admin/bookings?pageSize=8&q=${encodeURIComponent(search)}`
+    : 'admin/bookings?status=used&pageSize=8'), [search]);
+
+  // Opened from search: the code is ready to redeem.
+  useEffect(() => {
+    if (!intent?.code) return;
+    setCode(intent.code);
+    setResult(null);
+    input.current?.focus();
+    clearIntent();
+  }, [intent, clearIntent]);
   const [samples, setSamples] = useState<string[]>([]);
   const loadSamples = () => {
     if (DEMO) void import('../demo/server').then(({ demoCodes }) => setSamples(demoCodes()));
@@ -95,14 +113,14 @@ export function RedeemPage() {
   return (
     <>
       <PageHead title={t('redeem')} hint={t('redeemHint')} />
-      <div className="grid two">
+      <div className="grid two top">
         <form className="glass card stack" onSubmit={submit}>
-          <input className="input code-input ltr" dir="ltr" autoFocus autoComplete="off" spellCheck={false} placeholder="SRN-XXXX-XXXX"
+          <input ref={input} className="input code-input ltr" dir="ltr" autoFocus autoComplete="off" spellCheck={false} placeholder="SRN-XXXX-XXXX"
             value={code} onChange={(event) => setCode(event.target.value.toUpperCase())} />
           <div className="row">
-            <button className="btn primary" style={{ flex: 1 }} disabled={busy || code.trim().length < 6}>✅ {t('redeemAction')}</button>
+            <button className="btn primary" style={{ flex: 1 }} disabled={busy || code.trim().length < 6}><Icon name="check" size={18} />{t('redeemAction')}</button>
             {window.BarcodeDetector && (
-              <button type="button" className="btn" onClick={() => setScanning((on) => !on)}>{scanning ? t('stopScan') : `📷 ${t('scan')}`}</button>
+              <button type="button" className="btn" onClick={() => setScanning((on) => !on)}><Icon name={scanning ? 'close' : 'scan'} size={18} />{scanning ? t('stopScan') : t('scan')}</button>
             )}
           </div>
           {scanning && <video ref={video} className="scanner" muted playsInline />}
@@ -110,35 +128,38 @@ export function RedeemPage() {
             <div className="row small">
               <span className="muted">{t('demoCodes')}:</span>
               {samples.map((sample) => (
-                <button key={sample} type="button" className="badge orange ltr" style={{ cursor: 'pointer' }} onClick={() => setCode(sample)}>{sample}</button>
+                <button key={sample} type="button" className="badge orange ltr num clickable-badge" onClick={() => setCode(sample)}>{sample}</button>
               ))}
             </div>
           )}
           {result && (result.ok ? (
             <div className="result ok">
-              <span className="big" aria-hidden>✅</span>
+              <span className="big" aria-hidden><Icon name="check" size={24} /></span>
               <div className="stack" style={{ gap: 4 }}>
                 <strong>{t('redeemed')}</strong>
-                <span>{result.member.fullName} · <span className="ltr">{result.member.memberNumber}</span></span>
+                <span>{result.member.fullName} · <span className="ltr num">{result.member.memberNumber}</span></span>
                 <span className="muted">{L(result.booking.venueName)} · {L(result.booking.offerTitle)} × {number(result.booking.quantity)}</span>
                 <span className="num"><span className="price-old">{money(result.booking.originalTotalBaisa)}</span> <span className="price-new">{money(result.booking.paidTotalBaisa)}</span></span>
               </div>
             </div>
           ) : (
-            <div className="result bad"><span className="big" aria-hidden>⛔</span><strong>{result.message}</strong></div>
+            <div className="result bad"><span className="big" aria-hidden><Icon name="close" size={22} /></span><strong>{result.message}</strong></div>
           ))}
         </form>
         <section className="glass card stack">
           <h2>{t('recentRedemptions')}</h2>
-          {!recent ? <Loading /> : recent.items.length === 0 ? <Empty /> : recent.items.map((booking) => (
-            <div key={booking.id} className="row between">
+          <SearchField value={lookup} onChange={setLookup} placeholder={t('searchCodeOrName')} />
+          {!recent ? <Loading /> : recent.items.length === 0 ? <Empty text={search ? t('noMatches') : undefined} /> : recent.items.map((booking) => (
+            <div key={booking.id} className="row between code-row">
               <div>
-                <strong className="ltr">{booking.code}</strong>
+                {booking.status === 'active'
+                  ? <button type="button" className="link-btn ltr num" onClick={() => { setCode(booking.code); setResult(null); input.current?.focus(); }}>{booking.code}</button>
+                  : <strong className="ltr num">{booking.code}</strong>}
                 <div className="muted small">{booking.member?.fullName} · {L(booking.venueName)}</div>
               </div>
               <div className="stack" style={{ gap: 4, alignItems: 'flex-end' }}>
                 <StatusBadge status={booking.status} />
-                <span className="muted small num">{dateTime(booking.usedAt)}</span>
+                <span className="muted small num">{dateTime(booking.usedAt ?? booking.purchasedAt)}</span>
               </div>
             </div>
           ))}

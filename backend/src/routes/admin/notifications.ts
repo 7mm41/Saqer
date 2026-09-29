@@ -1,4 +1,4 @@
-import { and, count, desc, eq, type SQL } from 'drizzle-orm';
+import { and, count, desc, eq, ne, or, sql, type SQL } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { requireAuthContext } from '../../auth.ts';
@@ -17,10 +17,21 @@ export async function notificationAdminRoutes(admin: FastifyInstance) {
   admin.get('/notifications', adminOnly, async (request) => {
     const query = parse(pagination.extend({
       kind: z.enum(notificationKinds).optional(),
+      /** Written by an admin (broadcast) or sent by the automatic rules. */
+      origin: z.enum(['written', 'automatic']).optional(),
       status: z.enum(['scheduled', 'sending', 'sent', 'cancelled', 'failed']).optional(),
+      q: z.string().trim().max(100).optional(),
     }), request.query);
     const filters: SQL[] = [];
     if (query.kind) filters.push(eq(notifications.kind, query.kind));
+    if (query.origin) filters.push(query.origin === 'written' ? eq(notifications.kind, 'broadcast') : ne(notifications.kind, 'broadcast'));
+    if (query.q) {
+      const like = `%${query.q}%`;
+      filters.push(or(
+        sql`${notifications.title}->>'en' ilike ${like}`, sql`${notifications.title}->>'ar' ilike ${like}`,
+        sql`${notifications.body}->>'en' ilike ${like}`, sql`${notifications.body}->>'ar' ilike ${like}`,
+      )!);
+    }
     if (query.status) filters.push(eq(notifications.status, query.status));
     const where = filters.length ? and(...filters) : undefined;
     const [total] = await db.select({ n: count() }).from(notifications).where(where);

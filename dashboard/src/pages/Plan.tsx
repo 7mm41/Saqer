@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { fromOMR, get, patch, toOMR, type Localized, type Plan } from '../api';
 import { useI18n } from '../i18n';
+import { Icon } from '../icons';
 import { useLive } from '../live';
 import { DateTimeField, Field, Loading, LocalizedField, LocalizedLinesField, PageHead, useErrorText, useLoad, useToast } from '../ui';
 
@@ -17,7 +18,7 @@ const toDraft = (plan: Plan): Draft => ({
 });
 
 export function PlanPage() {
-  const { t, L, money, date } = useI18n();
+  const { t, L, money, amount, currency, date } = useI18n();
   const toast = useToast();
   const errorText = useErrorText();
   const { data, reload } = useLoad(() => get<{ plans: Plan[] }>('admin/plans'), []);
@@ -72,9 +73,9 @@ export function PlanPage() {
           </div>
           <LocalizedLinesField label={t('perks')} value={draft.perks} onChange={(value) => set('perks', value)} />
 
-          <div className="glass card stack" style={{ marginTop: 6 }}>
+          <div className="sub-card stack">
             <div className="row between">
-              <h3>🎁 {t('discount')}</h3>
+              <h3 className="with-icon"><Icon name="gift" size={18} />{t('discount')}</h3>
               {promoState === 'running' && <span className="badge green">{t('discountRunning')}</span>}
               {promoState === 'scheduled' && <span className="badge orange">{t('discountScheduled')}</span>}
             </div>
@@ -95,24 +96,26 @@ export function PlanPage() {
         <section className="stack">
           <h3 className="muted">{t('appPreview')}</h3>
           {/* Mirrors the app's membership card. */}
-          <div className="glass tinted card stack" style={{ borderRadius: 32 }}>
+          <div className="glass tinted card stack plan-preview">
             <div className="row">
-              <span style={{ fontSize: 30, width: 60, height: 60, borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.25)', border: '1px solid rgba(255,255,255,.6)' }}>👑</span>
+              <span className="plan-crown"><Icon name="crown" size={28} /></span>
               <h2>{L(draft.name)}</h2>
             </div>
             {promoPrice !== null && (
-              <span className="badge" style={{ background: 'rgba(255,255,255,.28)', color: '#fff', borderColor: 'rgba(255,255,255,.5)', alignSelf: 'flex-start' }}>
-                🎁 {L(draft.promoLabel)}{draft.promoEndsAt ? ` · ${t('until')} ${date(draft.promoEndsAt)}` : ''}
+              <span className="badge on-tint num">
+                <Icon name="gift" size={13} />{L(draft.promoLabel)}{draft.promoEndsAt ? ` · ${t('until')} ${date(draft.promoEndsAt)}` : ''}
               </span>
             )}
             <div>
-              {promoPrice !== null && <div className="num" style={{ textDecoration: 'line-through', opacity: .75, fontWeight: 700 }}>{money(price)}</div>}
-              <div className="num" style={{ fontSize: 40, fontWeight: 900 }}>{money(promoPrice ?? price)} <span style={{ fontSize: 16, opacity: .85 }}>{t('perYear')}</span></div>
+              {promoPrice !== null && <div className="num plan-was">{money(price)}</div>}
+              <div className="plan-price num">
+                <strong>{amount(promoPrice ?? price)}</strong><span>{currency} {t('perYear')}</span>
+              </div>
               <div className="muted">{L(draft.description)}</div>
             </div>
-            <div className="stack" style={{ gap: 6 }}>
-              {draft.perks.map((perk, index) => <div key={index}>✓ {L(perk)}</div>)}
-            </div>
+            <ul className="plan-perks">
+              {draft.perks.map((perk, index) => <li key={index}><Icon name="check" size={18} />{L(perk)}</li>)}
+            </ul>
           </div>
         </section>
       </div>

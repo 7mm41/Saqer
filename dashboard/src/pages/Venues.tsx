@@ -1,10 +1,12 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { CATEGORIES, del, fromOMR, get, patch, post, toOMR, type Category, type Localized, type Offer, type Venue } from '../api';
 import { useI18n } from '../i18n';
+import { CATEGORY_ICONS, Icon } from '../icons';
 import { useLive } from '../live';
+import { useNav } from '../nav';
 import {
   CATEGORY_META, DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, LocalizedLinesField, Modal, PageHead,
-  Toggle, categoryGradient, useConfirm, useErrorText, useLoad, useToast,
+  SearchField, Segmented, Toggle, categoryGradient, fold, useConfirm, useErrorText, useLoad, useToast,
 } from '../ui';
 
 const blank = (): Localized => ({ en: '', ar: '' });
@@ -19,53 +21,79 @@ const newVenue = (): VenueDraft => ({
 
 export function VenuesPage() {
   const { t, L, money, date, number } = useI18n();
+  const { intent, clearIntent } = useNav();
   const { data, reload } = useLoad(() => get<{ venues: Venue[] }>('admin/venues'), []);
   useLive(['catalog'], () => void reload());
   const [editing, setEditing] = useState<VenueDraft | null>(null);
-  const [filter, setFilter] = useState<Category | ''>('');
+  const [category, setCategory] = useState<Category | ''>('');
+  const [status, setStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const [query, setQuery] = useState('');
 
-  const venues = (data?.venues ?? []).filter((venue) => !filter || venue.category === filter);
+  // Opened from search: go straight to that venue.
+  useEffect(() => {
+    if (!intent?.venueId || !data) return;
+    const venue = data.venues.find((item) => item.id === intent.venueId);
+    if (venue) setEditing({ ...venue });
+    clearIntent();
+  }, [intent, data, clearIntent]);
+
+  const all = data?.venues ?? [];
+  const q = fold(query.trim());
+  const matching = all
+    .filter((venue) => status === 'all' || venue.isPublished === (status === 'published'))
+    .filter((venue) => !q || [venue.name.en, venue.name.ar, venue.area.en, venue.area.ar, venue.slug].some((field) => fold(field).includes(q)));
+  const venues = matching.filter((venue) => !category || venue.category === category);
+  const countIn = (value: Category) => matching.filter((venue) => venue.category === value).length;
 
   return (
     <>
       <PageHead title={t('venues')} hint={t('venuesHint')}>
-        <button className="btn primary" onClick={() => setEditing(newVenue())}>＋ {t('newVenue')}</button>
+        <button className="btn primary" onClick={() => setEditing(newVenue())}><Icon name="plus" size={18} />{t('newVenue')}</button>
       </PageHead>
-      <div className="row">
-        <button className={`btn small${filter === '' ? ' primary' : ''}`} onClick={() => setFilter('')}>{t('all')}</button>
-        {CATEGORIES.map((category) => (
-          <button key={category} className={`btn small${filter === category ? ' primary' : ''}`} onClick={() => setFilter(category)}>
-            {CATEGORY_META[category].emoji} {L(CATEGORY_META[category].label)}
+      <div className="toolbar">
+        <SearchField value={query} onChange={setQuery} placeholder={t('searchVenue')} />
+        <Segmented value={status} onChange={setStatus} options={[
+          { value: 'all', label: t('all') }, { value: 'published', label: t('published') }, { value: 'draft', label: t('draft') },
+        ]} />
+        {data && <span className="muted small num toolbar-count">{t('results', { n: number(venues.length) })}</span>}
+      </div>
+      <div className="chips" role="tablist">
+        <button type="button" role="tab" aria-selected={category === ''} className={`chip${category === '' ? ' on' : ''}`} onClick={() => setCategory('')}>
+          {t('all')} <span className="chip-count num">{number(matching.length)}</span>
+        </button>
+        {CATEGORIES.map((value) => (
+          <button key={value} type="button" role="tab" aria-selected={category === value} className={`chip${category === value ? ' on' : ''}`} onClick={() => setCategory(value)}>
+            <Icon name={CATEGORY_ICONS[value]} size={16} />
+            {L(CATEGORY_META[value].label)} <span className="chip-count num">{number(countIn(value))}</span>
           </button>
         ))}
       </div>
-      {!data ? <Loading /> : venues.length === 0 ? <div className="glass"><Empty /></div> : (
+      {!data ? <Loading /> : venues.length === 0 ? <div className="glass"><Empty text={q ? t('noMatches') : undefined} /></div> : (
         <div className="grid cards">
           {venues.map((venue) => {
             const cheapest = [...venue.offers].sort((a, b) => a.memberPriceBaisa - b.memberPriceBaisa)[0];
             return (
-              <button key={venue.id} type="button" className="glass venue-card" style={{ textAlign: 'start', cursor: 'pointer', font: 'inherit', color: 'inherit' }}
-                onClick={() => setEditing({ ...venue })}>
+              <button key={venue.id} type="button" className="glass venue-card" onClick={() => setEditing({ ...venue })}>
                 <div className="venue-art" style={{ background: categoryGradient(venue.category) }}>
-                  <span aria-hidden>{CATEGORY_META[venue.category].emoji}</span>
+                  <Icon name={CATEGORY_ICONS[venue.category]} size={44} strokeWidth={1.6} />
                   {venue.imageUrl && <img src={venue.imageUrl} alt="" loading="lazy" />}
                   <div className="badges">
-                    <span className={`badge ${venue.isPublished ? 'green' : ''}`} style={{ background: 'rgba(255,255,255,.85)' }}>
-                      {venue.isPublished ? t('published') : t('draft')}
-                    </span>
-                    {venue.isFeatured && <span className="badge gold" style={{ background: 'rgba(255,255,255,.85)' }}>★ {t('featured')}</span>}
+                    <span className={`badge ${venue.isPublished ? 'green' : ''}`}>{venue.isPublished ? t('published') : t('draft')}</span>
+                    {venue.isFeatured && <span className="badge gold"><Icon name="star" size={12} />{t('featured')}</span>}
                   </div>
                 </div>
                 <div className="venue-body">
                   <h3>{L(venue.name)}</h3>
                   <span className="muted small">{L(venue.area)}</span>
-                  {venue.eventStartsAt && <span className="badge orange">📅 {date(venue.eventStartsAt)}{venue.eventEndsAt ? ` – ${date(venue.eventEndsAt)}` : ''}</span>}
+                  {venue.eventStartsAt && (
+                    <span className="badge orange num"><Icon name="calendar" size={12} />{date(venue.eventStartsAt)}{venue.eventEndsAt ? ` – ${date(venue.eventEndsAt)}` : ''}</span>
+                  )}
                   {cheapest && (
-                    <div className="row small">
+                    <div className="venue-price small">
                       <span className="muted">{t('fromPrice')}</span>
                       <span className="price-old num">{money(cheapest.originalPriceBaisa)}</span>
                       <span className="price-new num">{money(cheapest.memberPriceBaisa)}</span>
-                      <span className="muted">· {number(venue.offers.length)} 🎟️</span>
+                      <span className="venue-offers muted num"><Icon name="ticket" size={14} />{number(venue.offers.length)}</span>
                     </div>
                   )}
                 </div>
@@ -125,11 +153,11 @@ function VenueEditor({ initial, onClose, onSaved }: { initial: VenueDraft; onClo
           <Toggle label={t('published')} checked={venue.isPublished} onChange={(value) => set('isPublished', value)} />
           <Toggle label={t('featured')} checked={venue.isFeatured} onChange={(value) => set('isFeatured', value)} />
         </div>
-        {!venue.id && <p className="muted small">📣 {t('announceHint')}</p>}
+        {!venue.id && <p className="muted small with-icon"><Icon name="bell" size={16} />{t('announceHint')}</p>}
         <div className="pair">
           <Field label={t('category')}>
             <select className="select" value={venue.category} onChange={(event) => set('category', event.target.value as Category)}>
-              {CATEGORIES.map((category) => <option key={category} value={category}>{CATEGORY_META[category].emoji} {L(CATEGORY_META[category].label)}</option>)}
+              {CATEGORIES.map((category) => <option key={category} value={category}>{L(CATEGORY_META[category].label)}</option>)}
             </select>
           </Field>
           <Field label={t('linkName')}>
@@ -165,7 +193,7 @@ function VenueEditor({ initial, onClose, onSaved }: { initial: VenueDraft; onClo
 
       <div className="stack" style={{ marginTop: 26 }}>
         <div>
-          <h2>🎟️ {t('tickets')}</h2>
+          <h2 className="with-icon"><Icon name="ticket" size={20} />{t('tickets')}</h2>
           <p className="muted small" style={{ marginTop: 4 }}>{t('ticketsHint')}</p>
         </div>
         {venue.id
@@ -254,7 +282,7 @@ function OffersEditor({ venueID, offers, onChange }: { venueID: string; offers: 
       <div>
         <button type="button" className="btn" onClick={() => setDrafts((all) => [...all, {
           key: `new-${Date.now()}`, title: blank(), perks: [], original: '', member: '', remaining: '', isActive: true,
-        }])}>＋ {t('addTicket')}</button>
+        }])}><Icon name="plus" size={18} />{t('addTicket')}</button>
       </div>
     </div>
   );

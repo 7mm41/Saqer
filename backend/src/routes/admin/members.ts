@@ -104,14 +104,22 @@ export async function memberAdminRoutes(admin: FastifyInstance) {
   });
 
   admin.get('/memberships', adminOnly, async (request) => {
-    const query = parse(pagination.extend({ status: z.enum(['active', 'expired', 'cancelled']).optional() }), request.query);
+    const query = parse(pagination.extend({
+      status: z.enum(['active', 'expired', 'cancelled']).optional(),
+      q: z.string().trim().max(100).optional(),
+    }), request.query);
     const now = new Date();
-    const where = query.status === 'active'
-      ? and(eq(memberships.status, 'active'), gt(memberships.expiresAt, now))
-      : query.status === 'expired'
-        ? and(eq(memberships.status, 'active'), sql`${memberships.expiresAt} <= ${now}`)
-        : query.status === 'cancelled' ? eq(memberships.status, 'cancelled') : undefined;
-    const [total] = await db.select({ n: count() }).from(memberships).where(where);
+    const filters: SQL[] = [];
+    if (query.status === 'active') filters.push(eq(memberships.status, 'active'), gt(memberships.expiresAt, now));
+    if (query.status === 'expired') filters.push(eq(memberships.status, 'active'), sql`${memberships.expiresAt} <= ${now}`);
+    if (query.status === 'cancelled') filters.push(eq(memberships.status, 'cancelled'));
+    if (query.q) {
+      const like = `%${query.q}%`;
+      filters.push(or(ilike(users.fullName, like), ilike(users.email, like), ilike(users.phone, like), ilike(users.memberNumber, like))!);
+    }
+    const where = filters.length ? and(...filters) : undefined;
+    const [total] = await db.select({ n: count() }).from(memberships)
+      .innerJoin(users, eq(users.id, memberships.userId)).where(where);
     const rows = await db.select({ membership: memberships, plan: plans, user: users }).from(memberships)
       .innerJoin(plans, eq(plans.id, memberships.planId))
       .innerJoin(users, eq(users.id, memberships.userId))

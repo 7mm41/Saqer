@@ -56,15 +56,15 @@ const STRINGS = {
   overviewHint: ['Everything updates live as members join, book and redeem.', 'كل شيء يتحدث مباشرة عند انضمام الأعضاء والحجز والاستخدام.'],
   totalMembers: ['Members', 'الأعضاء'],
   activeMemberships: ['Active memberships', 'العضويات الفعّالة'],
-  revenue30: ['Revenue · 30 days', 'الإيرادات · ٣٠ يوماً'],
+  revenue30: ['Revenue · 30 days', 'الإيرادات · 30 يوماً'],
   revenueTotal: ['Total revenue', 'إجمالي الإيرادات'],
-  bookings30: ['Bookings · 30 days', 'الحجوزات · ٣٠ يوماً'],
-  redemptions30: ['Redeemed · 30 days', 'المستخدمة · ٣٠ يوماً'],
+  bookings30: ['Bookings · 30 days', 'الحجوزات · 30 يوماً'],
+  redemptions30: ['Redeemed · 30 days', 'المستخدمة · 30 يوماً'],
   memberSavings: ['Saved by members', 'ما وفّره الأعضاء'],
-  endingSoon: ['Ending in 30 days', 'تنتهي خلال ٣٠ يوماً'],
+  endingSoon: ['Ending in 30 days', 'تنتهي خلال 30 يوماً'],
   pushDevices: ['Phones with notifications', 'هواتف مفعّل بها الإشعارات'],
-  signups30: ['New members · last 30 days', 'الأعضاء الجدد · آخر ٣٠ يوماً'],
-  topVenues: ['Top venues · 30 days', 'الأماكن الأكثر حجزاً · ٣٠ يوماً'],
+  signups30: ['New members · last 30 days', 'الأعضاء الجدد · آخر 30 يوماً'],
+  topVenues: ['Top venues · 30 days', 'الأماكن الأكثر حجزاً · 30 يوماً'],
   pushNotConfigured: ['Push notifications are not connected yet: add your Apple (APNs) key on the server. Notifications are recorded but not delivered.', 'الإشعارات غير مربوطة بعد: أضف مفتاح Apple (APNs) في الخادم. تُسجَّل الإشعارات لكنها لا تُرسل.'],
   // Members
   membersHint: ['Search, grant memberships, suspend accounts or give staff access.', 'ابحث، امنح العضويات، أوقف الحسابات أو امنح صلاحية الموظفين.'],
@@ -142,7 +142,7 @@ const STRINGS = {
   duration: ['Length (days)', 'المدة (أيام)'],
   description: ['Description', 'الوصف'],
   discount: ['Discount', 'الخصم'],
-  discountHint: ['e.g. National Day: 12 OMR instead of 15. Members are notified automatically when it starts.', 'مثال: العيد الوطني ١٢ ريالاً بدلاً من ١٥. يُبلَّغ الأعضاء تلقائياً عند بدايته.'],
+  discountHint: ['e.g. National Day: 12 OMR instead of 15. Members are notified automatically when it starts.', 'مثال: العيد الوطني 12 ريالاً بدلاً من 15. يُبلَّغ الأعضاء تلقائياً عند بدايته.'],
   discountPrice: ['Discounted price (OMR)', 'السعر بعد الخصم (ر.ع.)'],
   discountLabel: ['Offer name', 'اسم العرض'],
   discountStarts: ['Starts (empty = now)', 'يبدأ (فارغ = الآن)'],
@@ -193,7 +193,7 @@ const STRINGS = {
   ruleNewEvents: ['New venues and events', 'الأماكن والفعاليات الجديدة'],
   ruleEventDay: ['"Starts today" on the event morning', '"تبدأ اليوم" صباح يوم الفعالية'],
   rulePromos: ['Membership discount starts', 'بدء خصم العضوية'],
-  ruleExpiry: ['Membership ending (7 days before) and ended', 'قرب انتهاء العضوية (قبل ٧ أيام) وانتهاؤها'],
+  ruleExpiry: ['Membership ending (7 days before) and ended', 'قرب انتهاء العضوية (قبل 7 أيام) وانتهاؤها'],
   newEventDelay: ['Wait before announcing (minutes)', 'الانتظار قبل الإعلان (دقائق)'],
   morningHour: ['Morning hour', 'ساعة الصباح'],
   reminders: ['Reminders for booked events (on the phone)', 'تذكيرات الفعاليات المحجوزة (على الهاتف)'],
@@ -233,6 +233,36 @@ const STRINGS = {
   resetDemoConfirm: ['Erase your changes and start again with fresh sample data?', 'حذف تعديلاتك والبدء من جديد ببيانات تجريبية جديدة؟'],
   exitDemo: ['Back to the real dashboard', 'العودة إلى اللوحة الحقيقية'],
   demoCodes: ['Codes to try', 'أكواد للتجربة'],
+  // Navigation & search
+  navMain: ['Dashboard', 'الرئيسية'],
+  navContent: ['Content', 'المحتوى'],
+  navPeople: ['Members', 'الأعضاء'],
+  navEngage: ['Engagement', 'التواصل'],
+  navOps: ['At the venue', 'في المكان'],
+  openMenu: ['Open menu', 'فتح القائمة'],
+  closeMenu: ['Close menu', 'إغلاق القائمة'],
+  searchAll: ['Search members, venues, codes…', 'ابحث عن عضو أو مكان أو كود…'],
+  searchPages: ['Pages', 'الصفحات'],
+  searchVenues: ['Venues & events', 'الأماكن والفعاليات'],
+  searchGroupMembers: ['Members', 'الأعضاء'],
+  searchCodes: ['Codes', 'الأكواد'],
+  searchNoResults: ['Nothing found for “{q}”', 'لا توجد نتائج لـ «{q}»'],
+  searchHint: ['Type a name, phone, member number or code', 'اكتب اسماً أو رقم هاتف أو رقم عضوية أو كوداً'],
+  searchKeys: ['↑↓ to move · Enter to open · Esc to close', '↑↓ للتنقل · Enter للفتح · Esc للإغلاق'],
+  appearance: ['Appearance', 'المظهر'],
+  lightMode: ['Light', 'فاتح'],
+  darkMode: ['Dark', 'داكن'],
+  searchVenue: ['Search venues or areas', 'ابحث باسم المكان أو المنطقة'],
+  searchMembership: ['Search by member name or number', 'ابحث باسم العضو أو رقم العضوية'],
+  searchNotification: ['Search notifications', 'ابحث في الإشعارات'],
+  statusFilter: ['Status', 'الحالة'],
+  automaticOnly: ['Automatic', 'تلقائي'],
+  writtenOnly: ['Written', 'مكتوب'],
+  results: ['{n} results', '{n} نتيجة'],
+  clear: ['Clear', 'مسح'],
+  noMatches: ['No matches. Try another word.', 'لا توجد نتائج مطابقة. جرّب كلمة أخرى.'],
+  recipients: ['Phones reached', 'الهواتف المستلمة'],
+  searchCodeOrName: ['Find a code or member', 'ابحث عن كود أو عضو'],
 } satisfies Record<string, [string, string]>;
 
 export type StringKey = keyof typeof STRINGS;
@@ -246,7 +276,11 @@ type I18n = {
   L: (text: Localized | null | undefined) => string;
   date: (iso: string | null | undefined) => string;
   dateTime: (iso: string | null | undefined) => string;
+  /** "15.000 ر.ع." / "OMR 15.000" — the rial always shows its 3 decimals. */
   money: (baisa: number) => string;
+  /** The amount alone ("1,828.100"), for layouts that set the currency apart. */
+  amount: (baisa: number) => string;
+  currency: string;
   number: (value: number) => string;
 };
 
@@ -267,11 +301,13 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   const value = useMemo<I18n>(() => {
-    const locale = lang === 'ar' ? 'ar-OM' : 'en-GB';
+    // Western digits in both languages: easier to scan in tables and figures.
+    const locale = lang === 'ar' ? 'ar-OM-u-nu-latn' : 'en-GB';
     const dateFormat = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' });
     const dateTimeFormat = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
-    const moneyFormat = new Intl.NumberFormat(locale, { style: 'currency', currency: 'OMR', minimumFractionDigits: 0, maximumFractionDigits: 3 });
-    const numberFormat = new Intl.NumberFormat(locale);
+    const amountFormat = new Intl.NumberFormat('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+    const numberFormat = new Intl.NumberFormat('en-US');
+    const currency = lang === 'ar' ? 'ر.ع.' : 'OMR';
     return {
       lang,
       dir: lang === 'ar' ? 'rtl' : 'ltr',
@@ -284,7 +320,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       L: (text) => (text ? (lang === 'ar' ? text.ar || text.en : text.en || text.ar) : ''),
       date: (iso) => (iso ? dateFormat.format(new Date(iso)) : '—'),
       dateTime: (iso) => (iso ? dateTimeFormat.format(new Date(iso)) : '—'),
-      money: (baisa) => moneyFormat.format(baisa / 1000),
+      money: (baisa) => (lang === 'ar' ? `${amountFormat.format(baisa / 1000)} ${currency}` : `${currency} ${amountFormat.format(baisa / 1000)}`),
+      amount: (baisa) => amountFormat.format(baisa / 1000),
+      currency,
       number: (value) => numberFormat.format(value),
     };
   }, [lang, setLang]);

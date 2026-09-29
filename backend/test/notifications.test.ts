@@ -186,6 +186,15 @@ describe('push notifications', () => {
     assert.ok(!t.push.titles().includes('New on Sarena: Draft'));
     const cancelled = (await t.call('GET', '/v1/admin/notifications?status=cancelled', { token: adminToken })).body.items;
     assert.ok(cancelled.some((n: Json) => n.title.en === 'New on Sarena: Draft'));
+
+    // History search: by title in either language, and automatic vs written.
+    const byArabic = (await t.call('GET', `/v1/admin/notifications?q=${encodeURIComponent('الهجن')}`, { token: adminToken })).body;
+    assert.equal(byArabic.total, 1);
+    assert.equal(byArabic.items[0].title.en, 'New event: Ibri Camel Race');
+    const automatic = (await t.call('GET', '/v1/admin/notifications?origin=automatic&q=camel', { token: adminToken })).body;
+    assert.equal(automatic.total, 1);
+    const written = (await t.call('GET', '/v1/admin/notifications?origin=written&q=camel', { token: adminToken })).body;
+    assert.equal(written.total, 0);
   });
 
   test('"starts today" goes out on the event morning, once', async () => {

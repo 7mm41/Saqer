@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ApiError, DEMO, IS_DEMO_BUILD, get, post, session, setDemo, type User } from './api';
-import { useI18n, type StringKey } from './i18n';
+import logo from './assets/logo.png';
+import { useI18n } from './i18n';
+import { Icon } from './icons';
 import { startLive, stopLive, useLiveConnected } from './live';
+import { NAV_GROUPS, NAV_ITEMS, NavContext, type Intent, type Route } from './nav';
 import { MembersPage } from './pages/Members';
 import { MembershipsPage } from './pages/Memberships';
 import { NotificationsPage } from './pages/Notifications';
@@ -10,21 +13,10 @@ import { PlanPage } from './pages/Plan';
 import { RedeemPage } from './pages/Redeem';
 import { ThemesPage } from './pages/Themes';
 import { VenuesPage } from './pages/Venues';
-import logo from './assets/logo.png';
-import { Loading, useConfirm, useErrorText } from './ui';
+import { CommandPalette } from './search';
+import { Loading, initials, useConfirm, useErrorText } from './ui';
 
-type Route = 'overview' | 'members' | 'memberships' | 'venues' | 'plan' | 'themes' | 'notifications' | 'redeem';
-
-const NAV: { route: Route; icon: string; label: StringKey; staff?: boolean }[] = [
-  { route: 'overview', icon: '✦', label: 'overview' },
-  { route: 'venues', icon: '🎟️', label: 'venues' },
-  { route: 'members', icon: '👥', label: 'members' },
-  { route: 'memberships', icon: '👑', label: 'memberships' },
-  { route: 'plan', icon: '🏷️', label: 'plan' },
-  { route: 'themes', icon: '🎨', label: 'themes' },
-  { route: 'notifications', icon: '🔔', label: 'notifications' },
-  { route: 'redeem', icon: '📷', label: 'redeem', staff: true },
-];
+const IS_MAC = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
 const BASE = '/admin/';
 
@@ -36,11 +28,30 @@ function currentRoute(): Route {
   const slug = USE_HASH
     ? location.hash.slice(1)
     : location.pathname.slice(BASE.length).split('/')[0];
-  return (NAV.find((item) => item.route === slug)?.route) ?? 'overview';
+  return (NAV_ITEMS.find((item) => item.route === slug)?.route) ?? 'overview';
 }
 
 // The demo needs no sign-in.
 if (DEMO && !session.token) session.set('demo');
+
+type Appearance = 'light' | 'dark' | null;
+
+function useAppearance() {
+  const [appearance, setAppearance] = useState<Appearance>(() => {
+    try { return (localStorage.getItem('sarena.admin.appearance') as Appearance) ?? null; } catch { return null; }
+  });
+  useEffect(() => {
+    if (appearance) document.documentElement.dataset.theme = appearance;
+    else delete document.documentElement.dataset.theme;
+    try {
+      if (appearance) localStorage.setItem('sarena.admin.appearance', appearance);
+      else localStorage.removeItem('sarena.admin.appearance');
+    } catch { /* storage blocked */ }
+  }, [appearance]);
+  const isDark = appearance === 'dark'
+    || (appearance === null && typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches);
+  return { isDark, toggle: () => setAppearance(isDark ? 'light' : 'dark') };
+}
 
 export function App() {
   const [token, setToken] = useState(session.token);
@@ -72,17 +83,17 @@ function Shell({ user }: { user: User }) {
   const { t, lang, setLang } = useI18n();
   const connected = useLiveConnected();
   const confirmAction = useConfirm();
-  const resetDemoData = async () => {
-    if (await confirmAction(t('resetDemoConfirm'), { action: t('resetDemo') })) {
-      const { resetDemo } = await import('./demo/server');
-      resetDemo();
-    }
-  };
+  const { isDark, toggle: toggleAppearance } = useAppearance();
   const isStaff = user.role === 'staff';
   const [route, setRoute] = useState<Route>(() => (isStaff ? 'redeem' : currentRoute()));
+  const [intent, setIntent] = useState<Intent>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  const navigate = useCallback((next: Route) => {
+  const navigate = useCallback((next: Route, nextIntent: Intent = null) => {
     setRoute(next);
+    setIntent(nextIntent);
+    setMenuOpen(false);
     try {
       if (USE_HASH) history.pushState(null, '', next === 'overview' ? location.pathname : `#${next}`);
       else history.pushState(null, '', next === 'overview' ? BASE : `${BASE}${next}`);
@@ -98,71 +109,144 @@ function Shell({ user }: { user: User }) {
     return () => window.removeEventListener('popstate', onPop);
   }, [isStaff]);
 
+  // Ctrl/⌘ K or "/" opens search; Esc closes the menu.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const typing = event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName);
+      if ((event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)) || (event.key === '/' && !typing)) {
+        event.preventDefault();
+        setSearchOpen(true);
+      } else if (event.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // The drawer covers the page on narrow screens: keep the page from scrolling behind it.
+  useEffect(() => {
+    document.body.classList.toggle('no-scroll', menuOpen);
+  }, [menuOpen]);
+
+  const resetDemoData = async () => {
+    if (await confirmAction(t('resetDemoConfirm'), { action: t('resetDemo') })) {
+      const { resetDemo } = await import('./demo/server');
+      resetDemo();
+    }
+  };
+
   const signOut = async () => {
     await post('auth/logout').catch(() => {});
     session.set(null);
   };
 
-  const items = NAV.filter((item) => !isStaff || item.staff);
-  const page = isStaff ? 'redeem' : route;
+  const page: Route = isStaff ? 'redeem' : route;
+  const current = NAV_ITEMS.find((item) => item.route === page)!;
+  const groups = NAV_GROUPS
+    .map((group) => ({ ...group, items: group.items.filter((item) => !isStaff || item.staff) }))
+    .filter((group) => group.items.length > 0);
+  let index = 0;
 
   return (
-    <div className="shell">
-      <nav className="glass sidebar" aria-label={t('tagline')}>
-        <div className="brand">
-          <img src={logo} alt="" />
-          <div>
-            <strong>{lang === 'ar' ? 'سرينا' : 'Sarena'}</strong>
-            <span className="muted small">{t('tagline')}</span>
-          </div>
-        </div>
-        {items.map((item) => (
-          <button key={item.route} type="button" className={`nav-item${page === item.route ? ' active' : ''}`}
-            aria-current={page === item.route ? 'page' : undefined} onClick={() => navigate(item.route)}>
-            <span className="ico" aria-hidden>{item.icon}</span>
-            {t(item.label)}
-          </button>
-        ))}
-        <div className="spacer" />
-        <div className="side-foot stack" style={{ gap: 8 }}>
-          {DEMO && (
-            <div className="glass card small stack" style={{ padding: 14, gap: 8 }}>
-              <span className="badge orange">🧪 {t('demoBadge')}</span>
-              <span className="muted">{t('demoHint')}</span>
-              <button type="button" className="btn small" onClick={() => void resetDemoData()}>↺ {t('resetDemo')}</button>
-              {!IS_DEMO_BUILD && <button type="button" className="btn small ghost" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
+    <NavContext.Provider value={{ route: page, navigate, intent, clearIntent: () => setIntent(null) }}>
+      <div className={`app${menuOpen ? ' menu-open' : ''}`}>
+        <aside className="sidebar" id="sidebar" aria-label={t('tagline')}>
+          <div className="brand">
+            <img src={logo} alt="" />
+            <div>
+              <strong>{lang === 'ar' ? 'سرينا' : 'Sarena'}</strong>
+              <span>{t('tagline')}</span>
             </div>
-          )}
-          <span className="row small muted" style={{ gap: 8, padding: '0 8px' }}>
-            <span className={`live-dot${connected ? ' on' : ''}`} />
-            {DEMO ? t('demoLive') : connected ? t('live') : t('offline')}
-          </span>
-          <span className="small muted" style={{ padding: '0 8px' }}>{user.fullName} · {user.email}</span>
-          <button type="button" className="nav-item" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>
-            <span className="ico" aria-hidden>🌐</span>{t('language')}
-          </button>
-          <button type="button" className="nav-item" onClick={() => void signOut()}>
-            <span className="ico" aria-hidden>⎋</span>{t('signOut')}
-          </button>
+            <button type="button" className="icon-btn drawer-close" aria-label={t('closeMenu')} onClick={() => setMenuOpen(false)}>
+              <Icon name="close" size={18} />
+            </button>
+          </div>
+
+          <nav className="nav">
+            {groups.map((group) => (
+              <div key={group.label} className="nav-group">
+                <span className="nav-label">{t(group.label)}</span>
+                {group.items.map((item) => (
+                  <button key={item.route} type="button" style={{ '--i': index++ } as React.CSSProperties}
+                    className={`nav-item${page === item.route ? ' active' : ''}`}
+                    aria-current={page === item.route ? 'page' : undefined} onClick={() => navigate(item.route)}>
+                    <Icon name={item.icon} size={19} />
+                    <span>{t(item.label)}</span>
+                  </button>
+                ))}
+              </div>
+            ))}
+          </nav>
+
+          <div className="side-foot">
+            {DEMO && (
+              <div className="demo-card">
+                <span className="badge orange"><Icon name="flask" size={14} /> {t('demoBadge')}</span>
+                <p className="muted small">{t('demoHint')}</p>
+                <button type="button" className="btn small" onClick={() => void resetDemoData()}>
+                  <Icon name="refresh" size={15} /> {t('resetDemo')}
+                </button>
+                {!IS_DEMO_BUILD && <button type="button" className="btn small ghost" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
+              </div>
+            )}
+            <div className="user-row">
+              <span className="avatar">{initials(user.fullName)}</span>
+              <div className="user-text">
+                <strong>{user.fullName}</strong>
+                <span className="muted small ltr">{user.email}</span>
+              </div>
+            </div>
+            <div className="foot-actions">
+              <button type="button" className="icon-btn" title={t('language')} aria-label={t('language')} onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>
+                <Icon name="globe" size={18} />
+              </button>
+              <button type="button" className="icon-btn" title={t('appearance')} aria-label={t('appearance')} onClick={toggleAppearance}>
+                <Icon name={isDark ? 'sun' : 'moon'} size={18} />
+              </button>
+              <button type="button" className="icon-btn" title={t('signOut')} aria-label={t('signOut')} onClick={() => void signOut()}>
+                <Icon name="logout" size={18} />
+              </button>
+            </div>
+          </div>
+        </aside>
+        <div className="drawer-backdrop" aria-hidden="true" onClick={() => setMenuOpen(false)} />
+
+        <div className="content">
+          <header className="topbar">
+            <button type="button" className="icon-btn menu-btn" aria-label={t('openMenu')} aria-controls="sidebar"
+              aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+              <Icon name="menu" size={20} />
+            </button>
+            <div className="topbar-title">
+              <Icon name={current.icon} size={18} />
+              <strong>{t(current.label)}</strong>
+            </div>
+            <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label={t('search')}>
+              <Icon name="search" size={18} />
+              <span>{t('searchAll')}</span>
+              <kbd className="ltr">{IS_MAC ? '⌘K' : 'Ctrl K'}</kbd>
+            </button>
+            <span className={`live-pill${connected ? ' on' : ''}`}>
+              <span className="live-dot" />
+              <span className="live-text">{DEMO ? t('demoLive') : connected ? t('live') : t('offline')}</span>
+            </span>
+          </header>
+
+          <main className="main" key={page}>
+            {page === 'overview' && <OverviewPage user={user} />}
+            {page === 'members' && <MembersPage />}
+            {page === 'memberships' && <MembershipsPage />}
+            {page === 'venues' && <VenuesPage />}
+            {page === 'plan' && <PlanPage />}
+            {page === 'themes' && <ThemesPage />}
+            {page === 'notifications' && <NotificationsPage />}
+            {page === 'redeem' && <RedeemPage />}
+          </main>
         </div>
-        {/* Compact controls for phones (the footer above is hidden there). */}
-        {DEMO && (
-          <button type="button" className="nav-item mobile-only" aria-label={t('resetDemo')} onClick={() => void resetDemoData()}>↺</button>
-        )}
-        <button type="button" className="nav-item mobile-only" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>🌐</button>
-        <button type="button" className="nav-item mobile-only" onClick={() => void signOut()}>⎋</button>
-      </nav>
-      <main className="main">
-        {page === 'overview' && <OverviewPage user={user} />}
-        {page === 'members' && <MembersPage />}
-        {page === 'memberships' && <MembershipsPage />}
-        {page === 'venues' && <VenuesPage />}
-        {page === 'plan' && <PlanPage />}
-        {page === 'themes' && <ThemesPage />}
-        {page === 'notifications' && <NotificationsPage />}
-        {page === 'redeem' && <RedeemPage />}
-      </main>
-    </div>
+      </div>
+      <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} isStaff={isStaff} />
+    </NavContext.Provider>
   );
 }
 
@@ -181,12 +265,12 @@ function Login() {
           <img className="logo" src={logo} alt="" />
           <div style={{ textAlign: 'center' }}>
             <h1>{t('appName')}</h1>
-            <span className="badge orange" style={{ marginTop: 10 }}>🧪 {t('demoBadge')}</span>
+            <span className="badge orange" style={{ marginTop: 10 }}><Icon name="flask" size={14} /> {t('demoBadge')}</span>
             <p className="muted" style={{ marginTop: 10 }}>{t('demoHint')}</p>
           </div>
           <button className="btn primary" type="button" onClick={() => session.set('demo')}>{t('enterDemo')}</button>
           {!IS_DEMO_BUILD && <button className="btn ghost small" type="button" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
-          <button className="btn ghost small" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>🌐 {t('language')}</button>
+          <button className="btn ghost small" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}><Icon name="globe" size={16} /> {t('language')}</button>
         </div>
       </div>
     );
@@ -231,8 +315,8 @@ function Login() {
         </label>
         {error && <p role="alert" style={{ color: 'var(--danger)', fontWeight: 700 }}>{error}</p>}
         <button className="btn primary" type="submit" disabled={busy}>{busy ? t('loading') : t('signIn')}</button>
-        <button className="btn small" type="button" onClick={() => setDemo(true)}>🧪 {t('tryDemo')}</button>
-        <button className="btn ghost small" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>🌐 {t('language')}</button>
+        <button className="btn small" type="button" onClick={() => setDemo(true)}><Icon name="flask" size={16} /> {t('tryDemo')}</button>
+        <button className="btn ghost small" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}><Icon name="globe" size={16} /> {t('language')}</button>
       </form>
     </div>
   );

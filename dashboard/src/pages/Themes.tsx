@@ -6,6 +6,7 @@ import nationalDayIcon from '../assets/icons/season-nationalday.png';
 import ramadanIcon from '../assets/icons/season-ramadan.png';
 import logo from '../assets/logo.png';
 import { useI18n, type StringKey } from '../i18n';
+import { Icon } from '../icons';
 import { useLive } from '../live';
 import {
   DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, Modal, PageHead, Toggle, useConfirm, useErrorText, useLoad, useToast,
@@ -41,14 +42,14 @@ export function ThemesPage() {
   return (
     <>
       <PageHead title={t('themes')} hint={t('themesHint')}>
-        <button className="btn primary" onClick={() => setEditing(newTheme())}>＋ {t('newTheme')}</button>
+        <button className="btn primary" onClick={() => setEditing(newTheme())}><Icon name="plus" size={18} />{t('newTheme')}</button>
       </PageHead>
       {!data ? <Loading /> : data.themes.length === 0 ? <div className="glass"><Empty /></div> : (
         <div className="grid cards">
           {data.themes.map((theme) => {
             const [label, tone] = state(theme);
             return (
-              <button key={theme.id} type="button" className="glass card stack" style={{ textAlign: 'start', cursor: 'pointer', font: 'inherit', color: 'inherit' }}
+              <button key={theme.id} type="button" className="glass card stack theme-card"
                 onClick={() => setEditing({ ...theme })}>
                 <div className="theme-preview" style={{ background: `linear-gradient(135deg, ${theme.accentColor ?? '#FF7900'}, #1B1420)` }}>
                   <img src={theme.logoUrl ?? logo} alt="" />
@@ -58,8 +59,8 @@ export function ThemesPage() {
                   <h3>{theme.name}</h3>
                   <span className={`badge ${tone}`}>{t(label)}</span>
                 </div>
-                <span className="muted small">{theme.startsAt ? date(theme.startsAt) : '…'} → {theme.endsAt ? date(theme.endsAt) : '…'}</span>
-                {theme.iconName && <span className="row small"><img src={ICONS[theme.iconName].preview} alt="" style={{ width: 28, height: 28, borderRadius: 7 }} /> {t(ICONS[theme.iconName].label)}</span>}
+                <span className="muted small num with-icon"><Icon name="calendar" size={15} />{theme.startsAt ? date(theme.startsAt) : '…'} – {theme.endsAt ? date(theme.endsAt) : '…'}</span>
+                {theme.iconName && <span className="row small"><img className="mini-icon" src={ICONS[theme.iconName].preview} alt="" />{t(ICONS[theme.iconName].label)}</span>}
               </button>
             );
           })}

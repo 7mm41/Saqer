@@ -192,7 +192,7 @@ function seed(): State {
     },
     {
       id: uid(), kind: 'broadcast', title: { en: 'Weekend deal 🎬', ar: 'عرض نهاية الأسبوع 🎬' },
-      body: { en: 'Cinema tickets from 2.9 OMR for members this weekend.', ar: 'تذاكر السينما من ٢٫٩ ر.ع. للأعضاء هذا الأسبوع.' },
+      body: { en: 'Cinema tickets from 2.9 OMR for members this weekend.', ar: 'تذاكر السينما من 2.9 ر.ع. للأعضاء هذا الأسبوع.' },
       audience: 'members', userId: null, venueId: venues[0]!.id, status: 'sent', scheduledFor: iso(now - 3 * DAY),
       sentAt: iso(now - 3 * DAY), recipients: 34, createdAt: iso(now - 3 * DAY),
     },
@@ -337,6 +337,11 @@ export async function demoRequest<T>(method: string, path: string, body?: unknow
   return structuredClone(result) as T;
 }
 
+/** Case- and hamza-insensitive matching, like the server's `ilike` (plus Arabic letter variants). */
+const fold = (value: string) => value.toLowerCase()
+  .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[\u064B-\u0652]/g, '');
+const searchTerm = (query: URLSearchParams) => fold((query.get('q') ?? '').trim());
+
 async function route(method: string, parts: string[], query: URLSearchParams, body: Body): Promise<unknown> {
   const [a, b, c, d] = parts;
   const admin = state.users.find((user) => user.id === DEMO_ADMIN_ID)!;
@@ -352,10 +357,10 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
 
   // ---- members
   if (b === 'members' && !c && method === 'GET') {
-    const q = (query.get('q') ?? '').trim().toLowerCase();
+    const q = searchTerm(query);
     const status = query.get('status');
     const rows = state.users
-      .filter((u) => !q || [u.fullName, u.email, u.phone, u.memberNumber].some((field) => field.toLowerCase().includes(q)))
+      .filter((u) => !q || [u.fullName, u.email, u.phone, u.memberNumber].some((field) => fold(field ?? '').includes(q)))
       .filter((u) => !status || u.status === status)
       .sort(byNewest((u) => u.memberSince))
       .map((u) => ({ ...u, membership: activeMembership(u.id) ? membershipOut(activeMembership(u.id)!) : null }));
@@ -393,6 +398,7 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
   }
   if (b === 'memberships' && !c) {
     const status = query.get('status');
+    const q = searchTerm(query);
     const rows = state.memberships
       .filter((m) => !status || membershipStatus(m) === status)
       .sort(byNewest((m) => m.createdAt))
@@ -401,8 +407,11 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
         return {
           ...membershipOut(m), paidBaisa: m.paidBaisa,
           member: user ? { id: user.id, fullName: user.fullName, email: user.email, memberNumber: user.memberNumber } : undefined,
+          search: user ? [user.fullName, user.email, user.phone, user.memberNumber] : [],
         };
-      });
+      })
+      .filter((m) => !q || m.search.some((field) => fold(field ?? '').includes(q)))
+      .map(({ search: _search, ...m }) => m);
     return paginate(rows, query);
   }
 
@@ -512,9 +521,13 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
   if (b === 'notifications' && c === 'audience') return { devices: devicesFor((query.get('audience') ?? 'all') as Audience) };
   if (b === 'notifications' && !c && method === 'GET') {
     const kind = query.get('kind');
+    const origin = query.get('origin');
     const status = query.get('status');
+    const q = searchTerm(query);
     const rows = state.notifications
       .filter((n) => (!kind || n.kind === kind) && (!status || n.status === status))
+      .filter((n) => !origin || (origin === 'written') === (n.kind === 'broadcast'))
+      .filter((n) => !q || [n.title.en, n.title.ar, n.body.en, n.body.ar].some((field) => fold(field).includes(q)))
       .sort(byNewest((n) => n.sentAt ?? n.scheduledFor));
     return { ...paginate(rows, query), pushConfigured: true, devices: state.devices };
   }
@@ -542,10 +555,12 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
   // ---- bookings & redemption
   if (b === 'bookings' && !c) {
     const status = query.get('status');
+    const q = searchTerm(query);
     const rows = state.bookings
       .filter((bk) => !status || bk.status === status)
       .sort(byNewest((bk) => bk.usedAt ?? bk.purchasedAt))
-      .map((bk) => withMember(bk));
+      .map((bk) => withMember(bk))
+      .filter((bk) => !q || fold(bk.code).includes(q) || fold(bk.member?.fullName ?? '').includes(q));
     return paginate(rows, query);
   }
   if (b === 'bookings' && c === 'redeem') {

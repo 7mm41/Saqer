@@ -1,18 +1,19 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { ApiError, upload, type Category, type Localized } from './api';
 import { useI18n, type StringKey } from './i18n';
+import { Icon, type IconName } from './icons';
 
 // ---------------------------------------------------------------- categories
 
-/** Same colours and symbols as the app's category cards. */
-export const CATEGORY_META: Record<Category, { emoji: string; colors: [string, string]; label: Localized }> = {
-  cinema: { emoji: '🎬', colors: ['#FF5A5F', '#C2185B'], label: { en: 'Cinema', ar: 'السينما' } },
-  jetSki: { emoji: '🌊', colors: ['#3DD6F5', '#1565C0'], label: { en: 'Jet Ski', ar: 'جيت سكي' } },
-  shootingClub: { emoji: '🎯', colors: ['#9CCC65', '#2E7D32'], label: { en: 'Oman Shooting Club', ar: 'نادي عمان للرماية' } },
-  automobileClub: { emoji: '🏎️', colors: ['#FFB05C', '#E45A00'], label: { en: 'Oman Automobile Association', ar: 'الجمعية العمانية للسيارات' } },
-  ibriArena: { emoji: '🏟️', colors: ['#FFD54F', '#F57F17'], label: { en: 'Ibri Arena', ar: 'ساحة عبري' } },
-  videoGames: { emoji: '🎮', colors: ['#B388FF', '#5E35B1'], label: { en: 'Video Game Arcades', ar: 'صالات الألعاب' } },
-  festivals: { emoji: '🎆', colors: ['#FF80AB', '#FF2F7D'], label: { en: 'Oman Festivals', ar: 'مهرجانات عُمان' } },
+/** Same colours as the app's category cards (icons: CATEGORY_ICONS in icons.tsx). */
+export const CATEGORY_META: Record<Category, { colors: [string, string]; label: Localized }> = {
+  cinema: { colors: ['#FF5A5F', '#C2185B'], label: { en: 'Cinema', ar: 'السينما' } },
+  jetSki: { colors: ['#3DD6F5', '#1565C0'], label: { en: 'Jet Ski', ar: 'جيت سكي' } },
+  shootingClub: { colors: ['#9CCC65', '#2E7D32'], label: { en: 'Oman Shooting Club', ar: 'نادي عمان للرماية' } },
+  automobileClub: { colors: ['#FFB05C', '#E45A00'], label: { en: 'Oman Automobile Association', ar: 'الجمعية العمانية للسيارات' } },
+  ibriArena: { colors: ['#FFD54F', '#F57F17'], label: { en: 'Ibri Arena', ar: 'ساحة عبري' } },
+  videoGames: { colors: ['#B388FF', '#5E35B1'], label: { en: 'Video Game Arcades', ar: 'صالات الألعاب' } },
+  festivals: { colors: ['#FF80AB', '#FF2F7D'], label: { en: 'Oman Festivals', ar: 'مهرجانات عُمان' } },
 };
 
 export const categoryGradient = (category: Category) =>
@@ -134,13 +135,43 @@ export function PageHead({ title, hint, children }: { title: string; hint?: stri
   );
 }
 
-export function Stat({ label, value, icon, tinted }: { label: string; value: ReactNode; icon?: string; tinted?: boolean }) {
+/** A figure with its label; `unit` (e.g. the currency) is set smaller beside the value. */
+export function Stat({ label, value, unit, icon, tinted }: {
+  label: string; value: ReactNode; unit?: string; icon?: IconName; tinted?: boolean;
+}) {
   return (
     <div className={`glass stat${tinted ? ' tinted' : ''}`}>
-      <span className="label">{icon && <span aria-hidden>{icon}</span>}{label}</span>
-      <span className="value num">{value}</span>
+      <span className="label">{icon && <span className="stat-icon"><Icon name={icon} size={18} /></span>}{label}</span>
+      <span className="value num">{value}{unit && <span className="cur">{unit}</span>}</span>
     </div>
   );
+}
+
+/** A search box with its icon and a clear button. */
+export function SearchField({ value, onChange, placeholder }: { value: string; onChange: (value: string) => void; placeholder: string }) {
+  const { t } = useI18n();
+  return (
+    <div className="search-field">
+      <Icon name="search" size={18} />
+      <input className="input" type="search" value={value} placeholder={placeholder} aria-label={placeholder}
+        onChange={(event) => onChange(event.target.value)} />
+      {value && (
+        <button type="button" className="search-clear" aria-label={t('clear')} onClick={() => onChange('')}>
+          <Icon name="close" size={14} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** Keeps a search box responsive while delaying the request it drives. */
+export function useDebounced<T>(value: T, delay = 250) {
+  const [settled, setSettled] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setSettled(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return settled;
 }
 
 export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
@@ -232,13 +263,14 @@ export function LocalizedLinesField({ label, value, onChange }: {
 export function DateTimeField({ label, value, onChange, hint }: {
   label: string; value: string | null; onChange: (value: string | null) => void; hint?: string;
 }) {
+  const { t } = useI18n();
   const local = value ? toLocalInput(value) : '';
   return (
     <Field label={label} hint={hint}>
       <div className="row" style={{ flexWrap: 'nowrap' }}>
         <input className="input ltr" type="datetime-local" value={local}
           onChange={(event) => onChange(event.target.value ? new Date(event.target.value).toISOString() : null)} />
-        {value && <button type="button" className="icon-btn" aria-label="clear" onClick={() => onChange(null)}>✕</button>}
+        {value && <button type="button" className="icon-btn" aria-label={t('clear')} onClick={() => onChange(null)}><Icon name="close" size={16} /></button>}
       </div>
     </Field>
   );
@@ -275,7 +307,7 @@ export function ImageUpload({ label, value, onChange, hint }: {
     <div className="field">
       <span>{label}</span>
       <div className="uploader">
-        <div className="preview">{value ? <img src={value} alt="" /> : <span aria-hidden>🖼️</span>}</div>
+        <div className="preview">{value ? <img src={value} alt="" /> : <Icon name="image" size={24} />}</div>
         <div className="row">
           <button type="button" className="btn small" disabled={busy} onClick={() => input.current?.click()}>
             {busy ? t('uploading') : t('uploadPhoto')}
@@ -290,6 +322,7 @@ export function ImageUpload({ label, value, onChange, hint }: {
 }
 
 export function Modal({ title, onClose, children, narrow }: { title: string; onClose: () => void; children: ReactNode; narrow?: boolean }) {
+  const { t } = useI18n();
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
@@ -302,7 +335,7 @@ export function Modal({ title, onClose, children, narrow }: { title: string; onC
       <div className={`glass modal${narrow ? ' narrow' : ''}`} role="dialog" aria-modal="true" aria-label={title}>
         <div className="row between" style={{ marginBottom: 18 }}>
           <h2>{title}</h2>
-          <button type="button" className="icon-btn" aria-label="close" onClick={onClose}>✕</button>
+          <button type="button" className="icon-btn" aria-label={t('close')} onClick={onClose}><Icon name="close" size={16} /></button>
         </div>
         {children}
       </div>
@@ -334,6 +367,13 @@ export function Pager({ page, pageSize, total, onPage }: { page: number; pageSiz
   );
 }
 
+/** Normalises Arabic and Latin text for matching: "احمد" finds "أحمد", case is ignored. */
+export const fold = (value: string) => value.toLowerCase()
+  .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[\u064B-\u0652]/g, '');
+
+/** "Salim Al Hinai" → "SH", "سالم الهنائي" → "س‌ه" (the family name without "Al"/"ال"; ZWNJ keeps Arabic letters apart). */
 export function initials(name: string) {
-  return name.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'S';
+  const parts = name.split(' ').filter((part) => part && !/^al$/i.test(part))
+    .map((part) => (part.startsWith('ال') && part.length > 3 ? part.slice(2) : part));
+  return parts.slice(0, 2).map((part) => part[0]).join('\u200C').toUpperCase() || 'S';
 }

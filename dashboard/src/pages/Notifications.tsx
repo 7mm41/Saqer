@@ -2,9 +2,11 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { get, patch, post, type Audience, type Localized, type Notification, type NotificationSettings, type Page, type Venue } from '../api';
 import appIcon from '../assets/icons/app.png';
 import { useI18n, type StringKey } from '../i18n';
+import { Icon } from '../icons';
 import { useLive } from '../live';
 import {
-  DateTimeField, Empty, Field, Loading, LocalizedField, PageHead, Pager, Segmented, StatusBadge, Toggle, useErrorText, useLoad, useToast,
+  DateTimeField, Empty, Field, Loading, LocalizedField, PageHead, Pager, SearchField, Segmented, StatusBadge, Toggle, useDebounced,
+  useErrorText, useLoad, useToast,
 } from '../ui';
 
 type History = Page<Notification> & { pushConfigured: boolean; devices: number };
@@ -14,7 +16,13 @@ export function NotificationsPage() {
   const toast = useToast();
   const errorText = useErrorText();
   const [page, setPage] = useState(1);
-  const { data: history, reload } = useLoad(() => get<History>(`admin/notifications?page=${page}&pageSize=20`), [page]);
+  const [query, setQuery] = useState('');
+  const [origin, setOrigin] = useState<'' | 'automatic' | 'written'>('');
+  const search = useDebounced(query.trim());
+  const params = new URLSearchParams({ page: String(page), pageSize: '20' });
+  if (search) params.set('q', search);
+  if (origin) params.set('origin', origin);
+  const { data: history, reload } = useLoad(() => get<History>(`admin/notifications?${params}`), [params.toString()]);
   useLive(['notifications'], () => void reload());
 
   const cancel = async (id: string) => {
@@ -24,10 +32,10 @@ export function NotificationsPage() {
   return (
     <>
       <PageHead title={t('notifications')} hint={t('notificationsHint')}>
-        {history && <span className="badge num">📱 {number(history.devices)}</span>}
+        {history && <span className="badge num"><Icon name="phone" size={13} />{t('sentTo', { n: number(history.devices) })}</span>}
       </PageHead>
       {history && !history.pushConfigured && (
-        <div className="glass card small" style={{ borderColor: 'rgba(255,121,0,.45)' }}>🔔 {t('pushNotConfigured')}</div>
+        <div className="notice small"><Icon name="bell" size={18} /><span>{t('pushNotConfigured')}</span></div>
       )}
       <div className="grid two">
         <Composer onSent={() => void reload()} />
@@ -35,15 +43,24 @@ export function NotificationsPage() {
       </div>
       <section className="glass card stack">
         <h2>{t('historyTitle')}</h2>
-        {!history ? <Loading /> : history.items.length === 0 ? <Empty /> : (
+        <div className="toolbar">
+          <SearchField value={query} onChange={(value) => { setQuery(value); setPage(1); }} placeholder={t('searchNotification')} />
+          <Segmented value={origin} onChange={(value) => { setOrigin(value); setPage(1); }} options={[
+            { value: '', label: t('all') }, { value: 'automatic', label: t('automaticOnly') }, { value: 'written', label: t('writtenOnly') },
+          ]} />
+          {history && <span className="muted small num toolbar-count">{t('results', { n: number(history.total) })}</span>}
+        </div>
+        {!history ? <Loading /> : history.items.length === 0 ? <Empty text={search ? t('noMatches') : undefined} /> : (
           <div className="table-wrap"><table>
-            <thead><tr><th>{t('title')}</th><th>{t('audience')}</th><th>{t('status')}</th><th>{t('sendAt')}</th><th>📱</th><th /></tr></thead>
+            <thead><tr><th>{t('title')}</th><th>{t('audience')}</th><th>{t('status')}</th><th>{t('sendAt')}</th><th aria-label={t('recipients')}><Icon name="phone" size={15} /></th><th /></tr></thead>
             <tbody>{history.items.map((n) => (
               <tr key={n.id}>
                 <td>
-                  <span className="badge" style={{ marginInlineEnd: 8 }}>{t(`kind_${n.kind}` as StringKey)}</span>
-                  <strong>{L(n.title)}</strong>
-                  <div className="muted small">{L(n.body)}</div>
+                  <div className="notif-title">
+                    <span className={`badge${n.kind === 'broadcast' ? '' : ' orange'}`}>{t(`kind_${n.kind}` as StringKey)}</span>
+                    <strong>{L(n.title)}</strong>
+                  </div>
+                  <div className="muted small clamp">{L(n.body)}</div>
                 </td>
                 <td className="muted small">{t(audienceKey(n.audience))}</td>
                 <td><StatusBadge status={n.status} /></td>
@@ -103,7 +120,7 @@ function Composer({ onSent }: { onSent: () => void }) {
 
   return (
     <form className="glass card stack" onSubmit={(event) => void send(event)}>
-      <h2>✍️ {t('compose')}</h2>
+      <h2 className="with-icon"><Icon name="send" size={20} />{t('compose')}</h2>
       <LocalizedField label={t('title')} value={title} onChange={setTitle} />
       <LocalizedField label={t('message')} multiline value={body} onChange={setBody} />
       <Field label={t('audience')} hint={reach === null ? undefined : t('reach', { n: number(reach) })}>
@@ -130,7 +147,7 @@ function Composer({ onSent }: { onSent: () => void }) {
         </div>
       </div>
       <div className="row">
-        <button className="btn primary" disabled={busy}>{scheduledFor ? `🗓️ ${t('schedule')}` : `🚀 ${t('send')}`}</button>
+        <button className="btn primary" disabled={busy}><Icon name={scheduledFor ? 'calendar' : 'send'} size={18} />{scheduledFor ? t('schedule') : t('send')}</button>
       </div>
     </form>
   );
@@ -169,7 +186,7 @@ function AutomaticRules() {
 
   return (
     <form className="glass card stack" onSubmit={(event) => void save(event)}>
-      <h2>⚙️ {t('automatic')}</h2>
+      <h2 className="with-icon"><Icon name="settings" size={20} />{t('automatic')}</h2>
       <Toggle label={t('ruleNewEvents')} checked={settings.newEvents} onChange={(value) => set('newEvents', value)} />
       <Toggle label={t('ruleEventDay')} checked={settings.eventDay} onChange={(value) => set('eventDay', value)} />
       <Toggle label={t('rulePromos')} checked={settings.planPromos} onChange={(value) => set('planPromos', value)} />
@@ -179,7 +196,7 @@ function AutomaticRules() {
         {numberField('morningHour', 'morningHour')}
       </div>
       <div className="stack" style={{ gap: 6 }}>
-        <h3>⏰ {t('reminders')}</h3>
+        <h3 className="with-icon"><Icon name="clock" size={18} />{t('reminders')}</h3>
         <p className="muted small">{t('remindersHint')}</p>
       </div>
       <div className="pair">
