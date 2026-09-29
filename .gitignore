@@ -1,3 +1,4 @@
 # Encrypted database backups (deploy/backup.sh) and their key: never in git.
 backups/
 .env
+*.tsbuildinfo
