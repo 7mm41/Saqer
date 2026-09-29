@@ -4,6 +4,7 @@ import appIcon from '../assets/icons/app.png';
 import { useI18n, type StringKey } from '../i18n';
 import { Icon } from '../icons';
 import { useLive } from '../live';
+import { PushStatusCard, usePushReason } from '../push';
 import {
   DateTimeField, Empty, Field, Loading, LocalizedField, PageHead, Pager, SearchField, Segmented, StatusBadge, Toggle, useDebounced,
   useErrorText, useLoad, useToast,
@@ -13,6 +14,7 @@ type History = Page<Notification> & { pushConfigured: boolean; devices: number }
 
 export function NotificationsPage() {
   const { t, dateTime, L, number } = useI18n();
+  const explain = usePushReason();
   const toast = useToast();
   const errorText = useErrorText();
   const [page, setPage] = useState(1);
@@ -34,9 +36,7 @@ export function NotificationsPage() {
       <PageHead title={t('notifications')} hint={t('notificationsHint')}>
         {history && <span className="badge num"><Icon name="phone" size={13} />{t('sentTo', { n: number(history.devices) })}</span>}
       </PageHead>
-      {history && !history.pushConfigured && (
-        <div className="notice small"><Icon name="bell" size={18} /><span>{t('pushNotConfigured')}</span></div>
-      )}
+      <PushStatusCard />
       <div className="grid two">
         <Composer onSent={() => void reload()} />
         <AutomaticRules />
@@ -61,11 +61,13 @@ export function NotificationsPage() {
                     <strong>{L(n.title)}</strong>
                   </div>
                   <div className="muted small clamp">{L(n.body)}</div>
+                  {n.error && n.status !== 'scheduled' && <div className="small danger-text">{explain(n.error)}</div>}
                 </td>
                 <td className="muted small">{t(audienceKey(n.audience))}</td>
                 <td><StatusBadge status={n.status} /></td>
                 <td className="small num">{dateTime(n.sentAt ?? n.scheduledFor)}</td>
-                <td className="num">{n.status === 'sent' ? number(n.recipients) : '—'}</td>
+                <td className="num small">{n.status === 'sent' || n.status === 'failed'
+                  ? t('deliveredOf', { d: number(n.delivered ?? n.recipients), n: number(n.recipients) }) : '—'}</td>
                 <td>{n.status === 'scheduled' && <button className="btn small ghost" onClick={() => void cancel(n.id)}>{t('cancel')}</button>}</td>
               </tr>
             ))}</tbody>

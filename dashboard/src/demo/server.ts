@@ -296,6 +296,7 @@ function sendDueNotifications() {
       notification.status = 'sent';
       notification.sentAt = nowISO();
       notification.recipients = devicesFor(notification.audience);
+      notification.delivered = notification.recipients;
       changed = true;
     }
   }
@@ -547,6 +548,15 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
     return method === 'DELETE' ? { ok: true } : { theme };
   }
 
+  // ---- push (the demo pretends Apple accepted everything)
+  if (b === 'push' && c === 'status') {
+    return {
+      configured: true, missing: [], problem: null, bundleId: 'om.sarena.app', defaultEnvironment: 'sandbox', recentFailures: [],
+      devices: { total: state.devices, sandbox: 3, production: state.devices - 3, unknown: 0, mine: 1 },
+    };
+  }
+  if (b === 'push' && c === 'test') return { configured: true, delivered: 1, devices: [{ environment: 'production', ok: true, reason: null }] };
+
   // ---- notifications
   if (b === 'notifications' && c === 'audience') return { devices: devicesFor((query.get('audience') ?? 'all') as Audience) };
   if (b === 'notifications' && !c && method === 'GET') {
@@ -628,7 +638,7 @@ function addNotification(
   const notification: Notification = {
     id: uid(), kind, title, body, audience, userId, venueId, status: later ? 'scheduled' : 'sent',
     scheduledFor: scheduledFor ?? nowISO(), sentAt: later ? null : nowISO(),
-    recipients: later ? 0 : devicesFor(audience), createdAt: nowISO(),
+    recipients: later ? 0 : devicesFor(audience), delivered: later ? 0 : devicesFor(audience), error: null, createdAt: nowISO(),
   };
   state.notifications.push(notification);
   emitLive('notifications');

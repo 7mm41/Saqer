@@ -31,3 +31,31 @@ struct NoPushRegistration: PushRegistrationServicing {
     func register(token: String, locale: String) async throws {}
     func unregister(token: String) async {}
 }
+
+/// Which of Apple's two push gateways this build's token belongs to: apps run
+/// from Xcode get sandbox tokens, TestFlight and App Store installs production
+/// ones. Sent with the token so the server uses the right gateway.
+enum PushEnvironment: String, Sendable {
+    case sandbox, production
+
+    static let current: PushEnvironment = {
+        #if targetEnvironment(simulator)
+        return .sandbox
+        #else
+        let profile = Bundle.main.url(forResource: "embedded", withExtension: "mobileprovision")
+        return from(provisioningProfile: profile.flatMap { try? Data(contentsOf: $0) })
+        #endif
+    }()
+
+    /// Reads `aps-environment` from the provisioning profile inside the app.
+    /// App Store builds have none, and use production.
+    static func from(provisioningProfile data: Data?) -> PushEnvironment {
+        guard let data,
+              let start = data.range(of: Data("<?xml".utf8)),
+              let end = data.range(of: Data("</plist>".utf8), in: start.lowerBound..<data.endIndex),
+              let plist = try? PropertyListSerialization.propertyList(from: data.subdata(in: start.lowerBound..<end.upperBound), format: nil),
+              let entitlements = (plist as? [String: Any])?["Entitlements"] as? [String: Any]
+        else { return .production }
+        return entitlements["aps-environment"] as? String == "development" ? .sandbox : .production
+    }
+}

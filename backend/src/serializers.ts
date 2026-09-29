@@ -82,6 +82,8 @@ export const serializeNotification = (n: Notification) => ({
   scheduledFor: iso(n.scheduledFor),
   sentAt: iso(n.sentAt),
   recipients: n.recipients,
+  delivered: n.delivered,
+  error: n.error,
   createdAt: iso(n.createdAt),
 });
 

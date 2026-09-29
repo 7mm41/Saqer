@@ -184,6 +184,10 @@ export const devices = pgTable('devices', {
   platform: text('platform', { enum: ['ios', 'android'] }).notNull(),
   token: text('token').notNull().unique(),
   locale: text('locale', { enum: ['ar', 'en'] }).notNull().default('ar'),
+  /** Apple's gateway for this phone's token (null: registered by an older app version). */
+  environment: text('environment', { enum: ['sandbox', 'production'] }),
+  /** The app's bundle identifier, used as the APNs topic (null: APNS_BUNDLE_ID). */
+  bundleId: text('bundle_id'),
   createdAt: createdAt(),
   lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
 }, (t) => [index('devices_user_idx').on(t.userId)]);
@@ -207,7 +211,11 @@ export const notifications = pgTable('notifications', {
   status: text('status', { enum: ['scheduled', 'sending', 'sent', 'cancelled', 'failed'] }).notNull().default('scheduled'),
   scheduledFor: timestamp('scheduled_for', { withTimezone: true }).notNull(),
   sentAt: timestamp('sent_at', { withTimezone: true }),
+  /** Phones targeted, and how many Apple accepted. */
   recipients: integer('recipients').notNull().default(0),
+  delivered: integer('delivered').notNull().default(0),
+  /** Why some or all didn't arrive (Apple's reason, e.g. `InvalidProviderToken`, or `NotConfigured`). */
+  error: text('error'),
   createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
   createdAt: createdAt(),
 }, (t) => [index('notifications_due_idx').on(t.status, t.scheduledFor)]);

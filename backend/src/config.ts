@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { resolve } from 'node:path';
+import { normalizePem } from './lib/push.ts';
 import { readablePassword } from './lib/passwords.ts';
 
 const root = resolve(import.meta.dirname, '..');
@@ -7,6 +9,19 @@ const root = resolve(import.meta.dirname, '..');
 function bool(value: string | undefined, fallback: boolean): boolean {
   if (value === undefined || value === '') return fallback;
   return ['1', 'true', 'yes', 'on'].includes(value.toLowerCase());
+}
+
+/** The .p8 key from APNS_KEY (its text) or APNS_KEY_FILE (a path, relative to backend/ or starting with ~/). */
+function readApnsKey(env: NodeJS.ProcessEnv): { privateKey: string; keyError: string | null } {
+  if (env.APNS_KEY) return { privateKey: normalizePem(env.APNS_KEY), keyError: null };
+  if (!env.APNS_KEY_FILE) return { privateKey: '', keyError: null };
+  const file = env.APNS_KEY_FILE.trim().replace(/^["']|["']$/g, '');
+  const path = file.startsWith('~/') ? resolve(homedir(), file.slice(2)) : resolve(root, file);
+  try {
+    return { privateKey: normalizePem(readFileSync(path, 'utf8')), keyError: null };
+  } catch {
+    return { privateKey: '', keyError: `APNS_KEY_FILE: there is no file at ${path}. Put the AuthKey_XXXXXXXXXX.p8 file there, or write its full path.` };
+  }
 }
 
 export type Config = ReturnType<typeof loadConfig>;
@@ -61,11 +76,15 @@ export function loadConfig(input: NodeJS.ProcessEnv = process.env) {
     },
     /** Apple Push Notification service (token auth with a .p8 key from developer.apple.com). */
     apns: {
-      keyId: env.APNS_KEY_ID ?? '',
-      teamId: env.APNS_TEAM_ID ?? '',
-      bundleId: env.APNS_BUNDLE_ID ?? 'om.sarena.app',
-      privateKey: env.APNS_KEY ?? (env.APNS_KEY_FILE ? readFileSync(resolve(root, env.APNS_KEY_FILE), 'utf8') : ''),
-      /** false = the sandbox gateway used by Xcode / TestFlight-less development builds. */
+      keyId: (env.APNS_KEY_ID ?? '').trim().toUpperCase(),
+      teamId: (env.APNS_TEAM_ID ?? '').trim().toUpperCase(),
+      /** The app's bundle identifier. Phones on current app versions send their own. */
+      bundleId: (env.APNS_BUNDLE_ID ?? 'om.sarena.app').trim(),
+      ...readApnsKey(env),
+      /**
+       * The gateway for phones registered by older app versions. Current versions
+       * say which one they use (Xcode builds: sandbox; TestFlight / App Store: production).
+       */
       production: bool(env.APNS_PRODUCTION, production),
     },
     /** Apple Wallet passes (membership card, booking codes). Off until all four are set. */

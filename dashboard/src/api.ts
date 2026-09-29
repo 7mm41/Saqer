@@ -47,7 +47,16 @@ export type Notification = {
   title: Localized; body: Localized; audience: Audience; userId: string | null; venueId: string | null;
   status: 'scheduled' | 'sending' | 'sent' | 'cancelled' | 'failed'; scheduledFor: string; sentAt: string | null;
   recipients: number; createdAt: string;
+  /** How many phones Apple accepted, and why the rest didn't arrive (Apple's reason code). */
+  delivered?: number; error?: string | null;
 };
+export type PushEnvironment = 'sandbox' | 'production';
+export type PushStatus = {
+  configured: boolean; missing: string[]; problem: string | null; bundleId: string; defaultEnvironment: PushEnvironment;
+  recentFailures: { at: string; reason: string; environment: PushEnvironment; topic: string }[];
+  devices: { total: number; sandbox: number; production: number; unknown: number; mine: number };
+};
+export type PushTest = { configured: boolean; delivered: number; devices: { environment: PushEnvironment | null; ok: boolean; reason: string | null }[] };
 export type NotificationSettings = {
   newEvents: boolean; eventDay: boolean; planPromos: boolean; membershipExpiry: boolean;
   newEventDelayMinutes: number; morningHour: number; reminderHoursBefore: number; finalReminderMinutes: number;

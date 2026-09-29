@@ -162,9 +162,17 @@ export async function memberRoutes(api: FastifyInstance) {
       token: z.string().trim().min(16).max(512),
       platform: z.enum(['ios', 'android']),
       locale: z.string().transform((v) => (v.toLowerCase().startsWith('en') ? 'en' as const : 'ar' as const)).default('ar'),
+      /** Apple's gateway for this token: Xcode builds use the sandbox, TestFlight and the App Store production. */
+      environment: z.enum(['sandbox', 'production']).optional(),
+      /** The app's bundle identifier (the APNs topic). */
+      bundleId: z.string().trim().regex(/^[A-Za-z0-9.-]{3,155}$/).optional(),
     }), request.body);
-    await db.insert(devices).values({ userId: user.id, ...body })
-      .onConflictDoUpdate({ target: devices.token, set: { userId: user.id, platform: body.platform, locale: body.locale, lastSeenAt: new Date() } });
+    const values = {
+      userId: user.id, platform: body.platform, locale: body.locale,
+      environment: body.environment ?? null, bundleId: body.bundleId ?? null,
+    };
+    await db.insert(devices).values({ ...values, token: body.token })
+      .onConflictDoUpdate({ target: devices.token, set: { ...values, lastSeenAt: new Date() } });
     return { ok: true };
   });
 

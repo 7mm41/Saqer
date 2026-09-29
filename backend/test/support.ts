@@ -8,7 +8,7 @@ import { loadConfig } from '../src/config.ts';
 import { openDatabase } from '../src/db/client.ts';
 import type { Device } from '../src/db/schema.ts';
 import { seed } from '../src/db/seed.ts';
-import type { PushMessage, PushSender } from '../src/lib/push.ts';
+import { emptyPushResult, type PushMessage, type PushSender, type PushStatus } from '../src/lib/push.ts';
 import type { WalletSigner } from '../src/lib/wallet.ts';
 
 export type Json = Record<string, any>;
@@ -23,7 +23,20 @@ export class FakePush implements PushSender {
 
   async send(devices: Device[], message: PushMessage) {
     this.sent.push({ devices, message });
-    return { delivered: devices.length, invalidTokens: devices.map((d) => d.token).filter((t) => this.invalid.has(t)) };
+    const invalidTokens = devices.map((d) => d.token).filter((t) => this.invalid.has(t));
+    const result = emptyPushResult();
+    result.invalidTokens = invalidTokens;
+    result.delivered = devices.length - invalidTokens.length;
+    if (invalidTokens.length) result.failures.BadDeviceToken = invalidTokens.length;
+    result.outcomes = devices.map((d) => ({
+      token: d.token, ok: !this.invalid.has(d.token), status: this.invalid.has(d.token) ? 400 : 200,
+      reason: this.invalid.has(d.token) ? 'BadDeviceToken' : undefined, environment: d.environment ?? 'sandbox',
+    }));
+    return result;
+  }
+
+  status(): PushStatus {
+    return { configured: true, missing: [], problem: null, bundleId: 'om.sarena.app', defaultEnvironment: 'sandbox', recentFailures: [] };
   }
 
   async close() {}

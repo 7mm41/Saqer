@@ -1,5 +1,8 @@
 import SwiftUI
 import XCTest
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 @testable import Sarena
 
 // MARK: - Fixtures
@@ -565,6 +568,78 @@ final class ServerAddressTests: XCTestCase {
             .absoluteString, "http://localhost:3000")
         ServerAddress.save(nil, defaults: defaults)
         XCTAssertNil(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults))
+    }
+}
+
+final class PushRegistrationTests: XCTestCase {
+    /// A provisioning profile: the entitlements plist inside a binary signature.
+    private func profile(apsEnvironment: String?) -> Data {
+        let entitlements = apsEnvironment.map { "<key>aps-environment</key><string>\($0)</string>" } ?? ""
+        let plist = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0"><dict><key>Name</key><string>Sarena</string>\
+        <key>Entitlements</key><dict>\(entitlements)</dict></dict></plist>
+        """
+        return Data([0x30, 0x82, 0x1F, 0x00, 0x06]) + Data(plist.utf8) + Data([0xA0, 0x82, 0x00, 0xFF])
+    }
+
+    func testTheGatewayComesFromTheProvisioningProfile() {
+        XCTAssertEqual(PushEnvironment.from(provisioningProfile: profile(apsEnvironment: "development")), .sandbox)
+        XCTAssertEqual(PushEnvironment.from(provisioningProfile: profile(apsEnvironment: "production")), .production)
+        XCTAssertEqual(PushEnvironment.from(provisioningProfile: nil), .production, "App Store builds carry no profile")
+        XCTAssertEqual(PushEnvironment.from(provisioningProfile: Data("not a profile".utf8)), .production)
+    }
+
+    func testRegistrationSendsTheGatewayAndBundleIdentifier() async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [RecordingURLProtocol.self]
+        let client = APIClient(baseURL: URL(string: "https://sarena.test")!,
+                               tokens: TokenStore(keychain: KeychainStore(service: "SarenaTests.\(UUID().uuidString)")),
+                               session: URLSession(configuration: configuration))
+        let registration = APIPushRegistration(client: client, environment: .sandbox, bundleID: "om.sarena.app")
+        try await registration.register(token: "abcdef0123456789", locale: "ar-OM")
+
+        let request = try XCTUnwrap(RecordingURLProtocol.lastRequest)
+        XCTAssertTrue(request.url?.path.hasSuffix("/v1/me/devices") ?? false)
+        let body = try XCTUnwrap(JSONSerialization.jsonObject(with: RecordingURLProtocol.lastBody ?? Data()) as? [String: Any])
+        XCTAssertEqual(body["token"] as? String, "abcdef0123456789")
+        XCTAssertEqual(body["platform"] as? String, "ios")
+        XCTAssertEqual(body["environment"] as? String, "sandbox")
+        XCTAssertEqual(body["bundleId"] as? String, "om.sarena.app")
+    }
+}
+
+/// Answers every request with `{"ok":true}` and keeps the last one.
+private final class RecordingURLProtocol: URLProtocol {
+    nonisolated(unsafe) static var lastRequest: URLRequest?
+    nonisolated(unsafe) static var lastBody: Data?
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        Self.lastRequest = request
+        Self.lastBody = request.httpBody ?? request.httpBodyStream.map(Self.read)
+        let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: Data(#"{"ok":true}"#.utf8))
+        client?.urlProtocolDidFinishLoading(self)
+    }
+
+    override func stopLoading() {}
+
+    private static func read(_ stream: InputStream) -> Data {
+        stream.open()
+        defer { stream.close() }
+        var data = Data()
+        var buffer = [UInt8](repeating: 0, count: 1024)
+        while stream.hasBytesAvailable {
+            let count = stream.read(&buffer, maxLength: buffer.count)
+            if count <= 0 { break }
+            data.append(buffer, count: count)
+        }
+        return data
     }
 }
 

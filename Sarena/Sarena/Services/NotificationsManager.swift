@@ -16,6 +16,9 @@ final class NotificationsManager: NSObject {
     static let shared = NotificationsManager()
 
     private(set) var authorization: UNAuthorizationStatus = .notDetermined
+    /// Why iOS couldn't give this phone a push token (e.g. the build lacks the
+    /// Push Notifications capability). Shown in Settings.
+    private(set) var registrationProblem: String?
     /// Set when a notification about a venue is tapped; Home opens it.
     var pendingVenueID: String?
     /// Set when a reminder is tapped; the Wallet opens.
@@ -38,9 +41,11 @@ final class NotificationsManager: NSObject {
         super.init()
     }
 
-    /// Called once at launch by the app delegate.
+    /// Called at launch, and again when the app connects to another server.
     func activate(registration: any PushRegistrationServicing) {
         self.registration = registration
+        // A new server hasn't seen this phone yet.
+        registeredToken = nil
         center.delegate = self
         Task { await refreshAuthorization() }
     }
@@ -66,7 +71,12 @@ final class NotificationsManager: NSObject {
 
     func didRegister(deviceToken data: Data) {
         deviceToken = data.map { String(format: "%02x", $0) }.joined()
+        registrationProblem = nil
         Task { await syncRegistration() }
+    }
+
+    func didFailToRegister(_ error: Error) {
+        registrationProblem = error.localizedDescription
     }
 
     func sessionChanged(signedIn: Bool) async {
@@ -142,6 +152,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        // Simulators without push support and missing entitlements end up here; nothing to do.
+        // E.g. a build signed without the Push Notifications capability.
+        MainActor.assumeIsolated {
+            NotificationsManager.shared.didFailToRegister(error)
+        }
     }
 }

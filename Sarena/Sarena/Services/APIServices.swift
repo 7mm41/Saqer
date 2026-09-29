@@ -185,11 +185,21 @@ struct APIWalletPasses: WalletPassServicing {
 
 struct APIPushRegistration: PushRegistrationServicing {
     let client: APIClient
+    /// Tells the server which Apple gateway and app (topic) the token belongs to.
+    var environment: PushEnvironment = .current
+    var bundleID: String? = Bundle.main.bundleIdentifier
 
     func register(token: String, locale: String) async throws {
-        struct Body: Encodable { let token: String; let platform = "ios"; let locale: String }
+        struct Body: Encodable {
+            let token: String
+            let platform = "ios"
+            let locale: String
+            let environment: String
+            let bundleId: String?
+        }
         struct OK: Decodable {}
-        _ = try await client.post("me/devices", body: Body(token: token, locale: locale), as: OK.self)
+        let body = Body(token: token, locale: locale, environment: environment.rawValue, bundleId: bundleID)
+        _ = try await client.post("me/devices", body: body, as: OK.self)
     }
 
     func unregister(token: String) async {

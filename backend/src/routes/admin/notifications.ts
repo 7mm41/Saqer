@@ -84,6 +84,44 @@ export async function notificationAdminRoutes(admin: FastifyInstance) {
     return { devices: targets.length };
   });
 
+  /** Is push set up, how many phones can receive it, and what went wrong lately. */
+  admin.get('/push/status', adminOnly, async (request) => {
+    const { user } = requireAuthContext(request);
+    const rows = await db.select({ environment: devices.environment, n: count() }).from(devices).groupBy(devices.environment);
+    const [mine] = await db.select({ n: count() }).from(devices).where(eq(devices.userId, user.id));
+    const byEnvironment = Object.fromEntries(rows.map((row) => [row.environment ?? 'unknown', row.n]));
+    return {
+      ...admin.notifier.pushStatus(),
+      devices: {
+        total: rows.reduce((sum, row) => sum + row.n, 0),
+        sandbox: byEnvironment.sandbox ?? 0, production: byEnvironment.production ?? 0, unknown: byEnvironment.unknown ?? 0,
+        mine: mine?.n ?? 0,
+      },
+    };
+  });
+
+  /** A test notification to the phones signed in with this account (or a member's), with Apple's answer for each. */
+  admin.post('/push/test', adminOnly, async (request) => {
+    const { user } = requireAuthContext(request);
+    const body = parse(z.object({ userId: z.uuid().optional() }), request.body ?? {});
+    const targets = await db.select().from(devices).where(eq(devices.userId, body.userId ?? user.id));
+    if (!targets.length) {
+      throw new ApiError(409, 'no_devices', 'No phone is registered for this account: sign in to the app with it and allow notifications.');
+    }
+    const result = await admin.notifier.sendTo(targets, {
+      title: { en: 'Sarena test notification ✅', ar: 'إشعار تجريبي من سرينا ✅' },
+      body: { en: 'Notifications reach this phone.', ar: 'الإشعارات تصل إلى هذا الجهاز.' },
+      data: { kind: 'test' },
+    });
+    return {
+      configured: admin.notifier.pushConfigured,
+      delivered: result.delivered,
+      devices: result.outcomes.length
+        ? result.outcomes.map((o) => ({ environment: o.environment, ok: o.ok, reason: o.reason ?? null }))
+        : targets.map((d) => ({ environment: d.environment, ok: false, reason: admin.notifier.pushConfigured ? null : 'NotConfigured' })),
+    };
+  });
+
   admin.get('/settings/notifications', adminOnly, async () => ({ settings: await getNotificationSettings(db) }));
 
   admin.patch('/settings/notifications', adminOnly, async (request) => {

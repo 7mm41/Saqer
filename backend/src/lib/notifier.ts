@@ -8,7 +8,7 @@ import {
 } from '../db/schema.ts';
 import { live, type LiveHub } from './live.ts';
 import { activePromo } from './plans.ts';
-import type { PushSender } from './push.ts';
+import type { PushMessage, PushResult, PushSender } from './push.ts';
 import { getNotificationSettings, type NotificationSettings } from './settings.ts';
 import { activeTheme } from './themes.ts';
 
@@ -56,6 +56,10 @@ export class Notifier {
 
   get pushConfigured() {
     return this.push.configured;
+  }
+
+  pushStatus() {
+    return this.push.status();
   }
 
   start(intervalMs = 30_000) {
@@ -270,7 +274,7 @@ export class Notifier {
         }
       }
       const targets = await this.devicesFor(notification, now);
-      const result = await this.push.send(targets, {
+      const result = await this.sendTo(targets, {
         title: notification.title,
         body: notification.body,
         data: {
@@ -278,15 +282,31 @@ export class Notifier {
           ...(notification.venueId ? { venueId: notification.venueId } : {}),
         },
       });
-      if (result.invalidTokens.length) {
-        await this.db.delete(devices).where(inArray(devices.token, result.invalidTokens));
-      }
-      await this.db.update(notifications).set({ status: 'sent', sentAt: new Date(), recipients: targets.length })
-        .where(eq(notifications.id, notification.id));
+      const error = mainReason(result.failures);
+      await this.db.update(notifications).set({
+        // Reached no phone at all although some were targeted: say so instead of "sent".
+        status: targets.length && !result.delivered && error ? 'failed' : 'sent',
+        sentAt: new Date(), recipients: targets.length, delivered: result.delivered, error,
+      }).where(eq(notifications.id, notification.id));
     } catch (error) {
       this.log.error({ err: error, id: notification.id }, 'Notification delivery failed');
-      await this.db.update(notifications).set({ status: 'failed' }).where(eq(notifications.id, notification.id));
+      await this.db.update(notifications).set({ status: 'failed', error: 'ServerError' }).where(eq(notifications.id, notification.id));
     }
+  }
+
+  /**
+   * Sends to these phones, then forgets the tokens Apple no longer accepts and
+   * remembers which gateway the others use.
+   */
+  async sendTo(targets: Device[], message: PushMessage): Promise<PushResult> {
+    const result = await this.push.send(targets, message);
+    if (result.invalidTokens.length) {
+      await this.db.delete(devices).where(inArray(devices.token, result.invalidTokens));
+    }
+    for (const { token, environment } of result.environments) {
+      await this.db.update(devices).set({ environment }).where(eq(devices.token, token));
+    }
+    return result;
   }
 
   /** Devices of active accounts in the notification's audience. */
@@ -351,4 +371,10 @@ export class Notifier {
       hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Muscat',
     }).format(date);
   }
+}
+
+/** The most common reason notifications didn't arrive, or null. */
+function mainReason(failures: Record<string, number>): string | null {
+  const [top] = Object.entries(failures).sort((a, b) => b[1] - a[1]);
+  return top?.[0] ?? null;
 }
