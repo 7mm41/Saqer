@@ -1,5 +1,7 @@
-# Production-like stack: Sarena + PostgreSQL.
-#   cp backend/.env.example backend/.env   # set JWT_SECRET, ADMIN_EMAIL/PASSWORD, APNS_*, SMS...
+# Production stack: Sarena + PostgreSQL + Caddy (automatic HTTPS).
+# On a new Ubuntu server, `sudo bash deploy/install.sh` does all of this for you. By hand:
+#   cp backend/.env.example backend/.env   # set JWT_SECRET, ADMIN_EMAIL/PASSWORD, PUBLIC_URL, APNS_*, SMS...
+#   echo "SARENA_DOMAIN=sarena.fun" > .env # the domain whose DNS points at this server
 #   docker compose up -d --build
 services:
   db:
@@ -20,9 +22,28 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgres://sarena:${POSTGRES_PASSWORD:-change-me}@db:5432/sarena
     ports:
-      - "3000:3000"
+      # Reachable from the server itself only; the public goes through Caddy (HTTPS).
+      - "127.0.0.1:3000:3000"
     volumes:
       - uploads:/app/backend/data
+      # The APNs key (.p8) and Apple Wallet certificates; read-only, never in the image.
+      - ./backend/certs:/app/backend/certs:ro
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [app]
+    environment:
+      SARENA_DOMAIN: ${SARENA_DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
 volumes:
   pgdata:
   uploads:
+  caddy-data:
+  caddy-config:

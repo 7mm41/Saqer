@@ -35,12 +35,21 @@ cd backend && npm start      # http://localhost:3000  (website)  ·  /admin/  (c
 
 ## Deploy
 
+Sarena needs a server that runs Node.js and a database around the clock: a **VPS** (e.g. Hostinger KVM, Hetzner, DigitalOcean) with Ubuntu. Shared web hosting (such as Hostinger *Premium Web Hosting*) runs PHP sites only and can't run it.
+
+1. Point the domain's DNS **A** records (`@` and `www`) at the VPS's IP.
+2. Copy this folder to the VPS (`git clone`, or upload the zip), then inside it:
+
 ```bash
-cp backend/.env.example backend/.env      # JWT_SECRET, ADMIN_*, APNS_*, SMS, store links
-docker compose up -d --build              # Sarena + PostgreSQL on :3000
+sudo bash deploy/install.sh     # asks for the domain once, then does the rest
 ```
 
-Put it behind HTTPS (Caddy, nginx or a cloud load balancer), then set `PUBLIC_URL`, the app's `SarenaAPIBaseURL` and the store links.
+It installs Docker, creates the settings (random database password, `JWT_SECRET` and admin password), and starts Sarena, PostgreSQL and **Caddy**, which gets and renews the HTTPS certificate by itself. It then prints the website, control panel and admin sign-in. Run it again after an update; settings and data are kept.
+
+* Website `https://<domain>/` · control panel `/admin/` · API `/v1/`. Live updates stream straight through Caddy (never compressed).
+* The APNs key and Wallet certificates go in `backend/certs/`, which is mounted read-only and never built into the image.
+* Connect the iPhone app from the control panel (*Connect the app*). App Store builds: set `SarenaAPIBaseURL` to `https://<domain>`.
+* By hand: `backend/.env` from `.env.example`, `SARENA_DOMAIN=<domain>` in `.env`, then `docker compose up -d --build`.
 
 ## Tests
 
