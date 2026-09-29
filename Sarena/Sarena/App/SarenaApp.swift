@@ -4,53 +4,27 @@ import SwiftUI
 @main
 struct SarenaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    private let services: AppServices
-    @State private var session: SessionStore
-    @State private var wallet: WalletStore
-    @State private var membership: MembershipStore
-    @State private var catalog: CatalogStore
-    @State private var liveSync: LiveSync
-    @State private var appConfig: AppConfigStore
-    @State private var motion: MotionManager
-    @State private var languageCoordinator: LanguageCoordinator
+    /// Everything that talks to the server; rebuilt when the app is connected to another one.
+    @State private var container = AppContainer(services: .configured())
+    @State private var motion = MotionManager()
+    @State private var languageCoordinator = LanguageCoordinator()
+    /// A server offered by a `sarena://connect?server=…` link, awaiting confirmation.
+    @State private var offeredServer: URL?
 
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
-
-    init() {
-        // The Sarena API when Info.plist › SarenaAPIBaseURL is set, else the on-device demo backend.
-        let services = AppServices.configured()
-        self.services = services
-        let session = SessionStore(auth: services.auth)
-        let wallet = WalletStore(booking: services.booking)
-        let membership = MembershipStore(service: services.membership)
-        let catalog = CatalogStore(catalog: services.catalog)
-        let appConfig = AppConfigStore(service: services.config)
-        _session = State(initialValue: session)
-        _appConfig = State(initialValue: appConfig)
-        _wallet = State(initialValue: wallet)
-        _membership = State(initialValue: membership)
-        _catalog = State(initialValue: catalog)
-        _liveSync = State(initialValue: LiveSync(
-            live: services.live, session: session, catalog: catalog, membership: membership, wallet: wallet,
-            appConfig: appConfig
-        ))
-        // Push notifications and on-phone event reminders.
-        NotificationsManager.shared.activate(registration: services.push)
-        session.beforeSignOut = { await NotificationsManager.shared.sessionChanged(signedIn: false) }
-        _motion = State(initialValue: MotionManager())
-        _languageCoordinator = State(initialValue: LanguageCoordinator())
-    }
 
     var body: some Scene {
         WindowGroup {
             RootView()
-                .environment(\.services, services)
-                .environment(session)
-                .environment(wallet)
-                .environment(membership)
-                .environment(catalog)
-                .environment(liveSync)
-                .environment(appConfig)
+                .environment(\.services, container.services)
+                .environment(container.session)
+                .environment(container.wallet)
+                .environment(container.membership)
+                .environment(container.catalog)
+                .environment(container.liveSync)
+                .environment(container.appConfig)
+                // A fresh screen tree (and fresh stores) for a new server.
+                .id(container.id)
                 .environment(motion)
                 .environment(languageCoordinator)
                 .appLanguage(languageCoordinator.language)
@@ -58,7 +32,61 @@ struct SarenaApp: App {
                 .languageTransitionCover(languageCoordinator)
                 .preferredColorScheme(appearance.colorScheme)
                 .tint(Theme.Palette.orange)
+                .onOpenURL { url in
+                    guard ServerAddress.linksAllowed(), let server = ServerAddress.fromConnectLink(url) else { return }
+                    offeredServer = server
+                }
+                .alert(
+                    Text("Connect Sarena to this server?"),
+                    isPresented: Binding(get: { offeredServer != nil }, set: { if !$0 { offeredServer = nil } }),
+                    presenting: offeredServer
+                ) { server in
+                    Button("Connect") { connect(to: server) }
+                    Button("Cancel", role: .cancel) {}
+                } message: { server in
+                    Text("\(server.host() ?? server.absoluteString)\nYou will sign in again on this server.")
+                }
         }
+    }
+
+    /// Switches every store to `server`. The old server's sign-in and cached
+    /// look are dropped first, so nothing of one server is sent to another.
+    private func connect(to server: URL) {
+        guard server != ServerAddress.current() || container.services.isDemo else { return }
+        container.session.endSession()
+        TokenStore().clear()
+        AppConfigStore.clearCache()
+        ServerAddress.save(server)
+        container = AppContainer(services: .configured())
+    }
+}
+
+/// The server-facing half of the app: its services and the stores built on them.
+@MainActor
+final class AppContainer {
+    let id = UUID()
+    let services: AppServices
+    let session: SessionStore
+    let wallet: WalletStore
+    let membership: MembershipStore
+    let catalog: CatalogStore
+    let liveSync: LiveSync
+    let appConfig: AppConfigStore
+
+    init(services: AppServices) {
+        self.services = services
+        session = SessionStore(auth: services.auth)
+        wallet = WalletStore(booking: services.booking)
+        membership = MembershipStore(service: services.membership)
+        catalog = CatalogStore(catalog: services.catalog)
+        appConfig = AppConfigStore(service: services.config)
+        liveSync = LiveSync(
+            live: services.live, session: session, catalog: catalog, membership: membership, wallet: wallet,
+            appConfig: appConfig
+        )
+        // Push notifications and on-phone event reminders.
+        NotificationsManager.shared.activate(registration: services.push)
+        session.beforeSignOut = { await NotificationsManager.shared.sessionChanged(signedIn: false) }
     }
 }
 

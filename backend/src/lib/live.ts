@@ -12,10 +12,12 @@ import type { Role } from '../db/schema.ts';
  * back in to see a change.
  *
  * Events:
- *   catalog     venues/offers/events changed          → every signed-in client
- *   offer       { offerId, venueId, remaining }        → every signed-in client (scarcity counter)
- *   plans       membership plans changed               → every signed-in client
- *   config      seasonal theme / reminder settings      → every signed-in client
+ *   catalog     venues/offers/events changed          → every client
+ *   offer       { offerId, venueId, remaining }        → every client (scarcity counter)
+ *   plans       membership plans changed               → every client
+ *   config      seasonal theme / reminder settings      → every client
+ *
+ * (`/v1/live/public` streams, opened without an account, get only these four.)
  *   membership  this member's membership changed       → that member
  *   bookings    this member's codes changed            → that member
  *   account     profile/status/role changed            → that member (re-fetch /me; 401/403 → signed out)
@@ -34,7 +36,8 @@ export type LiveEvent =
 
 export type AdminTopic = 'members' | 'memberships' | 'bookings' | 'catalog' | 'plans' | 'themes' | 'notifications';
 
-type Client = { id: string; userId: string; sessionId: string; role: Role; stream: ServerResponse };
+/** `userId`/`sessionId` are null and `role` is "guest" on the public stream. */
+type Client = { id: string; userId: string | null; sessionId: string | null; role: Role | 'guest'; stream: ServerResponse };
 
 /** Transport between server instances (Postgres LISTEN/NOTIFY), or none for a single process. */
 export type LiveBridge = {

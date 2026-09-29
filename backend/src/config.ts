@@ -12,7 +12,13 @@ function bool(value: string | undefined, fallback: boolean): boolean {
 export type Config = ReturnType<typeof loadConfig>;
 
 /** All settings come from environment variables (see `.env.example`). */
-export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
+export function loadConfig(input: NodeJS.ProcessEnv = process.env) {
+  // A blank line in .env (`JWT_SECRET=`, as in .env.example) means "not set":
+  // without this, an empty secret breaks every sign-in and an empty
+  // ADMIN_PASSWORD would lock the dashboard.
+  const env: NodeJS.ProcessEnv = Object.fromEntries(
+    Object.entries(input).filter(([, value]) => value !== undefined && value.trim() !== ''),
+  );
   const production = env.NODE_ENV === 'production';
   const jwtSecret = env.JWT_SECRET ?? (production ? '' : 'dev-only-insecure-secret-change-me');
   if (production && jwtSecret.length < 32) {
@@ -22,7 +28,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
     production,
     port: Number(env.PORT ?? 3000),
     host: env.HOST ?? '0.0.0.0',
-    /** Public base URL, used for uploaded image links (e.g. https://sarena.example). */
+    /** The address people use (e.g. https://sarena.om); shown in the start-up message. */
     publicUrl: (env.PUBLIC_URL ?? '').replace(/\/$/, ''),
     /** PostgreSQL connection string. Empty = embedded PGlite database in `dataDir`. */
     databaseUrl: env.DATABASE_URL ?? '',

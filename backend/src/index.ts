@@ -13,6 +13,8 @@ if (!config.databaseUrl) app.log.info(`Using the embedded database in ${config.d
 if (config.demoMode && config.production) app.log.warn('DEMO_MODE is on in production: turn it off before launch.');
 
 await app.listen({ port: config.port, host: config.host });
+const local = `http://localhost:${config.port}`;
+app.log.info(`Website ${config.publicUrl || local}/ · control panel ${config.publicUrl || local}/admin/`);
 
 let closing = false;
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {

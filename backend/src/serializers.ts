@@ -40,11 +40,28 @@ export const serializePlanAdmin = (p: Plan) => ({
   sortOrder: p.sortOrder,
 });
 
+/**
+ * Uploaded images saved with a machine-local address (older versions used
+ * PUBLIC_URL=http://localhost:3000) become paths on this server, which every
+ * client can load whatever address it uses.
+ */
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '0.0.0.0', '[::1]']);
+export function portableMediaUrl(url: string | null): string | null {
+  if (!url || url.startsWith('/')) return url;
+  try {
+    const parsed = new URL(url);
+    if (LOCAL_HOSTS.has(parsed.hostname) && parsed.pathname.startsWith('/uploads/')) return parsed.pathname;
+  } catch {
+    // Not an absolute URL: leave as is.
+  }
+  return url;
+}
+
 export const serializeTheme = (t: Theme) => ({
   id: t.id,
   name: t.name,
-  logoUrl: t.logoUrl,
-  bannerUrl: t.bannerUrl,
+  logoUrl: portableMediaUrl(t.logoUrl),
+  bannerUrl: portableMediaUrl(t.bannerUrl),
   greeting: t.greeting,
   accentColor: t.accentColor,
   iconName: t.iconName,
@@ -101,7 +118,7 @@ export const serializeVenue = (v: Venue, offers: Offer[]) => ({
   longitude: v.longitude,
   rating: v.rating,
   reviewCount: v.reviewCount,
-  imageUrl: v.imageUrl,
+  imageUrl: portableMediaUrl(v.imageUrl),
   isFeatured: v.isFeatured,
   isPublished: v.isPublished,
   dealEndsAt: iso(v.dealEndsAt),

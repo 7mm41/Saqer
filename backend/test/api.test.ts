@@ -3,11 +3,14 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, describe, test } from 'node:test';
+import { eq } from 'drizzle-orm';
 import type { FastifyInstance } from 'fastify';
 import { buildApp } from '../src/app.ts';
 import { loadConfig } from '../src/config.ts';
 import { openDatabase, type DatabaseHandle } from '../src/db/client.ts';
+import { users } from '../src/db/schema.ts';
 import { DEMO_MEMBER, seed } from '../src/db/seed.ts';
+import { hashPassword, verifyPassword } from '../src/lib/passwords.ts';
 
 const ADMIN = { email: 'admin@sarena.test', password: 'AdminPass123' };
 
@@ -46,9 +49,12 @@ async function register(name = 'Test Member') {
 }
 
 /** Reads Server-Sent Events from `/v1/live`. */
-async function openLive(token: string) {
+/** The member/admin stream, or the public one (`/v1/live/public`) without a token. */
+async function openLive(token: string | null) {
   const controller = new AbortController();
-  const response = await fetch(`${baseUrl}/v1/live`, { headers: { authorization: `Bearer ${token}` }, signal: controller.signal });
+  const response = await fetch(`${baseUrl}/v1/live${token ? '' : '/public'}`, {
+    headers: token ? { authorization: `Bearer ${token}` } : {}, signal: controller.signal,
+  });
   assert.equal(response.status, 200);
   assert.match(response.headers.get('content-type') ?? '', /text\/event-stream/);
   const reader = response.body!.pipeThrough(new TextDecoderStream()).getReader();
@@ -128,6 +134,46 @@ after(async () => {
   await app.close();
   await database.close();
   rmSync(uploadsDir, { recursive: true, force: true });
+});
+
+describe('configuration', () => {
+  test('blank lines in .env count as not set', () => {
+    const blank = loadConfig({ NODE_ENV: 'development', JWT_SECRET: '', ADMIN_PASSWORD: '', PAYMENTS_MODE: '', PORT: '', PUBLIC_URL: ' ' });
+    assert.ok(blank.jwtSecret.length >= 32);
+    assert.ok(blank.adminPassword.length >= 8);
+    assert.equal(blank.adminPasswordGenerated, true);
+    assert.equal(blank.paymentsMode, 'demo');
+    assert.equal(blank.port, 3000);
+    assert.equal(blank.publicUrl, '');
+    assert.throws(() => loadConfig({ NODE_ENV: 'production', JWT_SECRET: '' }), /JWT_SECRET/);
+  });
+
+  test('ADMIN_PASSWORD recovers the admin, and a blank admin password is replaced', async () => {
+    const db = await openDatabase({ inMemory: true });
+    try {
+      const passwordOf = async () => (await db.db.select().from(users).where(eq(users.email, 'owner@sarena.test')))[0]!.passwordHash;
+      const logs: string[] = [];
+      await seed(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test', ADMIN_PASSWORD: 'FirstPass123' }), () => {});
+      assert.ok(await verifyPassword('FirstPass123', await passwordOf()));
+
+      await seed(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test', ADMIN_PASSWORD: 'NewPass4567' }), () => {});
+      assert.ok(await verifyPassword('NewPass4567', await passwordOf()));
+
+      // Created by an older version from a blank ADMIN_PASSWORD line.
+      await db.db.update(users).set({ passwordHash: await hashPassword('') }).where(eq(users.email, 'owner@sarena.test'));
+      await seed(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test', ADMIN_PASSWORD: '' }), (m) => logs.push(m));
+      const generated = /owner@sarena\.test: (\S+)/.exec(logs.join('\n'))?.[1];
+      assert.ok(generated, logs.join('\n'));
+      assert.ok(await verifyPassword(generated!, await passwordOf()));
+
+      // Without ADMIN_PASSWORD a working password is left alone.
+      logs.length = 0;
+      await seed(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test' }), (m) => logs.push(m));
+      assert.ok(await verifyPassword(generated!, await passwordOf()));
+    } finally {
+      await db.close();
+    }
+  });
 });
 
 describe('public', () => {
@@ -335,6 +381,40 @@ describe('dashboard', () => {
     assert.equal((await call('GET', '/v1/admin/memberships?q=nobody-by-this-name', { token: adminToken })).body.total, 0);
   });
 
+  test('admins create admin and staff accounts', async () => {
+    const created = await call('POST', '/v1/admin/members', {
+      token: adminToken, body: { fullName: 'Second Admin', email: 'Second.Admin@Sarena.test', phone: '', password: 'Welcome2026', role: 'admin' },
+    });
+    assert.equal(created.status, 201, JSON.stringify(created.body));
+    assert.equal(created.body.member.role, 'admin');
+    assert.equal(created.body.member.email, 'second.admin@sarena.test');
+    assert.equal(created.body.member.phone, ''); // none (serialized as empty)
+
+    // The new admin signs in to the dashboard straight away.
+    const token = await signIn('second.admin@sarena.test', 'Welcome2026');
+    assert.equal((await call('GET', '/v1/admin/stats', { token })).status, 200);
+
+    const staff = await call('POST', '/v1/admin/members', {
+      token, body: { fullName: 'Gate Staff', email: 'gate@sarena.test', phone: '9123 9876', password: 'Gate12345', role: 'staff' },
+    });
+    assert.equal(staff.status, 201, JSON.stringify(staff.body));
+    assert.equal(staff.body.member.phone, '91239876');
+
+    const duplicate = await call('POST', '/v1/admin/members', {
+      token, body: { fullName: 'Again', email: 'gate@sarena.test', password: 'Gate12345', role: 'staff' },
+    });
+    assert.equal(duplicate.status, 409);
+    const weak = await call('POST', '/v1/admin/members', {
+      token, body: { fullName: 'Weak', email: 'weak@sarena.test', password: 'short', role: 'admin' },
+    });
+    assert.equal(weak.status, 400);
+    const member = await register();
+    const refused = await call('POST', '/v1/admin/members', {
+      token: member.token, body: { fullName: 'Sneaky', email: 'sneaky@sarena.test', password: 'Sneaky2026', role: 'admin' },
+    });
+    assert.equal(refused.status, 403);
+  });
+
   test('suspending a member signs them out everywhere', async () => {
     const { token, user } = await register();
     const suspended = await call('PATCH', `/v1/admin/members/${user.id}`, { token: adminToken, body: { status: 'suspended' } });
@@ -360,8 +440,9 @@ describe('dashboard', () => {
     });
     assert.equal(upload.status, 201);
     const { url } = (await upload.json()) as { url: string };
-    assert.match(url, /^https:\/\/sarena\.test\/uploads\/.+\.png$/);
-    const served = await fetch(`${baseUrl}${new URL(url).pathname}`);
+    // A path on this server, so it survives a change of address (new tunnel, domain).
+    assert.match(url, /^\/uploads\/.+\.png$/);
+    const served = await fetch(`${baseUrl}${url}`);
     assert.equal(served.status, 200);
 
     const rejected = new FormData();
@@ -411,6 +492,20 @@ describe('dashboard', () => {
     await call('PATCH', `/v1/admin/venues/${venueId}`, { token: adminToken, body: { isPublished: false } });
     assert.equal((await call('GET', `/v1/venues/${venueId}`, { token })).status, 404);
     assert.equal((await call('DELETE', `/v1/admin/venues/${venueId}`, { token: adminToken })).status, 200);
+  });
+
+  test('images saved with a localhost address are served as paths', async () => {
+    const adminToken = await signIn(ADMIN.email, ADMIN.password);
+    const venue = (await call('GET', '/v1/admin/venues', { token: adminToken })).body.venues[0];
+    const saved = await call('PATCH', `/v1/admin/venues/${venue.id}`, {
+      token: adminToken, body: { imageUrl: 'http://localhost:3000/uploads/old-poster.jpg' },
+    });
+    assert.equal(saved.body.venue.imageUrl, '/uploads/old-poster.jpg');
+    const external = await call('PATCH', `/v1/admin/venues/${venue.id}`, {
+      token: adminToken, body: { imageUrl: 'https://cdn.example.com/uploads/poster.jpg' },
+    });
+    assert.equal(external.body.venue.imageUrl, 'https://cdn.example.com/uploads/poster.jpg');
+    await call('PATCH', `/v1/admin/venues/${venue.id}`, { token: adminToken, body: { imageUrl: venue.imageUrl } });
   });
 
   test('staff redeem codes once', async () => {
@@ -492,6 +587,26 @@ describe('live updates', () => {
     } finally {
       await stream.close();
       await dashboard.close();
+    }
+  });
+
+  test('the public stream carries public changes only', async () => {
+    const adminToken = await signIn(ADMIN.email, ADMIN.password);
+    const guest = await openLive(null);
+    try {
+      await guest.next('ready');
+      const venue = (await call('GET', '/v1/admin/venues', { token: adminToken })).body.venues[0];
+      await call('PATCH', `/v1/admin/venues/${venue.id}`, { token: adminToken, body: { isFeatured: !venue.isFeatured } });
+      await guest.next('catalog');
+      const plan = (await call('GET', '/v1/admin/plans', { token: adminToken })).body.plans[0];
+      await call('PATCH', `/v1/admin/plans/${plan.id}`, { token: adminToken, body: { perks: plan.perks } });
+      await guest.next('plans');
+      const member = await register();
+      await call('POST', `/v1/admin/members/${member.user.id}/memberships`, { token: adminToken, body: { planId: plan.id } });
+      await new Promise((r) => setTimeout(r, 150));
+      assert.deepEqual(guest.events.filter((e) => ['membership', 'admin', 'bookings', 'account'].includes(e.event)), []);
+    } finally {
+      await guest.close();
     }
   });
 

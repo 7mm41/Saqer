@@ -55,8 +55,8 @@ struct SeasonalTheme: Codable, Hashable, Sendable, Identifiable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(String.self, forKey: .id)
         name = try c.decode(String.self, forKey: .name)
-        logoURL = (try? c.decodeIfPresent(String.self, forKey: .logoURL)).flatMap { $0.flatMap(URL.init(string:)) }
-        bannerURL = (try? c.decodeIfPresent(String.self, forKey: .bannerURL)).flatMap { $0.flatMap(URL.init(string:)) }
+        logoURL = MediaURL.decode(c, .logoURL, from: decoder)
+        bannerURL = MediaURL.decode(c, .bannerURL, from: decoder)
         greeting = try c.decodeIfPresent(LocalizedText.self, forKey: .greeting)
         accentColor = try c.decodeIfPresent(String.self, forKey: .accentColor)
         iconName = try c.decodeIfPresent(String.self, forKey: .iconName)

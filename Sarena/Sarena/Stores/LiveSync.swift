@@ -10,6 +10,8 @@ import Observation
 ///   catalogue answers 304 when unchanged).
 /// * While in the foreground a Server-Sent Events stream pushes changes as
 ///   they happen; it reconnects with back-off and re-syncs after a gap.
+/// * Signed out (welcome and sign-in screens), a public stream still brings
+///   the seasonal look and plan changes.
 @Observable
 @MainActor
 final class LiveSync {
@@ -43,9 +45,14 @@ final class LiveSync {
         self.sleep = sleep
     }
 
-    /// Re-checks everything the member sees.
+    /// Re-checks everything the member sees (signed out: the public parts).
     func refreshAll() async {
-        guard session.user != nil else { return }
+        guard session.user != nil else {
+            async let plans: Void = membership.reloadPlans()
+            async let look: Void = refreshConfig()
+            _ = await (plans, look)
+            return
+        }
         async let profile: Void = session.refresh()
         async let venues: Void = catalog.reload()
         async let current: Void = membership.refresh()
@@ -59,12 +66,14 @@ final class LiveSync {
         await appConfig?.refresh()
     }
 
-    /// Runs until cancelled (the scene leaves the foreground or the member signs out).
+    /// Runs until cancelled (the scene leaves the foreground, or the member
+    /// signs in or out — the caller then starts the matching stream).
     func run() async {
         guard let live else { return }
+        let signedIn = session.user != nil
         var attempt = 0
         var hasConnected = false
-        while !Task.isCancelled, session.user != nil {
+        while !Task.isCancelled, (session.user != nil) == signedIn {
             do {
                 for try await event in live.connect() {
                     if event == .ready {
@@ -81,7 +90,7 @@ final class LiveSync {
                 // Fall through to the back-off below.
             }
             isConnected = false
-            guard !Task.isCancelled, session.user != nil else { break }
+            guard !Task.isCancelled, (session.user != nil) == signedIn else { break }
             attempt += 1
             // 2 s, 4 s, 8 s ... capped at 60 s.
             let delay = min(60, 1 << min(attempt, 6))
@@ -91,6 +100,15 @@ final class LiveSync {
     }
 
     func handle(_ event: LiveEvent) async {
+        guard session.user != nil else {
+            // Signed out: only the public parts are on screen.
+            switch event {
+            case .config: await appConfig?.refresh()
+            case .plans: await membership.reloadPlans()
+            default: break
+            }
+            return
+        }
         switch event {
         case .ready:
             break

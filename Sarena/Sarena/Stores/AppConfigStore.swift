@@ -22,6 +22,11 @@ final class AppConfigStore {
         dismissedOffer = defaults.string(forKey: Self.dismissedKey)
     }
 
+    /// Forgets the cached look (when the app moves to another server).
+    static func clearCache(defaults: UserDefaults = .standard) {
+        defaults.removeObject(forKey: cacheKey)
+    }
+
     var theme: SeasonalTheme? { config.theme }
     var reminders: ReminderSettings { config.reminders }
 

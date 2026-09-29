@@ -12,8 +12,11 @@ Sarena is an iOS app for exclusive discounts and bookings in Oman. It is for mem
 
 ## Backend: on-device demo or the Sarena API
 
-* **No setup:** when `Info.plist › SarenaAPIBaseURL` is empty, the app runs on an on-device demo backend (`AppServices.mock`).
-* **Real server:** start the API in `../backend` (`npm install && npm start`), then either set `SarenaAPIBaseURL` (for example `https://api.sarena.om`) or add the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000`. Every service then goes through `APIClient`, and the token is kept in the Keychain.
+* **Real server (default):** `Info.plist › SarenaAPIBaseURL` points at the Sarena server (now `https://roll-participated-enable-lions.trycloudflare.com`). Every service goes through `APIClient`, and the token is kept in the Keychain.
+* **Switch server without rebuilding:** in the control panel choose **ربط التطبيق · Connect the app** on the iPhone and tap *Open in the Sarena app*. The app asks, then moves to that server (link `sarena://connect?server=https://…`). Settings › About shows the server and a green dot while live updates flow. Set `SarenaAllowServerLinks` to `NO` for the App Store build.
+* **Local testing:** the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000` wins over both.
+* **No setup:** with `SarenaAPIBaseURL` empty (and no linked server), the app runs on an on-device demo backend (`AppServices.mock`).
+* **Live:** changes made in the control panel reach the open app within about a second (Server-Sent Events): venues and events, prices and tickets, the membership plan and discounts, seasonal looks, memberships and codes. Before sign-in, the welcome and sign-in screens follow the seasonal look the same way.
 * **Live updates:** changes made in the dashboard reach the app without signing out and back in. That includes new events, prices, photos, the membership price, a membership granted by an admin, and a code redeemed at the venue. The app re-checks everything each time it returns to the foreground; ETags keep that cheap. While it is open, it also listens to the server's event stream (`GET /v1/live`, see `Stores/LiveSync.swift`).
 
 ## 🧪 Demo account (testing only)

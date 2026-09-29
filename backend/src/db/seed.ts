@@ -4,7 +4,7 @@ import { count, eq } from 'drizzle-orm';
 import type { Config } from '../config.ts';
 import { memberNumber } from '../lib/codes.ts';
 import { grantMembership } from '../lib/memberships.ts';
-import { hashPassword } from '../lib/passwords.ts';
+import { hashPassword, verifyPassword } from '../lib/passwords.ts';
 import type { Database } from './client.ts';
 import { offers, plans, users, venues, type Category, type Localized } from './schema.ts';
 
@@ -46,8 +46,20 @@ export async function seed(db: Database, config: Config, log: (message: string) 
     log('Seeded the annual membership plan (15 OMR / year).');
   }
 
-  const [admin] = await db.select({ id: users.id }).from(users).where(eq(users.email, config.adminEmail)).limit(1);
-  if (!admin) {
+  const [admin] = await db.select({ id: users.id, passwordHash: users.passwordHash }).from(users)
+    .where(eq(users.email, config.adminEmail)).limit(1);
+  if (admin) {
+    // ADMIN_PASSWORD, when set, is the admin's password (a way back in if it is lost).
+    // An admin created with a blank ADMIN_PASSWORD line (older versions) gets a real one.
+    const blank = !admin.passwordHash || await verifyPassword('', admin.passwordHash);
+    const outdated = !config.adminPasswordGenerated && !(admin.passwordHash && await verifyPassword(config.adminPassword, admin.passwordHash));
+    if (blank || outdated) {
+      await db.update(users).set({ passwordHash: await hashPassword(config.adminPassword) }).where(eq(users.id, admin.id));
+      log(config.adminPasswordGenerated
+        ? `Set a password for the dashboard admin ${config.adminEmail}: ${config.adminPassword}  (set ADMIN_PASSWORD to choose one)`
+        : `Updated the dashboard admin ${config.adminEmail}'s password from ADMIN_PASSWORD.`);
+    }
+  } else {
     await db.insert(users).values({
       fullName: 'Sarena Admin', email: config.adminEmail, phone: null, role: 'admin',
       passwordHash: await hashPassword(config.adminPassword), memberNumber: memberNumber(),

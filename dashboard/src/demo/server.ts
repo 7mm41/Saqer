@@ -366,6 +366,24 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
       .map((u) => ({ ...u, membership: activeMembership(u.id) ? membershipOut(activeMembership(u.id)!) : null }));
     return paginate(rows, query);
   }
+  if (b === 'members' && !c && method === 'POST') {
+    const email = String(body.email ?? '').trim().toLowerCase();
+    const phone = String(body.phone ?? '').replace(/\D/g, '').replace(/^968/, '');
+    if (String(body.fullName ?? '').trim().length < 3) throw bad('fullName: at least 3 characters.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw bad('email: enter a valid email address.');
+    if (phone && !/^[79]\d{7}$/.test(phone)) throw bad('phone: Omani mobile numbers have 8 digits and start with 7 or 9.');
+    const password = String(body.password ?? '');
+    if (password.length < 8 || !/\d/.test(password) || !/\p{L}/u.test(password)) throw bad('password: at least 8 characters with letters and numbers.');
+    if (state.users.some((u) => u.email === email)) throw new ApiError(409, 'email_taken', 'An account with this email already exists.');
+    if (phone && state.users.some((u) => u.phone === phone)) throw new ApiError(409, 'phone_taken', 'An account with this phone number already exists.');
+    const user: User = {
+      id: uid(), fullName: String(body.fullName).trim(), email, phone, role: body.role ?? 'admin', status: 'active',
+      memberNumber: `SRN-${300_000 + state.users.length}`, memberSince: new Date().toISOString(),
+    };
+    state.users.push(user);
+    emitLive('members');
+    return { member: user };
+  }
   if (b === 'members' && c && !d) {
     const user = state.users.find((u) => u.id === c);
     if (!user) throw notFound('Member');

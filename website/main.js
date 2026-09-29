@@ -191,6 +191,16 @@ if (location.protocol === 'file:') {
 
 applyLanguage();
 void refresh();
-// Pick up dashboard changes (a new seasonal look or discount) while the page stays open.
-setInterval(() => { if (document.visibilityState === 'visible') void refresh(); }, 60_000);
+
+// Dashboard changes (a new seasonal look, a price or discount) appear at once:
+// the server pushes them over the public live stream; a slow poll covers
+// networks that block it.
+if (location.protocol !== 'file:' && 'EventSource' in window) {
+  const stream = new EventSource('/v1/live/public');
+  for (const name of ['config', 'plans']) stream.addEventListener(name, () => void refresh());
+  // Reconnected after a drop: something may have changed meanwhile.
+  let connectedBefore = false;
+  stream.addEventListener('ready', () => { if (connectedBefore) void refresh(); connectedBefore = true; });
+}
+setInterval(() => { if (document.visibilityState === 'visible') void refresh(); }, 5 * 60_000);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') void refresh(); });

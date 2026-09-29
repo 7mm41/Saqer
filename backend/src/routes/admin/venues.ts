@@ -129,7 +129,11 @@ export async function venueAdminRoutes(admin: FastifyInstance) {
     return { ok: true };
   });
 
-  /** Image upload (JPEG, PNG or WebP, up to 5 MB) → public URL. */
+  /**
+   * Image upload (JPEG, PNG or WebP, up to 5 MB) → its path on this server.
+   * Relative, so it keeps working when the server's address changes (a new
+   * tunnel, a domain); the app resolves it against the API it talks to.
+   */
   admin.post('/uploads', adminOnly, async (request, reply) => {
     const file = await request.file();
     if (!file) throw new ApiError(400, 'no_file', 'Choose an image to upload.');
@@ -145,6 +149,6 @@ export async function venueAdminRoutes(admin: FastifyInstance) {
       await unlink(target);
       throw new ApiError(413, 'image_too_large', 'Images must be 5 MB or smaller.');
     }
-    return reply.status(201).send({ url: `${config.publicUrl}/uploads/${name}` });
+    return reply.status(201).send({ url: `/uploads/${name}` });
   });
 }

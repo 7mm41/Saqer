@@ -1,6 +1,7 @@
 import Foundation
 
-/// Streams `GET /v1/live` with the member's token.
+/// Streams `GET /v1/live` with the member's token, or `GET /v1/live/public`
+/// (the seasonal look, plans) on the welcome and sign-in screens.
 struct ServerSentEventsClient: LiveUpdatesServicing {
     let client: APIClient
 
@@ -8,7 +9,7 @@ struct ServerSentEventsClient: LiveUpdatesServicing {
         AsyncThrowingStream { continuation in
             let task = Task {
                 do {
-                    var request = client.makeRequest("GET", "live")
+                    var request = client.makeRequest("GET", client.tokens.token == nil ? "live/public" : "live")
                     request.setValue("text/event-stream", forHTTPHeaderField: "Accept")
                     // The server sends a heartbeat every 25 s; anything longer means the link is dead.
                     request.timeoutInterval = 60

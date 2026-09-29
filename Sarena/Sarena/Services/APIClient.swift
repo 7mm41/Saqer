@@ -44,16 +44,49 @@ struct TokenStore: Sendable {
     }
 }
 
+extension CodingUserInfoKey {
+    /// The API's address, so image paths such as `/uploads/poster.jpg` resolve against it.
+    static let apiBaseURL = CodingUserInfoKey(rawValue: "sarena.apiBaseURL")!
+}
+
+/// Image links from the API. Uploaded images arrive as paths on the server
+/// (`/uploads/…`), which keep working when its address changes; links saved
+/// with a machine-local address (`http://localhost:3000/uploads/…`) are moved
+/// to the API's address too, so they load on a phone.
+enum MediaURL {
+    private static let localHosts: Set<String> = ["localhost", "127.0.0.1", "0.0.0.0", "::1"]
+
+    static func resolve(_ raw: String?, base: URL?) -> URL? {
+        guard let raw = raw?.trimmingCharacters(in: .whitespacesAndNewlines), !raw.isEmpty else { return nil }
+        if let url = URL(string: raw), url.scheme != nil {
+            if let base, let host = url.host(), localHosts.contains(host), url.path().hasPrefix("/uploads/") {
+                return URL(string: url.path(), relativeTo: base)?.absoluteURL
+            }
+            return url
+        }
+        guard let base else { return URL(string: raw) }
+        return URL(string: raw, relativeTo: base)?.absoluteURL
+    }
+
+    /// For `init(from:)`: the string under `key`, resolved against the decoder's API address.
+    static func decode<Key: CodingKey>(_ container: KeyedDecodingContainer<Key>, _ key: Key, from decoder: Decoder) -> URL? {
+        resolve((try? container.decodeIfPresent(String.self, forKey: key)) ?? nil, base: decoder.userInfo[.apiBaseURL] as? URL)
+    }
+}
+
 /// Minimal JSON client for the Sarena API (`/v1/...`).
 final class APIClient: Sendable {
     let baseURL: URL
     let tokens: TokenStore
+    /// Like `APIClient.decoder`, and resolves image paths against `baseURL`.
+    let decoder: JSONDecoder
     private let session: URLSession
 
     init(baseURL: URL, tokens: TokenStore = TokenStore(), session: URLSession = .shared) {
         self.baseURL = baseURL
         self.tokens = tokens
         self.session = session
+        self.decoder = Self.makeDecoder(baseURL: baseURL)
     }
 
     // MARK: Requests
@@ -93,7 +126,7 @@ final class APIClient: Sendable {
             throw Self.error(from: data, status: response.statusCode)
         }
         do {
-            return try Self.decoder.decode(Response.self, from: data)
+            return try decoder.decode(Response.self, from: data)
         } catch {
             throw APIError(status: response.statusCode, code: "invalid_response", message: "\(error)")
         }
@@ -133,8 +166,11 @@ final class APIClient: Sendable {
     }
 
     /// ISO-8601 dates, with or without fractional seconds (`2026-09-28T10:00:00.000Z`).
-    static let decoder: JSONDecoder = {
+    static let decoder = makeDecoder(baseURL: nil)
+
+    static func makeDecoder(baseURL: URL?) -> JSONDecoder {
         let decoder = JSONDecoder()
+        if let baseURL { decoder.userInfo[.apiBaseURL] = baseURL }
         decoder.dateDecodingStrategy = .custom { decoder in
             let container = try decoder.singleValueContainer()
             let text = try container.decode(String.self)
@@ -147,7 +183,7 @@ final class APIClient: Sendable {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date: \(text)")
         }
         return decoder
-    }()
+    }
 
     static let encoder: JSONEncoder = {
         let encoder = JSONEncoder()

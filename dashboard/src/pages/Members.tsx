@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { fromOMR, get, patch, post, type Booking, type Membership, type Page, type Plan, type Role, type User } from '../api';
+import { copyText } from '../connect';
 import { useI18n } from '../i18n';
 import { Icon } from '../icons';
 import { useLive } from '../live';
@@ -17,6 +18,7 @@ export function MembersPage() {
   const [status, setStatus] = useState<'' | 'active' | 'suspended'>('');
   const [page, setPage] = useState(1);
   const [openID, setOpenID] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
   const { intent, clearIntent } = useNav();
   const search = useDebounced(query.trim());
 
@@ -35,7 +37,9 @@ export function MembersPage() {
 
   return (
     <>
-      <PageHead title={t('members')} hint={t('membersHint')} />
+      <PageHead title={t('members')} hint={t('membersHint')}>
+        <button className="btn primary" onClick={() => setCreating(true)}><Icon name="userPlus" size={18} />{t('newAccount')}</button>
+      </PageHead>
       <section className="glass card stack">
         <div className="toolbar">
           <SearchField value={query} onChange={(value) => { setQuery(value); setPage(1); }} placeholder={t('searchMembers')} />
@@ -76,7 +80,125 @@ export function MembersPage() {
         {data && <Pager page={data.page} pageSize={data.pageSize} total={data.total} onPage={setPage} />}
       </section>
       {openID && <MemberModal id={openID} onClose={() => setOpenID(null)} />}
+      {creating && <NewAccountModal onClose={() => setCreating(false)} onCreated={() => void reload()} />}
     </>
+  );
+}
+
+/** 12 characters from an unambiguous alphabet, always with letters and digits. */
+function generatePassword() {
+  const letters = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
+  const digits = '23456789';
+  const all = letters + digits;
+  const random = crypto.getRandomValues(new Uint32Array(12));
+  const chars = Array.from(random, (n) => all[n % all.length]!);
+  chars[random[0]! % 12] = digits[random[1]! % digits.length]!;
+  chars[(random[0]! + 5) % 12] = letters[random[2]! % letters.length]!;
+  return chars.join('');
+}
+
+/** Creates an admin, venue staff or member account, then shows its sign-in details once. */
+function NewAccountModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
+  const { t } = useI18n();
+  const toast = useToast();
+  const errorText = useErrorText();
+  const [form, setForm] = useState({ fullName: '', email: '', phone: '', password: generatePassword(), role: 'admin' as Role });
+  const [reveal, setReveal] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [created, setCreated] = useState<{ member: User; password: string } | null>(null);
+  const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) => setForm((current) => ({ ...current, [key]: value }));
+
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    setBusy(true);
+    try {
+      const { member } = await post<{ member: User }>('admin/members', form);
+      setCreated({ member, password: form.password });
+      onCreated();
+    } catch (error) {
+      toast(errorText(error), true);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (created) {
+    // The control panel's home (not the page it is on now).
+    const dashboard = window.location.pathname.startsWith('/admin')
+      ? `${window.location.origin}/admin/` : window.location.href.split('#')[0]!;
+    const details = [
+      `${t('signInDetails')} · Sarena`,
+      `${t('email')}: ${created.member.email}`,
+      `${t('password')}: ${created.password}`,
+      ...(created.member.role === 'member' ? [] : [`${t('tagline')}: ${dashboard}`]),
+    ].join('\n');
+    return (
+      <Modal narrow title={t('accountCreated')} onClose={onClose}>
+        <div className="stack">
+          <div className="person">
+            <span className="avatar">{initials(created.member.fullName)}</span>
+            <div className="person-text">
+              <strong>{created.member.fullName}</strong>
+              <span className="muted small"><RoleBadge role={created.member.role} /></span>
+            </div>
+          </div>
+          <dl className="credentials">
+            <dt>{t('email')}</dt><dd className="ltr">{created.member.email}</dd>
+            <dt>{t('password')}</dt><dd className="ltr num">{created.password}</dd>
+            {created.member.role !== 'member' && <><dt>{t('tagline')}</dt><dd className="ltr">{dashboard}</dd></>}
+          </dl>
+          <div className="notice small"><Icon name="bell" size={18} /><span>{t('passwordOnce')}</span></div>
+          <div className="row">
+            <button type="button" className="btn primary" onClick={async () => toast((await copyText(details)) ? t('copied') : details)}>
+              <Icon name="copy" size={17} />{t('copyDetails')}
+            </button>
+            <button type="button" className="btn" onClick={onClose}>{t('done')}</button>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
+
+  return (
+    <Modal narrow title={t('newAccount')} onClose={onClose}>
+      <form className="stack" onSubmit={(event) => void submit(event)}>
+        <p className="muted small">{t('newAccountHint')}</p>
+        <Field label={t('role')}>
+          <Segmented value={form.role} onChange={(role) => set('role', role)} options={[
+            { value: 'admin', label: t('roleAdmin') }, { value: 'staff', label: t('roleStaff') }, { value: 'member', label: t('roleMember') },
+          ]} />
+        </Field>
+        <Field label={t('fullName')}>
+          <input className="input" required minLength={3} maxLength={120} autoComplete="off" value={form.fullName}
+            onChange={(event) => set('fullName', event.target.value)} />
+        </Field>
+        <Field label={t('email')}>
+          <input className="input ltr" dir="ltr" type="email" required autoComplete="off" value={form.email}
+            onChange={(event) => set('email', event.target.value)} />
+        </Field>
+        <Field label={t('phoneOptional')}>
+          <input className="input ltr num" dir="ltr" inputMode="tel" placeholder="9123 4567" autoComplete="off" value={form.phone}
+            onChange={(event) => set('phone', event.target.value)} />
+        </Field>
+        <Field label={t('password')} hint={t('passwordRule')}>
+          <div className="row nowrap">
+            <input className="input ltr num" dir="ltr" type={reveal ? 'text' : 'password'} required minLength={8} autoComplete="new-password"
+              value={form.password} onChange={(event) => set('password', event.target.value)} />
+            <button type="button" className="icon-btn" title={t('showPassword')} aria-label={t('showPassword')} aria-pressed={reveal}
+              onClick={() => setReveal((on) => !on)}>
+              <Icon name={reveal ? 'eyeOff' : 'eye'} size={16} />
+            </button>
+            <button type="button" className="btn small" onClick={() => { set('password', generatePassword()); setReveal(true); }}>
+              <Icon name="refresh" size={15} />{t('generate')}
+            </button>
+          </div>
+        </Field>
+        <div className="row">
+          <button className="btn primary" disabled={busy}>{busy ? t('loading') : t('createAccount')}</button>
+          <button type="button" className="btn" onClick={onClose}>{t('cancel')}</button>
+        </div>
+      </form>
+    </Modal>
   );
 }
 

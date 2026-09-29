@@ -13,8 +13,10 @@ import { PlanPage } from './pages/Plan';
 import { RedeemPage } from './pages/Redeem';
 import { ThemesPage } from './pages/Themes';
 import { VenuesPage } from './pages/Venues';
+import { ConnectAppModal } from './connect';
 import { CommandPalette } from './search';
 import { Loading, initials, useConfirm, useErrorText } from './ui';
+import { applyAppearance, storedAppearance, type Appearance } from './appearance';
 
 const IS_MAC = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
@@ -34,20 +36,9 @@ function currentRoute(): Route {
 // The demo needs no sign-in.
 if (DEMO && !session.token) session.set('demo');
 
-type Appearance = 'light' | 'dark' | null;
-
 function useAppearance() {
-  const [appearance, setAppearance] = useState<Appearance>(() => {
-    try { return (localStorage.getItem('sarena.admin.appearance') as Appearance) ?? null; } catch { return null; }
-  });
-  useEffect(() => {
-    if (appearance) document.documentElement.dataset.theme = appearance;
-    else delete document.documentElement.dataset.theme;
-    try {
-      if (appearance) localStorage.setItem('sarena.admin.appearance', appearance);
-      else localStorage.removeItem('sarena.admin.appearance');
-    } catch { /* storage blocked */ }
-  }, [appearance]);
+  const [appearance, setAppearance] = useState<Appearance>(storedAppearance);
+  useEffect(() => applyAppearance(appearance), [appearance]);
   const isDark = appearance === 'dark'
     || (appearance === null && typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches);
   return { isDark, toggle: () => setAppearance(isDark ? 'light' : 'dark') };
@@ -89,6 +80,7 @@ function Shell({ user }: { user: User }) {
   const [intent, setIntent] = useState<Intent>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [connectOpen, setConnectOpen] = useState(false);
 
   const navigate = useCallback((next: Route, nextIntent: Intent = null) => {
     setRoute(next);
@@ -190,6 +182,11 @@ function Shell({ user }: { user: User }) {
                 {!IS_DEMO_BUILD && <button type="button" className="btn small ghost" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
               </div>
             )}
+            {!isStaff && (
+              <button type="button" className="nav-item connect-item" onClick={() => { setMenuOpen(false); setConnectOpen(true); }}>
+                <Icon name="phone" />{t('connectApp')}
+              </button>
+            )}
             <div className="user-row">
               <span className="avatar">{initials(user.fullName)}</span>
               <div className="user-text">
@@ -246,6 +243,7 @@ function Shell({ user }: { user: User }) {
         </div>
       </div>
       <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} isStaff={isStaff} />
+      {connectOpen && <ConnectAppModal onClose={() => setConnectOpen(false)} />}
     </NavContext.Provider>
   );
 }

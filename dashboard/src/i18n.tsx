@@ -263,6 +263,31 @@ const STRINGS = {
   noMatches: ['No matches. Try another word.', 'لا توجد نتائج مطابقة. جرّب كلمة أخرى.'],
   recipients: ['Phones reached', 'الهواتف المستلمة'],
   searchCodeOrName: ['Find a code or member', 'ابحث عن كود أو عضو'],
+  // New accounts
+  newAccount: ['New account', 'حساب جديد'],
+  newAccountHint: ['Another admin, venue staff or a member. They sign in with this email and password.', 'مشرف آخر أو موظف مكان أو عضو. يسجّل الدخول بهذا البريد وكلمة المرور.'],
+  fullName: ['Full name', 'الاسم الكامل'],
+  phoneOptional: ['Phone (optional)', 'الهاتف (اختياري)'],
+  passwordRule: ['At least 8 characters, with letters and numbers.', '8 أحرف على الأقل، حروف وأرقام.'],
+  generate: ['Generate', 'توليد'],
+  showPassword: ['Show password', 'إظهار كلمة المرور'],
+  createAccount: ['Create account', 'إنشاء الحساب'],
+  accountCreated: ['Account created', 'تم إنشاء الحساب'],
+  signInDetails: ['Sign-in details', 'بيانات تسجيل الدخول'],
+  copyDetails: ['Copy sign-in details', 'نسخ بيانات الدخول'],
+  copied: ['Copied', 'تم النسخ'],
+  copy: ['Copy', 'نسخ'],
+  passwordOnce: ['The password is shown only now: copy it and send it to them.', 'تظهر كلمة المرور الآن فقط: انسخها وأرسلها لصاحب الحساب.'],
+  done: ['Done', 'تم'],
+  // Connect the app
+  connectApp: ['Connect the app', 'ربط التطبيق'],
+  connectAppTitle: ['Connect the Sarena app to this server', 'ربط تطبيق سرينا بهذا الخادم'],
+  connectAppHint: ['Open this page on the iPhone that has Sarena and tap the button: the app asks, then switches to this server, with no rebuild. From then on every change made here appears in the app instantly.', 'افتح هذه الصفحة على الآيفون المثبّت عليه تطبيق سرينا واضغط الزر: يسألك التطبيق ثم ينتقل إلى هذا الخادم دون إعادة بناء. بعدها يظهر كل تعديل هنا في التطبيق فوراً.'],
+  serverAddress: ['Server address', 'عنوان الخادم'],
+  openInApp: ['Open in the Sarena app', 'فتح في تطبيق سرينا'],
+  connectXcode: ['Or in Xcode:', 'أو في Xcode:'],
+  connectTunnel: ['A trycloudflare.com address changes each time the tunnel restarts: tap the button again after a restart.', 'عنوان trycloudflare.com يتغيّر عند كل إعادة تشغيل للنفق: اضغط الزر مرة أخرى بعد كل إعادة تشغيل.'],
+  connectDemo: ['This demo runs without a server, so the app cannot connect to it. Open the control panel on your server (…/admin/) to connect the app.', 'هذه النسخة التجريبية تعمل بدون خادم، لذلك لا يمكن ربط التطبيق بها. افتح لوحة التحكم من خادمك (…/admin/) لربط التطبيق.'],
 } satisfies Record<string, [string, string]>;
 
 export type StringKey = keyof typeof STRINGS;

@@ -77,7 +77,7 @@ extension Venue: Codable {
         isFeatured = try c.decodeIfPresent(Bool.self, forKey: .isFeatured) ?? false
         dealEndsAt = try c.decodeIfPresent(Date.self, forKey: .dealEndsAt)
         // A malformed or empty image link simply falls back to the artwork.
-        imageURL = (try? c.decodeIfPresent(String.self, forKey: .imageURL)).flatMap { $0.flatMap(URL.init(string:)) }
+        imageURL = MediaURL.decode(c, .imageURL, from: decoder)
         eventStartsAt = try c.decodeIfPresent(Date.self, forKey: .eventStartsAt)
         eventEndsAt = try c.decodeIfPresent(Date.self, forKey: .eventEndsAt)
     }

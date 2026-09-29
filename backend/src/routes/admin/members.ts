@@ -6,7 +6,9 @@ import { bookings, memberships, plans, roles, sessions, users } from '../../db/s
 import { ApiError, errors } from '../../lib/errors.ts';
 import { live } from '../../lib/live.ts';
 import { activeMembership, grantMembership, membershipStatus } from '../../lib/memberships.ts';
-import { pagination, parse, uuidParam } from '../../lib/validation.ts';
+import { memberNumber } from '../../lib/codes.ts';
+import { hashPassword } from '../../lib/passwords.ts';
+import { newPassword, pagination, parse, phoneSchema, uuidParam } from '../../lib/validation.ts';
 import { serializeBooking, serializeMembership, serializeUser } from '../../serializers.ts';
 
 export async function memberAdminRoutes(admin: FastifyInstance) {
@@ -38,6 +40,37 @@ export async function memberAdminRoutes(admin: FastifyInstance) {
       };
     }));
     return { items, total: total?.n ?? 0, page: query.page, pageSize: query.pageSize };
+  });
+
+  /** A new account made from the dashboard: another admin, venue staff, or a member. */
+  admin.post('/members', adminOnly, async (request, reply) => {
+    const body = parse(z.object({
+      fullName: z.string().trim().min(3).max(120),
+      email: z.email().transform((v) => v.trim().toLowerCase()),
+      phone: z.union([z.literal(''), z.null(), phoneSchema]).optional().transform((v) => v || null),
+      password: newPassword,
+      role: z.enum(roles),
+    }), request.body);
+    const [emailOwner] = await db.select({ id: users.id }).from(users).where(eq(users.email, body.email)).limit(1);
+    if (emailOwner) throw errors.emailTaken();
+    if (body.phone) {
+      const [phoneOwner] = await db.select({ id: users.id }).from(users).where(eq(users.phone, body.phone)).limit(1);
+      if (phoneOwner) throw errors.phoneTaken();
+    }
+    const passwordHash = await hashPassword(body.password);
+    let user: typeof users.$inferSelect | undefined;
+    for (let attempt = 0; attempt < 5 && !user; attempt++) {
+      try {
+        [user] = await db.insert(users).values({
+          fullName: body.fullName, email: body.email, phone: body.phone, role: body.role, passwordHash, memberNumber: memberNumber(),
+        }).returning();
+      } catch (error) {
+        if (!String(error).includes('member_number')) throw error; // retry only a member-number collision
+      }
+    }
+    if (!user) throw new ApiError(500, 'server_error', 'Could not create the account.');
+    admin.live.publish(live.admin('members'));
+    return reply.status(201).send({ member: serializeUser(user) });
   });
 
   admin.get('/members/:id', adminOnly, async (request) => {

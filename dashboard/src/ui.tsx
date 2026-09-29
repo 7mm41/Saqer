@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { ApiError, upload, type Category, type Localized } from './api';
 import { useI18n, type StringKey } from './i18n';
 import { Icon, type IconName } from './icons';
@@ -330,7 +331,8 @@ export function Modal({ title, onClose, children, narrow }: { title: string; onC
     document.body.style.overflow = 'hidden';
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = overflow; };
   }, [onClose]);
-  return (
+  // On <body>, so an animated or blurred page around it can never clip or offset it.
+  return createPortal(
     <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <div className={`glass modal${narrow ? ' narrow' : ''}`} role="dialog" aria-modal="true" aria-label={title}>
         <div className="row between" style={{ marginBottom: 18 }}>
@@ -339,7 +341,8 @@ export function Modal({ title, onClose, children, narrow }: { title: string; onC
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

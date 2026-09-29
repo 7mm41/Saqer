@@ -16,13 +16,13 @@ extension AppServices {
         )
     }
 
-    /// Info.plist › `SarenaAPIBaseURL` selects the API; empty keeps the
-    /// on-device demo backend. `SARENA_API_BASE_URL` in the scheme's
-    /// environment overrides it for local testing (e.g. `http://localhost:3000`).
-    static func configured(bundle: Bundle = .main, environment: [String: String] = ProcessInfo.processInfo.environment) -> AppServices {
-        let value = environment["SARENA_API_BASE_URL"] ?? bundle.object(forInfoDictionaryKey: "SarenaAPIBaseURL") as? String ?? ""
-        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty, let url = URL(string: trimmed), url.scheme?.hasPrefix("http") == true else {
+    /// The API at `ServerAddress.current`, or the on-device demo backend when none is set.
+    static func configured(
+        bundle: Bundle = .main,
+        environment: [String: String] = ProcessInfo.processInfo.environment,
+        defaults: UserDefaults = .standard
+    ) -> AppServices {
+        guard let url = ServerAddress.current(bundle: bundle, environment: environment, defaults: defaults) else {
             return .mock
         }
         return .api(baseURL: url)

@@ -6,7 +6,7 @@ The control panel for Sarena, styled like the app (Sarena orange, Arabic first w
 | --- | --- |
 | نظرة عامة · Overview | Live numbers: members, active memberships, revenue, bookings, redemptions, member savings, memberships ending soon, 30-day sign-ups, top venues |
 | الأماكن والفعاليات · Venues & events | Search by name or area, filter by category or published/draft. Add or edit venues and events: photo upload, description, dates, map position, featured and published flags, **ticket options** (original vs member price, remaining). Publishing a new one notifies members automatically |
-| الأعضاء · Members | Search. Grant or extend a membership (gift, partner, cash sale), suspend or reactivate an account, give **venue staff** access, see a member's codes, send one member a notification |
+| الأعضاء · Members | Search. **Create accounts**: another admin, venue staff or a member, with a generated password and sign-in details ready to copy. Grant or extend a membership (gift, partner, cash sale), suspend or reactivate an account, give **venue staff** access, see a member's codes, send one member a notification |
 | الاشتراكات · Memberships | Every membership: active, expired or cancelled, searchable by member name, number, email or phone |
 | العضوية والخصومات · Membership & discounts | The single annual plan (15 OMR): name, price, perks. Also a **limited-time discount** (for example, National Day at 12 OMR) with dates, and a live preview of the app card |
 | المظهر الموسمي · Seasonal looks | For National Day, Ramadan, Eid and other occasions: the in-app logo, greeting, banner and colour, plus the bundled home-screen icon the app offers members, all on a schedule |
@@ -16,6 +16,8 @@ The control panel for Sarena, styled like the app (Sarena orange, Arabic first w
 **Search everything** from the top bar, or press <kbd>Ctrl</kbd> <kbd>K</kbd> (<kbd>⌘</kbd> <kbd>K</kbd> on a Mac) or <kbd>/</kbd>: pages, venues and events, members (name, phone, member number) and booking codes. Picking a result opens it directly.
 
 **Layout.** The menu sits on the right (the left in English). On tablets and phones it becomes a drawer that slides in from that side, from the menu button at the top. Text uses IBM Plex Sans Arabic, and all figures use Western digits (1,769.100 ر.ع.) so they line up in tables.
+
+**Connect the app** (bottom of the menu) points the iPhone app at this server: open the control panel on the iPhone and tap *Open in the Sarena app*.
 
 Every page updates **live**. The dashboard listens to the API's event stream (`/v1/live`), so new members, bookings and redemptions appear without refreshing. Changes made here reach open apps immediately.
 

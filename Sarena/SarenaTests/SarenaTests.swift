@@ -514,14 +514,80 @@ final class LiveSyncTests: XCTestCase {
         XCTAssertFalse(sync.isConnected)
     }
 
-    func testDoesNotConnectWhenSignedOut() async {
+    func testSignedOutFollowsPublicChangesOnly() async throws {
         let stores = await makeStores()
         stores.session.endSession()
-        let live = ScriptedLiveUpdates([[.ready]])
+        let theme = SeasonalTheme(id: "nd", name: "National Day 2026")
+        let appConfig = AppConfigStore(service: MockAppConfigService(config: AppConfig(theme: theme, reminders: .standard, links: .init())),
+                                       defaults: Fixtures.defaults())
+        XCTAssertNil(appConfig.theme)
+        // A membership granted meanwhile must not be fetched for a signed-out screen.
+        _ = try await stores.membershipService.subscribe(to: .annual, for: Fixtures.newMember)
+        let live = ScriptedLiveUpdates([[.ready, .config, .membership, .bookings]])
         let sync = LiveSync(live: live, session: stores.session, catalog: stores.catalog,
-                            membership: stores.membership, wallet: stores.wallet, sleep: { _ in })
+                            membership: stores.membership, wallet: stores.wallet, appConfig: appConfig,
+                            sleep: { _ in throw CancellationError() })
         await sync.run()
-        XCTAssertEqual(live.connections, 0)
+        XCTAssertEqual(live.connections, 1)
+        XCTAssertEqual(appConfig.theme?.id, "nd")
+        XCTAssertFalse(stores.membership.isActive)
+    }
+}
+
+// MARK: - Server address & images
+
+final class ServerAddressTests: XCTestCase {
+    func testNormalizesWhateverIsPasted() {
+        XCTAssertEqual(ServerAddress.normalized("roll-participated-enable-lions.trycloudflare.com")?.absoluteString,
+                       "https://roll-participated-enable-lions.trycloudflare.com")
+        XCTAssertEqual(ServerAddress.normalized(" https://Sarena.om/admin/#/venues ")?.absoluteString, "https://sarena.om")
+        XCTAssertEqual(ServerAddress.normalized("http://192.168.1.20:3000/")?.absoluteString, "http://192.168.1.20:3000")
+        XCTAssertNil(ServerAddress.normalized("ftp://sarena.om"))
+        XCTAssertNil(ServerAddress.normalized("   "))
+    }
+
+    func testReadsOnlyConnectLinks() {
+        let link = URL(string: "sarena://connect?server=https%3A%2F%2Fnew-tunnel.trycloudflare.com%2Fadmin%2F")!
+        XCTAssertEqual(ServerAddress.fromConnectLink(link)?.absoluteString, "https://new-tunnel.trycloudflare.com")
+        XCTAssertNil(ServerAddress.fromConnectLink(URL(string: "sarena://redeem?code=SRN-AB12-CD34")!))
+        XCTAssertNil(ServerAddress.fromConnectLink(URL(string: "https://connect?server=https://evil.example")!))
+        XCTAssertNil(ServerAddress.fromConnectLink(URL(string: "sarena://connect?server=javascript:alert(1)")!))
+    }
+
+    func testTheSchemeThenTheLinkedServerThenInfoPlist() {
+        // The test bundle has no SarenaAPIBaseURL (the app's Info.plist does).
+        let bundle = Bundle(for: ServerAddressTests.self)
+        let defaults = Fixtures.defaults()
+        XCTAssertNil(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults))
+        ServerAddress.save(URL(string: "https://linked.example"), defaults: defaults)
+        XCTAssertEqual(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults)?.absoluteString, "https://linked.example")
+        XCTAssertEqual(ServerAddress.current(bundle: bundle, environment: ["SARENA_API_BASE_URL": "http://localhost:3000"], defaults: defaults)?
+            .absoluteString, "http://localhost:3000")
+        ServerAddress.save(nil, defaults: defaults)
+        XCTAssertNil(ServerAddress.current(bundle: bundle, environment: [:], defaults: defaults))
+    }
+}
+
+final class MediaURLTests: XCTestCase {
+    func testUploadedImagesLoadFromTheServerInUse() throws {
+        let base = URL(string: "https://tunnel.example")!
+        XCTAssertEqual(MediaURL.resolve("/uploads/a.jpg", base: base)?.absoluteString, "https://tunnel.example/uploads/a.jpg")
+        XCTAssertEqual(MediaURL.resolve("http://localhost:3000/uploads/a.jpg", base: base)?.absoluteString, "https://tunnel.example/uploads/a.jpg")
+        XCTAssertEqual(MediaURL.resolve("https://cdn.example/uploads/p.jpg", base: base)?.absoluteString, "https://cdn.example/uploads/p.jpg")
+        XCTAssertNil(MediaURL.resolve("  ", base: base))
+
+        let json = #"""
+        {"theme":{"id":"t1","name":"Eid","logoUrl":"/uploads/eid.png","bannerUrl":"http://localhost:3000/uploads/banner.jpg",
+          "greeting":null,"accentColor":null,"iconName":null,"startsAt":null,"endsAt":null,"isEnabled":true},
+         "reminders":{"morningHour":8,"hoursBefore":5,"finalReminderMinutes":60},
+         "links":{"appStoreUrl":"","googlePlayUrl":"","whatsapp":"","email":"","instagram":""},"timeZone":"Asia/Muscat"}
+        """#
+        let config = try APIClient.makeDecoder(baseURL: base).decode(AppConfig.self, from: Data(json.utf8))
+        XCTAssertEqual(config.theme?.logoURL?.absoluteString, "https://tunnel.example/uploads/eid.png")
+        XCTAssertEqual(config.theme?.bannerURL?.absoluteString, "https://tunnel.example/uploads/banner.jpg")
+        // Cached copies keep the full address.
+        let cached = try JSONDecoder().decode(AppConfig.self, from: JSONEncoder().encode(config))
+        XCTAssertEqual(cached.theme?.logoURL, config.theme?.logoURL)
     }
 }
 

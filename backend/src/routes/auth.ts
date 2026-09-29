@@ -3,12 +3,12 @@ import type { FastifyInstance, FastifyRequest, RouteShorthandOptions } from 'fas
 import { z } from 'zod';
 import { requireAuthContext } from '../auth.ts';
 import { otpCodes, sessions, users, type User } from '../db/schema.ts';
-import { hashOtp, isOmaniMobile, memberNumber, normalizePhone, otpCode } from '../lib/codes.ts';
+import { hashOtp, memberNumber, normalizePhone, otpCode } from '../lib/codes.ts';
 import { ApiError, errors } from '../lib/errors.ts';
 import { activeMembership } from '../lib/memberships.ts';
 import { live } from '../lib/live.ts';
 import { hashPassword, verifyPassword } from '../lib/passwords.ts';
-import { parse } from '../lib/validation.ts';
+import { newPassword as password, parse, phoneSchema } from '../lib/validation.ts';
 import { serializeMembership, serializeUser } from '../serializers.ts';
 
 export const DEMO_PHONE = '91234567';
@@ -17,8 +17,6 @@ const OTP_TTL_MS = 5 * 60_000;
 const OTP_RESEND_MS = 30_000;
 const OTP_MAX_ATTEMPTS = 5;
 
-const phoneSchema = z.string().transform(normalizePhone).refine(isOmaniMobile, 'Omani mobile numbers have 8 digits and start with 7 or 9.');
-const password = z.string().min(8).max(200).refine((v) => /[a-zA-Z\p{L}]/u.test(v) && /\d/.test(v), 'Use letters and numbers.');
 
 export async function authRoutes(api: FastifyInstance, limit: RouteShorthandOptions['config']) {
   const { db, tokens, config } = api;

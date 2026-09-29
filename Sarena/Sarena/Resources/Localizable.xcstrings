@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@\nYou will sign in again on this server." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@\nستحتاج إلى تسجيل الدخول من جديد على هذا الخادم."
+          }
+        }
+      }
+    },
     "%@ / year · every venue, all year" : {
       "localizations" : {
         "ar" : {
@@ -371,6 +381,26 @@
         }
       }
     },
+    "Connect" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ربط"
+          }
+        }
+      }
+    },
+    "Connect Sarena to this server?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ربط سرينا بهذا الخادم؟"
+          }
+        }
+      }
+    },
     "Continue" : {
       "localizations" : {
         "ar" : {
@@ -517,6 +547,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هل تريد حذف حسابك في سرينا؟"
+          }
+        }
+      }
+    },
+    "Demo (on this device)" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تجريبي (على هذا الجهاز)"
           }
         }
       }
@@ -967,6 +1007,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "فاتح"
+          }
+        }
+      }
+    },
+    "Live" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متصل مباشرة"
           }
         }
       }
@@ -1541,6 +1591,16 @@
         }
       }
     },
+    "Reconnecting" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ إعادة الاتصال"
+          }
+        }
+      }
+    },
     "Redeemed" : {
       "localizations" : {
         "ar" : {
@@ -1687,6 +1747,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "إرسال الرمز"
+          }
+        }
+      }
+    },
+    "Server" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الخادم"
           }
         }
       }

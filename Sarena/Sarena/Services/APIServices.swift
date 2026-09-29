@@ -120,7 +120,7 @@ actor APICatalogService: CatalogServicing {
         guard (200..<300).contains(response.statusCode) else {
             throw APIClient.error(from: data, status: response.statusCode)
         }
-        let venues = try APIClient.decoder.decode(Response.self, from: data).venues
+        let venues = try client.decoder.decode(Response.self, from: data).venues
         if let etag = response.value(forHTTPHeaderField: "ETag") {
             cached = (etag, venues)
         }
@@ -150,7 +150,7 @@ actor APIAppConfigService: AppConfigServicing {
         guard (200..<300).contains(response.statusCode) else {
             throw APIClient.error(from: data, status: response.statusCode)
         }
-        let config = try APIClient.decoder.decode(AppConfig.self, from: data)
+        let config = try client.decoder.decode(AppConfig.self, from: data)
         if let etag = response.value(forHTTPHeaderField: "ETag") {
             cached = (etag, config)
         }

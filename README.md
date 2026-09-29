@@ -26,7 +26,11 @@ cd dashboard && npm install && npm run build && cd ..
 cd backend && npm install && npm start      # http://localhost:3000  (website)  ·  /admin/  (control panel)
 ```
 
-The API prints the admin password on first start (or set `ADMIN_EMAIL` / `ADMIN_PASSWORD`). A demo member is seeded: `demo@sarena.om` / `Sarena2026`, or +968 9123 4567 with SMS code `123456`. In Xcode, set the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000` to point the app at it.
+**Sign in to the control panel** with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `backend/.env`. Setting `ADMIN_PASSWORD` also resets the admin's password on the next start, which gets you back in if it is lost. Without it, the server prints a password when it first creates the admin. More admins and venue staff: *Members › New account*. A demo member is seeded: `demo@sarena.om` / `Sarena2026`, or +968 9123 4567 with SMS code `123456`.
+
+**Connect the iPhone app:** open the control panel on the iPhone, choose *Connect the app* and tap *Open in the Sarena app*. For local testing in Xcode, set the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000`.
+
+**Share it from your Mac:** `cloudflared tunnel --url http://localhost:3000` prints a public `https://….trycloudflare.com` address for the website, the control panel (`/admin/`) and the app. That address changes whenever the tunnel restarts: tap *Connect the app* again afterwards, or use a named Cloudflare tunnel on your own domain for a permanent address.
 
 ## Deploy
 

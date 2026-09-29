@@ -32,6 +32,7 @@
 		45867CB6DE70CA350EA4B4BFEC727C27 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A14A7F64C4792F846D0929387CB2901 /* SettingsView.swift */; };
 		47D80A2E491D39F6D276440C3C861322 /* PromoCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB9EC3BDA2B826CC3AE5AABD55D4047 /* PromoCode.swift */; };
 		58EA6AB2A3DF5EFAC3EC9A9146FC4276 /* AppServices+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199756A7E00C9626BE7F563381BB75A8 /* AppServices+API.swift */; };
+		9862EEEC248F4DE8B1BADBEFFC52AA5C /* ServerAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB5954BAD2E4A0287AFD5B861E535CC /* ServerAddress.swift */; };
 		59E8FA5F678FEEC3170CE70E8F87BAF8 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F9DD3563421F8FA52F0C9DF5193E5674 /* InfoPlist.xcstrings */; };
 		5B2A4A9106ACD14E7906CF826C9DE803 /* FloatingGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBBD830441527D1D96F13DF7E36CD4F /* FloatingGlass.swift */; };
 		5E089ADEB4B9E838260648A9982264FD /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC586F54582D75CA5870F7732E45DB3 /* Venue.swift */; };
@@ -97,6 +98,7 @@
 		0AF99FC1CFC9C8C4985B8EE846556FAB /* AccountComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AccountComponents.swift; sourceTree = "<group>"; };
 		145F805759E3872526FC8A9FB8E022B6 /* SarenaApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SarenaApp.swift; sourceTree = "<group>"; };
 		199756A7E00C9626BE7F563381BB75A8 /* AppServices+API.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AppServices+API.swift"; sourceTree = "<group>"; };
+		ECB5954BAD2E4A0287AFD5B861E535CC /* ServerAddress.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ServerAddress.swift; sourceTree = "<group>"; };
 		1D553516829729791F16CEDC500C7ACD /* LiveUpdatesClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveUpdatesClient.swift; sourceTree = "<group>"; };
 		206C6DC2FCFEA7CCEFD6317792E6A862 /* OfferCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OfferCategory.swift; sourceTree = "<group>"; };
 		20E7DAFCAEB46326AE0FAD3E0CE722E4 /* LanguageTransitionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LanguageTransitionView.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				A31E85585A883B68600D01CC18EEDA33 /* APIServices.swift */,
 				2A813FF23E5EFB6C83CC0786F8C19768 /* AppConfigService.swift */,
 				199756A7E00C9626BE7F563381BB75A8 /* AppServices+API.swift */,
+				ECB5954BAD2E4A0287AFD5B861E535CC /* ServerAddress.swift */,
 				4BD61190CFDBBC4ED722DB2F51CD47E9 /* AppServices.swift */,
 				7725B955B3BAAEBB2A25F36074AEBDEA /* AuthService.swift */,
 				98DD625F8139DAE7DD637A81E4223C9B /* BookingService.swift */,
@@ -576,6 +579,7 @@
 				F16FF92600BE34D260CF05F5815EFF0A /* APIServices.swift in Sources */,
 				72DCAE2CC631AB09B0CF4B338E9F9746 /* AppConfigService.swift in Sources */,
 				58EA6AB2A3DF5EFAC3EC9A9146FC4276 /* AppServices+API.swift in Sources */,
+				9862EEEC248F4DE8B1BADBEFFC52AA5C /* ServerAddress.swift in Sources */,
 				B81EEB0CF86029E530BFACAF774A03E3 /* AppServices.swift in Sources */,
 				9DE77DC27211216B83B40CE507536468 /* AuthService.swift in Sources */,
 				88ED597CB1E4EB4384CC124B2CE1AFA6 /* BookingService.swift in Sources */,

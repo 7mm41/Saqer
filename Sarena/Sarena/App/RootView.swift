@@ -29,7 +29,8 @@ struct RootView: View {
         let authorized: Bool
     }
 
-    /// Live updates run while a member is signed in and the app is on screen.
+    /// Live updates run while the app is on screen: the member's stream when
+    /// signed in, the public one (seasonal look, plans) before that.
     private struct SyncKey: Equatable {
         let userID: User.ID?
         let isForeground: Bool
@@ -96,13 +97,17 @@ struct RootView: View {
         // Dashboard changes appear by themselves: re-sync on every return to
         // the foreground, then listen for pushed updates while on screen.
         .task(id: SyncKey(userID: session.user?.id, isForeground: scenePhase != .background, isReady: launchFinished)) {
-            guard launchFinished, let userID = session.user?.id, scenePhase != .background else { return }
-            if syncedUserID == userID {
-                await liveSync.refreshAll()
+            guard launchFinished, scenePhase != .background else { return }
+            if let userID = session.user?.id {
+                if syncedUserID == userID {
+                    await liveSync.refreshAll()
+                } else {
+                    syncedUserID = userID
+                }
+                await notifications.refreshAuthorization()
             } else {
-                syncedUserID = userID
+                await liveSync.refreshAll()
             }
-            await notifications.refreshAuthorization()
             await liveSync.run()
         }
         .task(id: ReminderKey(codes: wallet.codes, settings: appConfig.reminders,
