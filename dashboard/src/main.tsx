@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { DEMO } from './api';
 import { I18nProvider } from './i18n';
 import { ToastProvider } from './ui';
 import './styles.css';
@@ -16,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
 );
 
 // Installable (Add to Home Screen / Install app) and opens instantly.
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+if ('serviceWorker' in navigator && import.meta.env.PROD && !DEMO) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' }).catch(() => {});
   });

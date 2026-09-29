@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { get, patch, post, type Audience, type Localized, type Notification, type NotificationSettings, type Page, type Venue } from '../api';
+import appIcon from '../assets/icons/app.png';
 import { useI18n, type StringKey } from '../i18n';
 import { useLive } from '../live';
 import {
@@ -122,7 +123,7 @@ function Composer({ onSent }: { onSent: () => void }) {
       </div>
       {/* What it looks like on the lock screen. */}
       <div className="phone-preview">
-        <img src="/admin/icons/icon-192.png" alt="" />
+        <img src={appIcon} alt="" />
         <div>
           <strong>{(lang === 'ar' ? title.ar || title.en : title.en || title.ar) || t('title')}</strong>
           <div className="small">{(lang === 'ar' ? body.ar || body.en : body.en || body.ar) || t('message')}</div>

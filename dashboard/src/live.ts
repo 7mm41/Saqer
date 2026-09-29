@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { session } from './api';
+import { DEMO, session } from './api';
 
 export type AdminTopic = 'members' | 'memberships' | 'bookings' | 'catalog' | 'plans' | 'themes' | 'notifications';
 type Listener = (topic: AdminTopic) => void;
@@ -64,7 +64,14 @@ function emit(topic: AdminTopic) {
   listeners.forEach((listener) => listener(topic));
 }
 
+/** Used by the in-browser demo server: its changes refresh pages like the real stream does. */
+export const emitLive = emit;
+
 export function startLive() {
+  if (DEMO) {
+    setConnected(true);
+    return;
+  }
   controller?.abort();
   controller = new AbortController();
   void run(controller.signal);

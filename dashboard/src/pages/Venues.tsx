@@ -132,7 +132,7 @@ function VenueEditor({ initial, onClose, onSaved }: { initial: VenueDraft; onClo
             </select>
           </Field>
           <Field label={t('linkName')}>
-            <input className="input ltr" dir="ltr" required pattern="[a-z0-9-]{3,60}" placeholder="muscat-nights-2026" value={venue.slug}
+            <input className="input ltr" dir="ltr" required pattern="[a-z0-9\-]{3,60}" placeholder="muscat-nights-2026" value={venue.slug}
               onChange={(event) => set('slug', event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))} />
           </Field>
         </div>

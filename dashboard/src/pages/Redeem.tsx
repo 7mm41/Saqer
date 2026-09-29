@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { ApiError, get, post, type Booking, type Localized, type Page } from '../api';
+import { ApiError, DEMO, get, post, type Booking, type Localized, type Page } from '../api';
 import { useI18n } from '../i18n';
 import { useLive } from '../live';
 import { Empty, Loading, PageHead, StatusBadge, useErrorText, useLoad } from '../ui';
@@ -29,7 +29,12 @@ export function RedeemPage() {
   const [scanning, setScanning] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
   const { data: recent, reload } = useLoad(() => get<Page<Booking>>('admin/bookings?status=used&pageSize=8'), []);
-  useLive(['bookings'], () => void reload());
+  const [samples, setSamples] = useState<string[]>([]);
+  const loadSamples = () => {
+    if (DEMO) void import('../demo/server').then(({ demoCodes }) => setSamples(demoCodes()));
+  };
+  useEffect(loadSamples, []);
+  useLive(['bookings'], () => { void reload(); loadSamples(); });
 
   const redeem = async (value: string) => {
     const normalized = extractCode(value);
@@ -101,6 +106,14 @@ export function RedeemPage() {
             )}
           </div>
           {scanning && <video ref={video} className="scanner" muted playsInline />}
+          {DEMO && samples.length > 0 && (
+            <div className="row small">
+              <span className="muted">{t('demoCodes')}:</span>
+              {samples.map((sample) => (
+                <button key={sample} type="button" className="badge orange ltr" style={{ cursor: 'pointer' }} onClick={() => setCode(sample)}>{sample}</button>
+              ))}
+            </div>
+          )}
           {result && (result.ok ? (
             <div className="result ok">
               <span className="big" aria-hidden>✅</span>

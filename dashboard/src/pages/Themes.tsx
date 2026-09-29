@@ -1,13 +1,18 @@
 import { useState, type FormEvent } from 'react';
 import { THEME_ICONS, del, get, patch, post, type Localized, type Theme, type ThemeIcon } from '../api';
+import appIcon from '../assets/icons/app.png';
+import eidIcon from '../assets/icons/season-eid.png';
+import nationalDayIcon from '../assets/icons/season-nationalday.png';
+import ramadanIcon from '../assets/icons/season-ramadan.png';
+import logo from '../assets/logo.png';
 import { useI18n, type StringKey } from '../i18n';
 import { useLive } from '../live';
 import { DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, Modal, PageHead, Toggle, useErrorText, useLoad, useToast } from '../ui';
 
 const ICONS: Record<ThemeIcon, { label: StringKey; preview: string; accent: string }> = {
-  'AppIcon-NationalDay': { label: 'iconNationalDay', preview: '/admin/icons/season-nationalday.png', accent: '#C8102E' },
-  'AppIcon-Ramadan': { label: 'iconRamadan', preview: '/admin/icons/season-ramadan.png', accent: '#2B2470' },
-  'AppIcon-Eid': { label: 'iconEid', preview: '/admin/icons/season-eid.png', accent: '#0E7C66' },
+  'AppIcon-NationalDay': { label: 'iconNationalDay', preview: nationalDayIcon, accent: '#C8102E' },
+  'AppIcon-Ramadan': { label: 'iconRamadan', preview: ramadanIcon, accent: '#2B2470' },
+  'AppIcon-Eid': { label: 'iconEid', preview: eidIcon, accent: '#0E7C66' },
 };
 
 type Draft = Omit<Theme, 'id'> & { id?: string };
@@ -44,7 +49,7 @@ export function ThemesPage() {
               <button key={theme.id} type="button" className="glass card stack" style={{ textAlign: 'start', cursor: 'pointer', font: 'inherit', color: 'inherit' }}
                 onClick={() => setEditing({ ...theme })}>
                 <div className="theme-preview" style={{ background: `linear-gradient(135deg, ${theme.accentColor ?? '#FF7900'}, #1B1420)` }}>
-                  <img src={theme.logoUrl ?? '/admin/logo.png'} alt="" />
+                  <img src={theme.logoUrl ?? logo} alt="" />
                   <strong>{L(theme.greeting) || theme.name}</strong>
                 </div>
                 <div className="row between">
@@ -98,7 +103,7 @@ function ThemeEditor({ initial, onClose, onSaved }: { initial: Draft; onClose: (
     <Modal title={theme.id ? theme.name : t('newTheme')} onClose={onClose}>
       <form className="stack" onSubmit={(event) => void save(event)}>
         <div className="theme-preview" style={{ background: `linear-gradient(135deg, ${theme.accentColor ?? '#FF7900'}, #1B1420)` }}>
-          <img src={theme.logoUrl ?? '/admin/logo.png'} alt="" />
+          <img src={theme.logoUrl ?? logo} alt="" />
           <strong style={{ fontSize: 18 }}>{L(greeting) || theme.name}</strong>
         </div>
         <div className="pair">
@@ -119,7 +124,7 @@ function ThemeEditor({ initial, onClose, onSaved }: { initial: Draft; onClose: (
           <span>{t('homeIcon')}</span>
           <div className="icon-choice">
             <button type="button" className={theme.iconName === null ? 'on' : ''} onClick={() => set('iconName', null)}>
-              <img src="/admin/icons/icon-192.png" alt="" />{t('noIcon')}
+              <img src={appIcon} alt="" />{t('noIcon')}
             </button>
             {THEME_ICONS.map((icon) => (
               <button key={icon} type="button" className={theme.iconName === icon ? 'on' : ''}

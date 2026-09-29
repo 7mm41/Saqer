@@ -223,6 +223,16 @@ const STRINGS = {
   codeNotFound: ['No booking has this code.', 'لا يوجد حجز بهذا الكود.'],
   recentRedemptions: ['Recent codes', 'آخر الأكواد'],
   quantity: ['Qty', 'العدد'],
+  // Demo mode
+  demoBadge: ['Demo · no server', 'نسخة تجريبية · بدون خادم'],
+  demoHint: ['Sample data, saved on this device only. Every change works — try adding an event, a discount or a seasonal look.', 'بيانات تجريبية محفوظة على هذا الجهاز فقط. كل التعديلات تعمل — جرّب إضافة فعالية أو خصم أو مظهر موسمي.'],
+  demoLive: ['Simulated live activity', 'نشاط مباشر تجريبي'],
+  tryDemo: ['Try without a server', 'تجربة بدون خادم'],
+  enterDemo: ['Open the demo', 'دخول النسخة التجريبية'],
+  resetDemo: ['Reset sample data', 'إعادة البيانات التجريبية'],
+  resetDemoConfirm: ['Erase your changes and start again with fresh sample data?', 'حذف تعديلاتك والبدء من جديد ببيانات تجريبية جديدة؟'],
+  exitDemo: ['Back to the real dashboard', 'العودة إلى اللوحة الحقيقية'],
+  demoCodes: ['Codes to try', 'أكواد للتجربة'],
 } satisfies Record<string, [string, string]>;
 
 export type StringKey = keyof typeof STRINGS;

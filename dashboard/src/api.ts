@@ -70,6 +70,25 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * Demo mode: the whole API runs inside the browser with sample data kept on
+ * this device (src/demo/server.ts) — no server needed. On in the demo build
+ * (`npm run build:demo`), or from the "Try without a server" button.
+ */
+const DEMO_KEY = 'sarena.admin.demo.on';
+export const IS_DEMO_BUILD = import.meta.env.VITE_DEMO === '1';
+export const DEMO = IS_DEMO_BUILD || (() => {
+  try { return localStorage.getItem(DEMO_KEY) === '1'; } catch { return false; }
+})();
+
+export function setDemo(on: boolean) {
+  try {
+    if (on) localStorage.setItem(DEMO_KEY, '1'); else localStorage.removeItem(DEMO_KEY);
+    localStorage.removeItem('sarena.admin.token');
+  } catch { /* storage blocked */ }
+  location.reload();
+}
+
 const TOKEN_KEY = 'sarena.admin.token';
 let token: string | null = null;
 try { token = localStorage.getItem(TOKEN_KEY); } catch { /* storage blocked */ }
@@ -91,6 +110,10 @@ export const session = {
 };
 
 export async function api<T>(method: string, path: string, body?: unknown): Promise<T> {
+  if (DEMO) {
+    const { demoRequest } = await import('./demo/server');
+    return demoRequest<T>(method, path, body);
+  }
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (token) headers.Authorization = `Bearer ${token}`;
   let payload: BodyInit | undefined;

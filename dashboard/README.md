@@ -15,6 +15,12 @@ The control panel for Sarena, styled like the app (floating glass, Sarena orange
 
 Every page updates **live**. The dashboard listens to the API's event stream (`/v1/live`), so new members, bookings and redemptions appear without refreshing. Changes made here reach open apps immediately.
 
+## Try it without a server
+
+Open **`demo/sarena-admin-demo.html`** in any browser: double-click it on a computer, or send it to your phone and open it there. It is the whole control panel with a built-in pretend server, and it comes with sample members, venues, codes and notifications. Everything works (adding events, discounts, seasonal looks, redeeming codes...) and is saved **on that device only**. It also simulates live activity: a new member or booking every half minute or so. *Reset sample data* starts over.
+
+You can also try it from the real dashboard's sign-in page with **Try without a server**, or rebuild the file with `npm run build:demo`.
+
 ## Run
 
 ```bash
