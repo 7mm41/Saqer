@@ -3,6 +3,7 @@
 #   cp backend/.env.example backend/.env   # set JWT_SECRET, ADMIN_EMAIL/PASSWORD, PUBLIC_URL, APNS_*, SMS...
 #   echo "SARENA_DOMAIN=sarena.fun" > .env # the domain whose DNS points at this server
 #   docker compose up -d --build
+name: sarena
 services:
   db:
     image: postgres:17-alpine
@@ -21,9 +22,10 @@ services:
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://sarena:${POSTGRES_PASSWORD:-change-me}@db:5432/sarena
-    ports:
-      # Reachable from the server itself only; the public goes through Caddy (HTTPS).
-      - "127.0.0.1:3000:3000"
+    # No port on the server itself (nothing to clash with): the public reaches it
+    # through Caddy (HTTPS) over Docker's own network.
+    expose:
+      - "3000"
     volumes:
       - uploads:/app/backend/data
       # The APNs key (.p8) and Apple Wallet certificates; read-only, never in the image.

@@ -533,8 +533,8 @@ cloudflared tunnel --url http://localhost:3000   # public https://….trycloudfl
 
 **Production (a VPS; shared web hosting can't run Node.js):**
 
-* `docker-compose.yml`: `db` (PostgreSQL 17), `app` (bound to 127.0.0.1:3000, `backend/certs` mounted read-only), and `caddy` (ports 80/443, automatic HTTPS for `SARENA_DOMAIN`, `www.` redirects to the bare domain; compresses everything except `/v1/live*`, so live updates stream at once).
-* `deploy/install.sh` (run as root on Ubuntu/Debian, safe to re-run): installs Docker; asks for the domain once; fills only empty settings (random `POSTGRES_PASSWORD`, `JWT_SECRET`, admin password; `PUBLIC_URL`); warns if the domain's DNS doesn't point at the server yet; refuses if ports 80/443 are taken (Apache/nginx); builds and starts, waits for `/health`, then prints the website, control panel and admin sign-in.
+* `docker-compose.yml`: `db` (PostgreSQL 17), `app` (no port on the server itself, so nothing clashes; `backend/certs` mounted read-only), and `caddy` (ports 80/443, automatic HTTPS for `SARENA_DOMAIN`, `www.` redirects to the bare domain; compresses everything except `/v1/live*`, so live updates stream at once).
+* `deploy/install.sh` (run as root on Ubuntu/Debian, safe to re-run): installs Docker; asks for the domain once; fills only empty settings (random `POSTGRES_PASSWORD`, `JWT_SECRET`, admin password; `PUBLIC_URL`); warns if the domain's DNS doesn't point at the server yet; if other Docker apps (e.g. Traefik) hold ports 80/443, lists them and stops them only if you answer yes; refuses if a non-Docker web server (Apache/nginx) holds them; `--domain <domain>` skips the question or moves to another domain; builds and starts, waits for `/health` (checked inside the container), then prints the website, control panel and admin sign-in.
 
 ---
 

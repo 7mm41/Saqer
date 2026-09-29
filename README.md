@@ -41,7 +41,7 @@ Sarena needs a server that runs Node.js and a database around the clock: a **VPS
 2. Copy this folder to the VPS (`git clone`, or upload the zip), then inside it:
 
 ```bash
-sudo bash deploy/install.sh     # asks for the domain once, then does the rest
+sudo bash deploy/install.sh     # asks for the domain once (or: --domain sarena.fun), then does the rest
 ```
 
 It installs Docker, creates the settings (random database password, `JWT_SECRET` and admin password), and starts Sarena, PostgreSQL and **Caddy**, which gets and renews the HTTPS certificate by itself. It then prints the website, control panel and admin sign-in. Run it again after an update; settings and data are kept.
