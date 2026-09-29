@@ -11,7 +11,7 @@ import { RedeemPage } from './pages/Redeem';
 import { ThemesPage } from './pages/Themes';
 import { VenuesPage } from './pages/Venues';
 import logo from './assets/logo.png';
-import { Loading, useErrorText } from './ui';
+import { Loading, useConfirm, useErrorText } from './ui';
 
 type Route = 'overview' | 'members' | 'memberships' | 'venues' | 'plan' | 'themes' | 'notifications' | 'redeem';
 
@@ -71,6 +71,13 @@ export function App() {
 function Shell({ user }: { user: User }) {
   const { t, lang, setLang } = useI18n();
   const connected = useLiveConnected();
+  const confirmAction = useConfirm();
+  const resetDemoData = async () => {
+    if (await confirmAction(t('resetDemoConfirm'), { action: t('resetDemo') })) {
+      const { resetDemo } = await import('./demo/server');
+      resetDemo();
+    }
+  };
   const isStaff = user.role === 'staff';
   const [route, setRoute] = useState<Route>(() => (isStaff ? 'redeem' : currentRoute()));
 
@@ -122,9 +129,7 @@ function Shell({ user }: { user: User }) {
             <div className="glass card small stack" style={{ padding: 14, gap: 8 }}>
               <span className="badge orange">🧪 {t('demoBadge')}</span>
               <span className="muted">{t('demoHint')}</span>
-              <button type="button" className="btn small" onClick={() => {
-                if (confirm(t('resetDemoConfirm'))) void import('./demo/server').then(({ resetDemo }) => resetDemo());
-              }}>↺ {t('resetDemo')}</button>
+              <button type="button" className="btn small" onClick={() => void resetDemoData()}>↺ {t('resetDemo')}</button>
               {!IS_DEMO_BUILD && <button type="button" className="btn small ghost" onClick={() => setDemo(false)}>{t('exitDemo')}</button>}
             </div>
           )}
@@ -142,9 +147,7 @@ function Shell({ user }: { user: User }) {
         </div>
         {/* Compact controls for phones (the footer above is hidden there). */}
         {DEMO && (
-          <button type="button" className="nav-item mobile-only" aria-label={t('resetDemo')} onClick={() => {
-            if (confirm(t('resetDemoConfirm'))) void import('./demo/server').then(({ resetDemo }) => resetDemo());
-          }}>↺</button>
+          <button type="button" className="nav-item mobile-only" aria-label={t('resetDemo')} onClick={() => void resetDemoData()}>↺</button>
         )}
         <button type="button" className="nav-item mobile-only" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>🌐</button>
         <button type="button" className="nav-item mobile-only" onClick={() => void signOut()}>⎋</button>

@@ -7,7 +7,9 @@ import ramadanIcon from '../assets/icons/season-ramadan.png';
 import logo from '../assets/logo.png';
 import { useI18n, type StringKey } from '../i18n';
 import { useLive } from '../live';
-import { DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, Modal, PageHead, Toggle, useErrorText, useLoad, useToast } from '../ui';
+import {
+  DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, Modal, PageHead, Toggle, useConfirm, useErrorText, useLoad, useToast,
+} from '../ui';
 
 const ICONS: Record<ThemeIcon, { label: StringKey; preview: string; accent: string }> = {
   'AppIcon-NationalDay': { label: 'iconNationalDay', preview: nationalDayIcon, accent: '#C8102E' },
@@ -74,6 +76,7 @@ function ThemeEditor({ initial, onClose, onSaved }: { initial: Draft; onClose: (
   const errorText = useErrorText();
   const [theme, setTheme] = useState<Draft>(initial);
   const [busy, setBusy] = useState(false);
+  const confirmAction = useConfirm();
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setTheme((current) => ({ ...current, [key]: value }));
   const greeting: Localized = theme.greeting ?? { en: '', ar: '' };
 
@@ -95,7 +98,7 @@ function ThemeEditor({ initial, onClose, onSaved }: { initial: Draft; onClose: (
   };
 
   const remove = async () => {
-    if (!theme.id || !confirm(t('confirmDelete'))) return;
+    if (!theme.id || !(await confirmAction(t('confirmDelete'), { action: t('delete') }))) return;
     try { await del(`admin/themes/${theme.id}`); onSaved(); onClose(); } catch (error) { toast(errorText(error), true); }
   };
 

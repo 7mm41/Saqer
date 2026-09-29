@@ -4,7 +4,7 @@ import { useI18n } from '../i18n';
 import { useLive } from '../live';
 import {
   CATEGORY_META, DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, LocalizedLinesField, Modal, PageHead,
-  Toggle, categoryGradient, useErrorText, useLoad, useToast,
+  Toggle, categoryGradient, useConfirm, useErrorText, useLoad, useToast,
 } from '../ui';
 
 const blank = (): Localized => ({ en: '', ar: '' });
@@ -85,6 +85,7 @@ function VenueEditor({ initial, onClose, onSaved }: { initial: VenueDraft; onClo
   const errorText = useErrorText();
   const [venue, setVenue] = useState<VenueDraft>(initial);
   const [busy, setBusy] = useState(false);
+  const confirmAction = useConfirm();
   const set = <K extends keyof VenueDraft>(key: K, value: VenueDraft[K]) => setVenue((current) => ({ ...current, [key]: value }));
 
   const save = async (event: FormEvent) => {
@@ -107,7 +108,7 @@ function VenueEditor({ initial, onClose, onSaved }: { initial: VenueDraft; onClo
   };
 
   const remove = async () => {
-    if (!venue.id || !confirm(t('confirmDelete'))) return;
+    if (!venue.id || !(await confirmAction(t('confirmDelete'), { action: t('delete') }))) return;
     try {
       await del(`admin/venues/${venue.id}`);
       onSaved();
@@ -187,6 +188,7 @@ function OffersEditor({ venueID, offers, onChange }: { venueID: string; offers: 
   const toast = useToast();
   const errorText = useErrorText();
   const [drafts, setDrafts] = useState<OfferDraft[]>(offers.map(toDraft));
+  const confirmAction = useConfirm();
   const [busy, setBusy] = useState<string | null>(null);
 
   const update = (key: string, patchValue: Partial<OfferDraft>) =>
@@ -218,7 +220,7 @@ function OffersEditor({ venueID, offers, onChange }: { venueID: string; offers: 
 
   const remove = async (draft: OfferDraft) => {
     if (draft.id) {
-      if (!confirm(t('confirmDelete'))) return;
+      if (!(await confirmAction(t('confirmDelete'), { action: t('delete') }))) return;
       try { await del(`admin/offers/${draft.id}`); } catch (error) { toast(errorText(error), true); return; }
     }
     setDrafts((all) => all.filter((item) => item.key !== draft.key));

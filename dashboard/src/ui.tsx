@@ -51,6 +51,41 @@ export function useErrorText() {
   };
 }
 
+// ---------------------------------------------------------------- confirmation
+
+type ConfirmOptions = { action?: string; danger?: boolean };
+type ConfirmRequest = ConfirmOptions & { message: string; resolve: (ok: boolean) => void };
+const ConfirmContext = createContext<(message: string, options?: ConfirmOptions) => Promise<boolean>>(async () => false);
+
+/** In-page confirmation (the browser's confirm() is blocked in embedded viewers and looks out of place). */
+export function ConfirmProvider({ children }: { children: ReactNode }) {
+  const { t } = useI18n();
+  const [request, setRequest] = useState<ConfirmRequest | null>(null);
+  const ask = useCallback((message: string, options?: ConfirmOptions) =>
+    new Promise<boolean>((resolve) => setRequest({ message, resolve, ...options })), []);
+  const close = (ok: boolean) => {
+    request?.resolve(ok);
+    setRequest(null);
+  };
+  return (
+    <ConfirmContext.Provider value={ask}>
+      {children}
+      {request && (
+        <Modal narrow title={request.message} onClose={() => close(false)}>
+          <div className="row">
+            <button type="button" autoFocus className={`btn ${request.danger === false ? 'primary' : 'danger'}`} onClick={() => close(true)}>
+              {request.action ?? t('yes')}
+            </button>
+            <button type="button" className="btn" onClick={() => close(false)}>{t('cancel')}</button>
+          </div>
+        </Modal>
+      )}
+    </ConfirmContext.Provider>
+  );
+}
+
+export const useConfirm = () => useContext(ConfirmContext);
+
 // ---------------------------------------------------------------- data loading
 
 /** Loads data, exposes `reload`, and keeps the previous data while refreshing. */

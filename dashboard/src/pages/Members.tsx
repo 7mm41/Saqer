@@ -3,7 +3,7 @@ import { fromOMR, get, patch, post, type Booking, type Membership, type Page, ty
 import { useI18n } from '../i18n';
 import { useLive } from '../live';
 import {
-  Empty, Field, Loading, LocalizedField, Modal, PageHead, Pager, Segmented, StatusBadge, initials, useErrorText, useLoad, useToast,
+  Empty, Field, Loading, LocalizedField, Modal, PageHead, Pager, Segmented, StatusBadge, initials, useConfirm, useErrorText, useLoad, useToast,
 } from '../ui';
 
 type MemberRow = User & { membership: Membership | null };
@@ -83,6 +83,7 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
   const { t, date, money, L } = useI18n();
   const toast = useToast();
   const errorText = useErrorText();
+  const confirmAction = useConfirm();
   const { data, reload } = useLoad(() => get<MemberDetail>(`admin/members/${id}`), [id]);
   const { data: plans } = useLoad(() => get<{ plans: Plan[] }>('admin/plans'), []);
   useLive(['members', 'memberships', 'bookings'], () => void reload());
@@ -133,7 +134,7 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
               <option value="admin">{t('roleAdmin')}</option>
             </select>
             {member.status === 'active'
-              ? <button className="btn danger small" disabled={busy} onClick={() => { if (confirm(t('suspendConfirm'))) void run(() => patch(`admin/members/${id}`, { status: 'suspended' })); }}>{t('suspend')}</button>
+              ? <button className="btn danger small" disabled={busy} onClick={async () => { if (await confirmAction(t('suspendConfirm'), { action: t('suspend') })) void run(() => patch(`admin/members/${id}`, { status: 'suspended' })); }}>{t('suspend')}</button>
               : <button className="btn small" disabled={busy} onClick={() => void run(() => patch(`admin/members/${id}`, { status: 'active' }))}>{t('reactivate')}</button>}
           </div>
         </div>
@@ -160,7 +161,7 @@ function MemberModal({ id, onClose }: { id: string; onClose: () => void }) {
                   <td>{date(m.startsAt)}</td>
                   <td>{date(m.expiresAt)}</td>
                   <td>{m.status === 'active' && (
-                    <button className="btn small ghost" disabled={busy} onClick={() => { if (confirm(t('cancelMembership') + '?')) void run(() => post(`admin/memberships/${m.id}/cancel`)); }}>{t('cancelMembership')}</button>
+                    <button className="btn small ghost" disabled={busy} onClick={async () => { if (await confirmAction(`${t('cancelMembership')}?`, { action: t('cancelMembership') })) void run(() => post(`admin/memberships/${m.id}/cancel`)); }}>{t('cancelMembership')}</button>
                   )}</td>
                 </tr>
               ))}</tbody>
