@@ -12,6 +12,7 @@
     "dev": "node --env-file-if-exists=.env --watch src/index.ts",
     "prestart": "node scripts/prepare.ts",
     "start": "node --env-file-if-exists=.env src/index.ts",
+    "admin-password": "node --env-file-if-exists=.env scripts/admin-password.ts",
     "test": "node --test \"test/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate"

@@ -17,6 +17,7 @@ if (config.demoMode && config.production) app.log.warn('DEMO_MODE is on in produ
 await app.listen({ port: config.port, host: config.host });
 const local = `http://localhost:${config.port}`;
 app.log.info(`Website ${config.publicUrl || local}/ · control panel ${config.publicUrl || local}/admin/`);
+app.log.info('Forgot the control panel password? Stop the server and run: npm run admin-password');
 if (!existsSync(join(config.dashboardDir, 'index.html'))) {
   app.log.warn(`The control panel isn't built, so /admin/ can't open: start the server with "npm start" (it builds it), or run "cd dashboard && npm install && npm run build".`);
 }

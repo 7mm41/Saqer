@@ -69,7 +69,11 @@ export async function authRoutes(api: FastifyInstance, limit: RouteShorthandOpti
   api.post('/auth/login', options, async (request) => {
     const body = parse(z.object({ email: z.string().trim().toLowerCase(), password: z.string() }), request.body);
     const [user] = await db.select().from(users).where(eq(users.email, body.email)).limit(1);
-    if (!user || !(await verifyPassword(body.password, user.passwordHash))) throw errors.invalidCredentials();
+    const trimmed = body.password.trim();
+    const valid = user && (await verifyPassword(body.password, user.passwordHash)
+      // Phone keyboards can add a space before or after a pasted or suggested password.
+      || (trimmed !== body.password && await verifyPassword(trimmed, user.passwordHash)));
+    if (!user || !valid) throw errors.invalidCredentials();
     return signIn(user, request);
   });
 

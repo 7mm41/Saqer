@@ -516,6 +516,7 @@ cloudflared tunnel --url http://localhost:3000   # public https://….trycloudfl
 ```
 
 * `npm start` first runs `backend/scripts/prepare.ts`: it installs packages when `node_modules` is missing or older than `package.json`/`package-lock.json`, and builds the control panel when `dashboard/dist` is missing or older than its source. It only warns on failure. The server loads `backend/.env` with `--env-file-if-exists`.
+* `npm run admin-password [-- password]` resets the dashboard admin (the ADMIN_EMAIL account, else the first admin; created if none) to the given password, ADMIN_PASSWORD, or a new readable one, and prints the email and password. With the built-in database it refuses while the server answers on PORT. Generated passwords avoid look-alike characters (0/O, 1/l/I). Sign-in also accepts a password with spaces a phone keyboard added around it, and the dashboard sign-in has a show-password button.
 * `/Admin`, `/ADMIN/…` redirect to `/admin/…`; without a build, `/admin/` shows a bilingual page with the build command (503) and the server logs a warning.
 * The app's `Info.plist › SarenaAPIBaseURL` holds the public address.
 * After a tunnel restart, open the control panel on the iPhone → **Connect the app**.

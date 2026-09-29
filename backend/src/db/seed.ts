@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { count, eq } from 'drizzle-orm';
+import { asc, count, eq } from 'drizzle-orm';
 import type { Config } from '../config.ts';
 import { memberNumber } from '../lib/codes.ts';
 import { grantMembership } from '../lib/memberships.ts';
@@ -103,4 +103,28 @@ export async function seed(db: Database, config: Config, log: (message: string) 
 function omanDate(days: number, hour: number) {
   const now = new Date(Date.now() + 4 * 3_600_000);
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + days, hour - 4));
+}
+
+/**
+ * `npm run admin-password`: gives the dashboard admin a new password and returns
+ * the sign-in details. The password is `password` if given, else ADMIN_PASSWORD
+ * from .env (the next start applies it anyway), else a new readable one. The admin
+ * is the ADMIN_EMAIL account, or the first admin if that email has changed since;
+ * it is created if there is none.
+ */
+export async function resetAdminPassword(db: Database, config: Config, password = config.adminPassword) {
+  const columns = { id: users.id, email: users.email };
+  const [admin] = [
+    ...await db.select(columns).from(users).where(eq(users.email, config.adminEmail)).limit(1),
+    ...await db.select(columns).from(users).where(eq(users.role, 'admin')).orderBy(asc(users.createdAt)).limit(1),
+  ];
+  const passwordHash = await hashPassword(password);
+  if (admin) {
+    await db.update(users).set({ passwordHash, role: 'admin', status: 'active' }).where(eq(users.id, admin.id));
+    return { email: admin.email, password, created: false };
+  }
+  await db.insert(users).values({
+    fullName: 'Sarena Admin', email: config.adminEmail, phone: null, role: 'admin', passwordHash, memberNumber: memberNumber(),
+  });
+  return { email: config.adminEmail, password, created: true };
 }

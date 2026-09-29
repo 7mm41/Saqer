@@ -9,8 +9,8 @@ import { buildApp } from '../src/app.ts';
 import { loadConfig } from '../src/config.ts';
 import { openDatabase, type DatabaseHandle } from '../src/db/client.ts';
 import { users } from '../src/db/schema.ts';
-import { DEMO_MEMBER, seed } from '../src/db/seed.ts';
-import { hashPassword, verifyPassword } from '../src/lib/passwords.ts';
+import { DEMO_MEMBER, resetAdminPassword, seed } from '../src/db/seed.ts';
+import { hashPassword, readablePassword, verifyPassword } from '../src/lib/passwords.ts';
 
 const ADMIN = { email: 'admin@sarena.test', password: 'AdminPass123' };
 
@@ -174,6 +174,42 @@ describe('configuration', () => {
       await db.close();
     }
   });
+  test('npm run admin-password gives the admin a new password', async () => {
+    const db = await openDatabase({ inMemory: true });
+    try {
+      const passwordOf = async (email: string) => (await db.db.select().from(users).where(eq(users.email, email)))[0]!;
+      await seed(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test', ADMIN_PASSWORD: 'FirstPass123' }), () => {});
+
+      // A new generated password for the ADMIN_EMAIL account…
+      const generated = await resetAdminPassword(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test' }));
+      assert.equal(generated.email, 'owner@sarena.test');
+      assert.equal(generated.created, false);
+      assert.match(generated.password, /^[A-HJ-NP-Za-km-z2-9]{12}$/);
+      assert.ok(await verifyPassword(generated.password, (await passwordOf('owner@sarena.test')).passwordHash));
+
+      // …one of your own, or ADMIN_PASSWORD from .env, which the next start would apply anyway.
+      await resetAdminPassword(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test' }), 'Chosen2026');
+      assert.ok(await verifyPassword('Chosen2026', (await passwordOf('owner@sarena.test')).passwordHash));
+      const fromEnv = await resetAdminPassword(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'owner@sarena.test', ADMIN_PASSWORD: 'FromEnv2026' }));
+      assert.equal(fromEnv.password, 'FromEnv2026');
+
+      // ADMIN_EMAIL changed since the admin was created: the existing admin is the one reset.
+      const moved = await resetAdminPassword(db.db, loadConfig({ NODE_ENV: 'test', ADMIN_EMAIL: 'someone-else@sarena.test' }));
+      assert.equal(moved.email, 'owner@sarena.test');
+      assert.equal(moved.created, false);
+    } finally {
+      await db.close();
+    }
+  });
+
+  test('generated passwords have no look-alike characters', () => {
+    for (let i = 0; i < 200; i++) {
+      const password = readablePassword();
+      assert.equal(password.length, 12);
+      assert.doesNotMatch(password, /[0O1lI_-]/);
+      assert.match(password, /\d/);
+    }
+  });
 });
 
 describe('public', () => {
@@ -320,6 +356,11 @@ describe('members', () => {
     const { body } = await call('POST', '/v1/auth/login', { body: { email: 'Demo@Sarena.om', password: DEMO_MEMBER.password } });
     assert.ok(body.token);
     assert.equal(body.membership.status, 'active');
+    // A space the phone keyboard added around a pasted password is ignored.
+    const spaced = await call('POST', '/v1/auth/login', { body: { email: DEMO_MEMBER.email, password: ` ${DEMO_MEMBER.password} ` } });
+    assert.equal(spaced.status, 200);
+    const extra = await call('POST', '/v1/auth/login', { body: { email: DEMO_MEMBER.email, password: `${DEMO_MEMBER.password}x` } });
+    assert.equal(extra.status, 401);
   });
 
   test('demo member signs in by SMS code', async () => {

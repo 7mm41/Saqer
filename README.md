@@ -27,7 +27,7 @@ cd backend && npm start      # http://localhost:3000  (website)  ·  /admin/  (c
 
 `npm start` installs missing packages and builds the control panel on the first start, and again after an update changes them, so a fresh download or a `git pull` needs nothing else. It reads `backend/.env` if there is one. The address works in any letter case (`/Admin/` opens `/admin/`).
 
-**Sign in to the control panel** with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `backend/.env`. Setting `ADMIN_PASSWORD` also resets the admin's password on the next start, which gets you back in if it is lost. Without it, the server prints a password when it first creates the admin. More admins and venue staff: *Members › New account*. A demo member is seeded: `demo@sarena.om` / `Sarena2026`, or +968 9123 4567 with SMS code `123456`.
+**Sign in to the control panel** with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `backend/.env`. Without `ADMIN_PASSWORD`, the server prints a password when it first creates the admin. **Forgot it?** Stop the server and run `cd backend && npm run admin-password`: it prints the admin's email and a new password (or sets yours: `npm run admin-password -- MyPassword2026`). Setting `ADMIN_PASSWORD` also resets it on the next start. More admins and venue staff: *Members › New account*. A demo member is seeded: `demo@sarena.om` / `Sarena2026`, or +968 9123 4567 with SMS code `123456`.
 
 **Connect the iPhone app:** open the control panel on the iPhone, choose *Connect the app* and tap *Open in the Sarena app*. For local testing in Xcode, set the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000`.
 

@@ -1,6 +1,6 @@
-import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { readablePassword } from './lib/passwords.ts';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -40,7 +40,7 @@ export function loadConfig(input: NodeJS.ProcessEnv = process.env) {
     tokenTtlDays: Number(env.TOKEN_TTL_DAYS ?? 30),
     adminEmail: (env.ADMIN_EMAIL ?? 'admin@sarena.local').toLowerCase(),
     /** Initial admin password; generated (and printed once) when not provided. */
-    adminPassword: env.ADMIN_PASSWORD ?? randomBytes(9).toString('base64url'),
+    adminPassword: env.ADMIN_PASSWORD ?? readablePassword(),
     adminPasswordGenerated: !env.ADMIN_PASSWORD,
     /** Seeds the demo member and accepts the fixed demo SMS code. Never enable in production. */
     demoMode: bool(env.DEMO_MODE, !production),

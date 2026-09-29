@@ -253,6 +253,7 @@ function Login() {
   const errorText = useErrorText();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [reveal, setReveal] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -305,12 +306,20 @@ function Login() {
         </div>
         <label className="field">
           <span>{t('email')}</span>
-          <input className="input" dir="ltr" type="email" autoComplete="username" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input className="input" dir="ltr" type="email" autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false} required
+            value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
-        <label className="field">
-          <span>{t('password')}</span>
-          <input className="input" dir="ltr" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
+        <div className="field">
+          <label htmlFor="login-password">{t('password')}</label>
+          <div className="row nowrap">
+            <input id="login-password" className="input" dir="ltr" type={reveal ? 'text' : 'password'} autoComplete="current-password"
+              autoCapitalize="none" autoCorrect="off" spellCheck={false} required value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button type="button" className="icon-btn" title={t('showPassword')} aria-label={t('showPassword')} aria-pressed={reveal}
+              onClick={() => setReveal((on) => !on)}>
+              <Icon name={reveal ? 'eyeOff' : 'eye'} size={18} />
+            </button>
+          </div>
+        </div>
         {error && <p role="alert" style={{ color: 'var(--danger)', fontWeight: 700 }}>{error}</p>}
         <button className="btn primary" type="submit" disabled={busy}>{busy ? t('loading') : t('signIn')}</button>
         <button className="btn small" type="button" onClick={() => setDemo(true)}><Icon name="flask" size={16} /> {t('tryDemo')}</button>
