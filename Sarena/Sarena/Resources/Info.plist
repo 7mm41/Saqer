@@ -27,7 +27,7 @@
 	     variable overrides it (e.g. http://localhost:3000), and so does a server chosen from
 	     the control panel's "Connect the app" link (sarena://connect?server=…). -->
 	<key>SarenaAPIBaseURL</key>
-	<string>https://roll-participated-enable-lions.trycloudflare.com</string>
+	<string>https://tiger-urls-reseller-consultancy.trycloudflare.com</string>
 	<!-- Lets sarena://connect links point the app at another server (after asking).
 	     Set to NO for the App Store build once the server has its permanent address. -->
 	<key>SarenaAllowServerLinks</key>

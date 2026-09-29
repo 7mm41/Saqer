@@ -220,6 +220,29 @@ describe('public', () => {
     assert.equal(redirect.headers.location, '/admin/');
   });
 
+  test('the dashboard address works in any letter case', async () => {
+    for (const [url, location] of [['/Admin/', '/admin/'], ['/ADMIN', '/admin/'], ['/Admin/members?q=x', '/admin/members?q=x'], ['/admin?tab=1', '/admin/?tab=1']]) {
+      const response = await app.inject({ method: 'GET', url: url! });
+      assert.equal(response.statusCode, 302, url);
+      assert.equal(response.headers.location, location, url);
+    }
+    assert.equal((await app.inject({ method: 'GET', url: '/administrator' })).statusCode, 404);
+  });
+
+  test('without a built control panel, /admin/ says how to build it', async () => {
+    const config = loadConfig({ NODE_ENV: 'test', UPLOADS_DIR: uploadsDir, DASHBOARD_DIR: join(uploadsDir, 'no-dashboard') });
+    const bare = await buildApp({ config, db: database.db, logger: false, rateLimit: false, scheduler: false });
+    try {
+      const page = await bare.inject({ method: 'GET', url: '/admin/' });
+      assert.equal(page.statusCode, 503);
+      assert.match(String(page.headers['content-type']), /text\/html/);
+      assert.match(page.body, /npm run build/);
+      assert.equal((await bare.inject({ method: 'GET', url: '/Admin/' })).headers.location, '/admin/');
+    } finally {
+      await bare.close();
+    }
+  });
+
   test('unknown API routes return a JSON 404', async () => {
     const { status, body } = await call('GET', '/v1/nope');
     assert.equal(status, 404);

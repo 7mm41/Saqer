@@ -511,11 +511,12 @@ Arabic comes first, and English is always available. Write production-quality co
 ## 7. Running and sharing
 
 ```bash
-cd dashboard && npm install && npm run build && cd ..
-cd backend && npm install && npm start     # website http://localhost:3000 · control panel /admin/
+cd backend && npm start     # website http://localhost:3000 · control panel /admin/
 cloudflared tunnel --url http://localhost:3000   # public https://….trycloudflare.com for the phone
 ```
 
+* `npm start` first runs `backend/scripts/prepare.ts`: it installs packages when `node_modules` is missing or older than `package.json`/`package-lock.json`, and builds the control panel when `dashboard/dist` is missing or older than its source. It only warns on failure. The server loads `backend/.env` with `--env-file-if-exists`.
+* `/Admin`, `/ADMIN/…` redirect to `/admin/…`; without a build, `/admin/` shows a bilingual page with the build command (503) and the server logs a warning.
 * The app's `Info.plist › SarenaAPIBaseURL` holds the public address.
 * After a tunnel restart, open the control panel on the iPhone → **Connect the app**.
 * For a permanent address, use a named Cloudflare tunnel or HTTPS hosting on your own domain.

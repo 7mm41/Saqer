@@ -22,9 +22,10 @@ Exclusive, members-only prices in Oman — **one annual membership (15 OMR)**, b
 ## Run everything locally
 
 ```bash
-cd dashboard && npm install && npm run build && cd ..
-cd backend && npm install && npm start      # http://localhost:3000  (website)  ·  /admin/  (control panel)
+cd backend && npm start      # http://localhost:3000  (website)  ·  /admin/  (control panel)
 ```
+
+`npm start` installs missing packages and builds the control panel on the first start, and again after an update changes them, so a fresh download or a `git pull` needs nothing else. It reads `backend/.env` if there is one. The address works in any letter case (`/Admin/` opens `/admin/`).
 
 **Sign in to the control panel** with `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `backend/.env`. Setting `ADMIN_PASSWORD` also resets the admin's password on the next start, which gets you back in if it is lost. Without it, the server prints a password when it first creates the admin. More admins and venue staff: *Members › New account*. A demo member is seeded: `demo@sarena.om` / `Sarena2026`, or +968 9123 4567 with SMS code `123456`.
 

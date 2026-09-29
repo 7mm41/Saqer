@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { buildApp } from './app.ts';
 import { loadConfig } from './config.ts';
 import { openDatabase } from './db/client.ts';
@@ -15,6 +17,9 @@ if (config.demoMode && config.production) app.log.warn('DEMO_MODE is on in produ
 await app.listen({ port: config.port, host: config.host });
 const local = `http://localhost:${config.port}`;
 app.log.info(`Website ${config.publicUrl || local}/ · control panel ${config.publicUrl || local}/admin/`);
+if (!existsSync(join(config.dashboardDir, 'index.html'))) {
+  app.log.warn(`The control panel isn't built, so /admin/ can't open: start the server with "npm start" (it builds it), or run "cd dashboard && npm install && npm run build".`);
+}
 
 let closing = false;
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {

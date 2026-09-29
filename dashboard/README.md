@@ -35,4 +35,6 @@ npm run dev      # http://localhost:5173/admin/ — proxies the API on :3000
 npm run build    # → dist/, served by the API at /admin/
 ```
 
+`npm start` in `backend/` builds it for you when `dist/` is missing or older than the source.
+
 Sign in with the admin account the API creates on first start (`ADMIN_EMAIL` / `ADMIN_PASSWORD`, see `backend/.env.example`). Venue staff accounts only see *Redeem*.

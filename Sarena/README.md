@@ -12,7 +12,7 @@ Sarena is an iOS app for exclusive discounts and bookings in Oman. It is for mem
 
 ## Backend: on-device demo or the Sarena API
 
-* **Real server (default):** `Info.plist › SarenaAPIBaseURL` points at the Sarena server (now `https://roll-participated-enable-lions.trycloudflare.com`). Every service goes through `APIClient`, and the token is kept in the Keychain.
+* **Real server (default):** `Info.plist › SarenaAPIBaseURL` points at the Sarena server (now `https://tiger-urls-reseller-consultancy.trycloudflare.com`). Every service goes through `APIClient`, and the token is kept in the Keychain.
 * **Switch server without rebuilding:** in the control panel choose **ربط التطبيق · Connect the app** on the iPhone and tap *Open in the Sarena app*. The app asks, then moves to that server (link `sarena://connect?server=https://…`). Settings › About shows the server and a green dot while live updates flow. Set `SarenaAllowServerLinks` to `NO` for the App Store build.
 * **Local testing:** the scheme environment variable `SARENA_API_BASE_URL=http://localhost:3000` wins over both.
 * **No setup:** with `SarenaAPIBaseURL` empty (and no linked server), the app runs on an on-device demo backend (`AppServices.mock`).

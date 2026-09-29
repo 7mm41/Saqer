@@ -146,11 +146,16 @@ export async function buildApp({
   }
 
   app.setNotFoundHandler(async (request, reply) => {
-    // Client-side routes of the dashboard (/admin/venues...) fall back to its index.html.
-    const dashboardIndex = join(config.dashboardDir, 'index.html');
-    if (request.method === 'GET' && request.url.startsWith('/admin') && existsSync(dashboardIndex)) {
-      if (request.url === '/admin') return reply.redirect('/admin/');
-      return reply.type('text/html; charset=utf-8').header('Cache-Control', 'no-cache').send(await readFile(dashboardIndex));
+    const { url } = request;
+    if (request.method === 'GET' && /^\/admin(?=[/?]|$)/i.test(url)) {
+      // /admin, /Admin/ or /ADMIN/members (typed by hand, or capitalised by the phone) → /admin/…
+      if (!url.startsWith('/admin/')) return reply.redirect(`/admin/${url.slice('/admin'.length).replace(/^\//, '')}`);
+      // Client-side routes of the dashboard (/admin/venues...) fall back to its index.html.
+      const dashboardIndex = join(config.dashboardDir, 'index.html');
+      if (existsSync(dashboardIndex)) {
+        return reply.type('text/html; charset=utf-8').header('Cache-Control', 'no-cache').send(await readFile(dashboardIndex));
+      }
+      return reply.status(503).type('text/html; charset=utf-8').header('Cache-Control', 'no-store').send(DASHBOARD_NOT_BUILT);
     }
     return reply.status(404).send({ error: { code: 'not_found', message: 'Not found.' } });
   });
@@ -169,3 +174,26 @@ function loadWallet(config: Config, log: FastifyInstance['log']): WalletSigner |
     return null;
   }
 }
+
+/** Shown at /admin/ when the control panel hasn't been built (`npm start` builds it). */
+const DASHBOARD_NOT_BUILT = `<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sarena · لوحة التحكم</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #FBF6F1; color: #2E2E32; font: 16px/1.7 -apple-system, "Segoe UI", Tahoma, sans-serif; padding: 16px; box-sizing: border-box; }
+  main { max-width: 560px; background: #fff; border: 1px solid #F0E3D6; border-radius: 20px; padding: 24px 28px; box-shadow: 0 10px 30px rgba(0,0,0,.06); }
+  h1 { font-size: 20px; margin: 0 0 8px; color: #FF7900; }
+  code { display: block; direction: ltr; text-align: left; background: #2E2E32; color: #fff; border-radius: 10px; padding: 10px 14px; margin: 10px 0; font: 14px/1.6 ui-monospace, Menlo, monospace; white-space: pre-wrap; }
+  hr { border: 0; border-top: 1px solid #F0E3D6; margin: 18px 0; }
+  .en { direction: ltr; text-align: left; }
+  @media (prefers-color-scheme: dark) { body { background: #121017; color: #EDEDF0; } main { background: #1C1A22; border-color: #2E2B36; } hr { border-color: #2E2B36; } }
+</style></head><body><main>
+<h1>لوحة التحكم لم تُجهَّز بعد</h1>
+<p>الخادم يعمل، لكن ملفات لوحة التحكم لم تُبنَ في هذا المجلد. أوقف الخادم (Ctrl + C) ثم شغّله بهذا الأمر، وسيجهّزها تلقائياً:</p>
+<code>cd backend &amp;&amp; npm start</code>
+<p>أو ابنِها يدوياً ثم أعد تشغيل الخادم:</p>
+<code>cd dashboard &amp;&amp; npm install &amp;&amp; npm run build</code>
+<hr>
+<div class="en"><h1>The control panel isn't built yet</h1>
+<p>The server is running, but the control panel's files haven't been built in this folder. Stop the server (Ctrl + C) and start it with <b>cd backend &amp;&amp; npm start</b>, which builds it automatically, or run <b>cd dashboard &amp;&amp; npm install &amp;&amp; npm run build</b> and restart.</p></div>
+</main></body></html>`;

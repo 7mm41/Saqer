@@ -8,8 +8,10 @@
     "node": ">=22.18"
   },
   "scripts": {
-    "dev": "node --watch src/index.ts",
-    "start": "node src/index.ts",
+    "predev": "node scripts/prepare.ts",
+    "dev": "node --env-file-if-exists=.env --watch src/index.ts",
+    "prestart": "node scripts/prepare.ts",
+    "start": "node --env-file-if-exists=.env src/index.ts",
     "test": "node --test \"test/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate"
