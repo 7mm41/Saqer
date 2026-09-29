@@ -121,7 +121,7 @@ function render() {
   const theme = config?.theme;
 
   // Seasonal logo, greeting and accent.
-  for (const img of document.querySelectorAll('[data-theme-logo]')) img.src = theme?.logoUrl || '/assets/logo.png';
+  for (const img of document.querySelectorAll('[data-theme-logo]')) img.src = theme?.logoUrl || 'assets/logo.png';
   const season = document.getElementById('season');
   const greeting = pick(theme?.greeting);
   season.hidden = !greeting;
@@ -183,6 +183,11 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
   applyLanguage();
 });
 document.getElementById('year').textContent = String(new Date().getFullYear());
+
+// Opened straight from the folder (no server): the dashboard links open its demo file instead.
+if (location.protocol === 'file:') {
+  for (const link of document.querySelectorAll('a[href="/admin/"]')) link.href = '../dashboard/demo/sarena-admin-demo.html';
+}
 
 applyLanguage();
 void refresh();

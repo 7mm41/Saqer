@@ -1,6 +1,6 @@
 /* Sarena website — the app's floating-glass look. */
-@font-face { font-family: "Montserrat"; src: url("/fonts/montserrat.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Alexandria"; src: url("/fonts/alexandria-ar.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
+@font-face { font-family: "Montserrat"; src: url("fonts/montserrat.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Alexandria"; src: url("fonts/alexandria-ar.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0600-06FF, U+0750-077F, U+FB50-FDFF, U+FE70-FEFF; }
 
 :root {
   --orange: #FF7900; --glow: #FFB05C; --ember: #E45A00; --pink: #FF2F7D; --success: #1FA971;
@@ -21,6 +21,8 @@
   }
 }
 * { box-sizing: border-box; }
+/* Components set display: flex/inline-block; `hidden` must still win (empty greeting / discount badge). */
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
 body {

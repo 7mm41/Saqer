@@ -10,6 +10,15 @@ Exclusive, members-only prices in Oman — **one annual membership (15 OMR)**, b
 | [`website/`](website/index.html) | The public website at `/`, with App Store / Google Play buttons |
 | [`REQUIREMENTS.txt`](REQUIREMENTS.txt) | What the project needs to launch (OTP/SMS, server, accounts, payments...), approximate prices, and the plan for success |
 
+## Try it without a server · جرّب بدون خادم
+
+| Open this file | What you get |
+| --- | --- |
+| **`dashboard/demo/sarena-admin-demo.html`** | The full control panel with sample data, saved on your device. Double-click it, or send it to your phone |
+| **`website/index.html`** | The website (its dashboard button opens the demo above) |
+
+افتح **`dashboard/demo/sarena-admin-demo.html`** لتجربة لوحة التحكم كاملة ببيانات تجريبية. أما `dashboard/index.html` فهو ملف المصدر، ولا يعمل عند فتحه مباشرة.
+
 ## Run everything locally
 
 ```bash
