@@ -26,6 +26,8 @@
   [ ] ربط بوابة دفع حقيقية للاشتراك (انظر القسم 4).
   [ ] ربط مزوّد رسائل SMS حقيقي (القسم 3).
   [ ] مفتاح إشعارات Apple (APNs) من حساب المطوّر (القسم 2).
+  [ ] شهادة بطاقات Apple Wallet (Pass Type ID) من حساب المطوّر (القسم 2).
+      الميزة جاهزة في التطبيق والخادم واللوحة، وتعمل فور إضافة الشهادة.
   [ ] تطبيق أندرويد (القسم 6) — أغلب مستخدمي الهواتف في عُمان على أندرويد.
   [ ] التعاقد مع الأماكن الشريكة (القسم 8).
 
@@ -66,6 +68,17 @@
   لتفعيل الإشعارات: من developer.apple.com ← Keys ← أنشئ مفتاح
   (Apple Push Notifications service) وضع قيمه في backend/.env:
   APNS_KEY_ID و APNS_TEAM_ID و APNS_KEY_FILE.
+
+  لتفعيل بطاقات Apple Wallet (مجاناً ضمن حساب المطوّر):
+    1. developer.apple.com ← Identifiers ← Pass Type IDs: أنشئ مثلاً
+       pass.om.sarena.membership، ثم أنشئ له شهادة (Certificate).
+    2. افتح الشهادة في Keychain Access على الماك، وصدّرها مع مفتاحها كملف .p12
+       بكلمة مرور، وضعه في backend/certs/ (المجلد مستثنى من git).
+    3. نزّل شهادة Apple WWDR (G4) من صفحة Apple PKI وضعها في نفس المجلد.
+    4. في backend/.env: WALLET_PASS_TYPE_ID و WALLET_TEAM_ID و
+       WALLET_CERT_FILE و WALLET_CERT_PASSWORD و WALLET_WWDR_FILE.
+  بعدها يظهر زر «إضافة إلى Apple Wallet» في التطبيق لبطاقة العضوية ولكل كود،
+  ويمسح الموظف رمز QR في صفحة «استخدام الأكواد» للتحقق من العضوية.
 
 
 ----------------------------------------------------------------------------

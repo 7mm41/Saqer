@@ -7,6 +7,14 @@ struct AppConfig: Codable, Hashable, Sendable {
     var theme: SeasonalTheme?
     var reminders: ReminderSettings
     var links: Links
+    /// Whether the server can make Apple Wallet passes (older servers omit it).
+    var wallet: Wallet? = nil
+
+    struct Wallet: Codable, Hashable, Sendable {
+        var enabled = false
+    }
+
+    var walletEnabled: Bool { wallet?.enabled ?? false }
 
     struct Links: Codable, Hashable, Sendable {
         var appStoreUrl = ""

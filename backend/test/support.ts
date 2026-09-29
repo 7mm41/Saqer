@@ -9,6 +9,7 @@ import { openDatabase } from '../src/db/client.ts';
 import type { Device } from '../src/db/schema.ts';
 import { seed } from '../src/db/seed.ts';
 import type { PushMessage, PushSender } from '../src/lib/push.ts';
+import type { WalletSigner } from '../src/lib/wallet.ts';
 
 export type Json = Record<string, any>;
 
@@ -32,7 +33,7 @@ export class FakePush implements PushSender {
   }
 }
 
-export async function createTestApp() {
+export async function createTestApp(options: { wallet?: WalletSigner | null } = {}) {
   const uploadsDir = mkdtempSync(join(tmpdir(), 'sarena-test-'));
   const config = loadConfig({
     NODE_ENV: 'test',
@@ -45,7 +46,9 @@ export async function createTestApp() {
   const database = await openDatabase({ inMemory: true });
   await seed(database.db, config, () => {});
   const push = new FakePush();
-  const app: FastifyInstance = await buildApp({ config, db: database.db, logger: false, rateLimit: false, scheduler: false, push });
+  const app: FastifyInstance = await buildApp({
+    config, db: database.db, logger: false, rateLimit: false, scheduler: false, push, wallet: options.wallet ?? null,
+  });
 
   async function call(method: string, url: string, options: { token?: string; body?: unknown; headers?: Json } = {}) {
     const response = await app.inject({

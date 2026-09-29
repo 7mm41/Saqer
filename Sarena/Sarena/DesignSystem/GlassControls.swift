@@ -264,15 +264,11 @@ struct GlassIconOrb: View {
     var body: some View {
         ZStack {
             Circle().fill(LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing))
-            Circle().fill(LinearGradient(colors: [.white.opacity(0.55), .clear], startPoint: .top, endPoint: .center))
-                .padding(size * 0.06)
             Image(systemName: systemImage)
-                .font(.system(size: size * 0.42, weight: .bold))
+                .font(.system(size: size * 0.42, weight: .semibold))
                 .foregroundStyle(.white)
-                .shadow(color: .black.opacity(0.25), radius: 3, y: 2)
         }
         .frame(width: size, height: size)
-        .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))
-        .shadow(color: (colors.last ?? .black).opacity(0.45), radius: 12, y: 6)
+        .shadow(color: (colors.last ?? .black).opacity(0.22), radius: 8, y: 4)
     }
 }

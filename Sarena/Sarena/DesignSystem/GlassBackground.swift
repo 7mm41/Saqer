@@ -1,30 +1,24 @@
 import SwiftUI
 
-/// The backdrop behind every screen: colour orbs under a deep gradient.
-///
-/// It ships as a pre-blurred image (`GlassBackdrop`, light + dark), so it costs
-/// no blur or animation work at runtime. That matters: every translucent pane
-/// drawn on top would otherwise be re-composited whenever the backdrop changed.
-/// Regenerate it with `Branding/source/render.sh`.
+/// The backdrop behind every screen: one plain colour (light grey, or near-black
+/// in dark mode). Calm to look at, and it costs nothing to draw.
 struct GlassBackground: View {
     var body: some View {
-        GeometryReader { proxy in
-            Image("GlassBackdrop")
-                .resizable()
-                .scaledToFill()
-                .frame(width: proxy.size.width, height: proxy.size.height)
-                .clipped()
-        }
-        .ignoresSafeArea()
+        Theme.Palette.background
+            .ignoresSafeArea()
         .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
 }
 
 extension View {
-    /// Places the Sarena backdrop behind a full screen.
+    /// Places the Sarena backdrop behind a full screen. The screen always takes
+    /// the whole width and height first: a scroll view with little content would
+    /// otherwise shrink to it, leaving the (black) navigation container showing
+    /// at the sides.
     func sarenaScreenBackground() -> some View {
-        background { GlassBackground() }
+        frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background { GlassBackground() }
     }
 }
 

@@ -48,18 +48,9 @@ enum OfferCategory: String, CaseIterable, Identifiable, Codable, Sendable {
         }
     }
 
-    /// Each category gets its own glass colour so the grid reads at a glance.
-    var colors: [Color] {
-        switch self {
-        case .cinema: [Color(hex: 0xFF5A5F), Color(hex: 0xC2185B)]
-        case .jetSki: [Color(hex: 0x3DD6F5), Color(hex: 0x1565C0)]
-        case .shootingClub: [Color(hex: 0x9CCC65), Color(hex: 0x2E7D32)]
-        case .automobileClub: [Color(hex: 0xFFB05C), Color(hex: 0xE45A00)]
-        case .ibriArena: [Color(hex: 0xFFD54F), Color(hex: 0xF57F17)]
-        case .videoGames: [Color(hex: 0xB388FF), Color(hex: 0x5E35B1)]
-        case .festivals: [Color(hex: 0xFF80AB), Color(hex: 0xFF2F7D)]
-        }
-    }
+    /// Every category shares Sarena orange: the symbol tells them apart, and the
+    /// screen stays calm (orange, greys and white only).
+    var colors: [Color] { [Theme.Palette.glow, Theme.Palette.orange] }
 
-    var accent: Color { colors.last ?? Theme.Palette.orange }
+    var accent: Color { Theme.Palette.orange }
 }

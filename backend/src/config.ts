@@ -68,6 +68,15 @@ export function loadConfig(input: NodeJS.ProcessEnv = process.env) {
       /** false = the sandbox gateway used by Xcode / TestFlight-less development builds. */
       production: bool(env.APNS_PRODUCTION, production),
     },
+    /** Apple Wallet passes (membership card, booking codes). Off until all four are set. */
+    wallet: {
+      passTypeId: env.WALLET_PASS_TYPE_ID ?? '',
+      teamId: env.WALLET_TEAM_ID ?? env.APNS_TEAM_ID ?? '',
+      organization: env.WALLET_ORGANIZATION ?? 'Sarena',
+      certFile: env.WALLET_CERT_FILE ? resolve(root, env.WALLET_CERT_FILE) : '',
+      certPassword: env.WALLET_CERT_PASSWORD ?? '',
+      wwdrFile: env.WALLET_WWDR_FILE ? resolve(root, env.WALLET_WWDR_FILE) : '',
+    },
     /** Oman is UTC+4 all year (no daylight saving). */
     timezoneOffsetMinutes: Number(env.TIMEZONE_OFFSET_MINUTES ?? 240),
     /** Runs automatic notifications and theme changes (turn off on all but one instance if you prefer). */

@@ -91,6 +91,16 @@
         }
       }
     },
+    "Add to Apple Wallet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة إلى Apple Wallet"
+          }
+        }
+      }
+    },
     "Allow" : {
       "localizations" : {
         "ar" : {
@@ -361,6 +371,16 @@
         }
       }
     },
+    "Coming soon" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قريباً"
+          }
+        }
+      }
+    },
     "Confirm" : {
       "localizations" : {
         "ar" : {
@@ -427,6 +447,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "نسخ الكود"
+          }
+        }
+      }
+    },
+    "Couldn't add to Apple Wallet" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّرت الإضافة إلى Apple Wallet"
           }
         }
       }
@@ -1241,6 +1271,16 @@
         }
       }
     },
+    "New places in this category are on the way. We'll let you know when they arrive." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أماكن جديدة في هذه الفئة في الطريق، وسنخبرك عند وصولها."
+          }
+        }
+      }
+    },
     "New to Sarena?" : {
       "localizations" : {
         "ar" : {
@@ -1807,6 +1847,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "عرض QR"
+          }
+        }
+      }
+    },
+    "Show the card's QR at any partner to prove your membership." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اعرض رمز QR في البطاقة عند أي شريك لإثبات عضويتك."
           }
         }
       }

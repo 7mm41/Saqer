@@ -366,6 +366,18 @@ async function route(method: string, parts: string[], query: URLSearchParams, bo
       .map((u) => ({ ...u, membership: activeMembership(u.id) ? membershipOut(activeMembership(u.id)!) : null }));
     return paginate(rows, query);
   }
+  if (b === 'members' && c === 'verify' && method === 'POST') {
+    // The demo has no signing key: a card is recognised by its member number.
+    const number = /sarena:\/\/member\?n=([^&\s]+)/.exec(String(body.qr ?? ''))?.[1];
+    if (!number) throw new ApiError(400, 'not_a_member_card', 'This is not a Sarena membership card.');
+    const user = state.users.find((u) => u.memberNumber === decodeURIComponent(number).toUpperCase());
+    if (!user) throw new ApiError(404, 'card_not_recognised', 'This membership card is not recognised.');
+    const current = user.status === 'active' ? activeMembership(user.id) : undefined;
+    return {
+      member: { fullName: user.fullName, memberNumber: user.memberNumber, status: user.status },
+      active: Boolean(current), membership: current ? membershipOut(current) : null,
+    };
+  }
   if (b === 'members' && !c && method === 'POST') {
     const email = String(body.email ?? '').trim().toLowerCase();
     const phone = String(body.phone ?? '').replace(/\D/g, '').replace(/^968/, '');
@@ -724,6 +736,12 @@ export function demoCodes() {
     .sort(byNewest((bk) => bk.purchasedAt))
     .slice(0, 3)
     .map((bk) => bk.code);
+}
+
+/** A membership card QR to try (as scanned from Apple Wallet or the app). */
+export function demoMemberCard() {
+  const member = state.users.find((u) => u.role === 'member' && u.status === 'active' && activeMembership(u.id));
+  return member ? `sarena://member?n=${member.memberNumber}&s=demo` : null;
 }
 
 // ---------------------------------------------------------------- start

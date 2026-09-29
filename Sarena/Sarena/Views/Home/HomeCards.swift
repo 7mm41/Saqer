@@ -63,6 +63,8 @@ struct CategoryCard: View {
     let category: OfferCategory
     let maxDiscount: Int
     var isWide = false
+    /// No venues yet: shows "Soon" instead of a discount.
+    var isEmpty = false
 
     @Environment(\.locale) private var locale
 
@@ -124,7 +126,14 @@ struct CategoryCard: View {
 
     @ViewBuilder
     private var discountBadge: some View {
-        if maxDiscount > 0 {
+        if isEmpty {
+            Text("Soon")
+                .font(.sarena(.caption, weight: .bold))
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 9)
+                .padding(.vertical, 5)
+                .background(Capsule().fill(Color.secondary.opacity(0.14)))
+        } else if maxDiscount > 0 {
             Text(verbatim: "−" + maxDiscount.localizedPercent(locale))
                 .font(.sarena(.caption, weight: .heavy))
                 .foregroundStyle(.white)
@@ -221,7 +230,7 @@ struct SavingsBanner: View {
         .padding(Theme.Spacing.l)
         .background {
             RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.festivalPink.opacity(0.85)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.ember], startPoint: .topLeading, endPoint: .bottomTrailing))
                 .opacity(0.75)
         }
         .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2))
@@ -248,6 +257,25 @@ struct CategoryVenuesView: View {
                 }
                 .padding(.bottom, Theme.Spacing.s)
 
+                if venues.isEmpty {
+                    // A category can be empty until the first partner joins.
+                    VStack(spacing: Theme.Spacing.m) {
+                        Image(systemName: "clock.badge.checkmark")
+                            .font(.system(size: 34, weight: .semibold))
+                            .foregroundStyle(Theme.Palette.orange)
+                        Text("Coming soon")
+                            .font(.sarena(.headline, weight: .bold))
+                        Text("New places in this category are on the way. We'll let you know when they arrive.")
+                            .font(.sarena(.subheadline))
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(Theme.Spacing.xl)
+                    .frame(maxWidth: .infinity)
+                    .glassSurface(.card)
+                    .accessibilityElement(children: .combine)
+                }
+
                 ForEach(venues) { venue in
                     NavigationLink(value: HomeRoute.venue(venue)) {
                         VenueCard(venue: venue)
@@ -255,6 +283,7 @@ struct CategoryVenuesView: View {
                     .buttonStyle(.glassPress)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Theme.gutter)
             .padding(.vertical, Theme.Spacing.l)
         }

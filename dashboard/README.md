@@ -11,7 +11,7 @@ The control panel for Sarena, styled like the app (Sarena orange, Arabic first w
 | العضوية والخصومات · Membership & discounts | The single annual plan (15 OMR): name, price, perks. Also a **limited-time discount** (for example, National Day at 12 OMR) with dates, and a live preview of the app card |
 | المظهر الموسمي · Seasonal looks | For National Day, Ramadan, Eid and other occasions: the in-app logo, greeting, banner and colour, plus the bundled home-screen icon the app offers members, all on a schedule |
 | الإشعارات · Notifications | Write a push notification now or schedule it, for everyone, members or non-members. Turn automatic notifications on or off (new events, event-day morning, discount start, membership ending), set the reminder timings for booked events, and search the full history (automatic or written) |
-| استخدام الأكواد · Redeem | For venue staff: type the code or scan the member's QR code with the camera. Look up any code or member |
+| استخدام الأكواد · Redeem | For venue staff: type the code or scan the member's QR code with the camera. Scanning a **membership card** (Apple Wallet or the app) shows whether the member is active and until when, without using anything up. Look up any code or member |
 
 **Search everything** from the top bar, or press <kbd>Ctrl</kbd> <kbd>K</kbd> (<kbd>⌘</kbd> <kbd>K</kbd> on a Mac) or <kbd>/</kbd>: pages, venues and events, members (name, phone, member number) and booking codes. Picking a result opens it directly.
 

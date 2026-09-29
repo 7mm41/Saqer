@@ -73,13 +73,16 @@ struct LoginView: View {
                 title: \.title
             )
 
-            Group {
+            // Both forms share one slot and cross-fade in place: the old one fades
+            // out first, then the new one fades in while the panel resizes. Nothing
+            // slides, so neither form ever shows over the content below the panel.
+            ZStack(alignment: .top) {
                 switch viewModel.method {
-                case .phone: phoneForm
-                case .email: emailForm
+                case .phone: phoneForm.transition(Self.formSwap)
+                case .email: emailForm.transition(Self.formSwap)
                 }
             }
-            .transition(.opacity.combined(with: .move(edge: .bottom)))
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             if let error = viewModel.error {
                 ErrorBanner(message: error.message)
@@ -91,6 +94,11 @@ struct LoginView: View {
         .animation(.snappy, value: viewModel.challenge)
         .animation(.snappy, value: viewModel.error)
     }
+
+    private static let formSwap = AnyTransition.asymmetric(
+        insertion: .opacity.animation(.easeOut(duration: 0.2).delay(0.1)),
+        removal: .opacity.animation(.easeIn(duration: 0.1))
+    )
 
     // MARK: Phone
 
@@ -250,7 +258,7 @@ private struct DemoAccountCard: View {
                 Label("Demo account", systemImage: "testtube.2")
                     .font(.sarena(.headline, weight: .bold))
                 Spacer()
-                GlassBadge(text: "Testing only", tint: Theme.Palette.violet)
+                GlassBadge(text: "Testing only", tint: Theme.Palette.steel)
             }
             Grid(alignment: .leading, horizontalSpacing: Theme.Spacing.l, verticalSpacing: Theme.Spacing.s) {
                 row("Mobile", LoginView.displayPhone(DemoAccount.phone))
@@ -264,7 +272,7 @@ private struct DemoAccountCard: View {
             .buttonStyle(.sarenaGlass)
         }
         .padding(Theme.Spacing.l)
-        .glassSurface(.tinted(Theme.Palette.violet, opacity: 0.16, cornerRadius: Theme.Radius.card, shadow: .floating))
+        .glassSurface(.tinted(Theme.Palette.steel, opacity: 0.12, cornerRadius: Theme.Radius.card, shadow: .floating))
     }
 
     private func row(_ title: LocalizedStringKey, _ value: String) -> some View {

@@ -2,21 +2,26 @@ import SwiftUI
 
 /// Sarena design tokens. Every colour, radius and spacing value used by the
 /// glass components lives here so the brand can be tuned from one place.
+///
+/// The palette is deliberately small and easy on the eyes: Sarena orange, greys
+/// and white on a plain background. Red and green appear only for errors.
 enum Theme {
     enum Palette {
         /// Sampled from the Sarena logo tile.
         static let orange = Color(hex: 0xFF7900)
         static let glow = Color(hex: 0xFFB05C)
         static let ember = Color(hex: 0xE45A00)
-        static let festivalPink = Color(hex: 0xFF2F7D)
-        static let violet = Color(hex: 0x6B3DFF)
-        static let lagoon = Color(hex: 0x19C3D8)
-        static let mint = Color(hex: 0x2FD8A6)
-        static let gold = Color(hex: 0xFFC24D)
-        static let nightPlum = Color(hex: 0x170A24)
+        /// Neutral grey for secondary icons, inactive states and badges.
+        static let steel = Color(hex: 0x8E8E93)
+        /// Dark grey for artwork behind white and orange symbols.
+        static let graphite = Color(hex: 0x2E2E32)
         static let ink = Color(hex: 0x15151B)
         static let success = Color(hex: 0x22C55E)
         static let danger = Color(hex: 0xFF4D5E)
+
+        /// The plain screen background: light grey, or near-black in dark mode.
+        /// The same colour set as the launch screen, so launch → app is seamless.
+        static let background = Color("LaunchBackground")
     }
 
     static let brandGradient = LinearGradient(

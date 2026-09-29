@@ -15,7 +15,7 @@ struct MemberCard: View {
                     .font(.system(.title3, design: .rounded, weight: .black))
                 Spacer()
                 if isActiveMember {
-                    GlassBadge(text: "Member", systemImage: "crown.fill", tint: Theme.Palette.gold, prominent: true)
+                    GlassBadge(text: "Member", systemImage: "crown.fill", tint: .white)
                 } else {
                     GlassBadge(text: "Not a member yet", systemImage: "sparkles", tint: .white)
                 }
@@ -61,7 +61,7 @@ struct MemberCard: View {
         .background {
             ZStack {
                 RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                    .fill(LinearGradient(colors: [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember, Theme.Palette.festivalPink],
+                    .fill(LinearGradient(colors: [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember],
                                          startPoint: .topLeading, endPoint: .bottomTrailing))
                     .opacity(0.85)
                 // Holographic sheen
@@ -127,7 +127,7 @@ struct SavingsCard: View {
         .padding(Theme.Spacing.xl)
         .background {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.ember, Theme.Palette.festivalPink.opacity(0.8)],
+                .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.ember],
                                      startPoint: .topLeading, endPoint: .bottomTrailing))
                 .opacity(0.85)
         }

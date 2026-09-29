@@ -583,6 +583,11 @@ final class MediaURLTests: XCTestCase {
          "links":{"appStoreUrl":"","googlePlayUrl":"","whatsapp":"","email":"","instagram":""},"timeZone":"Asia/Muscat"}
         """#
         let config = try APIClient.makeDecoder(baseURL: base).decode(AppConfig.self, from: Data(json.utf8))
+        // Older servers don't mention Apple Wallet: the button stays hidden.
+        XCTAssertFalse(config.walletEnabled)
+        let withWallet = try APIClient.decoder.decode(AppConfig.self, from: Data(json.replacingOccurrences(
+            of: #""timeZone":"Asia/Muscat"}"#, with: #""timeZone":"Asia/Muscat","wallet":{"enabled":true}}"#).utf8))
+        XCTAssertTrue(withWallet.walletEnabled)
         XCTAssertEqual(config.theme?.logoURL?.absoluteString, "https://tunnel.example/uploads/eid.png")
         XCTAssertEqual(config.theme?.bannerURL?.absoluteString, "https://tunnel.example/uploads/banner.jpg")
         // Cached copies keep the full address.

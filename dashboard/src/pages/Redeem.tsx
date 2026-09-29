@@ -8,7 +8,17 @@ import { Empty, Loading, PageHead, SearchField, StatusBadge, useDebounced, useEr
 
 type Result =
   | { ok: true; booking: Booking & { offerTitle: Localized }; member: { fullName: string; memberNumber: string } }
+  | { ok: true; card: MemberCheck }
   | { ok: false; message: string };
+
+/** A scanned membership card (Apple Wallet or the app): checked live on the server. */
+type MemberCheck = {
+  member: { fullName: string; memberNumber: string; status: string };
+  active: boolean;
+  membership: { expiresAt: string } | null;
+};
+
+const isMemberCard = (raw: string) => /sarena:\/\/member\?/i.test(raw);
 
 // Chrome/Android and recent Safari expose BarcodeDetector; elsewhere staff type the code.
 type Detector = { detect: (source: HTMLVideoElement) => Promise<{ rawValue: string }[]> };
@@ -23,7 +33,7 @@ function extractCode(raw: string) {
 }
 
 export function RedeemPage() {
-  const { t, L, money, dateTime, number } = useI18n();
+  const { t, L, money, dateTime, date, number } = useI18n();
   const errorText = useErrorText();
   const [code, setCode] = useState('');
   const [result, setResult] = useState<Result | null>(null);
@@ -48,13 +58,36 @@ export function RedeemPage() {
     clearIntent();
   }, [intent, clearIntent]);
   const [samples, setSamples] = useState<string[]>([]);
+  const [sampleCard, setSampleCard] = useState<string | null>(null);
   const loadSamples = () => {
-    if (DEMO) void import('../demo/server').then(({ demoCodes }) => setSamples(demoCodes()));
+    if (DEMO) {
+      void import('../demo/server').then(({ demoCodes, demoMemberCard }) => {
+        setSamples(demoCodes());
+        setSampleCard(demoMemberCard());
+      });
+    }
   };
   useEffect(loadSamples, []);
   useLive(['bookings'], () => { void reload(); loadSamples(); });
 
+  /** A membership card (Apple Wallet or the app): is this an active member? Nothing is used up. */
+  const verifyCard = async (qr: string) => {
+    setBusy(true);
+    try {
+      const card = await post<MemberCheck>('admin/members/verify', { qr: qr.trim() });
+      setResult(card.active ? { ok: true, card } : { ok: false, message: t('cardNotActive', { name: card.member.fullName }) });
+      setCode('');
+      navigator.vibrate?.(card.active ? 60 : [80, 60, 80]);
+    } catch (error) {
+      setResult({ ok: false, message: error instanceof ApiError && error.status === 404 ? t('cardNotRecognised') : errorText(error) });
+      navigator.vibrate?.([80, 60, 80]);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const redeem = async (value: string) => {
+    if (isMemberCard(value)) return verifyCard(value);
     const normalized = extractCode(value);
     if (normalized.length < 6) return;
     setBusy(true);
@@ -116,7 +149,11 @@ export function RedeemPage() {
       <div className="grid two top">
         <form className="glass card stack" onSubmit={submit}>
           <input ref={input} className="input code-input ltr" dir="ltr" autoFocus autoComplete="off" spellCheck={false} placeholder="SRN-XXXX-XXXX"
-            value={code} onChange={(event) => setCode(event.target.value.toUpperCase())} />
+            value={code} onChange={(event) => {
+              // Codes are upper-case; a membership card link (e.g. typed by a hand scanner) keeps its case.
+              const value = event.target.value;
+              setCode(isMemberCard(value) ? value : value.toUpperCase());
+            }} />
           <div className="row">
             <button className="btn primary" style={{ flex: 1 }} disabled={busy || code.trim().length < 6}><Icon name="check" size={18} />{t('redeemAction')}</button>
             {window.BarcodeDetector && (
@@ -130,9 +167,23 @@ export function RedeemPage() {
               {samples.map((sample) => (
                 <button key={sample} type="button" className="badge orange ltr num clickable-badge" onClick={() => setCode(sample)}>{sample}</button>
               ))}
+              {sampleCard && (
+                <button type="button" className="badge clickable-badge" onClick={() => void verifyCard(sampleCard)}>
+                  <Icon name="crown" size={12} />{t('sampleMemberCard')}
+                </button>
+              )}
             </div>
           )}
-          {result && (result.ok ? (
+          {result && (result.ok && 'card' in result ? (
+            <div className="result ok">
+              <span className="big" aria-hidden><Icon name="crown" size={22} /></span>
+              <div className="stack" style={{ gap: 4 }}>
+                <strong>{t('cardActive')}</strong>
+                <span>{result.card.member.fullName} · <span className="ltr num">{result.card.member.memberNumber}</span></span>
+                {result.card.membership && <span className="muted num">{t('until')} {date(result.card.membership.expiresAt)}</span>}
+              </div>
+            </div>
+          ) : result.ok ? (
             <div className="result ok">
               <span className="big" aria-hidden><Icon name="check" size={24} /></span>
               <div className="stack" style={{ gap: 4 }}>

@@ -152,7 +152,7 @@ private struct PasswordStrengthMeter: View {
     private var color: Color {
         switch strength {
         case .weak: Theme.Palette.danger
-        case .fair: Theme.Palette.gold
+        case .fair: Theme.Palette.orange
         case .strong: Theme.Palette.success
         }
     }

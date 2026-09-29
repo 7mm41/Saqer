@@ -12,6 +12,7 @@ extension AppServices {
             config: APIAppConfigService(client: client),
             push: APIPushRegistration(client: client),
             live: ServerSentEventsClient(client: client),
+            walletPasses: APIWalletPasses(client: client),
             isDemo: false
         )
     }

@@ -182,7 +182,8 @@ struct HomeView: View {
             LazyVGrid(columns: columns, spacing: Theme.Spacing.l) {
                 ForEach(gridCategories) { category in
                     NavigationLink(value: viewModel.route(for: category)) {
-                        CategoryCard(category: category, maxDiscount: viewModel.maxDiscount(in: category))
+                        CategoryCard(category: category, maxDiscount: viewModel.maxDiscount(in: category),
+                                     isEmpty: viewModel.venues(in: category).isEmpty)
                     }
                     .buttonStyle(.glassPress)
                 }
@@ -191,7 +192,8 @@ struct HomeView: View {
             // The festivals card spans the full width as a seasonal banner.
             if let festivals = categories.last {
                 NavigationLink(value: viewModel.route(for: festivals)) {
-                    CategoryCard(category: festivals, maxDiscount: viewModel.maxDiscount(in: festivals), isWide: true)
+                    CategoryCard(category: festivals, maxDiscount: viewModel.maxDiscount(in: festivals), isWide: true,
+                                 isEmpty: viewModel.venues(in: festivals).isEmpty)
                 }
                 .buttonStyle(.glassPress)
             }

@@ -99,7 +99,8 @@ struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
             if let material = style.material {
                 shape.fill(material)
             } else {
-                shape.fill(.white.opacity(isDark ? 0.09 : 0.46))
+                // Plain cards on the plain background: white, or a raised grey in dark mode.
+                shape.fill(.white.opacity(isDark ? 0.07 : 0.94))
             }
 
             if let tint = style.tint {
@@ -113,10 +114,10 @@ struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
             }
 
             if style.sheen {
-                // Inner reflection: light enters from the upper-leading corner.
+                // A faint reflection from the upper-leading corner.
                 shape.fill(
                     LinearGradient(
-                        colors: [.white.opacity(isDark ? 0.16 : 0.38), .white.opacity(0)],
+                        colors: [.white.opacity(isDark ? 0.06 : 0.12), .white.opacity(0)],
                         startPoint: .topLeading,
                         endPoint: UnitPoint(x: 0.6, y: 0.55)
                     )
@@ -125,22 +126,19 @@ struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
         }
     }
 
+    /// A quiet hairline edge (tinted panes keep a touch of their colour).
     private var rimGradient: LinearGradient {
-        LinearGradient(
-            colors: [
-                .white.opacity(isDark ? 0.55 : 0.85),
-                .white.opacity(isDark ? 0.08 : 0.25),
-                .white.opacity(isDark ? 0.04 : 0.15),
-                (style.tint ?? .white).opacity(isDark ? 0.45 : 0.55),
-            ],
+        let edge: Color = isDark ? .white.opacity(0.09) : .black.opacity(0.06)
+        return LinearGradient(
+            colors: [edge, edge, (style.tint ?? edge).opacity(style.tint == nil ? 1 : (isDark ? 0.35 : 0.3))],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
     }
 
     private var shadowColor: Color {
-        if style.shadow.glowsWithTint, let tint = style.tint { return tint }
-        return isDark ? .black : Theme.Palette.ember.opacity(0.55)
+        if style.shadow.glowsWithTint, let tint = style.tint { return tint.opacity(0.6) }
+        return isDark ? .black : .black.opacity(0.35)
     }
 
     private var isDark: Bool { colorScheme == .dark }

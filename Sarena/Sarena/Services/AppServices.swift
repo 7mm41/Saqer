@@ -14,6 +14,8 @@ struct AppServices: Sendable {
     var push: any PushRegistrationServicing = NoPushRegistration()
     /// Server push for live updates; nil for the on-device mock backend.
     var live: (any LiveUpdatesServicing)?
+    /// Apple Wallet passes; nil for the on-device mock backend (nothing to sign them).
+    var walletPasses: (any WalletPassServicing)? = nil
     /// True while the app runs on the mock backend: enables the demo-account shortcut.
     var isDemo = false
 

@@ -213,7 +213,7 @@ const STRINGS = {
   status_cancelled: ['Cancelled', 'ملغى'],
   status_failed: ['Failed', 'فشل'],
   // Redeem
-  redeemHint: ["Type or scan the member's code at the entrance.", 'اكتب أو امسح كود العضو عند المدخل.'],
+  redeemHint: ["Type or scan the member's code, or scan their membership card (Apple Wallet or the app), at the entrance.", 'اكتب أو امسح كود العضو، أو امسح بطاقة عضويته (من Apple Wallet أو التطبيق) عند المدخل.'],
   scan: ['Scan QR', 'مسح QR'],
   stopScan: ['Stop camera', 'إيقاف الكاميرا'],
   redeemAction: ['Redeem', 'تأكيد الاستخدام'],
@@ -279,6 +279,11 @@ const STRINGS = {
   copy: ['Copy', 'نسخ'],
   passwordOnce: ['The password is shown only now: copy it and send it to them.', 'تظهر كلمة المرور الآن فقط: انسخها وأرسلها لصاحب الحساب.'],
   done: ['Done', 'تم'],
+  // Membership cards (Apple Wallet)
+  cardActive: ['Active member — member prices apply', 'عضو فعّال — تُطبَّق أسعار الأعضاء'],
+  cardNotActive: ['{name} has no active membership.', 'لا توجد عضوية فعّالة لـ {name}.'],
+  cardNotRecognised: ['This membership card is not recognised.', 'بطاقة العضوية هذه غير معروفة.'],
+  sampleMemberCard: ['Membership card', 'بطاقة عضوية'],
   // Connect the app
   connectApp: ['Connect the app', 'ربط التطبيق'],
   connectAppTitle: ['Connect the Sarena app to this server', 'ربط تطبيق سرينا بهذا الخادم'],

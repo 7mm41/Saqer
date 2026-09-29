@@ -6,6 +6,8 @@ struct AccountView: View {
     @State private var viewModel: AccountViewModel
     @Environment(\.locale) private var locale
     @Environment(AppRouter.self) private var router: AppRouter?
+    @Environment(\.services) private var services
+    @Environment(AppConfigStore.self) private var appConfig
 
     init(store: MembershipStore, session: SessionStore, wallet: WalletStore, isDemo: Bool) {
         _viewModel = State(initialValue: AccountViewModel(store: store, session: session, wallet: wallet, isDemo: isDemo))
@@ -38,6 +40,17 @@ struct AccountView: View {
                     )
 
                     subscribeButton
+
+                    // The membership card in Apple Wallet: partners scan its QR to confirm the membership.
+                    if viewModel.isActive, appConfig.config.walletEnabled, let passes = services.walletPasses {
+                        VStack(spacing: Theme.Spacing.s) {
+                            AddToAppleWallet { language in try await passes.membershipPass(language: language) }
+                            Text("Show the card's QR at any partner to prove your membership.")
+                                .font(.sarena(.caption))
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
 
                     if viewModel.isDemo {
                         Label("Demo mode — no payment is taken.", systemImage: "info.circle")
@@ -165,7 +178,7 @@ struct MembershipCard: View {
                 .fill(LinearGradient(
                     colors: isActive
                         ? [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember]
-                        : [Theme.Palette.orange.opacity(0.9), Theme.Palette.ember, Theme.Palette.festivalPink.opacity(0.85)],
+                        : [Color(hex: 0x6B6B70), Theme.Palette.graphite],
                     startPoint: .topLeading, endPoint: .bottomTrailing
                 ))
         }

@@ -29,6 +29,8 @@ export async function appConfigRoutes(api: FastifyInstance) {
         instagram: config.links.instagram,
       },
       timeZone: 'Asia/Muscat',
+      /** "Add to Apple Wallet" is offered only when the server can sign passes. */
+      wallet: { enabled: api.wallet !== null },
     });
   };
 

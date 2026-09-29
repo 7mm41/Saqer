@@ -22,6 +22,7 @@ import { authRoutes } from './routes/auth.ts';
 import { catalogRoutes } from './routes/catalog.ts';
 import { liveRoutes } from './routes/live.ts';
 import { memberRoutes } from './routes/member.ts';
+import { createWalletSigner, type WalletSigner } from './lib/wallet.ts';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -31,6 +32,8 @@ declare module 'fastify' {
     sms: SmsSender;
     live: LiveHub;
     notifier: Notifier;
+    /** Signs Apple Wallet passes; null until the Pass Type ID certificate is configured. */
+    wallet: WalletSigner | null;
     /** `preHandler: app.guard()` (any signed-in user) or `app.guard('admin')`. */
     guard: (...roles: Role[]) => preHandlerHookHandler;
   }
@@ -43,6 +46,8 @@ export type BuildOptions = {
   live?: LiveHub;
   /** Push provider; defaults to APNs when configured. */
   push?: PushSender;
+  /** Wallet pass signer; defaults to the certificate in the config (tests pass their own). */
+  wallet?: WalletSigner | null;
   /** Runs the notification scheduler (tests call `app.notifier.tick()` themselves). */
   scheduler?: boolean;
   logger?: boolean;
@@ -50,7 +55,7 @@ export type BuildOptions = {
 };
 
 export async function buildApp({
-  config, db, live = new LiveHub(), push, scheduler = config.scheduler, logger = true, rateLimit: limitRequests = true,
+  config, db, live = new LiveHub(), push, wallet, scheduler = config.scheduler, logger = true, rateLimit: limitRequests = true,
 }: BuildOptions): Promise<FastifyInstance> {
   const app = Fastify({
     logger: logger ? { level: config.production ? 'info' : 'debug' } : false,
@@ -67,6 +72,7 @@ export async function buildApp({
   app.decorate('live', live);
   const notifier = new Notifier({ db, push: push ?? createPushSender(config, app.log), live, config, log: app.log });
   app.decorate('notifier', notifier);
+  app.decorate('wallet', wallet !== undefined ? wallet : loadWallet(config, app.log));
   app.decorateRequest('auth', null);
   await live.start();
   if (scheduler) app.addHook('onReady', async () => notifier.start());
@@ -150,4 +156,16 @@ export async function buildApp({
   });
 
   return app;
+}
+
+/** The Wallet signing identity, or null (feature off) with a log line saying why. */
+function loadWallet(config: Config, log: FastifyInstance['log']): WalletSigner | null {
+  try {
+    const signer = createWalletSigner(config.wallet);
+    if (signer) log.info(`Apple Wallet passes are on (${signer.passTypeId}).`);
+    return signer;
+  } catch (error) {
+    log.error(`Apple Wallet passes are off: ${(error as Error).message}`);
+    return null;
+  }
 }

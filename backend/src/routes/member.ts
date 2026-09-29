@@ -9,6 +9,7 @@ import { live } from '../lib/live.ts';
 import { activeMembership, grantMembership } from '../lib/memberships.ts';
 import { effectivePriceBaisa } from '../lib/plans.ts';
 import { parse, uuidParam } from '../lib/validation.ts';
+import { bookingPass, buildPass, memberQr, membershipPass } from '../lib/wallet.ts';
 import { serializeBooking, serializeMembership, serializeUser } from '../serializers.ts';
 
 const CODE_VALIDITY_DAYS = 30;
@@ -90,6 +91,41 @@ export async function memberRoutes(api: FastifyInstance) {
       api.live.publish(live.offerRemaining(booking.offerId, booking.venueId, remaining));
     }
     return reply.status(201).send({ booking: serializeBooking(booking, eventStartsAt) });
+  });
+
+  // ---- Apple Wallet
+
+  const walletLang = (request: { query: unknown }) => ((request.query as { lang?: string })?.lang === 'en' ? 'en' : 'ar');
+  const sendPass = (reply: import('fastify').FastifyReply, name: string, pass: Buffer) =>
+    reply.header('Content-Type', 'application/vnd.apple.pkpass')
+      .header('Content-Disposition', `attachment; filename="${name}.pkpass"`)
+      .header('Cache-Control', 'no-store')
+      .send(pass);
+  const requireWallet = () => {
+    if (!api.wallet) throw new ApiError(503, 'wallet_unavailable', 'Apple Wallet passes are not set up on the server yet.');
+    return api.wallet;
+  };
+
+  /** The membership card: its QR lets any partner confirm the membership is active. */
+  api.get('/me/wallet/membership.pkpass', signedIn, async (request, reply) => {
+    const signer = requireWallet();
+    const { user } = requireAuthContext(request);
+    const membership = await activeMembership(db, user.id);
+    const pass = membershipPass({ user, membership, qr: memberQr(api.config.jwtSecret, user), lang: walletLang(request) });
+    return sendPass(reply, 'Sarena-membership', buildPass(signer, pass));
+  });
+
+  /** One booking code as a pass (event ticket or coupon), with the same QR as in the app. */
+  api.get('/me/bookings/:id/wallet.pkpass', signedIn, async (request, reply) => {
+    const signer = requireWallet();
+    const { user } = requireAuthContext(request);
+    const { id } = parse(uuidParam, request.params);
+    const [row] = await db.select({ booking: bookings, venue: venues }).from(bookings)
+      .leftJoin(venues, eq(venues.id, bookings.venueId))
+      .where(and(eq(bookings.id, id), eq(bookings.userId, user.id))).limit(1);
+    if (!row) throw errors.notFound('Booking');
+    const pass = bookingPass({ booking: row.booking, venue: row.venue, lang: walletLang(request) });
+    return sendPass(reply, row.booking.code, buildPass(signer, pass));
   });
 
   /** The member confirms the venue accepted the code (staff can also redeem it from the dashboard). */

@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Placeholder hero art per category: brand gradient, floating glass discs and
-/// the category symbol. Swap for venue photography (AsyncImage) when available.
+/// Placeholder hero art per category: a dark grey field with the category
+/// symbol in an orange disc. Venue photos (from the dashboard) cover it.
 struct VenueArtwork: View {
     let category: OfferCategory
     var symbolSize: CGFloat = 72
@@ -34,25 +34,18 @@ struct VenueArtwork: View {
 
     private var artwork: some View {
         ZStack {
-            LinearGradient(colors: category.colors, startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(colors: [Color(hex: 0x3A3A3F), Theme.Palette.graphite], startPoint: .topLeading, endPoint: .bottomTrailing)
             Circle()
-                .fill(.white.opacity(0.18))
+                .fill(.white.opacity(0.05))
                 .frame(width: symbolSize * 2.6, height: symbolSize * 2.6)
                 .offset(x: symbolSize * 1.2, y: -symbolSize * 0.9)
             Circle()
-                .fill(.white.opacity(0.10))
-                .frame(width: symbolSize * 1.8, height: symbolSize * 1.8)
-                .offset(x: -symbolSize * 1.4, y: symbolSize * 0.9)
-            // Frosted disc: a translucent fill looks the same over a gradient
-            // as a live material, without the backdrop blur.
-            Circle()
-                .fill(LinearGradient(colors: [.white.opacity(0.34), .white.opacity(0.14)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(Theme.brandGradient)
                 .frame(width: symbolSize * 1.7, height: symbolSize * 1.7)
-                .overlay(Circle().strokeBorder(.white.opacity(0.45), lineWidth: 1))
+                .shadow(color: Theme.Palette.orange.opacity(0.35), radius: 14, y: 6)
             Image(systemName: category.symbol)
-                .font(.system(size: symbolSize, weight: .bold))
+                .font(.system(size: symbolSize, weight: .semibold))
                 .foregroundStyle(.white)
-                .shadow(color: .black.opacity(0.25), radius: 8, y: 6)
         }
     }
 }
@@ -89,7 +82,7 @@ struct RatingView: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: "star.fill")
-                .foregroundStyle(Theme.Palette.gold)
+                .foregroundStyle(Theme.Palette.orange)
             Text(verbatim: rating.rating(locale))
                 .fontWeight(.bold)
             Text(verbatim: "(\(reviewCount.localizedNumber(locale)))")

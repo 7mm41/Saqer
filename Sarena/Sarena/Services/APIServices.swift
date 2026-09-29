@@ -158,6 +158,31 @@ actor APIAppConfigService: AppConfigServicing {
     }
 }
 
+/// `GET /v1/me/wallet/membership.pkpass` and `GET /v1/me/bookings/:id/wallet.pkpass`.
+struct APIWalletPasses: WalletPassServicing {
+    let client: APIClient
+
+    func membershipPass(language: String) async throws -> Data {
+        try await download("me/wallet/membership.pkpass", language: language)
+    }
+
+    func bookingPass(id: String, language: String) async throws -> Data {
+        try await download("me/bookings/\(id)/wallet.pkpass", language: language)
+    }
+
+    private func download(_ path: String, language: String) async throws -> Data {
+        var request = client.makeRequest("GET", path)
+        request.url = request.url?.appending(queryItems: [URLQueryItem(name: "lang", value: language)])
+        request.setValue("application/vnd.apple.pkpass", forHTTPHeaderField: "Accept")
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        let (data, response) = try await client.data(for: request)
+        guard (200..<300).contains(response.statusCode) else {
+            throw APIClient.error(from: data, status: response.statusCode)
+        }
+        return data
+    }
+}
+
 struct APIPushRegistration: PushRegistrationServicing {
     let client: APIClient
 

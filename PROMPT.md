@@ -78,7 +78,11 @@ Arabic comes first, and English is always available. Write production-quality co
 
 **App style**
 
-* **Floating glassmorphism** with a warm backdrop, frosted cards, rim light, soft shadows and orange-tinted glass for primary actions.
+* **Calm and minimal: Sarena orange, greys and white only.**
+  * A **plain background**: light grey `#F3F3F5`, or near-black `#121214` in dark mode. It is the same colour set as the launch screen.
+  * White (or raised dark grey) cards with a hairline edge and a soft shadow.
+  * Orange for primary actions and highlights.
+  * Red and green only for errors and the password meter.
 * App fonts: Montserrat (Latin) and Alexandria (Arabic).
 
 **Control panel style**
@@ -86,17 +90,20 @@ Arabic comes first, and English is always available. Write production-quality co
 * IBM Plex Sans Arabic for both scripts, bundled with its OFL licence.
 * **Western digits everywhere**, e.g. `1,769.100 ر.ع.`, with tabular figures.
 
-**Categories:** each has its own two-colour gradient and a line icon, the same in the app and the control panel. The panel uses its own SVG icon set, not emoji:
+**Categories:** in the app, every category is the **same orange circle with a white symbol**; the symbol tells them apart.
 
-| Category | Colours | Icon |
-| --- | --- | --- |
-| Cinema | `#FF5A5F → #C2185B` | clapperboard |
-| Jet Ski | `#3DD6F5 → #1565C0` | waves |
-| Shooting club | `#9CCC65 → #2E7D32` | target |
-| Automobile | `#FFB05C → #E45A00` | car |
-| Ibri Arena | `#FFD54F → #F57F17` | flag |
-| Video games | `#B388FF → #5E35B1` | gamepad |
-| Festivals | `#FF80AB → #FF2F7D` | sparkles |
+* Venue art without a photo: dark grey, with the symbol in an orange disc.
+* The control panel uses its own SVG icon set, not emoji:
+
+| Category | Icon |
+| --- | --- |
+| Cinema | clapperboard |
+| Jet Ski | waves |
+| Shooting club | target |
+| Automobile | car |
+| Ibri Arena | flag |
+| Video games | gamepad |
+| Festivals | sparkles |
 
 **Money:** amounts are stored in **baisa** (1 OMR = 1000 baisa) and always shown with 3 decimals, e.g. `15.000 ر.ع.` / `OMR 15.000`.
 
@@ -135,6 +142,7 @@ Arabic comes first, and English is always available. Write production-quality co
 3. Language picker: greeting chips, with Arabic and English live and other languages marked "Soon".
 4. Onboarding carousel: three illustrated pages with Continue/Skip and a capsule indicator.
 5. Sign in by **mobile number + SMS code** (SMS AutoFill) or **email + password**, or create a free account.
+   * Switching between phone and email **cross-fades the two forms in the same place**: the old one fades out, then the new one fades in while the panel resizes. Nothing slides over the content below.
    * Registration validates live: Omani numbers (8 digits starting with 7 or 9), Arabic-Indic digits accepted, password strength.
    * The session lives in the Keychain.
 
@@ -143,7 +151,10 @@ Arabic comes first, and English is always available. Write production-quality co
 * **Discover:**
   * a savings banner and a seasonal banner/greeting;
   * a 3D cover-flow featured carousel with live countdowns;
-  * the 7 category cards, a "Biggest savings" list, and search.
+  * the 7 category cards, a "Biggest savings" list, and search;
+  * a category with one venue opens it directly;
+  * an empty category shows a "Soon" badge, and its screen says "Coming soon" instead of staying blank;
+  * every screen fills the full width before drawing its background, so a short list never leaves black bands at the sides.
 * **Venue detail:**
   * a hero photo (uploaded from the control panel) or the category art, with a floating discount medallion;
   * event dates, description, highlights;
@@ -152,11 +163,13 @@ Arabic comes first, and English is always available. Write production-quality co
   * a quantity picker and a floating **Book Now** bar, which becomes **Become a member** without a membership.
 * **Wallet:**
   * glass segmented control "Active / Used";
-  * ticket-shaped cards, a QR sheet, copy code, mark as used.
+  * ticket-shaped cards, a QR sheet, copy code, mark as used;
+  * **Add to Apple Wallet** on every active code.
 * **My Account:**
   * the membership card and member savings (total saved, ready and redeemed codes);
   * the single plan (15 OMR / year, or the discount price) with status, valid-until date, days left, progress and perks;
   * **Subscribe / Renew**, with the confirmation anchored to the button;
+  * **Add to Apple Wallet** for active members: the membership card as a pass, whose QR lets any partner confirm the membership;
   * **Delete account** (an Apple requirement).
 * **Settings:**
   * language (current language with an LTR/RTL badge, in-app switch, link to iOS language settings);
@@ -174,7 +187,7 @@ Arabic comes first, and English is always available. Write production-quality co
 
 **Performance rules** (the app must stay cool):
 
-* A static, pre-blurred backdrop image; content cards use a frosted fill, not live blur.
+* A plain background colour; content cards use a solid fill, not live blur.
 * Real materials only on bars, sheets and form panels.
 * No endless animations on glass.
 * Parallax on a few hero elements only. The motion manager is reference-counted, samples at 20 Hz, and pauses in Low Power Mode, under heat, with Reduce Motion, or when the Settings toggle is off.
@@ -221,6 +234,11 @@ Arabic comes first, and English is always available. Write production-quality co
 * On-phone reminders for booked events: the morning of the event and at least N hours before, plus a final nudge, timed from the server's settings.
 * Ask for permission after booking an event, or from Settings.
 
+**Apple Wallet:**
+
+* `AddToAppleWallet` wraps Apple's own `PKAddPassButton`. It downloads the signed pass from the server with the member's token and the app language, then shows `PKAddPassesViewController`.
+* It appears only when `/app/config` says `wallet.enabled`, the services have `walletPasses` (not on the on-device demo), and the device can add passes.
+
 **Demo account** (on-device demo and server demo mode):
 
 * `demo@sarena.om` / `Sarena2026`;
@@ -249,7 +267,7 @@ Arabic comes first, and English is always available. Write production-quality co
   * **PostgreSQL** in production, with `docker compose up -d --build` running Sarena and Postgres on port 3000.
 * Serves `website/` at `/` and `dashboard/dist` at `/admin/`, with an SPA fallback to `index.html`.
 * **Security:**
-  * helmet with a strict CSP (images `self data: blob:`);
+  * helmet with a strict CSP (images `self data: blob:`), **without `upgrade-insecure-requests`**: Safari applies it to `http://localhost` and the pages would load blank. HTTPS belongs to the proxy;
   * rate limits on sign-in, OTP and the public stream;
   * JSON errors `{ error: { code, message } }`.
 
@@ -303,6 +321,11 @@ Arabic comes first, and English is always available. Write production-quality co
     * `POST /notifications/:id/cancel`;
     * `GET/PATCH /settings/notifications`.
   * Bookings: `GET /bookings?q=&status=` (code or member name), `POST /bookings/redeem` (once; clear errors for already used, expired, not found).
+  * **Membership cards**: `POST /members/verify { qr }` (admins and staff). It returns the member, `active` and the expiry date, checked live. A forged or unknown card gets 404, and anything that isn't a card gets 400.
+* **Apple Wallet** (members):
+  * `GET /me/wallet/membership.pkpass?lang=ar|en` for the membership card;
+  * `GET /me/bookings/:id/wallet.pkpass?lang=` for one code;
+  * `/app/config` reports `wallet.enabled`.
 
 **Live hub** (`/v1/live`, Server-Sent Events):
 
@@ -315,6 +338,27 @@ Arabic comes first, and English is always available. Write production-quality co
 * Signing out or suspension ends the member's streams.
 * Public streams carry only the "all" events.
 * With several server instances, bridge events through Postgres LISTEN/NOTIFY.
+
+**Apple Wallet passes** (`lib/wallet.ts`, node-forge):
+
+* A `.pkpass` zip holds:
+  * `pass.json`, icons and logo;
+  * `en.lproj` / `ar.lproj/pass.strings` for the labels;
+  * `manifest.json` with SHA-1 hashes;
+  * `signature`: a detached PKCS #7 signature by the Pass Type ID certificate (.p12) plus Apple's WWDR certificate.
+* Colours: orange background, white text.
+* **Membership card** (generic pass):
+  * shows the name, member number, status and valid-until date;
+  * QR `sarena://member?n=<number>&s=<HMAC of the account id>`, so a number that is merely guessed is refused;
+  * Wallet greys it out after the expiry date.
+* **Code pass** (event ticket for events, coupon otherwise):
+  * shows the venue, ticket, quantity, code, and price vs original;
+  * carries the same QR as the app (`sarena://redeem?code=…`);
+  * appears on the lock screen near the venue (`locations`) and on the event day (`relevantDate`);
+  * is voided once used.
+* Settings: `WALLET_PASS_TYPE_ID`, `WALLET_TEAM_ID`, `WALLET_CERT_FILE`, `WALLET_CERT_PASSWORD`, `WALLET_WWDR_FILE`. The feature is off (503 `wallet_unavailable`, and the app hides the button) until they are set.
+* Keys stay out of git (`*.p12`, `*.p8`, `certs/`).
+* Tests make a test CA and certificate, check the zip and hashes, verify the signature with OpenSSL, and cover verification and forged cards.
 
 **Notifier:**
 
@@ -423,7 +467,8 @@ Arabic comes first, and English is always available. Write production-quality co
 8. **Redeem codes** (the only page for venue staff):
    * type or scan the QR with the camera (`BarcodeDetector`);
    * clear success or error states;
-   * recent codes, with a lookup for any code or member.
+   * recent codes, with a lookup for any code or member;
+   * scanning a **membership card** (from Apple Wallet or the app) shows "Active member — member prices apply" with the name, number and valid-until date, or "no active membership", without using anything up. A hand scanner typing the link keeps its case.
 
 **Connect the app:**
 

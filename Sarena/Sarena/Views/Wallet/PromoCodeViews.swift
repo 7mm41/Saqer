@@ -155,6 +155,8 @@ struct PromoCodeSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
+    @Environment(\.services) private var services
+    @Environment(AppConfigStore.self) private var appConfig
     @State private var isConfirmingUse = false
 
     var body: some View {
@@ -186,6 +188,11 @@ struct PromoCodeSheet: View {
                     .font(.sarena(.subheadline))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+
+                // The same QR in Apple Wallet, on the lock screen near the venue or on the event day.
+                if code.status == .active, appConfig.config.walletEnabled, let passes = services.walletPasses {
+                    AddToAppleWallet { language in try await passes.bookingPass(id: code.id, language: language) }
+                }
 
                 details
 

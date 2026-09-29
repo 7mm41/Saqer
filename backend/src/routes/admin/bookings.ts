@@ -5,8 +5,10 @@ import { requireAuthContext } from '../../auth.ts';
 import { bookings, users } from '../../db/schema.ts';
 import { ApiError, errors } from '../../lib/errors.ts';
 import { live } from '../../lib/live.ts';
+import { activeMembership } from '../../lib/memberships.ts';
 import { pagination, parse } from '../../lib/validation.ts';
-import { serializeBooking } from '../../serializers.ts';
+import { checkMemberSignature, parseMemberQr } from '../../lib/wallet.ts';
+import { serializeBooking, serializeMembership } from '../../serializers.ts';
 
 export async function bookingAdminRoutes(admin: FastifyInstance) {
   const { db } = admin;
@@ -27,6 +29,27 @@ export async function bookingAdminRoutes(admin: FastifyInstance) {
     return {
       items: rows.map((r) => ({ ...serializeBooking(r.booking), member: { id: r.user.id, fullName: r.user.fullName, memberNumber: r.user.memberNumber } })),
       total: total?.n ?? 0, page: query.page, pageSize: query.pageSize,
+    };
+  });
+
+  /**
+   * Venue staff scan a membership card (from Apple Wallet or the app): is this
+   * person an active Sarena member? Checked live, so a renewed or cancelled
+   * membership is always current whatever the card shows.
+   */
+  admin.post('/members/verify', { preHandler: admin.guard('admin', 'staff') }, async (request) => {
+    const { qr } = parse(z.object({ qr: z.string().trim().min(10).max(300) }), request.body);
+    const card = parseMemberQr(qr);
+    if (!card) throw new ApiError(400, 'not_a_member_card', 'This is not a Sarena membership card.');
+    const [user] = await db.select().from(users).where(eq(users.memberNumber, card.memberNumber)).limit(1);
+    if (!user || !checkMemberSignature(admin.config.jwtSecret, user.id, card.signature)) {
+      throw new ApiError(404, 'card_not_recognised', 'This membership card is not recognised.');
+    }
+    const current = user.status === 'active' ? await activeMembership(db, user.id) : null;
+    return {
+      member: { fullName: user.fullName, memberNumber: user.memberNumber, status: user.status },
+      active: current !== null,
+      membership: current ? serializeMembership(current.membership, current.plan) : null,
     };
   });
 

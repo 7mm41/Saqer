@@ -86,7 +86,7 @@ struct BookingConfirmationView: View {
                                      center: .center, startRadius: 30, endRadius: 80))
                 .frame(width: 160, height: 160)
             Circle()
-                .fill(LinearGradient(colors: [Color(hex: 0x4ADE80), Theme.Palette.success], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(Theme.brandGradient)
                 .frame(width: 92, height: 92)
                 .overlay(Circle().fill(LinearGradient(colors: [.white.opacity(0.5), .clear], startPoint: .top, endPoint: .center)).padding(5))
                 .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))

@@ -92,7 +92,7 @@ struct SettingsView: View {
         return GlassBadge(
             text: isRTL ? "Right-to-left" : "Left-to-right",
             systemImage: isRTL ? "text.alignright" : "text.alignleft",
-            tint: isRTL ? Theme.Palette.festivalPink : Theme.Palette.lagoon
+            tint: isRTL ? Theme.Palette.orange : Theme.Palette.steel
         )
     }
 
@@ -217,7 +217,7 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             } else {
                 Circle()
-                    .fill(liveSync.isConnected ? Color.green : Color.orange)
+                    .fill(liveSync.isConnected ? Theme.Palette.orange : Theme.Palette.steel)
                     .frame(width: 7, height: 7)
                 Text(verbatim: ServerAddress.current()?.host() ?? "—")
                     .foregroundStyle(.secondary)

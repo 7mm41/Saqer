@@ -39,6 +39,7 @@
 		5E8C057B949AA1CDCE0B950BB0257383 /* LiveSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ECA780A2EFEFC6AED314638788DAC8 /* LiveSync.swift */; };
 		644DD813B0BB222B92C1A06EAC598B0B /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9683F10E25DF65139A8FEFB2CC18402F /* HomeViewModel.swift */; };
 		65B3F6D2B8B5A6550423935B02455F0F /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291FD34959CE01E81503293ED4E1B8B1 /* Components.swift */; };
+		8E1BDD18E996432DBB2FEBA139F511B5 /* AppleWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD6F4394942456B9AD42BF3D7602231 /* AppleWallet.swift */; };
 		6CB0668A3A3C0BF969CAA639C3A67F48 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4FB57A18A75DBB5CE709946B937D4D4 /* RegisterView.swift */; };
 		72DCAE2CC631AB09B0CF4B338E9F9746 /* AppConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A813FF23E5EFB6C83CC0786F8C19768 /* AppConfigService.swift */; };
 		760AC72DD123689E7106820A786CB3F8 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76938BA50E7C42333EB8825BD845A733 /* PreviewSupport.swift */; };
@@ -106,6 +107,7 @@
 		24D9AF0565EB96A60C5492E306F064A2 /* MembershipStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MembershipStore.swift; sourceTree = "<group>"; };
 		28ECA780A2EFEFC6AED314638788DAC8 /* LiveSync.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveSync.swift; sourceTree = "<group>"; };
 		291FD34959CE01E81503293ED4E1B8B1 /* Components.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		CCD6F4394942456B9AD42BF3D7602231 /* AppleWallet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleWallet.swift; sourceTree = "<group>"; };
 		2A813FF23E5EFB6C83CC0786F8C19768 /* AppConfigService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConfigService.swift; sourceTree = "<group>"; };
 		2C73CA577C0766EEBB42C7BA2651A7F9 /* Sarena.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sarena.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D072D3EDC9BABD0A0EFDE2579BDC0D8 /* AppPreferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		4714DFF7799922604DB0890BB4E77705 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				CCD6F4394942456B9AD42BF3D7602231 /* AppleWallet.swift */,
 				291FD34959CE01E81503293ED4E1B8B1 /* Components.swift */,
 				D4364D19C1F11DB8B692B76A0DF0E9BC /* Feedback.swift */,
 				20E7DAFCAEB46326AE0FAD3E0CE722E4 /* LanguageTransitionView.swift */,
@@ -621,6 +624,7 @@
 				333E1205E2BF1275BF7024E3B1BCAFDA /* OnboardingFlowView.swift in Sources */,
 				45867CB6DE70CA350EA4B4BFEC727C27 /* SettingsView.swift in Sources */,
 				65B3F6D2B8B5A6550423935B02455F0F /* Components.swift in Sources */,
+				8E1BDD18E996432DBB2FEBA139F511B5 /* AppleWallet.swift in Sources */,
 				BAA251052A50856E4534809F6CF47D1E /* Feedback.swift in Sources */,
 				EEC62A1E0E952AC795E8C49D2FBDABC6 /* LanguageTransitionView.swift in Sources */,
 				760AC72DD123689E7106820A786CB3F8 /* PreviewSupport.swift in Sources */,
