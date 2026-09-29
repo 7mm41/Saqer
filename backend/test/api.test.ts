@@ -203,6 +203,13 @@ describe('public', () => {
     assert.equal(body.error.code, 'unauthorized');
   });
 
+  test('pages load their files over plain http (Safari on localhost)', async () => {
+    const page = await app.inject({ method: 'GET', url: '/admin/' });
+    const policy = String(page.headers['content-security-policy'] ?? '');
+    assert.match(policy, /script-src 'self'/);
+    assert.doesNotMatch(policy, /upgrade-insecure-requests/);
+  });
+
   test('dashboard routes fall back to its index.html', async () => {
     const index = await app.inject({ method: 'GET', url: '/admin/venues' });
     assert.equal(index.statusCode, 200);

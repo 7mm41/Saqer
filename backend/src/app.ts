@@ -89,6 +89,10 @@ export async function buildApp({
         workerSrc: ["'self'"],
         manifestSrc: ["'self'"],
         frameAncestors: ["'none'"],
+        // Off: Safari applies it to http://localhost too, so the website and the
+        // control panel would load their files from https://localhost and stay
+        // blank. HTTPS is enforced by the proxy in front of the server instead.
+        upgradeInsecureRequests: null,
       },
     },
     crossOriginResourcePolicy: { policy: 'same-site' },
