@@ -20,50 +20,28 @@ struct BrandMark: View {
     }
 }
 
-/// The 3D glass Sarena price tag (rendered artwork in `SarenaLogo`), with an
-/// orange halo so it glows over the scene.
+/// The Sarena logo (or the one set in the dashboard) at a given size, still.
 struct SarenaLogoView: View {
     var size: CGFloat = 120
-    /// Idle float + device parallax. Keep it for hero moments (splash, sign-in);
-    /// small logos inside content stay still.
-    var floats = false
 
     var body: some View {
-        let logo = BrandMark()
+        BrandMark()
             .frame(width: size, height: size)
-            .background {
-                // Radial gradient instead of a blur filter: same glow, no per-frame blur.
-                Circle()
-                    .fill(RadialGradient(colors: [Theme.Palette.orange.opacity(0.45), Theme.Palette.orange.opacity(0)],
-                                         center: .center, startRadius: 0, endRadius: size * 0.75))
-                    .frame(width: size * 1.5, height: size * 1.5)
-            }
             .accessibilityLabel(Text("Sarena"))
-
-        if floats {
-            logo
-                .idleFloat(amplitude: size * 0.05, period: 2.8)
-                .parallax(tilt: 10, shift: size * 0.04)
-        } else {
-            logo
-        }
     }
 }
 
 /// Logo + wordmark. The wordmark is localised ("Sarena" / "سرينا").
 struct SarenaWordmark: View {
     var logoSize: CGFloat = 96
-    var floats = true
 
     var body: some View {
         VStack(spacing: Theme.Spacing.m) {
-            SarenaLogoView(size: logoSize, floats: floats)
+            SarenaLogoView(size: logoSize)
             Text("Sarena")
                 .font(.system(size: logoSize * 0.38, weight: .black, design: .rounded))
                 .tracking(2)
-                .foregroundStyle(
-                    LinearGradient(colors: [.primary, .primary.opacity(0.75)], startPoint: .top, endPoint: .bottom)
-                )
+                .foregroundStyle(.primary)
         }
     }
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Big carousel card: artwork, floating glass info panel, countdown and discount.
+/// Big carousel card: artwork, info panel, countdown and discount.
 struct FeaturedDealCard: View {
     let venue: Venue
     @Environment(\.locale) private var locale
@@ -51,9 +51,8 @@ struct FeaturedDealCard: View {
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                .strokeBorder(LinearGradient(colors: [.white.opacity(0.7), .white.opacity(0.1)], startPoint: .top, endPoint: .bottom), lineWidth: 1)
+                .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
         }
-        .shadow(color: venue.category.accent.opacity(0.4), radius: 20, y: 12)
         .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous))
     }
 }
@@ -93,17 +92,6 @@ struct CategoryCard: View {
         }
         .padding(Theme.Spacing.l)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            // Colour bleeding through the glass from the corner.
-            // Radial gradient, not a blur filter: blurs are re-applied every frame while scrolling.
-            Circle()
-                .fill(RadialGradient(colors: [category.accent.opacity(0.4), category.accent.opacity(0)],
-                                     center: .center, startRadius: 0, endRadius: 110))
-                .frame(width: 220, height: 220)
-                .offset(x: 80, y: -80)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
-        }
         .glassSurface(.tile)
         .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
     }
@@ -136,11 +124,10 @@ struct CategoryCard: View {
         } else if maxDiscount > 0 {
             Text(verbatim: "−" + maxDiscount.localizedPercent(locale))
                 .font(.sarena(.caption, weight: .heavy))
-                .foregroundStyle(.white)
+                .foregroundStyle(Theme.Palette.accentText)
                 .padding(.horizontal, 9)
                 .padding(.vertical, 5)
-                .background(Capsule().fill(category.accent.gradient))
-                .shadow(color: category.accent.opacity(0.5), radius: 8, y: 4)
+                .background(Capsule().fill(Theme.Palette.orangeSoft))
                 .accessibilityLabel(Text("Up to \(maxDiscount.localizedPercent(locale)) off"))
         }
     }
@@ -162,8 +149,8 @@ struct VenueCard: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3)
-                        .background(Capsule().fill(Theme.brandGradient))
-                        .offset(y: 8)
+                        .background(Capsule().fill(Theme.Palette.orangeFill))
+                        .padding(.bottom, 6)
                 }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -189,51 +176,44 @@ struct VenueCard: View {
     }
 }
 
-/// Marketing banner: lifetime savings (or the membership promise for new members).
+/// Lifetime savings (or the membership promise for new members) on a white card.
 struct SavingsBanner: View {
     let totalSavings: Decimal
     @Environment(\.locale) private var locale
 
     var body: some View {
         HStack(spacing: Theme.Spacing.l) {
-            ZStack {
-                Circle().fill(.white.opacity(0.25))
-                Image(systemName: totalSavings > 0 ? "chart.line.uptrend.xyaxis" : "crown.fill")
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(.white)
-            }
-            .frame(width: 54, height: 54)
+            GlassIconOrb(systemImage: totalSavings > 0 ? "chart.line.uptrend.xyaxis" : "crown.fill",
+                         colors: [Theme.Palette.orange], size: 52)
 
             VStack(alignment: .leading, spacing: 2) {
                 if totalSavings > 0 {
                     Text("You've saved")
                         .font(.sarena(.caption, weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.85))
+                        .foregroundStyle(.secondary)
                     Text(verbatim: totalSavings.omr(locale))
                         .font(.sarena(.title2, weight: .heavy))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Theme.Palette.accentText)
                         .contentTransition(.numericText())
                     Text("with your Sarena membership")
                         .font(.sarena(.caption))
-                        .foregroundStyle(.white.opacity(0.85))
+                        .foregroundStyle(.secondary)
                 } else {
                     Text("Members save up to \(50.localizedPercent(locale)) every day")
                         .font(.sarena(.headline, weight: .bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                     Text("Book your first deal to start saving.")
                         .font(.sarena(.caption))
-                        .foregroundStyle(.white.opacity(0.85))
+                        .foregroundStyle(.secondary)
                 }
             }
             Spacer(minLength: 0)
+            Image(systemName: "chevron.forward")
+                .font(.footnote.weight(.bold))
+                .foregroundStyle(.tertiary)
         }
         .padding(Theme.Spacing.l)
-        .background {
-            RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                .fill(LinearGradient(colors: [Theme.Palette.orange, Theme.Palette.ember], startPoint: .topLeading, endPoint: .bottomTrailing))
-                .opacity(0.75)
-        }
-        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2))
+        .glassSurface(.card)
     }
 }
 
@@ -290,6 +270,6 @@ struct CategoryVenuesView: View {
         .sarenaScreenBackground()
         .navigationTitle(category.title)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .sarenaNavigationBar()
     }
 }

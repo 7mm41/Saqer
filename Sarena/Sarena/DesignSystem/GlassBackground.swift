@@ -20,6 +20,23 @@ extension View {
         frame(maxWidth: .infinity, maxHeight: .infinity)
             .background { GlassBackground() }
     }
+
+    /// A solid title bar in the screen colour: the title never sits on top of
+    /// cards scrolled underneath it.
+    func sarenaNavigationBar() -> some View {
+        toolbarBackground(Theme.Palette.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+    }
+
+    /// For screens without a title bar: the status bar (clock, battery) gets
+    /// the screen colour, so content scrolled up doesn't show behind it.
+    func sarenaStatusBarBackdrop() -> some View {
+        safeAreaInset(edge: .top, spacing: 0) {
+            Color.clear
+                .frame(height: 0)
+                .background(Theme.Palette.background)
+        }
+    }
 }
 
 #Preview {

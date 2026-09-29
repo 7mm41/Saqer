@@ -63,7 +63,7 @@ struct AccountView: View {
             }
             .sarenaScreenBackground()
             .navigationTitle("My Account")
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .sarenaNavigationBar()
             .alert("Couldn't complete the subscription", isPresented: isShowingFailure, presenting: viewModel.failure) { _ in
                 Button("OK", role: .cancel) {}
             } message: { failure in
@@ -87,16 +87,14 @@ struct AccountView: View {
             viewModel.requestSubscription()
         } label: {
             if viewModel.isProcessing {
-                ProgressView().tint(.white)
+                ProgressView().tint(isMainAction ? Color.white : Theme.Palette.orange)
             } else if viewModel.isRenewal {
                 Label("Renew for \(viewModel.plan.effectivePrice.omr(locale)) / year", systemImage: "arrow.clockwise")
             } else {
                 Label("Subscribe for \(viewModel.plan.effectivePrice.omr(locale)) / year", systemImage: "crown.fill")
             }
         }
-        .buttonStyle(viewModel.isActive && !(viewModel.membership?.isEndingSoon() ?? false)
-            ? SarenaButtonStyle(kind: .glass)
-            : SarenaButtonStyle(kind: .prominent))
+        .buttonStyle(SarenaButtonStyle(kind: isMainAction ? .prominent : .glass))
         .disabled(viewModel.isProcessing || viewModel.isLoading)
         // Attached to the button so it appears right next to it (iOS 26 shows it as a popover).
         .confirmationDialog(confirmationTitle, isPresented: $viewModel.isConfirming, titleVisibility: .visible) {
@@ -109,6 +107,12 @@ struct AccountView: View {
                 Text("\(viewModel.plan.effectivePrice.omr(locale)) for one year of member prices at every Sarena venue and event.")
             }
         }
+    }
+
+    /// Subscribing (or renewing near the end) is the screen's main action; an
+    /// early renewal is offered quietly.
+    private var isMainAction: Bool {
+        !(viewModel.isActive && !(viewModel.membership?.isEndingSoon() ?? false))
     }
 
     private var confirmationTitle: Text {
@@ -130,11 +134,7 @@ struct MembershipCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.l) {
             HStack(alignment: .center, spacing: Theme.Spacing.m) {
-                Image(systemName: "crown.fill")
-                    .font(.system(size: 30, weight: .bold))
-                    .frame(width: 64, height: 64)
-                    .background(Circle().fill(.white.opacity(0.25)))
-                    .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: 1))
+                GlassIconOrb(systemImage: "crown.fill", colors: [isActive ? Theme.Palette.orange : Theme.Palette.steel], size: 60)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(verbatim: plan.name(locale))
                         .font(.sarena(.title3, weight: .heavy))
@@ -151,7 +151,7 @@ struct MembershipCard: View {
 
             if isLoading {
                 ProgressView()
-                    .tint(.white)
+                    .tint(Theme.Palette.orange)
                     .frame(maxWidth: .infinity)
             } else if let membership, isActive {
                 validity(membership)
@@ -165,24 +165,15 @@ struct MembershipCard: View {
                         Text(verbatim: perk(locale))
                     } icon: {
                         Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(Theme.Palette.accentText)
                     }
                     .font(.sarena(.subheadline, weight: .medium))
                 }
             }
         }
-        .foregroundStyle(.white)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Theme.Spacing.xl)
-        .background {
-            RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                .fill(LinearGradient(
-                    colors: isActive
-                        ? [Theme.Palette.glow, Theme.Palette.orange, Theme.Palette.ember]
-                        : [Color(hex: 0x6B6B70), Theme.Palette.graphite],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                ))
-        }
-        .glassSurface(.tinted(Theme.Palette.orange, opacity: 0.2, cornerRadius: Theme.Radius.hero))
+        .glassSurface(.card)
         .animation(.smooth, value: membership)
         .accessibilityElement(children: .combine)
     }
@@ -191,13 +182,13 @@ struct MembershipCard: View {
     private var statusBadge: some View {
         switch membership.map({ $0.isActive() ? Membership.Status.active : ($0.status == .cancelled ? .cancelled : .expired) }) {
         case .active:
-            GlassBadge(text: "Active", systemImage: "checkmark.seal.fill", tint: .white)
+            GlassBadge(text: "Active", systemImage: "checkmark.seal.fill")
         case .expired:
-            GlassBadge(text: "Expired", systemImage: "clock.badge.exclamationmark", tint: .white)
+            GlassBadge(text: "Expired", systemImage: "clock.badge.exclamationmark", tint: Theme.Palette.steel)
         case .cancelled:
-            GlassBadge(text: "Cancelled", systemImage: "xmark.circle", tint: .white)
+            GlassBadge(text: "Cancelled", systemImage: "xmark.circle", tint: Theme.Palette.steel)
         case nil:
-            GlassBadge(text: "Not a member yet", systemImage: "sparkles", tint: .white)
+            GlassBadge(text: "Not a member yet", systemImage: "sparkles", tint: Theme.Palette.steel)
         }
     }
 
@@ -207,7 +198,7 @@ struct MembershipCard: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Valid until")
                         .font(.sarena(.caption, weight: .semibold))
-                        .opacity(0.85)
+                        .foregroundStyle(.secondary)
                     Text(verbatim: membership.expiresAt.shortDate(locale))
                         .font(.sarena(.title2, weight: .heavy))
                 }
@@ -218,15 +209,15 @@ struct MembershipCard: View {
                         .contentTransition(.numericText())
                     Text("days left")
                         .font(.sarena(.caption, weight: .semibold))
-                        .opacity(0.85)
+                        .foregroundStyle(.secondary)
                 }
             }
             ProgressView(value: progress)
-                .tint(.white)
-                .background(Capsule().fill(.white.opacity(0.25)))
+                .tint(Theme.Palette.orange)
             if membership.isEndingSoon() {
                 Label("Ending soon — renew to keep your member prices.", systemImage: "exclamationmark.circle.fill")
                     .font(.sarena(.caption, weight: .bold))
+                    .foregroundStyle(Theme.Palette.accentText)
             }
         }
     }
@@ -240,14 +231,14 @@ struct MembershipCard: View {
                 Image(systemName: "gift.fill")
             }
             .font(.sarena(.caption, weight: .heavy))
+            .foregroundStyle(Theme.Palette.accentText)
             .padding(.horizontal, Theme.Spacing.m)
             .padding(.vertical, 6)
-            .background(Capsule().fill(.white.opacity(0.28)))
-            .overlay(Capsule().strokeBorder(.white.opacity(0.5), lineWidth: 1))
+            .background(Capsule().fill(Theme.Palette.orangeSoft))
             if let endsAt = promo.endsAt {
                 Text("Until \(endsAt.shortDate(locale))")
                     .font(.sarena(.caption, weight: .semibold))
-                    .opacity(0.9)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -257,8 +248,8 @@ struct MembershipCard: View {
             if plan.promo != nil {
                 Text(verbatim: plan.price.omr(locale))
                     .font(.sarena(.headline, weight: .semibold))
-                    .strikethrough(true, color: .white)
-                    .opacity(0.75)
+                    .strikethrough(true, color: .secondary)
+                    .foregroundStyle(.secondary)
             }
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(verbatim: plan.effectivePrice.omr(locale))
@@ -267,14 +258,14 @@ struct MembershipCard: View {
                     .minimumScaleFactor(0.6)
                 Text(plan.isYearly ? "/ year" : "/ period")
                     .font(.sarena(.headline, weight: .semibold))
-                    .opacity(0.85)
+                    .foregroundStyle(.secondary)
             }
             Text("Just \(plan.monthlyEquivalent.omr(locale)) a month")
                 .font(.sarena(.subheadline, weight: .semibold))
-                .opacity(0.9)
+                .foregroundStyle(Theme.Palette.accentText)
             Text(verbatim: plan.description(locale))
                 .font(.sarena(.caption))
-                .opacity(0.85)
+                .foregroundStyle(.secondary)
         }
     }
 }

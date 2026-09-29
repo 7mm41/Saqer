@@ -12,10 +12,7 @@ struct RootView: View {
     @Environment(AppConfigStore.self) private var appConfig
     @Environment(\.locale) private var locale
     @State private var notifications = NotificationsManager.shared
-    @Environment(MotionManager.self) private var motion
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @AppStorage(PreferenceKeys.floatingMotion) private var floatingMotion = true
     @AppStorage(PreferenceKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @State private var launchFinished = false
     /// The member whose data was last loaded; later activations re-sync it.
@@ -118,14 +115,6 @@ struct RootView: View {
             guard !Task.isCancelled else { return }
             await notifications.reminders.sync(codes: wallet.codes, settings: appConfig.reminders, locale: locale)
         }
-        .onChange(of: motionAllowed, initial: true) { _, allowed in
-            // The sensor itself only runs while a `.parallax()` view is on screen.
-            motion.setAllowed(allowed)
-        }
-    }
-
-    private var motionAllowed: Bool {
-        floatingMotion && !reduceMotion && scenePhase == .active
     }
 }
 

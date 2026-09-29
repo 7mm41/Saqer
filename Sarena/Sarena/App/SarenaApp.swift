@@ -6,7 +6,6 @@ struct SarenaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     /// Everything that talks to the server; rebuilt when the app is connected to another one.
     @State private var container = AppContainer(services: .configured())
-    @State private var motion = MotionManager()
     @State private var languageCoordinator = LanguageCoordinator()
     /// A server offered by a `sarena://connect?server=…` link, awaiting confirmation.
     @State private var offeredServer: URL?
@@ -25,7 +24,6 @@ struct SarenaApp: App {
                 .environment(container.appConfig)
                 // A fresh screen tree (and fresh stores) for a new server.
                 .id(container.id)
-                .environment(motion)
                 .environment(languageCoordinator)
                 .appLanguage(languageCoordinator.language)
                 // Branded "changing language" cover, so the switch never flips the UI in view.

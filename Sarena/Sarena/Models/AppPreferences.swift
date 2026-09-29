@@ -2,7 +2,9 @@ import SwiftUI
 
 // MARK: - App icon
 
-/// Home Screen icons shipped in `Assets.xcassets`.
+/// Home Screen icons shipped in `Assets.xcassets`. Members no longer pick
+/// them (the look is set in the control panel); the list lets someone who
+/// chose one in an earlier version return to `.classic`.
 ///
 /// Every alternate must also be listed in the target's
 /// `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES` build setting
@@ -36,39 +38,6 @@ enum AppIcon: String, CaseIterable, Identifiable {
         case .nationalDay: "AppIcon-NationalDay"
         case .ramadan: "AppIcon-Ramadan"
         case .eid: "AppIcon-Eid"
-        }
-    }
-
-    /// Offered by the dashboard's seasonal themes.
-    var isSeasonal: Bool {
-        switch self {
-        case .nationalDay, .ramadan, .eid: true
-        default: false
-        }
-    }
-
-    var title: LocalizedStringKey {
-        switch self {
-        case .classic: "Sarena Classic"
-        case .glass: "Glassmorphism Logo"
-        case .midnight: "Midnight Glass"
-        case .frost: "Frost Glass"
-        case .nationalDay: "National Day"
-        case .ramadan: "Ramadan"
-        case .eid: "Eid"
-        }
-    }
-
-    /// Alternate icons can't be loaded with `UIImage(named:)`, so previews ship as image sets.
-    var previewImageName: String {
-        switch self {
-        case .classic: "IconPreview-Classic"
-        case .glass: "IconPreview-Glass"
-        case .midnight: "IconPreview-Midnight"
-        case .frost: "IconPreview-Frost"
-        case .nationalDay: "IconPreview-NationalDay"
-        case .ramadan: "IconPreview-Ramadan"
-        case .eid: "IconPreview-Eid"
         }
     }
 
@@ -172,6 +141,5 @@ enum AppAppearance: String, CaseIterable, Identifiable {
 }
 
 enum PreferenceKeys {
-    static let floatingMotion = "sarena.floatingMotion"
     static let hasCompletedOnboarding = "sarena.onboarding.completed"
 }

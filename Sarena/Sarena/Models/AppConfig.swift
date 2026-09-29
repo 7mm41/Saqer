@@ -83,11 +83,6 @@ struct SeasonalTheme: Codable, Hashable, Sendable, Identifiable {
         try c.encodeIfPresent(endsAt, forKey: .endsAt)
     }
 
-    /// The bundled icon this theme suggests, if the app has it.
-    var icon: AppIcon? {
-        guard let iconName else { return nil }
-        return AppIcon.allCases.first { $0.alternateIconName == iconName }
-    }
 }
 
 /// When the phone reminds members of events they booked (set in the dashboard).

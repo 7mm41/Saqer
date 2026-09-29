@@ -683,7 +683,7 @@ final class AppConfigTests: XCTestCase {
          "links":{"appStoreUrl":"","googlePlayUrl":"","whatsapp":"96890000000","email":"","instagram":""},"timeZone":"Asia/Muscat"}
         """#
         let config = try APIClient.decoder.decode(AppConfig.self, from: Data(json.utf8))
-        XCTAssertEqual(config.theme?.icon, .nationalDay)
+        XCTAssertEqual(config.theme?.iconName, "AppIcon-NationalDay")
         XCTAssertEqual(config.theme?.logoURL?.lastPathComponent, "nd.png")
         XCTAssertNil(config.theme?.bannerURL)
         XCTAssertEqual(config.reminders, ReminderSettings(morningHour: 9, hoursBefore: 6, finalReminderMinutes: 30))
@@ -705,30 +705,7 @@ final class AppConfigTests: XCTestCase {
 }
 
 @MainActor
-final class SeasonalIconTests: XCTestCase {
-    private func store(theme: SeasonalTheme?) async -> AppConfigStore {
-        let service = MockAppConfigService(config: AppConfig(theme: theme, reminders: .standard, links: .init()))
-        let store = AppConfigStore(service: service, defaults: Fixtures.defaults())
-        await store.refresh()
-        return store
-    }
-
-    func testOffersTheSeasonalIconOnceUntilDismissed() async {
-        let theme = SeasonalTheme(id: "nd", name: "National Day", iconName: "AppIcon-NationalDay")
-        let store = await store(theme: theme)
-        XCTAssertEqual(store.iconSuggestion(currentIconName: nil), .apply(.nationalDay))
-        XCTAssertNil(store.iconSuggestion(currentIconName: "AppIcon-NationalDay"))
-        store.dismiss(.apply(.nationalDay))
-        XCTAssertNil(store.iconSuggestion(currentIconName: nil))
-    }
-
-    func testOffersToSwitchBackAfterTheSeason() async {
-        let store = await store(theme: nil)
-        XCTAssertEqual(store.iconSuggestion(currentIconName: "AppIcon-Ramadan"), .restore(from: .ramadan))
-        XCTAssertNil(store.iconSuggestion(currentIconName: "AppIcon-Glass"), "a member's own choice is left alone")
-        XCTAssertNil(store.iconSuggestion(currentIconName: nil))
-    }
-
+final class SeasonalThemeTests: XCTestCase {
     func testCachesTheLastConfig() async {
         let defaults = Fixtures.defaults()
         let theme = SeasonalTheme(id: "r", name: "Ramadan", greeting: LocalizedText("Ramadan Kareem", ar: "رمضان كريم"))

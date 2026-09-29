@@ -5,7 +5,7 @@ import UIKit
 @MainActor
 final class SettingsViewModel {
     private(set) var currentIcon: AppIcon
-    private(set) var changingIcon: AppIcon?
+    private(set) var isRestoringIcon = false
     var iconChangeFailed = false
     var isConfirmingSignOut = false
     private(set) var isSigningOut = false
@@ -13,13 +13,10 @@ final class SettingsViewModel {
     private(set) var isDeleting = false
     var deletionFailed = false
 
-    let supportsAlternateIcons: Bool
-
     private let session: SessionStore
 
     init(session: SessionStore) {
         self.session = session
-        self.supportsAlternateIcons = UIApplication.shared.supportsAlternateIcons
         self.currentIcon = AppIcon(alternateIconName: UIApplication.shared.alternateIconName)
     }
 
@@ -34,25 +31,23 @@ final class SettingsViewModel {
 
     // MARK: App icon
 
-    /// Switches the Home Screen icon.
-    ///
-    /// `AppIcon.glass` maps to the **"AppIcon-Glass"** alternate icon set — the
-    /// Glassmorphism logo — declared in `Assets.xcassets` and listed in the
-    /// target's `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES` build setting.
-    /// Passing `.classic` restores the primary icon (`nil` alternate name).
-    func setIcon(_ icon: AppIcon) async {
-        guard supportsAlternateIcons, icon != currentIcon, changingIcon == nil else { return }
-        changingIcon = icon
-        defer { changingIcon = nil }
+    /// Members no longer choose icons: the look is set in the control panel.
+    /// Someone who picked one in an earlier version can go back to the
+    /// original (App Store rule 4.6 asks for a way back).
+    var usesAlternateIcon: Bool { currentIcon != .classic }
+
+    func restoreOriginalIcon() async {
+        guard usesAlternateIcon, !isRestoringIcon else { return }
+        isRestoringIcon = true
+        defer { isRestoringIcon = false }
         do {
-            try await AppIconSwitcher.apply(icon)
-            currentIcon = icon
+            try await AppIconSwitcher.apply(.classic)
+            currentIcon = .classic
         } catch {
             iconChangeFailed = true
         }
     }
 
-    /// Re-reads the icon (it may have been changed from the seasonal banner).
     func refreshIcon() {
         currentIcon = AppIconSwitcher.current
     }
@@ -76,8 +71,8 @@ final class SettingsViewModel {
     }
 }
 
-/// Changes the Home Screen icon. Always called from a tap: App Store rule 4.6
-/// requires every icon change to be initiated by the member.
+/// Changes the Home Screen icon. Only ever called from a tap: App Store rule
+/// 4.6 requires every icon change to be initiated by the member.
 @MainActor
 enum AppIconSwitcher {
     static var current: AppIcon { AppIcon(alternateIconName: UIApplication.shared.alternateIconName) }

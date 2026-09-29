@@ -38,6 +38,7 @@ struct LoginView: View {
             .scrollDismissesKeyboard(.interactively)
             .sarenaScreenBackground()
             .toolbar(.hidden, for: .navigationBar)
+            .sarenaStatusBarBackdrop()
             .navigationDestination(isPresented: $showsRegistration) {
                 RegisterView(auth: auth, session: session)
             }

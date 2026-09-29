@@ -17,43 +17,26 @@ struct SarenaButtonStyle: ButtonStyle {
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity, minHeight: 54)
             .padding(.horizontal, Theme.Spacing.xl)
-            .background { background(pressed: configuration.isPressed) }
-            .overlay {
-                Capsule()
-                    .strokeBorder(
-                        LinearGradient(colors: [.white.opacity(0.75), .white.opacity(0.05), .white.opacity(0.3)],
-                                       startPoint: .topLeading, endPoint: .bottomTrailing),
-                        lineWidth: 1
-                    )
-            }
+            .background { capsule }
             .contentShape(Capsule())
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
-            .opacity(isEnabled ? 1 : 0.5)
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .opacity(isEnabled ? (configuration.isPressed ? 0.85 : 1) : 0.5)
+            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
     }
 
+    /// Flat fills, no glow: one solid orange for the main action, a white card
+    /// for the others.
     @ViewBuilder
-    private func background(pressed: Bool) -> some View {
+    private var capsule: some View {
         switch kind {
         case .prominent:
-            ZStack {
-                Capsule().fill(Theme.brandGradient)
-                // Glossy upper half — the "wet glass" highlight.
-                Capsule()
-                    .fill(LinearGradient(colors: [.white.opacity(0.45), .white.opacity(0)], startPoint: .top, endPoint: .center))
-                    .padding(2)
-            }
-            .shadow(color: Theme.Palette.orange.opacity(pressed ? 0.25 : 0.55), radius: pressed ? 8 : 18, y: pressed ? 4 : 10)
+            Capsule().fill(Theme.Palette.orangeFill)
         case .glass:
             Capsule()
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(pressed ? 0.08 : 0.18), radius: pressed ? 6 : 14, y: pressed ? 3 : 8)
+                .fill(Theme.Palette.card)
+                .overlay(Capsule().strokeBorder(Color.primary.opacity(0.08), lineWidth: 1))
         case .destructive:
-            ZStack {
-                Capsule().fill(.ultraThinMaterial)
-                Capsule().fill(Theme.Palette.danger.opacity(0.22))
-            }
-            .shadow(color: Theme.Palette.danger.opacity(pressed ? 0.15 : 0.35), radius: pressed ? 6 : 14, y: pressed ? 3 : 8)
+            Capsule().fill(Theme.Palette.danger.opacity(0.10))
         }
     }
 
@@ -144,7 +127,7 @@ struct GlassTextField: View {
 
 // MARK: - Segmented control
 
-/// A floating glass segmented control with a sliding orange "jewel".
+/// A segmented control with a sliding orange selection.
 struct GlassSegmentedControl<Option: Hashable & Identifiable>: View {
     let options: [Option]
     @Binding var selection: Option
@@ -176,9 +159,7 @@ struct GlassSegmentedControl<Option: Hashable & Identifiable>: View {
                     .background {
                         if isSelected {
                             Capsule()
-                                .fill(Theme.brandGradient)
-                                .overlay(Capsule().fill(LinearGradient(colors: [.white.opacity(0.35), .clear], startPoint: .top, endPoint: .center)))
-                                .shadow(color: Theme.Palette.orange.opacity(0.5), radius: 12, y: 6)
+                                .fill(Theme.Palette.orangeFill)
                                 .matchedGeometryEffect(id: "jewel", in: namespace)
                         }
                     }
@@ -224,15 +205,28 @@ struct GlassBadge: View {
             label
         }
         .font(.sarena(.caption, weight: .bold))
-        .foregroundStyle(prominent ? Color.white : tint)
+        .foregroundStyle(textColor)
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .background {
-            if prominent {
-                Capsule().fill(tint.gradient)
-            }
-        }
-        .glassSurface(prominent ? .flat : .tinted(tint, opacity: 0.18, cornerRadius: 99, shadow: .none), in: Capsule())
+        .background { Capsule().fill(fillColor) }
+    }
+
+    /// `.white` marks a badge on a photo or artwork: a solid card-coloured chip
+    /// with dark text, readable on any picture.
+    private var isChip: Bool { tint == .white }
+
+    private var textColor: Color {
+        if isChip { return .primary }
+        if prominent { return .white }
+        // Orange words are darkened (lightened in dark mode) so they stay readable.
+        return tint == Theme.Palette.orange ? Theme.Palette.accentText : tint
+    }
+
+    /// Solid for "prominent", otherwise a soft wash of the colour behind the text.
+    private var fillColor: Color {
+        if isChip { return Theme.Palette.card }
+        if prominent { return tint == Theme.Palette.orange ? Theme.Palette.orangeFill : tint }
+        return tint.opacity(0.12)
     }
 }
 
@@ -255,20 +249,22 @@ struct SectionHeader: View {
     }
 }
 
-/// Circular glass "orb" holding an SF Symbol — used for category icons.
+/// A soft circle holding an SF Symbol — used for category icons. The symbol
+/// takes the last colour (Sarena orange) on a light wash of it.
 struct GlassIconOrb: View {
     let systemImage: String
     var colors: [Color]
     var size: CGFloat = 52
 
+    private var tint: Color { colors.last ?? Theme.Palette.orange }
+
     var body: some View {
         ZStack {
-            Circle().fill(LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing))
+            Circle().fill(tint.opacity(0.12))
             Image(systemName: systemImage)
                 .font(.system(size: size * 0.42, weight: .semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(tint == Theme.Palette.orange ? Theme.Palette.accentText : tint)
         }
         .frame(width: size, height: size)
-        .shadow(color: (colors.last ?? .black).opacity(0.22), radius: 8, y: 4)
     }
 }

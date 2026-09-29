@@ -28,7 +28,7 @@ struct WalletView: View {
             .refreshable { await viewModel.refresh() }
             .sarenaScreenBackground()
             .navigationTitle("Wallet")
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .sarenaNavigationBar()
             .sheet(item: $viewModel.presentedCode) { code in
                 PromoCodeSheet(code: code) { Task { await viewModel.markUsed(code) } }
             }

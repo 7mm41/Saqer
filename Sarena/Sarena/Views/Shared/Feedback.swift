@@ -34,7 +34,7 @@ struct FieldHint: View {
     }
 }
 
-/// Glass checkbox for consent toggles.
+/// Checkbox for consent toggles.
 struct GlassCheckboxToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         Button {
@@ -43,9 +43,9 @@ struct GlassCheckboxToggleStyle: ToggleStyle {
             HStack(alignment: .top, spacing: Theme.Spacing.m) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 7, style: .continuous)
-                        .fill(configuration.isOn ? AnyShapeStyle(Theme.brandGradient) : AnyShapeStyle(.ultraThinMaterial))
+                        .fill(configuration.isOn ? Theme.Palette.orangeFill : Theme.Palette.card)
                     RoundedRectangle(cornerRadius: 7, style: .continuous)
-                        .strokeBorder(.white.opacity(0.5), lineWidth: 1)
+                        .strokeBorder(Color.primary.opacity(configuration.isOn ? 0 : 0.25), lineWidth: 1.5)
                     if configuration.isOn {
                         Image(systemName: "checkmark")
                             .font(.caption.weight(.heavy))
@@ -74,7 +74,7 @@ struct ShimmerPlaceholder: View {
 
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            .fill(.white.opacity(0.3))
+            .fill(Color.primary.opacity(0.06))
             .frame(height: height)
             .phaseAnimator([0.45, 0.9]) { view, opacity in
                 view.opacity(opacity)

@@ -82,14 +82,8 @@ struct BookingConfirmationView: View {
     private var successMark: some View {
         ZStack {
             Circle()
-                .fill(RadialGradient(colors: [Theme.Palette.success.opacity(0.4), Theme.Palette.success.opacity(0)],
-                                     center: .center, startRadius: 30, endRadius: 80))
-                .frame(width: 160, height: 160)
-            Circle()
-                .fill(Theme.brandGradient)
+                .fill(Theme.Palette.orangeFill)
                 .frame(width: 92, height: 92)
-                .overlay(Circle().fill(LinearGradient(colors: [.white.opacity(0.5), .clear], startPoint: .top, endPoint: .center)).padding(5))
-                .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1))
             Image(systemName: "checkmark")
                 .font(.system(size: 40, weight: .heavy))
                 .foregroundStyle(.white)

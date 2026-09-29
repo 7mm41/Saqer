@@ -95,8 +95,7 @@ struct PromoCodeCard: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, Theme.Spacing.l)
                         .frame(height: 42)
-                        .background(Capsule().fill(Theme.brandGradient))
-                        .shadow(color: Theme.Palette.orange.opacity(0.45), radius: 10, y: 5)
+                        .background(Capsule().fill(Theme.Palette.orangeFill))
                 }
                 .buttonStyle(.glassPress)
             } else {

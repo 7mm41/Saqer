@@ -55,7 +55,7 @@ struct LanguagePickerView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: Theme.Spacing.xxl) {
-                SarenaLogoView(size: 96, floats: true)
+                SarenaLogoView(size: 96)
                     .padding(.top, Theme.Spacing.xl)
 
                 greetingCloud
@@ -144,11 +144,11 @@ struct LanguagePickerView: View {
                 if !isAvailable {
                     Text("Soon")
                         .font(.sarena(.caption2, weight: .heavy))
-                        .foregroundStyle(Theme.Palette.ink)
+                        .foregroundStyle(.secondary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
-                        .background(Capsule().fill(.white))
-                        .offset(x: 6, y: -8)
+                        .background(Capsule().fill(Color.primary.opacity(0.08)))
+                        .padding(6)
                 }
             }
             .opacity(isAvailable ? 1 : 0.55)

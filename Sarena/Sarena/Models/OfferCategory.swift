@@ -50,7 +50,5 @@ enum OfferCategory: String, CaseIterable, Identifiable, Codable, Sendable {
 
     /// Every category shares Sarena orange: the symbol tells them apart, and the
     /// screen stays calm (orange, greys and white only).
-    var colors: [Color] { [Theme.Palette.glow, Theme.Palette.orange] }
-
-    var accent: Color { Theme.Palette.orange }
+    var colors: [Color] { [Theme.Palette.orange] }
 }

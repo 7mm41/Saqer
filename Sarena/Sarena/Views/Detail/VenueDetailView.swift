@@ -36,7 +36,7 @@ struct VenueDetailView: View {
         .safeAreaInset(edge: .bottom) { bookingBar }
         .navigationTitle(venue.name(locale))
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .sarenaNavigationBar()
         .sheet(item: $viewModel.confirmedCode) { code in
             BookingConfirmationView(code: code) {
                 router?.selectedTab = .wallet
@@ -87,13 +87,12 @@ struct VenueDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: Theme.Radius.hero, style: .continuous)
-                .strokeBorder(LinearGradient(colors: [.white.opacity(0.7), .white.opacity(0.1)], startPoint: .top, endPoint: .bottom), lineWidth: 1)
+                .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
         }
-        .shadow(color: venue.category.accent.opacity(0.45), radius: 24, y: 14)
+        // Inside the picture, so it never covers the title below.
         .overlay(alignment: .bottomTrailing) {
-            DiscountMedallion(percent: venue.maxDiscountPercent)
-                .padding(.trailing, Theme.Spacing.l)
-                .offset(y: 40)
+            DiscountMedallion(percent: venue.maxDiscountPercent, size: 84)
+                .padding(Theme.Spacing.l)
         }
         .padding(.horizontal, Theme.gutter)
         .padding(.top, Theme.Spacing.s)
@@ -104,7 +103,6 @@ struct VenueDetailView: View {
             Text(venue.name(locale))
                 .font(.sarena(.largeTitle, weight: .heavy))
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.trailing, 96) // room for the medallion
             Label(venue.area(locale), systemImage: "mappin.and.ellipse")
                 .font(.sarena(.subheadline, weight: .medium))
                 .foregroundStyle(.secondary)

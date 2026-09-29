@@ -20,7 +20,6 @@ struct PreviewContainer<Content: View>: View {
     @State private var catalog: CatalogStore
     @State private var liveSync: LiveSync
     @State private var appConfig: AppConfigStore
-    @State private var motion: MotionManager
     @State private var languageCoordinator: LanguageCoordinator
     private let content: Content
 
@@ -43,7 +42,6 @@ struct PreviewContainer<Content: View>: View {
         _liveSync = State(initialValue: LiveSync(
             live: nil, session: session, catalog: catalog, membership: membership, wallet: wallet
         ))
-        _motion = State(initialValue: MotionManager())
         _languageCoordinator = State(initialValue: LanguageCoordinator(
             defaults: UserDefaults(suiteName: "om.sarena.preview") ?? .standard
         ))
@@ -59,7 +57,6 @@ struct PreviewContainer<Content: View>: View {
             .environment(catalog)
             .environment(liveSync)
             .environment(appConfig)
-            .environment(motion)
             .environment(languageCoordinator)
             .appLanguage(languageCoordinator.language)
             .languageTransitionCover(languageCoordinator)

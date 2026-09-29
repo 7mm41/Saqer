@@ -21,7 +21,7 @@ struct LanguageTransitionView: View {
             VStack(spacing: Theme.Spacing.xl) {
                 ZStack {
                     Circle()
-                        .stroke(.white.opacity(0.25), lineWidth: 6)
+                        .stroke(Color.primary.opacity(0.08), lineWidth: 6)
                     Circle()
                         .trim(from: 0, to: progress)
                         .stroke(Theme.brandGradient, style: StrokeStyle(lineWidth: 6, lineCap: .round))

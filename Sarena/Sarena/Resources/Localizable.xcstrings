@@ -121,16 +121,6 @@
         }
       }
     },
-    "Alternate icons aren't available on this device." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الأيقونات البديلة غير متاحة على هذا الجهاز."
-          }
-        }
-      }
-    },
     "An account with this email already exists. Try signing in." : {
       "localizations" : {
         "ar" : {
@@ -141,32 +131,12 @@
         }
       }
     },
-    "App Icon" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "أيقونة التطبيق"
-          }
-        }
-      }
-    },
     "Appearance" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "المظهر"
-          }
-        }
-      }
-    },
-    "Apply" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تطبيق"
           }
         }
       }
@@ -651,16 +621,6 @@
         }
       }
     },
-    "Eid" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "العيد"
-          }
-        }
-      }
-    },
     "Email" : {
       "localizations" : {
         "ar" : {
@@ -811,32 +771,12 @@
         }
       }
     },
-    "Floating glass motion" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "حركة الزجاج العائم"
-          }
-        }
-      }
-    },
     "From" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "يبدأ من"
-          }
-        }
-      }
-    },
-    "Frost Glass" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "الزجاج الثلجي"
           }
         }
       }
@@ -867,36 +807,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ابدأ الآن"
-          }
-        }
-      }
-    },
-    "Get the %@ icon on your home screen" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ضع أيقونة %@ على شاشتك الرئيسية"
-          }
-        }
-      }
-    },
-    "Glass tilts and catches the light as you move your phone." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "يميل الزجاج ويلتقط الضوء مع حركة هاتفك."
-          }
-        }
-      }
-    },
-    "Glassmorphism Logo" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "شعار الزجاج العائم"
           }
         }
       }
@@ -1201,16 +1111,6 @@
         }
       }
     },
-    "Midnight Glass" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "زجاج منتصف الليل"
-          }
-        }
-      }
-    },
     "Mobile" : {
       "localizations" : {
         "ar" : {
@@ -1247,16 +1147,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "حسابي"
-          }
-        }
-      }
-    },
-    "National Day" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "العيد الوطني"
           }
         }
       }
@@ -1601,16 +1491,6 @@
         }
       }
     },
-    "Ramadan" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "رمضان"
-          }
-        }
-      }
-    },
     "Read more" : {
       "localizations" : {
         "ar" : {
@@ -1727,16 +1607,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "سرينا"
-          }
-        }
-      }
-    },
-    "Sarena Classic" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "سرينا الكلاسيكية"
           }
         }
       }
@@ -1961,16 +1831,6 @@
         }
       }
     },
-    "Switch back" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "العودة"
-          }
-        }
-      }
-    },
     "System" : {
       "localizations" : {
         "ar" : {
@@ -2031,16 +1891,6 @@
         }
       }
     },
-    "The season is over. Switch back to the classic icon?" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "انتهى الموسم. هل تريد العودة إلى الأيقونة الكلاسيكية؟"
-          }
-        }
-      }
-    },
     "This account is suspended. Contact Sarena support." : {
       "localizations" : {
         "ar" : {
@@ -2067,6 +1917,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "هذا العرض لم يعد متاحاً."
+          }
+        }
+      }
+    },
+    "This phone couldn't register for notifications: %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعذّر تسجيل هذا الهاتف لاستقبال الإشعارات: %@"
           }
         }
       }
@@ -2197,6 +2057,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "استخدم الحساب التجريبي"
+          }
+        }
+      }
+    },
+    "Use the original app icon" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استخدام أيقونة التطبيق الأصلية"
           }
         }
       }

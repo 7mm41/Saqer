@@ -5,7 +5,6 @@ struct SettingsView: View {
     @State private var viewModel: SettingsViewModel
 
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
-    @AppStorage(PreferenceKeys.floatingMotion) private var floatingMotion = true
 
     @Environment(\.locale) private var locale
     @Environment(\.layoutDirection) private var layoutDirection
@@ -25,7 +24,6 @@ struct SettingsView: View {
                 VStack(spacing: Theme.Spacing.xl) {
                     languageSection
                     notificationsSection
-                    appIconSection
                     experienceSection
                     aboutSection
                     signOutButton
@@ -36,7 +34,7 @@ struct SettingsView: View {
             }
             .sarenaScreenBackground()
             .navigationTitle("Settings")
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .sarenaNavigationBar()
             .onAppear { viewModel.refreshIcon() }
             .task { await notifications.refreshAuthorization() }
             .alert("Couldn't change the icon", isPresented: $viewModel.iconChangeFailed) {
@@ -102,32 +100,6 @@ struct SettingsView: View {
         return name.prefix(1).uppercased() + name.dropFirst()
     }
 
-    // MARK: App icon
-
-    private var appIconSection: some View {
-        SettingsSection(title: "App Icon", systemImage: "square.grid.2x2.fill") {
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: Theme.Spacing.m), GridItem(.flexible(), spacing: Theme.Spacing.m)],
-                      spacing: Theme.Spacing.m) {
-                ForEach(AppIcon.allCases) { icon in
-                    AppIconTile(
-                        icon: icon,
-                        isSelected: viewModel.currentIcon == icon,
-                        isChanging: viewModel.changingIcon == icon
-                    ) {
-                        Task { await viewModel.setIcon(icon) }
-                    }
-                    .disabled(!viewModel.supportsAlternateIcons)
-                }
-            }
-
-            if !viewModel.supportsAlternateIcons {
-                Text("Alternate icons aren't available on this device.")
-                    .font(.sarena(.caption))
-                    .foregroundStyle(.secondary)
-            }
-        }
-    }
-
     // MARK: Notifications
 
     private var notificationsSection: some View {
@@ -147,6 +119,17 @@ struct SettingsView: View {
                         .font(.title3)
                         .foregroundStyle(Theme.Palette.success)
                 }
+            }
+            if notifications.isAuthorized, let problem = notifications.registrationProblem {
+                // iOS gave no push token (e.g. the build lacks the Push Notifications capability).
+                Label {
+                    Text("This phone couldn't register for notifications: \(problem)")
+                } icon: {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                }
+                .font(.sarena(.caption, weight: .medium))
+                .foregroundStyle(Theme.Palette.danger)
+                .fixedSize(horizontal: false, vertical: true)
             }
             if !notifications.isAuthorized {
                 Button {
@@ -177,17 +160,6 @@ struct SettingsView: View {
                     title: \.title
                 )
             }
-
-            Toggle(isOn: $floatingMotion) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Label("Floating glass motion", systemImage: "move.3d")
-                        .font(.sarena(.subheadline, weight: .semibold))
-                    Text("Glass tilts and catches the light as you move your phone.")
-                        .font(.sarena(.caption))
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .tint(Theme.Palette.orange)
         }
     }
 
@@ -204,6 +176,20 @@ struct SettingsView: View {
             }
             .font(.sarena(.subheadline, weight: .medium))
             serverRow
+            if viewModel.usesAlternateIcon {
+                // Icons are set by Sarena now; someone who picked one earlier can go back.
+                Button {
+                    Task { await viewModel.restoreOriginalIcon() }
+                } label: {
+                    if viewModel.isRestoringIcon {
+                        ProgressView()
+                    } else {
+                        Label("Use the original app icon", systemImage: "arrow.uturn.backward")
+                    }
+                }
+                .buttonStyle(.sarenaGlass)
+                .disabled(viewModel.isRestoringIcon)
+            }
         }
     }
 
@@ -301,52 +287,6 @@ struct SettingsSection<Content: View>: View {
         .padding(Theme.Spacing.l)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassSurface(.card)
-    }
-}
-
-private struct AppIconTile: View {
-    let icon: AppIcon
-    let isSelected: Bool
-    let isChanging: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: Theme.Spacing.s) {
-                Image(icon.previewImageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 72, height: 72)
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(.white.opacity(0.4), lineWidth: 1))
-                    .shadow(color: .black.opacity(0.25), radius: 10, y: 6)
-                    .overlay {
-                        if isChanging {
-                            ProgressView()
-                                .padding(8)
-                                .background(.ultraThinMaterial, in: Circle())
-                        }
-                    }
-                    .overlay(alignment: .topTrailing) {
-                        if isSelected {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.title3)
-                                .symbolRenderingMode(.palette)
-                                .foregroundStyle(.white, Theme.Palette.orange)
-                                .offset(x: 8, y: -8)
-                        }
-                    }
-                Text(icon.title)
-                    .font(.sarena(.caption, weight: .bold))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2, reservesSpace: true)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(Theme.Spacing.m)
-            .glassSurface(isSelected ? .tinted(Theme.Palette.orange, opacity: 0.25, cornerRadius: Theme.Radius.tile) : .tile)
-        }
-        .buttonStyle(.glassPress)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

@@ -2,8 +2,8 @@ import SwiftUI
 
 // MARK: - Style
 
-/// Describes one "pane" of Sarena glass. Presets cover the common surfaces;
-/// build your own for special cases.
+/// Describes one surface ("pane"). Presets cover the common surfaces; build
+/// your own for special cases.
 ///
 /// ```swift
 /// VStack { ... }
@@ -14,29 +14,25 @@ import SwiftUI
 ///     .glassSurface(.tinted(Theme.Palette.orange), in: Capsule())
 /// ```
 ///
-/// Performance note: a `Material` is a live backdrop blur that re-renders
-/// whenever anything behind it moves. The backdrop is already pre-blurred, so
-/// content panes use *frosted* glass (translucent fill, sheen and rim) that looks
-/// the same at a fraction of the GPU cost. Real `ultraThinMaterial` /
-/// `thinMaterial` is reserved for surfaces that float over moving content
+/// Calm by design: a solid card colour, a hairline edge and a very soft
+/// neutral shadow, so neighbouring cards never bleed into each other. A live
+/// `Material` blur is kept only for surfaces that float over moving content
 /// (`.panel`, `.bar`, sheets).
 struct GlassSurfaceStyle {
-    /// Live blur behind the pane; `nil` = frosted glass without a backdrop blur.
+    /// Live blur behind the pane; `nil` = a solid card.
     var material: Material?
-    /// Optional colour poured into the glass (orange glass, pink glass, ...).
+    /// Optional colour washed over the card (a soft orange, grey...).
     var tint: Color?
-    var tintOpacity: Double = 0.28
+    var tintOpacity: Double = 0.12
     var cornerRadius: CGFloat = Theme.Radius.card
     var borderWidth: CGFloat = 1
-    /// Adds the diagonal inner reflection on the upper-leading edge.
-    var sheen = true
     var shadow = GlassShadow.floating
 
     static let card = GlassSurfaceStyle()
     static let tile = GlassSurfaceStyle(cornerRadius: Theme.Radius.tile)
-    static let field = GlassSurfaceStyle(cornerRadius: Theme.Radius.field, shadow: .subtle)
-    static let chip = GlassSurfaceStyle(cornerRadius: Theme.Radius.chip, sheen: false, shadow: .none)
-    static let flat = GlassSurfaceStyle(sheen: false, shadow: .none)
+    static let field = GlassSurfaceStyle(cornerRadius: Theme.Radius.field, shadow: .none)
+    static let chip = GlassSurfaceStyle(cornerRadius: Theme.Radius.chip, shadow: .none)
+    static let flat = GlassSurfaceStyle(shadow: .none)
     /// Thin-material panel for forms.
     static let panel = GlassSurfaceStyle(material: .thinMaterial, cornerRadius: Theme.Radius.hero, shadow: .lifted)
     /// Ultra-thin-material bar that floats over scrolling content (e.g. "Book Now").
@@ -44,33 +40,33 @@ struct GlassSurfaceStyle {
 
     static func tinted(
         _ color: Color,
-        opacity: Double = 0.32,
+        opacity: Double = 0.12,
         cornerRadius: CGFloat = Theme.Radius.card,
-        shadow: GlassShadow = .glow
+        shadow: GlassShadow = .floating
     ) -> GlassSurfaceStyle {
         GlassSurfaceStyle(tint: color, tintOpacity: opacity, cornerRadius: cornerRadius, shadow: shadow)
     }
 }
 
-/// A single soft shadow is what lifts the glass off the scene (optionally glowing
-/// in the tint colour). One shadow instead of two halves the offscreen work.
+/// One soft, neutral shadow: just enough to lift a card off the background,
+/// never enough to spill onto the next one.
 struct GlassShadow {
     var radius: CGFloat
     var y: CGFloat
     var opacity: Double
-    var glowsWithTint = false
 
     static let none = GlassShadow(radius: 0, y: 0, opacity: 0)
-    static let subtle = GlassShadow(radius: 10, y: 5, opacity: 0.12)
-    static let floating = GlassShadow(radius: 22, y: 14, opacity: 0.22)
-    static let lifted = GlassShadow(radius: 32, y: 20, opacity: 0.28)
-    static let glow = GlassShadow(radius: 24, y: 14, opacity: 0.45, glowsWithTint: true)
+    static let subtle = GlassShadow(radius: 3, y: 1, opacity: 0.04)
+    static let floating = GlassShadow(radius: 6, y: 2, opacity: 0.05)
+    static let lifted = GlassShadow(radius: 14, y: 6, opacity: 0.10)
+    /// Kept for existing call sites: the same quiet shadow as `.floating`.
+    static let glow = floating
 }
 
 // MARK: - Modifier
 
-/// The reusable glassmorphism modifier: glass body (material or frosted fill)
-/// + tint + inner reflection + gradient rim light + floating shadow.
+/// The surface modifier: solid card (or material) + optional soft tint +
+/// hairline edge + soft shadow.
 struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
     let shape: S
     let style: GlassSurfaceStyle
@@ -80,72 +76,38 @@ struct GlassSurfaceModifier<S: InsettableShape>: ViewModifier {
         content
             .background {
                 if style.shadow.opacity > 0 {
-                    glassBody
-                        .compositingGroup()
-                        .shadow(color: shadowColor.opacity(style.shadow.opacity), radius: style.shadow.radius, y: style.shadow.y)
+                    surface
+                        .shadow(color: .black.opacity(isDark ? style.shadow.opacity * 3 : style.shadow.opacity),
+                                radius: style.shadow.radius, y: style.shadow.y)
                 } else {
-                    glassBody
+                    surface
                 }
             }
             .overlay {
                 shape
-                    .strokeBorder(rimGradient, lineWidth: style.borderWidth)
+                    .strokeBorder(isDark ? Color.white.opacity(0.08) : Color.black.opacity(0.06), lineWidth: style.borderWidth)
                     .allowsHitTesting(false)
             }
     }
 
-    private var glassBody: some View {
+    private var surface: some View {
         ZStack {
             if let material = style.material {
                 shape.fill(material)
             } else {
-                // Plain cards on the plain background: white, or a raised grey in dark mode.
-                shape.fill(.white.opacity(isDark ? 0.07 : 0.94))
+                shape.fill(Theme.Palette.card)
             }
-
             if let tint = style.tint {
-                shape.fill(
-                    LinearGradient(
-                        colors: [tint.opacity(style.tintOpacity), tint.opacity(style.tintOpacity * 0.45)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-            }
-
-            if style.sheen {
-                // A faint reflection from the upper-leading corner.
-                shape.fill(
-                    LinearGradient(
-                        colors: [.white.opacity(isDark ? 0.06 : 0.12), .white.opacity(0)],
-                        startPoint: .topLeading,
-                        endPoint: UnitPoint(x: 0.6, y: 0.55)
-                    )
-                )
+                shape.fill(tint.opacity(style.tintOpacity))
             }
         }
-    }
-
-    /// A quiet hairline edge (tinted panes keep a touch of their colour).
-    private var rimGradient: LinearGradient {
-        let edge: Color = isDark ? .white.opacity(0.09) : .black.opacity(0.06)
-        return LinearGradient(
-            colors: [edge, edge, (style.tint ?? edge).opacity(style.tint == nil ? 1 : (isDark ? 0.35 : 0.3))],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
-    private var shadowColor: Color {
-        if style.shadow.glowsWithTint, let tint = style.tint { return tint.opacity(0.6) }
-        return isDark ? .black : .black.opacity(0.35)
     }
 
     private var isDark: Bool { colorScheme == .dark }
 }
 
 extension View {
-    /// Wraps the view in a rounded-rectangle glass pane.
+    /// Wraps the view in a rounded-rectangle card.
     func glassSurface(_ style: GlassSurfaceStyle = .card) -> some View {
         modifier(GlassSurfaceModifier(
             shape: RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous),
@@ -153,7 +115,7 @@ extension View {
         ))
     }
 
-    /// Wraps the view in glass of any insettable shape (`Capsule()`, `Circle()`, `TicketShape()`...).
+    /// Wraps the view in a surface of any insettable shape (`Capsule()`, `Circle()`, `TicketShape()`...).
     func glassSurface<S: InsettableShape>(_ style: GlassSurfaceStyle = .card, in shape: S) -> some View {
         modifier(GlassSurfaceModifier(shape: shape, style: style))
     }

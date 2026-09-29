@@ -22,13 +22,13 @@ struct RegisterView: View {
         .sarenaScreenBackground()
         .navigationTitle("Create Account")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .sarenaNavigationBar()
         .animation(.snappy, value: viewModel.error)
     }
 
     private var header: some View {
         VStack(spacing: Theme.Spacing.s) {
-            SarenaLogoView(size: 76, floats: true)
+            SarenaLogoView(size: 76)
             Text("Join the club")
                 .font(.sarena(.title, weight: .heavy))
             Text("One free account unlocks members-only prices on cinemas, jet skis, clubs, arenas and festivals across Oman.")
