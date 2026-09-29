@@ -1,28 +1,19 @@
 import { useState, type FormEvent } from 'react';
-import { THEME_ICONS, del, get, patch, post, type Localized, type Theme, type ThemeIcon } from '../api';
-import appIcon from '../assets/icons/app.png';
-import eidIcon from '../assets/icons/season-eid.png';
-import nationalDayIcon from '../assets/icons/season-nationalday.png';
-import ramadanIcon from '../assets/icons/season-ramadan.png';
+import { del, get, patch, post, type Localized, type Theme } from '../api';
 import logo from '../assets/logo.png';
-import { useI18n, type StringKey } from '../i18n';
+import { useI18n } from '../i18n';
 import { Icon } from '../icons';
 import { useLive } from '../live';
 import {
   DateTimeField, Empty, Field, ImageUpload, Loading, LocalizedField, Modal, PageHead, Toggle, useConfirm, useErrorText, useLoad, useToast,
 } from '../ui';
 
-const ICONS: Record<ThemeIcon, { label: StringKey; preview: string; accent: string }> = {
-  'AppIcon-NationalDay': { label: 'iconNationalDay', preview: nationalDayIcon, accent: '#C8102E' },
-  'AppIcon-Ramadan': { label: 'iconRamadan', preview: ramadanIcon, accent: '#2B2470' },
-  'AppIcon-Eid': { label: 'iconEid', preview: eidIcon, accent: '#0E7C66' },
-};
-
 type Draft = Omit<Theme, 'id'> & { id?: string };
 
+// The app no longer offers home-screen icons, so new looks don't set one.
 const newTheme = (): Draft => ({
-  name: '', logoUrl: null, bannerUrl: null, greeting: { en: '', ar: '' }, accentColor: '#C8102E',
-  iconName: 'AppIcon-NationalDay', startsAt: null, endsAt: null, isEnabled: true,
+  name: '', logoUrl: null, bannerUrl: null, greeting: { en: '', ar: '' }, accentColor: '#FF7900',
+  iconName: null, startsAt: null, endsAt: null, isEnabled: true,
 });
 
 export function ThemesPage() {
@@ -59,8 +50,10 @@ export function ThemesPage() {
                   <h3>{theme.name}</h3>
                   <span className={`badge ${tone}`}>{t(label)}</span>
                 </div>
-                <span className="muted small num with-icon"><Icon name="calendar" size={15} />{theme.startsAt ? date(theme.startsAt) : '…'} – {theme.endsAt ? date(theme.endsAt) : '…'}</span>
-                {theme.iconName && <span className="row small"><img className="mini-icon" src={ICONS[theme.iconName].preview} alt="" />{t(ICONS[theme.iconName].label)}</span>}
+                <span className="muted small num with-icon"><Icon name="calendar" size={15} />
+                  {!theme.startsAt && !theme.endsAt ? t('everydayLook')
+                    : <>{theme.startsAt ? date(theme.startsAt) : '…'} – {theme.endsAt ? date(theme.endsAt) : '…'}</>}
+                </span>
               </button>
             );
           })}
@@ -124,25 +117,11 @@ function ThemeEditor({ initial, onClose, onSaved }: { initial: Draft; onClose: (
           <ImageUpload label={t('logo')} value={theme.logoUrl} onChange={(url) => set('logoUrl', url)} hint="PNG" />
           <ImageUpload label={t('banner')} value={theme.bannerUrl} onChange={(url) => set('bannerUrl', url)} />
         </div>
-        <div className="field">
-          <span>{t('homeIcon')}</span>
-          <div className="icon-choice">
-            <button type="button" className={theme.iconName === null ? 'on' : ''} onClick={() => set('iconName', null)}>
-              <img src={appIcon} alt="" />{t('noIcon')}
-            </button>
-            {THEME_ICONS.map((icon) => (
-              <button key={icon} type="button" className={theme.iconName === icon ? 'on' : ''}
-                onClick={() => { set('iconName', icon); if (!initial.id) set('accentColor', ICONS[icon].accent); }}>
-                <img src={ICONS[icon].preview} alt="" />{t(ICONS[icon].label)}
-              </button>
-            ))}
-          </div>
-          <small>{t('homeIconHint')}</small>
-        </div>
         <div className="pair">
           <DateTimeField label={t('from')} value={theme.startsAt} onChange={(value) => set('startsAt', value)} />
           <DateTimeField label={t('to')} value={theme.endsAt} onChange={(value) => set('endsAt', value)} />
         </div>
+        <small className="muted">{t('lookDatesHint')}</small>
         <Toggle label={t('enabled')} checked={theme.isEnabled} onChange={(value) => set('isEnabled', value)} />
         <div className="row between">
           <div className="row">

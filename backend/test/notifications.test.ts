@@ -101,6 +101,22 @@ describe('seasonal themes', () => {
     assert.equal(list.body.themes.length, 1);
     assert.deepEqual(list.body.icons, ['AppIcon-NationalDay', 'AppIcon-Ramadan', 'AppIcon-Eid']);
   });
+
+  test('a look without dates is the everyday logo; a seasonal one replaces it during its dates', async () => {
+    const add = async (body: Record<string, unknown>) =>
+      (await t.call('POST', '/v1/admin/themes', { token: adminToken, body: { iconName: null, ...body } })).body.theme;
+    const everyday = await add({ name: 'Everyday', logoUrl: '/uploads/logo.png' });
+    const logo = async () => (await t.call('GET', '/v1/app/config')).body.theme?.name;
+    assert.equal(await logo(), 'Everyday');
+
+    const eid = await add({
+      name: 'Eid', startsAt: new Date(Date.now() - HOUR).toISOString(), endsAt: new Date(Date.now() + HOUR).toISOString(),
+    });
+    assert.equal(await logo(), 'Eid');
+    await t.call('PATCH', `/v1/admin/themes/${eid.id}`, { token: adminToken, body: { endsAt: new Date(Date.now() - 60_000).toISOString() } });
+    assert.equal(await logo(), 'Everyday');
+    await t.call('DELETE', `/v1/admin/themes/${everyday.id}`, { token: adminToken });
+  });
 });
 
 describe('push notifications', () => {

@@ -65,9 +65,18 @@
   --------------------------------------  ----------------------------------
   الإجمالي التقني الشهري                    ≈ 15–60 ر.ع./شهر
 
-  لتفعيل الإشعارات: من developer.apple.com ← Keys ← أنشئ مفتاح
-  (Apple Push Notifications service) وضع قيمه في backend/.env:
-  APNS_KEY_ID و APNS_TEAM_ID و APNS_KEY_FILE.
+  لتفعيل الإشعارات:
+    1. developer.apple.com ← Keys ← أنشئ مفتاحاً وفعّل له
+       Apple Push Notifications service، ونزّل ملف AuthKey_XXXXXXXXXX.p8
+       (يُنزَّل مرة واحدة فقط) وضعه في backend/certs/.
+    2. في backend/.env: APNS_KEY_ID (رقم المفتاح، 10 خانات) و APNS_TEAM_ID
+       (رقم الفريق من صفحة Membership، 10 خانات) و
+       APNS_KEY_FILE=certs/AuthKey_XXXXXXXXXX.p8، ثم أعد تشغيل الخادم.
+    3. في Xcode: Signing & Capabilities ← أضف Push Notifications.
+    4. افتح التطبيق وسجّل الدخول واسمح بالإشعارات، ثم من لوحة التحكم ←
+       الإشعارات ← «أرسل إشعاراً تجريبياً إلى هاتفي». تظهر النتيجة مع شرح
+       السبب إن لم يصل. لا حاجة لـ APNS_PRODUCTION: التطبيق يخبر الخادم
+       بنوع نسخته (Xcode أو TestFlight/App Store).
 
   لتفعيل بطاقات Apple Wallet (مجاناً ضمن حساب المطوّر):
     1. developer.apple.com ← Identifiers ← Pass Type IDs: أنشئ مثلاً

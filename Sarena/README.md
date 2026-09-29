@@ -1,6 +1,6 @@
 # Sarena · سرينا
 
-Sarena is an iOS app for exclusive discounts and bookings in Oman. It is for members only: nobody sees a venue or a price without an account. It's built with **SwiftUI + MVVM** and has a floating **glassmorphism** design. It is fully localized in **English and Arabic (RTL)**.
+Sarena is an iOS app for exclusive discounts and bookings in Oman. It is for members only: nobody sees a venue or a price without an account. It's built with **SwiftUI + MVVM** and has a calm design: white cards on a plain grey background, with Sarena orange as a small accent. It is fully localized in **English and Arabic (RTL)**.
 
 ![Brand sheet](Branding/renders/brand-sheet.png)
 
@@ -35,7 +35,7 @@ The login screen also has a **Demo account** card with a **Use demo account** bu
 ## First launch flow
 
 1. **Launch screen**: the Sarena lockup on a warm background, set in `Info.plist › UILaunchScreen`.
-2. **Splash**: the glass tag floats in while the session restores.
+2. **Splash**: the Sarena logo while the session restores.
 3. **Language picker**: greeting chips ("Hello · مرحبا · Hola…") and language cards. Arabic and English are live; French, Spanish, Russian and Chinese are marked *Soon*.
 4. **Onboarding carousel**: three illustrated pages with *Continue* / *Skip* and a capsule page indicator.
 5. **Sign in**: by **mobile number (SMS code)** or **email + password**, or **Create a free account**.
@@ -47,21 +47,21 @@ The login screen also has a **Demo account** card with a **Use demo account** bu
 | Auth | Phone OTP (SMS AutoFill), email/password, registration with live validation (Omani numbers, Arabic-Indic digits, password strength), Keychain-backed session |
 | Dashboard | Savings banner, 3D "cover-flow" featured carousel with live countdowns, the 7 category cards, a "Biggest savings" list, search |
 | Categories | Cinema · Jet Ski · Oman Shooting Club · Oman Automobile Association · Ibri Arena · Video Game Arcades · Oman Festivals (Ibri & Muscat Nights) |
-| Venue detail | Hero photo (uploaded from the dashboard) or category art, with a floating discount medallion. Also: event dates, description, highlights, and a MapKit `Map` with a marker and directions. **Ticket options** show the struck-through original price vs the member price, with live scarcity. Then quantity and a floating **Book Now** bar; without a membership that bar shows **Become a member** instead |
+| Venue detail | Hero photo (uploaded from the dashboard) or category art, with the discount disc inside the picture. Also: event dates, description, highlights, and a MapKit `Map` with a marker and directions. **Ticket options** show the struck-through original price vs the member price, with live scarcity. Then quantity and a floating **Book Now** bar; without a membership that bar shows **Become a member** instead |
 | My Account (حسابي) | Membership card, **member savings** (total saved, ready and redeemed codes, a link to the Wallet) and the **Sarena membership**. There is one plan: **15 OMR a year**, set in the dashboard. The screen shows its status, valid-until date, days left, progress, perks and a **Subscribe / Renew** button, whose confirmation is anchored to the button. Renewing adds a year to the current expiry date |
 | Wallet | Glass segmented control **Active Codes / Used Codes**, ticket-shaped cards, QR sheet, copy code, mark as used |
 | Apple Wallet | **Add to Apple Wallet** (Apple's own button) on the membership card (My Account) and on every active code. The server signs the passes. The membership card's QR lets any partner confirm the membership in the control panel's *Redeem codes*. A code's pass carries the same QR as the app, turns up on the lock screen near the venue or on the event day, and is voided once used. Shown only when the server has a Pass Type ID certificate |
-| Seasonal looks | While a dashboard **theme** runs (National Day, Ramadan, Eid...), the in-app logo changes to the one uploaded in the dashboard, and Home shows the theme's greeting and banner. Home also offers the matching **home-screen icon** (bundled: 🇴🇲 National Day, 🌙 Ramadan, ✨ Eid) with a one-tap *Apply*, and offers *Switch back* when the season ends. Apple requires the member to tap for every icon change (App Store rule 4.6), so the app offers the change and never switches the icon by itself |
-| Notifications | **Push** (APNs): the server sends new events, the morning an event starts, membership discounts, membership ending and dashboard broadcasts. Tapping one about a venue opens it. **On-phone reminders** for booked events work offline: the morning of the event, and always at least 5 hours before it starts (or the evening before for early events), plus a last nudge 1 hour before. Timings come from the dashboard. Permission is asked after booking an event, or from Settings › Notifications |
+| Logo & looks | The in-app logo, greeting and banner come from the dashboard (*Logo & looks*): a look without dates is the everyday logo, one with dates (National Day, Ramadan, Eid...) replaces it for its season. Members can't change them. The home-screen icon stays the Sarena icon: Apple only allows icons built into the app, changed by the member's own tap (App Store rule 4.6), so it changes with an app update |
+| Notifications | **Push** (APNs): the server sends new events, the morning an event starts, membership discounts, membership ending and dashboard broadcasts. Tapping one about a venue opens it. The app registers its token with its gateway (read from the provisioning profile: Xcode builds use the sandbox, TestFlight and the App Store production) and its bundle identifier, and registers again after connecting to another server. If iOS gives no token, Settings says why. **On-phone reminders** for booked events work offline: the morning of the event, and always at least 5 hours before it starts (or the evening before for early events), plus a last nudge 1 hour before. Timings come from the dashboard. Permission is asked after booking an event, or from Settings › Notifications |
 | Language switch | Changing the language shows a short branded **"Changing language…" screen** (logo in a filling timer ring, the target language with its flag). The switch happens behind it, so the layout never flips between LTR and RTL in view. The same screen appears when the language is picked on first launch |
-| Settings | **Language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), **app icon picker**, appearance, floating-motion toggle, **Log Out** |
+| Settings | **Language indicator** (current language + LTR/RTL badge, in-app switch, iOS language settings), notifications, appearance, **Log Out**. Someone who picked an app icon in an earlier version gets a *Use the original app icon* button |
 
 ## Architecture (MVVM)
 
 ```
 Sarena/
 ├── App/            SarenaApp (entry point), RootView (auth gate), MainTabView
-├── DesignSystem/   Theme tokens, GlassSurface modifier, FloatingGlass (motion),
+├── DesignSystem/   Theme tokens, GlassSurface modifier, press feedback,
 │                   GlassBackground, buttons / text field / segmented control, brand views
 ├── Models/         User, OfferCategory, Venue + TicketOption, MembershipPlan + Membership, PromoCode, AppPreferences, sample data
 ├── Services/       Auth, Catalog, Booking, Membership (mock + API), APIClient, LiveUpdates (SSE), KeychainStore, AppServices (DI)
@@ -74,44 +74,49 @@ Sarena/
 * Views get services from `@Environment(\.services)` and **inject them into their view models**, so every view model can be tested with fakes (see `SarenaTests`).
 * `AppServices.configured()` picks the on-device demo services or the URLSession-backed API services (`Services/APIServices.swift`). No view depends on which one is used.
 
-## The glass design system
+## The design system
 
 ```swift
-content.glassSurface()                                        // frosted glass card
+content.glassSurface()                                        // white card (dark grey in dark mode)
 content.glassSurface(.panel)                                  // thinMaterial panel (forms)
 content.glassSurface(.bar)                                    // ultraThinMaterial bar over scrolling content
-content.glassSurface(.tinted(Theme.Palette.orange))           // orange glass with glow
+content.glassSurface(.tinted(Theme.Palette.orange))           // card with a soft orange wash
 content.glassSurface(.chip, in: Capsule())                    // any InsettableShape
 content.glassSurface(.card, in: TicketShape())                // ticket with notches
-logo.idleFloat().parallax()                                   // hero artwork only
+screen.sarenaNavigationBar()                                  // solid title bar in the screen colour
+screen.sarenaStatusBarBackdrop()                              // screens without a title bar
 Button("Book Now") { }.buttonStyle(.sarenaProminent)          // .sarenaGlass, .sarenaDestructive
 ```
 
-Each pane has a body, an optional colour tint, a faint reflection, a hairline edge and a soft shadow.
+**Calm on purpose.** White cards with dark text on a plain grey background (near-black in dark mode). Each card has a hairline edge and a very soft neutral shadow, so neighbouring cards never bleed into each other. There are no gradients, gloss or coloured glows, and nothing tilts with the phone.
 
-**Colours are kept few and easy on the eyes:** Sarena orange, greys and white on a plain background (light grey, or near-black in dark mode). Every category uses the same orange circle with a white symbol, and venue art without a photo is dark grey with an orange disc. Red and green are kept for errors and the password meter.
+**Colour, chosen for contrast:**
+
+| Token | Use |
+| --- | --- |
+| `Palette.orange` `#FF7900` | Icons and small accents |
+| `Palette.orangeFill` `#EC6D00` | Filled buttons and badges with white text |
+| `Palette.accentText` | Orange words on cards (`#C75A00` light, `#FF9A3D` dark) |
+| `Palette.orangeSoft` | The light wash behind icons and small badges |
+| `Palette.card`, `Palette.artwork`, `Palette.background` | Cards, venue art without a photo, screens |
+
+Every category uses the same soft orange circle; the symbol tells them apart. A `GlassBadge` with `tint: .white` is a solid chip with dark text, for badges on photos. Red and green are kept for errors and success.
+
+**No overlaps.** Title bars are solid, so a title never sits on scrolled content, and Home and sign-in give the status bar the screen colour. Badges and the discount disc sit inside their pictures.
 
 ### Performance rules (why the app stays cool)
 
-* **The backdrop is one plain colour** (`LaunchBackground`, the same colour set as the launch screen). Nothing animates behind the panes, so nothing gets re-composited frame after frame. Every screen fills the whole width before its background is drawn (`sarenaScreenBackground()`), so a short list never leaves the navigation container showing at the sides.
-* **Content cards use frosted glass**: a translucent fill with sheen and rim, and no live backdrop blur. Over an already-blurred backdrop it looks the same and costs a fraction of a `Material`. Real `ultraThinMaterial` / `thinMaterial` is kept for surfaces that float over moving content: the booking bar, form panels, sheets and the tab bar.
-* **No endless animations on glass panes.** `idleFloat()` is only for lightweight artwork, such as the logo on the splash, sign-in and onboarding screens.
-* **`parallax()` is used on a few hero elements only**: the logo, the discount medallion and the membership card. `MotionManager` is reference-counted, so the motion sensor runs only while one of them is on screen. It samples at 20 Hz, ignores sub-pixel changes, and pauses in Low Power Mode, under thermal pressure, with Reduce Motion, or when the Settings toggle is off.
-* No blur filters on scrolling content (glows use radial gradients), the map is flat and non-interactive, and QR codes are cached.
+* **The backdrop is one plain colour** (`LaunchBackground`, the same colour set as the launch screen). Nothing animates behind the cards. Every screen fills the whole width before its background is drawn (`sarenaScreenBackground()`), so a short list never leaves the navigation container showing at the sides.
+* **Cards are solid** (no live backdrop blur). Real `ultraThinMaterial` / `thinMaterial` is kept for surfaces that float over moving content: the booking bar, form panels, sheets and the tab bar.
+* **No motion sensor and no endless animations.** No blur filters on scrolling content, the map is flat and non-interactive, and QR codes are cached.
 
 The style names use a `Sarena`/`glassSurface` prefix on purpose. iOS 26 adds its own `.glass` button style and `glassEffect`, and the prefix keeps this code compiling on every SDK.
 
 ## App icons
 
-| Icon | Asset | Notes |
-| --- | --- | --- |
-| National Day · Ramadan · Eid | `AppIcon-NationalDay` / `-Ramadan` / `-Eid` | Seasonal icons, offered on Home while the dashboard theme runs, and always available in Settings |
-| Sarena Classic | `AppIcon` | Primary icon, with iOS 18 dark and tinted variants |
-| **Glassmorphism Logo** | `AppIcon-Glass` | Frosted orange glass floating over colour orbs |
-| Midnight Glass | `AppIcon-Midnight` | Smoked glass with a neon rim |
-| Frost Glass | `AppIcon-Frost` | White frosted glass on a sunset gradient |
+The home-screen icon is `AppIcon` (Sarena Classic, with iOS 18 dark and tinted variants). Members don't choose icons. The logo inside the app is set in the dashboard.
 
-`SettingsViewModel.setIcon(_:)` calls `UIApplication.setAlternateIconName(_:)`. The alternates are listed in the `ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES` build setting.
+The alternate icon sets (`AppIcon-Glass`, `-Midnight`, `-Frost`, `-NationalDay`, `-Ramadan`, `-Eid`) stay in the bundle for members who picked one in an earlier version. `SettingsViewModel.restoreOriginalIcon()` takes them back to the classic icon; Apple asks for a way back (App Store rule 4.6).
 
 ## Branding renders
 

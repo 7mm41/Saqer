@@ -4,8 +4,8 @@ Exclusive, members-only prices in Oman — **one annual membership (15 OMR)**, b
 
 | Folder | What it is |
 | --- | --- |
-| [`Sarena/`](Sarena/README.md) | The iOS app (SwiftUI + MVVM, floating glass design, Arabic/English) |
-| [`backend/`](backend/.env.example) | The API server and database: accounts (email + SMS code), memberships, venues & events, bookings, seasonal themes, discounts, push notifications, live updates |
+| [`Sarena/`](Sarena/README.md) | The iOS app (SwiftUI + MVVM, calm white-card design, Arabic/English) |
+| [`backend/`](backend/.env.example) | The API server and database: accounts (email + SMS code), memberships, venues & events, bookings, logo & seasonal looks, discounts, push notifications, live updates |
 | [`dashboard/`](dashboard/README.md) | The control panel (installable web app) at `/admin/` |
 | [`website/`](website/index.html) | The public website at `/`, with App Store / Google Play buttons |
 | [`REQUIREMENTS.txt`](REQUIREMENTS.txt) | What the project needs to launch (OTP/SMS, server, accounts, payments...), approximate prices, and the plan for success |

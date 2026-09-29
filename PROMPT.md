@@ -45,9 +45,10 @@ Arabic comes first, and English is always available. Write production-quality co
   * optional event start and end dates, and a deal countdown;
   * **ticket options**: the original price (shown struck through), the member price, and the number remaining (scarcity).
 * **Booking** creates a **code** (e.g. `SRN-AB12-CD34`) with a **QR**. The member shows it at the door, and venue staff **redeem** it once.
-* **Seasonal looks** for National Day, Ramadan, Eid and other occasions:
-  * the in-app logo, a greeting, a home banner and an accent colour, all scheduled from the control panel;
-  * a matching **home-screen icon** that the app *offers*. Apple rule 4.6 requires a member tap for every icon change, so the app never switches the icon by itself.
+* **Logo & looks**, managed only from the control panel (members can't change them):
+  * the in-app and website logo, a greeting, a home banner and an accent colour;
+  * a look without dates is the everyday logo; a look with dates (National Day, Ramadan, Eid…) replaces it for its season;
+  * the home-screen icon stays the Sarena icon. Apple allows only icons built into the app, switched by the member's own tap (rule 4.6), so the app has no icon picker and never offers or switches icons. Someone who picked one in an earlier version gets "Use the original app icon" in Settings.
 * **Notifications:**
   * **Automatic, with no admin action:**
     * a new venue or event, announced a few minutes after publishing;
@@ -138,7 +139,7 @@ Arabic comes first, and English is always available. Write production-quality co
 **First launch:**
 
 1. Launch screen: the logo on a warm background.
-2. Splash: the glass tag floats in while the session restores.
+2. Splash: the logo, still, while the session restores.
 3. Language picker: greeting chips, with Arabic and English live and other languages marked "Soon".
 4. Onboarding carousel: three illustrated pages with Continue/Skip and a capsule indicator.
 5. Sign in by **mobile number + SMS code** (SMS AutoFill) or **email + password**, or create a free account.
@@ -146,7 +147,7 @@ Arabic comes first, and English is always available. Write production-quality co
    * Registration validates live: Omani numbers (8 digits starting with 7 or 9), Arabic-Indic digits accepted, password strength.
    * The session lives in the Keychain.
 
-**Tabs:** Discover · Wallet · My Account · Settings, on a glass tab bar.
+**Tabs:** Discover · Wallet · My Account · Settings.
 
 * **Discover:**
   * a savings banner and a seasonal banner/greeting;
@@ -156,13 +157,13 @@ Arabic comes first, and English is always available. Write production-quality co
   * an empty category shows a "Soon" badge, and its screen says "Coming soon" instead of staying blank;
   * every screen fills the full width before drawing its background, so a short list never leaves black bands at the sides.
 * **Venue detail:**
-  * a hero photo (uploaded from the control panel) or the category art, with a floating discount medallion;
+  * a hero photo (uploaded from the control panel) or the category art, with the discount disc inside the picture;
   * event dates, description, highlights;
   * a MapKit map with directions;
   * ticket options with original vs member price and live scarcity;
   * a quantity picker and a floating **Book Now** bar, which becomes **Become a member** without a membership.
 * **Wallet:**
-  * glass segmented control "Active / Used";
+  * a segmented control "Active / Used";
   * ticket-shaped cards, a QR sheet, copy code, mark as used;
   * **Add to Apple Wallet** on every active code.
 * **My Account:**
@@ -173,25 +174,27 @@ Arabic comes first, and English is always available. Write production-quality co
   * **Delete account** (an Apple requirement).
 * **Settings:**
   * language (current language with an LTR/RTL badge, in-app switch, link to iOS language settings);
-  * app icon picker, appearance, floating-motion toggle, notifications;
+  * notifications (and why the phone couldn't register, if iOS gave no token), appearance;
   * About: the version, **the connected server, and a green dot while live updates flow**;
   * Log Out, with the confirmation anchored to its button.
 
 **Language switch:** show a short branded "Changing language…" cover (the logo in a filling timer ring, the target language and its flag). Switch behind it, so the layout never flips between RTL and LTR in view.
 
-**Alternate app icons:**
+**Design: calm and readable.**
 
-* Classic (with iOS 18 dark and tinted variants), Glass, Midnight Glass, Frost Glass.
-* Seasonal icons: National Day, Ramadan, Eid.
-* Home offers the seasonal icon while a theme runs, and "Switch back" when it ends.
+* White cards (dark grey in dark mode) with dark text on a plain grey background; a hairline edge and a very soft neutral shadow, so cards never bleed into each other.
+* No gradients, gloss, coloured glows or device-motion tilt.
+* Orange only as an accent, in shades chosen for contrast: `#FF7900` for icons, `#EC6D00` behind white text (buttons, badges), and a darker orange for orange words on cards (`#C75A00`; `#FF9A3D` in dark mode). Soft orange washes behind icons and small badges.
+* Every category uses the same soft orange circle; the symbol tells them apart. Venue art without a photo is light grey with an orange symbol.
+* Badges on photos are solid white chips with dark text. Never white text on a light surface.
+* Solid title bars, so a title never sits on scrolled content; screens without a title bar give the status bar the screen colour.
+* Nothing overlaps: badges and the discount disc sit inside their pictures.
 
 **Performance rules** (the app must stay cool):
 
 * A plain background colour; content cards use a solid fill, not live blur.
 * Real materials only on bars, sheets and form panels.
-* No endless animations on glass.
-* Parallax on a few hero elements only. The motion manager is reference-counted, samples at 20 Hz, and pauses in Low Power Mode, under heat, with Reduce Motion, or when the Settings toggle is off.
-* Glows use gradients, not blur filters; QR codes are cached.
+* No motion sensor and no endless animations. QR codes are cached.
 * Cross-fades use opacity only, so black edges never show.
 
 **Backend connection:**
@@ -230,7 +233,7 @@ Arabic comes first, and English is always available. Write production-quality co
 
 **Notifications:**
 
-* Push via APNs: register the device token with the server; tapping a notification about a venue opens it.
+* Push via APNs: register the device token with the server, together with the **gateway** it belongs to (read `aps-environment` from the app's `embedded.mobileprovision`: development → sandbox; none, as in App Store builds → production) and the **bundle identifier**. Register again after connecting to another server. Tapping a notification about a venue opens it.
 * On-phone reminders for booked events: the morning of the event and at least N hours before, plus a final nudge, timed from the server's settings.
 * Ask for permission after booking an event, or from Settings.
 
@@ -365,6 +368,10 @@ Arabic comes first, and English is always available. Write production-quality co
 * A 30-second scheduler, with ticks run one at a time (no overlap).
 * Dedupe keys, and waking hours in Oman time (UTC+4).
 * Sends the automatic rules and scheduled broadcasts through APNs over HTTP/2 with an ES256 JWT.
+  * Each phone goes to its own gateway, with its own bundle identifier as the topic. A `BadDeviceToken` is retried on the other gateway (and the right one remembered) before the token is forgotten.
+  * Each notification records the phones targeted, how many Apple accepted, and the main reason for the rest.
+  * The `.p8` key is read however it was pasted (with or without BEGIN lines, with `\n`, quoted); a wrong key path doesn't stop the server.
+  * `GET /admin/push/status` (configured, missing settings, a problem, phones per gateway, recent failures) and `POST /admin/push/test` (a test to your own phones, with Apple's answer for each).
 * Without APNs keys it records and logs notifications instead of sending them.
 
 **Configuration** (`.env`; every value is optional in development):
@@ -445,8 +452,8 @@ Arabic comes first, and English is always available. Write production-quality co
    * the single plan (name, description, price, days, perks);
    * a **limited-time discount** (price, label, start, end; running / scheduled badges);
    * a live preview of the app's membership card.
-4. **Seasonal looks:**
-   * logo, banner, greeting, accent colour, bundled home-screen icon, and schedule;
+4. **Logo & looks:**
+   * logo, banner, greeting, accent colour and dates; no dates = the everyday logo, dates = a seasonal look that replaces it;
    * live / upcoming / ended states.
 5. **Members:**
    * search and an active/suspended filter;
@@ -463,7 +470,8 @@ Arabic comes first, and English is always available. Write production-quality co
 7. **Notifications:**
    * **writer**: bilingual, audience with a live phone count, send now or schedule, link to a venue, lock-screen preview;
    * **automatic rules**: on/off switches and timings (announcement delay, morning hour, hours before, last nudge);
-   * **history**: search, automatic/written filter, cancel a scheduled one.
+   * **history**: search, automatic/written filter, cancel a scheduled one; "delivered X of Y phones", and the reason explained when some didn't arrive;
+   * **Delivery to phones**: connected or not, the missing `.env` settings or the problem (e.g. no key file at that path), phones per gateway, recent problems, and **Send a test to my phone** with Apple's answer explained (wrong Key/Team ID, bundle identifier mismatch, out-of-date registration…).
 8. **Redeem codes** (the only page for venue staff):
    * type or scan the QR with the camera (`BarcodeDetector`);
    * clear success or error states;
