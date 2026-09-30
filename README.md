@@ -47,6 +47,7 @@ It installs Docker and creates the settings: a random database password, `JWT_SE
 
 * Website `https://<domain>/` · control panel `https://<domain>/<ADMIN_PATH>/` · API `/v1/`. Live updates stream straight through Caddy (never compressed).
 * Change the owner's password: `sudo bash deploy/install.sh --password`.
+* **Automatic updates:** `sudo bash deploy/install.sh --auto-update` checks GitHub every 10 minutes (`deploy/update.sh`). A new version is installed by itself: an encrypted backup first, then the build while the site keeps running, then the switch. If it doesn't build or start, the previous version is put back and that version is skipped. `bash deploy/update.sh --status` shows the installed and latest versions and the log (`/var/log/sarena-update.log`). For a private repository, `bash deploy/github-access.sh` gives the server a read-only GitHub deploy key.
 * The APNs key and Wallet certificates go in `backend/certs/`, which is mounted read-only and never built into the image.
 * Never change `JWT_SECRET` or `DATA_KEY` once there is data: the encrypted fields would become unreadable (the server then refuses to start and says why).
 

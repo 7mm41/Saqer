@@ -7,6 +7,9 @@
 #      (or  sudo bash deploy/install.sh --domain sarena.tech  to skip the question,
 #       or to move to another domain later)
 #
+# Automatic updates (checks GitHub every 10 minutes, installs new versions by itself):
+#   sudo bash deploy/install.sh --auto-update      (--no-auto-update turns them off)
+#
 # The control panel's owner is ADMIN_EMAIL (saqer@sarena.tech). The first run asks
 # for its password — typed hidden, never shown or saved in clear — and gives the
 # panel a secret address, printed at the end. To change the password later:
@@ -46,11 +49,14 @@ bare_domain() { echo "$1" | sed -E 's#^https?://##; s#/.*$##; s#^www\.##' | tr '
 
 requested_domain=""
 change_password=false
+auto_update=""
 while [ $# -gt 0 ]; do
   case $1 in
     --domain) requested_domain=$(bare_domain "${2:-}"); shift 2 ;;
     --password) change_password=true; shift ;;
-    *) echo "Unknown option: $1 (use --domain <domain> or --password)"; exit 1 ;;
+    --auto-update) auto_update=on; shift ;;
+    --no-auto-update) auto_update=off; shift ;;
+    *) echo "Unknown option: $1 (use --domain <domain>, --password, --auto-update or --no-auto-update)"; exit 1 ;;
   esac
 done
 
@@ -177,6 +183,17 @@ printf '17 3 * * * root cd %s && bash deploy/backup.sh >/dev/null 2>&1\n' "$(pwd
 chmod 644 /etc/cron.d/sarena-backup
 bash deploy/backup.sh >/dev/null 2>&1 || echo "Note: the first backup didn't run; check with: bash deploy/backup.sh"
 
+# 10. Automatic updates (deploy/update.sh every 10 minutes), when asked for.
+if [ "$auto_update" = on ]; then
+  printf '*/10 * * * * root cd %s && bash deploy/update.sh >/dev/null 2>&1\n' "$(pwd)" >/etc/cron.d/sarena-update
+  chmod 644 /etc/cron.d/sarena-update
+  printf '/var/log/sarena-update.log {\n  monthly\n  rotate 6\n  missingok\n  notifempty\n  compress\n}\n' >/etc/logrotate.d/sarena-update
+elif [ "$auto_update" = off ]; then
+  rm -f /etc/cron.d/sarena-update
+fi
+updates="off (turn on: sudo bash deploy/install.sh --auto-update)"
+[ -f /etc/cron.d/sarena-update ] && updates="on: new versions install by themselves (bash deploy/update.sh --status)"
+
 panel_path=$(current backend/.env ADMIN_PATH)
 cat <<DONE
 
@@ -194,6 +211,7 @@ cat <<DONE
   in the control panel under "Sign-in history".
 
   Backups: encrypted, every night, in $(pwd)/backups
+  Updates: $updates
   Push notifications: put the AuthKey_XXXXXXXXXX.p8 file in
   backend/certs/, fill APNS_* in backend/.env, then run this again.
 
