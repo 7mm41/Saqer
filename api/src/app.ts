@@ -116,13 +116,15 @@ export async function buildApp(ctx: Ctx, opts: { logger?: boolean } = {}): Promi
   // The admin SPA, only under the secret path. Unknown admin URLs get the same 404 as anything else.
   const adminDist = process.env.ADMIN_DIST ?? join(process.cwd(), '..', 'admin', 'dist');
   if (existsSync(adminDist)) {
-    await app.register(fastifyStatic, { root: adminDist, prefix: `/${ctx.config.adminPath}/`, decorateReply: false, index: false, wildcard: false, setHeaders: (res) => (res as unknown as import('node:http').ServerResponse).setHeader('cache-control', 'no-store') });
+    await app.register(fastifyStatic, { root: adminDist, prefix: `/${ctx.config.adminPath}/`, decorateReply: false, index: false, wildcard: false, setHeaders: (reply) => void reply.header('cache-control', 'no-store') });
     const index = async (_req: unknown, reply: { header: (k: string, v: string) => unknown; type: (t: string) => unknown; send: (b: Buffer) => unknown }) => {
       const { readFile } = await import('node:fs/promises');
-      reply.header('content-security-policy', "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+      reply.header('content-security-policy', "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
       reply.header('x-robots-tag', 'noindex, nofollow');
       reply.type('text/html; charset=utf-8');
-      return reply.send(await readFile(join(adminDist, 'index.html')));
+      // The build is path-agnostic; the secret path is injected here so it never appears in the files.
+      const html = (await readFile(join(adminDist, 'index.html'), 'utf8')).replace('%ADMIN_BASE%', `/${ctx.config.adminPath}/`);
+      return reply.send(Buffer.from(html));
     };
     app.get(`/${ctx.config.adminPath}`, index as never);
     app.get(`/${ctx.config.adminPath}/`, index as never);

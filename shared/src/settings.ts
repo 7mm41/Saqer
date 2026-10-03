@@ -85,6 +85,7 @@ export const SETTINGS = [
 
   // ---------------------------------------------------------------- technicians
   d({ key: 'probation_jobs', type: 'int', default: 5, min: 0, max: 50, group: 'technicians', ar: 'عدد طلبات فترة التجربة', en: 'Probation jobs' }),
+  d({ key: 'experiment_target_paid_services', type: 'int', default: 50, min: 1, max: 100_000, group: 'technicians', ar: 'هدف التجربة: عدد الخدمات المدفوعة', en: 'Experiment target: paid services' }),
   d({ key: 'strikes_for_suspension_review', type: 'int', default: 3, min: 1, max: 20, group: 'technicians', ar: 'عدد المخالفات للمراجعة', en: 'Strikes for suspension review' }),
   d({ key: 'strikes_window_days', type: 'days', default: 60, min: 1, max: 365, group: 'technicians', ar: 'مدة احتساب المخالفات', en: 'Strike window' }),
   d({ key: 'rating_review_threshold', type: 'tenths', default: 40, min: 10, max: 50, group: 'technicians', legal: true, ar: 'حد التقييم للمراجعة', en: 'Rating review threshold' }),

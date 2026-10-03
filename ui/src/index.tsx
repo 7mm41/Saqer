@@ -330,7 +330,7 @@ export function StatusPill({ status, label, tone }: { status?: string; label: Re
   return <span className={cx('k-pill', t !== 'info' && `k-pill-${t}`)}>{label}</span>;
 }
 
-export function Card({ title, icon, actions, children, className, tight, float, strong, as: As = 'section', ...rest }: { title?: ReactNode; icon?: ReactNode; actions?: ReactNode; children?: ReactNode; className?: string; tight?: boolean; float?: boolean; strong?: boolean; as?: 'section' | 'div' | 'article' } & React.HTMLAttributes<HTMLElement>) {
+export function Card({ title, icon, actions, children, className, tight, float, strong, as: As = 'section', ...rest }: { title?: ReactNode; icon?: ReactNode; actions?: ReactNode; children?: ReactNode; className?: string; tight?: boolean; float?: boolean; strong?: boolean; as?: 'section' | 'div' | 'article' } & Omit<React.HTMLAttributes<HTMLElement>, 'title'>) {
   return (
     <As className={cx('k-card', tight && 'k-tight', float && 'k-float', strong && 'k-strong', className)} {...rest}>
       {(title || actions) && (
@@ -506,6 +506,7 @@ export function Tabs<V extends string>({ value, onChange, tabs, label }: { value
 export function Modal({ open, onClose, title, children, footer, onReachEnd, wide }: { open: boolean; onClose: () => void; title: ReactNode; children: ReactNode; footer?: ReactNode; onReachEnd?: () => void; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null);
   const body = useRef<HTMLDivElement>(null);
+  const titleId = useId();
   const { t } = useI18n();
   useEffect(() => {
     const d = ref.current;
@@ -521,9 +522,9 @@ export function Modal({ open, onClose, title, children, footer, onReachEnd, wide
     if (open) setTimeout(check, 50);
   }, [open, check]);
   return (
-    <dialog ref={ref} className="k-modal" style={wide ? { width: 'min(980px, calc(100vw - 24px))' } : undefined} onClose={onClose} onCancel={onClose} aria-labelledby="k-modal-title">
+    <dialog ref={ref} className="k-modal" style={wide ? { width: 'min(980px, calc(100vw - 24px))' } : undefined} onClose={onClose} onCancel={onClose} aria-labelledby={titleId}>
       <div className="k-modal-head">
-        <h3 id="k-modal-title" className="k-grow">
+        <h3 id={titleId} className="k-grow">
           {title}
         </h3>
         <button type="button" className="k-icon-btn" onClick={onClose} aria-label={t('actions.close')}>
@@ -607,7 +608,9 @@ export function ConfirmWithReason({ open, onClose, title, body, confirmLabel, on
       await onConfirm(reason.trim());
       onClose();
     } catch (e) {
-      setErr(String((e as Error).message));
+      const { code, details } = e as { code?: string; details?: Record<string, string | number> };
+      const msg = code ? t(`errors.${code}`, details) : '';
+      setErr(msg && msg !== `errors.${code}` ? msg : t('errors.generic'));
     } finally {
       setBusy(false);
     }

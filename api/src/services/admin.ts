@@ -458,7 +458,7 @@ export async function overview(ctx: Ctx) {
     alerts: { failedPayments: failedPayments.length, needsAdmin: needsAdmin.length },
     experiment: {
       paidServices: paidServices.length,
-      target: 50,
+      target: Number((await ctx.settings.all()).experiment_target_paid_services),
       techniciansWithRepeatCustomers: techsWithRepeat,
       techniciansWithJobs: rebook.size,
       averagePlatformMargin: margin,

@@ -5,7 +5,7 @@
 import type { FastifyInstance } from 'fastify';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
-import { and, asc, desc, eq, ilike, inArray, isNull, or, sql, gt, lte, ne } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, sql, ne } from 'drizzle-orm';
 import { SETTINGS, defaultSettings } from '@katf/shared';
 import type { Ctx } from '../ctx';
 import {
@@ -37,10 +37,9 @@ import {
   waitlistEntries,
   broadcasts,
   messages,
-  files,
 } from '../db/schema';
 import { badRequest, conflict, forbidden, notFound } from '../lib/errors';
-import { clearSessionCookies, COOKIE, deviceId, reason, requireAdmin, setSessionCookies } from '../http';
+import { clearSessionCookies, COOKIE, deviceId, requireAdmin, setSessionCookies } from '../http';
 import { adminSignIn, createAdmin, hashPassword, listSessions, logout, refresh } from '../services/auth';
 import { audit, verifyAudit } from '../services/audit';
 import { decideApplication } from '../services/technicians';
@@ -66,8 +65,8 @@ import {
 import { addAdjustment, batchCsv, batches, createBatch, duePayouts, markBatchPaid, markPayoutFailed, monthlyStatement, setHold } from '../services/payouts';
 import { outOfDateDocuments, publishVersion, DOC_TYPES, TITLES } from '../services/legal';
 import { releaseQuote, syncPayment, revisitFailed } from '../services/bookings';
-import { loadBooking, refund } from '../services/booking-core';
-import { adminBookingView, techCard } from '../views';
+import { loadBooking } from '../services/booking-core';
+import { adminBookingView } from '../views';
 import { readSignedFile, signedFileUrl } from '../services/files';
 import { notify } from '../services/notifications';
 import { accountBalance } from '../services/ledger';
@@ -855,13 +854,4 @@ export function adminRoutes(app: FastifyInstance, ctx: Ctx) {
     return reply.send(f.data);
   });
 
-  void reason;
-  void techCard;
-  void refund;
-  void ilike;
-  void or;
-  void isNull;
-  void gt;
-  void lte;
-  void files;
 }
