@@ -75,7 +75,8 @@ jobs:
       - name: Secrets in the repository or its history
         run: |
           curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz | tar xz gitleaks
-          ./gitleaks git --no-banner --redact -v .
+          # this project's history only; other branches in the repository are separate projects
+          ./gitleaks git --no-banner --redact -v --log-opts="HEAD" .
       - name: Shell scripts
         run: shellcheck -x -S warning deploy/*.sh
 
