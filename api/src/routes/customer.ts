@@ -58,7 +58,7 @@ export function customerRoutes(app: FastifyInstance, ctx: Ctx) {
     const part = await req.file({ limits: { fileSize: 26 * 1024 * 1024, files: 1 } });
     if (!part) throw badRequest('file_required');
     const purpose = String((part.fields.purpose as { value?: string } | undefined)?.value ?? '') as Purpose;
-    const allowedAnon: Purpose[] = ['booking_problem'];
+    const allowedAnon: Purpose[] = ['booking_problem', 'dispute']; // tracking-link holders report problems without signing in
     const allowedCustomer: Purpose[] = ['booking_problem', 'dispute'];
     const allowedTech: Purpose[] = ['arrival', 'diagnosis', 'before', 'after', 'receipt', 'profile_photo', 'work_sample', 'document', 'signature', 'certification', 'dispute'];
     const ok = !owner ? allowedAnon.includes(purpose) : owner.role === 'customer' ? allowedCustomer.includes(purpose) : owner.role === 'technician' ? allowedTech.includes(purpose) : false;
@@ -180,6 +180,11 @@ export function customerRoutes(app: FastifyInstance, ctx: Ctx) {
     { schema: { params: z.object({ id: z.string().uuid() }), body: z.object({ reasonCode: z.enum(DISPUTE_REASONS.map((d) => d.id) as [string, ...string[]]), description: z.string().max(2000).nullish(), evidence: z.array(z.string().uuid()).max(8).default([]) }) } },
     async (req) => {
       const { actor } = await bookingCustomer(req, req.params.id);
+      if (req.body.evidence.length) {
+        const rows = await ctx.db.select().from(files).where(inArray(files.id, req.body.evidence));
+        if (rows.length !== req.body.evidence.length || rows.some((f) => f.purpose !== 'dispute' || (f.ownerUserId && f.ownerUserId !== actor.id))) throw badRequest('invalid_media');
+        await ctx.db.update(files).set({ ownerUserId: actor.id }).where(and(inArray(files.id, req.body.evidence), isNull(files.ownerUserId)));
+      }
       await openDispute(ctx, actor, req.params.id, { reasonCode: req.body.reasonCode, description: req.body.description ?? null, evidence: req.body.evidence });
       return { ok: true };
     },

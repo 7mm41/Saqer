@@ -55,6 +55,8 @@ export const commonAr = {
     refunded_partial: 'استُرد جزئياً',
     repair_failed_closed: 'تعذّر الإصلاح',
   },
+  ui: { photosMin: 'ارفع {n} صور على الأقل', clearSignature: 'مسح التوقيع', theme: 'المظهر', language: 'English' },
+  admin: { reason: 'السبب (يُحفظ في السجل)' },
   errors: {
     generic: 'حدث خطأ غير متوقع. حاول مرة أخرى.',
     network: 'تعذّر الاتصال. تحقق من الإنترنت وحاول مجدداً.',
@@ -79,7 +81,7 @@ export const commonAr = {
     registration_closed: 'التسجيل مفتوح حالياً للفنيين المدعوين فقط.',
     too_young: 'يجب أن يكون عمرك 18 سنة أو أكثر.',
     doc_expiring: 'المستند ينتهي قريباً. ارفع مستنداً ساري المفعول لمدة {days} يوماً على الأقل.',
-    file_type: 'نوع الملف غير مدعوم. استخدم صورة JPG أو PNG أو HEIC.',
+    file_type: 'نوع الملف غير مدعوم. استخدم صورة JPG أو PNG.',
     file_size: 'حجم الملف كبير جداً.',
     outside_geofence: 'أنت بعيد عن موقع الزبون. اقترب من الموقع ثم حاول مجدداً.',
     outside_coverage: 'لم نصل إلى منطقتك بعد',

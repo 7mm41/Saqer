@@ -59,6 +59,8 @@ export const commonEn: Shape<typeof commonAr> = {
     refunded_partial: 'Partially refunded',
     repair_failed_closed: 'Repair failed',
   },
+  ui: { photosMin: 'Upload at least {n} photos', clearSignature: 'Clear signature', theme: 'Theme', language: 'العربية' },
+  admin: { reason: 'Reason (kept in the log)' },
   errors: {
     generic: 'Something unexpected happened. Please try again.',
     network: "Couldn't connect. Check your internet and try again.",
@@ -83,7 +85,7 @@ export const commonEn: Shape<typeof commonAr> = {
     registration_closed: 'Registration is currently open to invited technicians only.',
     too_young: 'You must be 18 or older.',
     doc_expiring: 'This document expires soon. Upload one valid for at least {days} days.',
-    file_type: 'This file type is not supported. Use a JPG, PNG or HEIC photo.',
+    file_type: 'This file type is not supported. Use a JPG or PNG photo.',
     file_size: 'The file is too large.',
     outside_geofence: "You're too far from the customer's location. Move closer and try again.",
     outside_coverage: "We don't cover your area yet",
