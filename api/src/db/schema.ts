@@ -162,6 +162,8 @@ export const blockedIdentities = pgTable('blocked_identities', {
   id: id(),
   kind: text('kind').notNull(), // phone | civil_id | iban | device
   indexValue: text('index_value').notNull(),
+  // the blocked value itself, encrypted, so the index can be recomputed when DATA_KEY rotates
+  valueEnc: text('value_enc'),
   reason: text('reason').notNull(),
   createdBy: text('created_by'),
   createdAt: created(),

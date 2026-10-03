@@ -5,6 +5,7 @@
  *   verify-audit         recompute the audit hash chain
  *   demo-seed            demo data (only when DEMO_MODE=true)
  *   openapi              print the OpenAPI document
+ *   rotate-data-key      re-encrypt everything under a new DATA_KEY (DATA_KEY_PREVIOUS = the old key; API stopped)
  *   state-machine        print the Mermaid state diagram
  */
 import { createInterface } from 'node:readline';
@@ -82,12 +83,20 @@ try {
     await seedProduction(ctx);
     await seedDemo(ctx);
     console.log('demo data created (labelled as demo on every screen)');
+  } else if (cmd === 'rotate-data-key') {
+    const { rotateDataKey } = await import('./services/rotate');
+    const { audit } = await import('./services/audit');
+    const r = await rotateDataKey(ctx);
+    await audit(ctx.db, { id: null, role: 'system' }, { action: 'data_key.rotate', entity: 'system', data: { ...r } });
+    console.log(`DATA_KEY rotated: ${JSON.stringify(r)}`);
+    if (r.blockedUnresolved) console.log(`Warning: ${r.blockedUnresolved} old blocked identities could not be carried over (no stored value).`);
+    console.log('Now remove DATA_KEY_PREVIOUS from the environment and start the API.');
   } else if (cmd === 'openapi') {
     const app = await buildApp(ctx);
     await app.ready();
     console.log(JSON.stringify(app.swagger(), null, 2));
   } else {
-    console.log('commands: seed | create-owner | verify-audit | demo-seed | openapi | state-machine');
+    console.log('commands: seed | create-owner | verify-audit | demo-seed | openapi | state-machine | rotate-data-key');
   }
 } catch (e) {
   console.error(String((e as Error).message));

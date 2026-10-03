@@ -100,3 +100,22 @@ One line each where the prompt allowed a choice. "Owner" = needs the owner's con
 | D57 | When **more than one commission rate applies** (technician override, own link, repeat customer), the lowest is used. It is fixed on the booking at creation and shown to the technician before accepting | Predictable for the technician; an override never makes their own customers more expensive | Approved 2026-10-03 |
 | D58 | Numbers that appear only in the prompt's prose also become settings with history. Examples: 15-minute unpaid expiry, 2-hour technician-cancel strike rule, 30-day re-apply wait, 5 probation jobs, 48-hour bank-change lock, 3 chat flags in 30 days, quiet hours 22:00–07:00 | "Every business number is a setting, never code" | Decided |
 | D59 | **App name: كتف.** Latin spelling "Katf" for English pages and the App Store [DEFAULT]; booking-code prefix `KT`, e.g. `KT-7Q4M2X` [DEFAULT]. All three are branding settings in admin, and the legal texts render the name from `{{APP_NAME}}` | Named by the owner on 2026-10-03; the Latin spelling and the prefix are my defaults and can be changed in admin without code | Approved 2026-10-03 (name); Latin spelling and prefix are defaults |
+
+## H. Decided during the build (2026-10-03)
+
+These came up while building. Each is a sensible default the owner can change.
+
+| # | Decision | Reason | Status |
+|---|---|---|---|
+| D60 | The admin panel's files are served by the API under the secret path; the build has no path in it and the API adds it as `<base>`, so rotating the path needs no rebuild | Keeps the address secret and rotatable (D20) | Decided |
+| D61 | Language is kept in a cookie (website) or local storage (apps), not in the URL | One address per page; no server middleware | Decided — owner may want `/en/` URLs later for English SEO |
+| D62 | Receipts and monthly statements are printable pages ("Save as PDF") instead of generated PDF files | Same content, no PDF engine to maintain in Phase 1 | Decided |
+| D63 | Backups with restic in a container (AES-256), 14 nightly copies, weekly automatic restore test; backup credentials in their own file, never visible to the app | Tested restore was a Phase-1 requirement (M13) | Decided — off-site repository recommended |
+| D64 | `DATA_KEY` rotation re-encrypts all fields and files and recomputes lookup indexes; bans keep an encrypted copy of the value so they survive rotation | A leaked key must be replaceable without losing bans or sign-in | Decided |
+| D65 | Changing bank details needs a fresh code sent for that purpose; sign-in codes and bank codes cannot be swapped | Bank changes are the main fraud target | Decided |
+| D66 | Payment return links must match our own origins exactly | `startsWith` let a look-alike host through | Decided |
+| D67 | The iPhone app is iPhone-only and portrait; its new-request sound is generated from code; bundle ID `om.katf.pro` is a placeholder | Simpler App Store review; no binary assets to hand-edit | Decided — bundle ID waits for the Apple account |
+| D68 | Light-mode text on tinted pills uses darker "ink" colours; dark mode keeps the brighter ones | WCAG AA (4.5:1) for small text, found by axe | Decided |
+| D69 | Admin panel static files do not count toward the per-IP rate limit | An office behind one IP could lock itself out | Decided |
+| D70 | Production images use Node 24; the technician app and admin panel build with Vite 8 | Current long-term-support Node; the React plugin needs Vite 8 | Decided |
+

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Gives the admin panel a new secret address. Everyone signed in to the admin panel must sign in again.
+# shellcheck source=deploy/lib.sh
 . "$(dirname "$0")/lib.sh"
 load_env
 new="$(rand_path 32)"

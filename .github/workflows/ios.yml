@@ -1,0 +1,31 @@
+name: iPhone app
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths: ['tech/**', 'ui/**', 'shared/**', '.github/workflows/ios.yml']
+  pull_request:
+    paths: ['tech/**', 'ui/**', 'shared/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  simulator-build:
+    name: Xcode build for the iOS Simulator
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Web assets for the app bundle
+        run: pnpm --filter @katf/tech exec sh -c "CAP_BUILD=1 VITE_API_URL=https://staging.example.invalid vite build && cap sync ios"
+      - name: Build (no signing)
+        run: |
+          xcodebuild -project tech/ios/App/App.xcodeproj -scheme App \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug CODE_SIGNING_ALLOWED=NO build | tail -50

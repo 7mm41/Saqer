@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Shared helpers for the deploy scripts. Sourced, not executed.
 set -euo pipefail
 DEPLOY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

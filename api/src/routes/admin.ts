@@ -830,7 +830,7 @@ export function adminRoutes(app: FastifyInstance, ctx: Ctx) {
     const { normaliseOmanPhone, normaliseCivilId, normaliseOmanIban } = await import('@katf/shared');
     const v = req.body.kind === 'phone' ? normaliseOmanPhone(req.body.value) : req.body.kind === 'civil_id' ? normaliseCivilId(req.body.value) : normaliseOmanIban(req.body.value);
     if (!v) throw badRequest('invalid_value');
-    await ctx.db.insert(blockedIdentities).values({ id: newId(), kind: req.body.kind, indexValue: ctx.crypto.blindIndex(req.body.kind, v), reason: req.body.reason, createdBy: a.id });
+    await ctx.db.insert(blockedIdentities).values({ id: newId(), kind: req.body.kind, indexValue: ctx.crypto.blindIndex(req.body.kind, v), valueEnc: ctx.crypto.encrypt(v), reason: req.body.reason, createdBy: a.id });
     await audit(ctx.db, a, { action: 'blocked.add', entity: 'blocked_identity', reason: req.body.reason, data: { kind: req.body.kind } });
     return { ok: true };
   });

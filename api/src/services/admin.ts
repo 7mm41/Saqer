@@ -225,10 +225,10 @@ export async function technicianAction(
       case 'ban': {
         await set({ status: 'banned', available: false, pausedReason: i.reason });
         const u = (await tx.select().from(users).where(eq(users.id, technicianId)))[0];
-        if (u?.phoneIndex) await tx.insert(blockedIdentities).values({ id: newId(), kind: 'phone', indexValue: u.phoneIndex, reason: i.reason, createdBy: admin.id });
-        if (t.civilIdIndex) await tx.insert(blockedIdentities).values({ id: newId(), kind: 'civil_id', indexValue: t.civilIdIndex, reason: i.reason, createdBy: admin.id });
+        if (u?.phoneIndex) await tx.insert(blockedIdentities).values({ id: newId(), kind: 'phone', indexValue: u.phoneIndex, valueEnc: u.phoneEnc, reason: i.reason, createdBy: admin.id });
+        if (t.civilIdIndex) await tx.insert(blockedIdentities).values({ id: newId(), kind: 'civil_id', indexValue: t.civilIdIndex, valueEnc: t.civilIdEnc, reason: i.reason, createdBy: admin.id });
         const bank = (await tx.select().from(technicianBank).where(eq(technicianBank.technicianId, technicianId)))[0];
-        if (bank) await tx.insert(blockedIdentities).values({ id: newId(), kind: 'iban', indexValue: bank.ibanIndex, reason: i.reason, createdBy: admin.id });
+        if (bank) await tx.insert(blockedIdentities).values({ id: newId(), kind: 'iban', indexValue: bank.ibanIndex, valueEnc: bank.ibanEnc, reason: i.reason, createdBy: admin.id });
         await logoutEverywhere(ctx, technicianId, 'banned', tx);
         break;
       }

@@ -1,0 +1,1 @@
+ALTER TABLE "blocked_identities" ADD COLUMN "value_enc" text;

@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 // The admin panel is served by the API under the secret ADMIN_PATH (§9.1). The build is path-agnostic
 // (relative asset URLs + a <base> the API fills in), so rotating the path never needs a rebuild.
-const adminPath = process.env.ADMIN_PATH ?? 'dev-admin-path-1234567890ab';
+const adminPath = process.env.ADMIN_PATH ?? 'dev-admin'; // same default as the API in development
 
 const devBase = (): Plugin => ({
   name: 'katf-admin-base',

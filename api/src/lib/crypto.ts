@@ -12,7 +12,7 @@ export interface Keys {
   token: Buffer;
   url: Buffer;
   file: Buffer;
-  previous: { keyId: string; enc: Buffer; file: Buffer } | null;
+  previous: { keyId: string; enc: Buffer; file: Buffer; idx: Buffer } | null;
 }
 
 function derive(root: Buffer, info: string): Buffer {
@@ -30,7 +30,7 @@ export function deriveKeys(root: Buffer, previous: Buffer | null = null): Keys {
     token: derive(root, 'access-token'),
     url: derive(root, 'signed-url'),
     file: derive(root, 'file-encryption'),
-    previous: previous ? { keyId: keyIdOf(previous), enc: derive(previous, 'field-encryption'), file: derive(previous, 'file-encryption') } : null,
+    previous: previous ? { keyId: keyIdOf(previous), enc: derive(previous, 'field-encryption'), file: derive(previous, 'file-encryption'), idx: derive(previous, 'blind-index') } : null,
   };
 }
 
@@ -90,6 +90,18 @@ export class Crypto {
   /** Equality lookups on encrypted fields. */
   blindIndex(kind: string, value: string): string {
     return createHmac('sha256', this.keys.idx).update(`${kind}:${value.trim().toLowerCase()}`).digest('hex').slice(0, 40);
+  }
+
+  /** The same index under DATA_KEY_PREVIOUS (key rotation only). */
+  previousBlindIndex(kind: string, value: string): string | null {
+    if (!this.keys.previous) return null;
+    return createHmac('sha256', this.keys.previous.idx).update(`${kind}:${value.trim().toLowerCase()}`).digest('hex').slice(0, 40);
+  }
+
+  /** Re-encrypt a field under the current key (reads values under either key). */
+  reencrypt(value: string | null | undefined): string | null {
+    if (value == null) return null;
+    return this.encrypt(this.decrypt(value)!);
   }
 
   hashIp(ip: string | undefined | null): string | null {

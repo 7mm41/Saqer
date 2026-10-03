@@ -49,6 +49,8 @@ PLAN.md  DECISIONS.md  README.md  CHANGELOG.md  .env.example
 
 ## 3. Phase 1 — the smallest real product
 
+> Build status: see [docs/status.md](docs/status.md).
+
 Order of work. Each milestone is finished, tested and committed before the next starts.
 
 | # | Milestone | Done when |

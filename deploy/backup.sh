@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Nightly encrypted backup (restic, AES-256): database dump, uploaded files and the .env files.
 # Keeps KEEP_DAILY daily snapshots (14 by default). Safe to run any time.
+# shellcheck source=deploy/lib.sh
 . "$(dirname "$0")/lib.sh"
 load_env
 load_backup_env

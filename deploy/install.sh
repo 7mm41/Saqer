@@ -3,6 +3,7 @@
 #   git clone … /opt/katf && sudo /opt/katf/deploy/install.sh
 # Creates deploy/.env and deploy/backup.env with random secrets, builds and starts the stack,
 # creates the owner account (password typed by you, never stored here) and schedules nightly backups.
+# shellcheck source=deploy/lib.sh
 . "$(dirname "$0")/lib.sh"
 
 command -v docker >/dev/null || die "Docker is not installed. See https://docs.docker.com/engine/install/"

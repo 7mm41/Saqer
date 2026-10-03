@@ -5,9 +5,10 @@
 # If the new version is not healthy, the previous images and code come back automatically.
 # Database migrations only add things, so the previous version keeps working on the migrated schema;
 # if a release says otherwise, restore the pre-update backup with restore.sh.
+# shellcheck source=deploy/lib.sh
 . "$(dirname "$0")/lib.sh"
 load_env
-cd "$DEPLOY_DIR/.."
+cd "$DEPLOY_DIR/.." || exit 1
 
 say "Backup before updating"
 "$DEPLOY_DIR/backup.sh"
