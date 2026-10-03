@@ -1,0 +1,87 @@
+# Production stack. Settings and secrets come from deploy/.env (created by install.sh, never committed).
+name: katf
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: '10m', max-file: '5' }
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: katf
+      POSTGRES_USER: katf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run install.sh first}
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U katf -d katf']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    security_opt: ['no-new-privileges:true']
+    logging: *logging
+
+  api:
+    image: katf-api:latest
+    build: { context: .., dockerfile: deploy/Dockerfile, target: api }
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://katf:${POSTGRES_PASSWORD}@db:5432/katf
+      PUBLIC_ORIGIN: https://${DOMAIN}
+      TECH_ORIGIN: https://${DOMAIN}
+      ADMIN_ORIGIN: https://${DOMAIN}
+      API_PUBLIC_URL: https://${DOMAIN}
+      TRUST_PROXY_HOPS: '1'
+    volumes:
+      - files:/data
+    depends_on:
+      db: { condition: service_healthy }
+    read_only: true
+    tmpfs: ['/tmp']
+    security_opt: ['no-new-privileges:true']
+    logging: *logging
+
+  web:
+    image: katf-web:latest
+    build: { context: .., dockerfile: deploy/Dockerfile, target: web }
+    restart: unless-stopped
+    environment:
+      API_INTERNAL_URL: http://api:4000
+      PUBLIC_ORIGIN: https://${DOMAIN}
+    depends_on:
+      api: { condition: service_healthy }
+    read_only: true
+    tmpfs: ['/tmp', '/app/web/.next/cache']
+    security_opt: ['no-new-privileges:true']
+    logging: *logging
+
+  caddy:
+    image: katf-caddy:latest
+    build: { context: .., dockerfile: deploy/Dockerfile, target: caddy }
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+      ADMIN_PATH: ${ADMIN_PATH}
+      MAP_TILE_HOSTS: ${MAP_TILE_HOSTS:-https://tile.openstreetmap.org}
+      PAYMENT_HOSTS: ${PAYMENT_HOSTS:-https://uatcheckout.thawani.om https://checkout.thawani.om}
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [api, web]
+    security_opt: ['no-new-privileges:true']
+    logging: *logging
+
+volumes:
+  db:
+  files:
+  caddy-data:
+  caddy-config:

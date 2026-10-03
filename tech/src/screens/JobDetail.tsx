@@ -281,7 +281,7 @@ export function JobDetail() {
       </BottomSheet>
 
       <BottomSheet open={sheet === 'override'} onClose={() => setSheet(null)} label={m.job.override}>
-        <OverrideForm info={overrideInfo} onSubmit={async (reason) => { if (!overrideInfo) return; (await act('override', 'arrive', { lat: overrideInfo.lat, lng: overrideInfo.lng, photoFileId: overrideInfo.photo, override: true, overrideReason: reason })) && setSheet(null); }} />
+        <OverrideForm info={overrideInfo} onSubmit={async (reason) => { if (!overrideInfo) return; if (await act('override', 'arrive', { lat: overrideInfo.lat, lng: overrideInfo.lng, photoFileId: overrideInfo.photo, override: true, overrideReason: reason })) setSheet(null); }} />
       </BottomSheet>
 
       <BottomSheet open={sheet === 'absent'} onClose={() => setSheet(null)} label={m.job.absent}>
@@ -312,7 +312,7 @@ export function JobDetail() {
             loading={busy === 'safety'}
             onClick={async () => {
               const pos = await currentPosition().catch(() => null);
-              (await act('safety', 'safety', { lat: pos?.lat ?? null, lng: pos?.lng ?? null })) && toast(m.job.sendSafety, 'success');
+              if (await act('safety', 'safety', { lat: pos?.lat ?? null, lng: pos?.lng ?? null })) toast(m.job.sendSafety, 'success');
             }}
           >
             {m.job.sendSafety}

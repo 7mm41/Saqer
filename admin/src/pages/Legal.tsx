@@ -34,7 +34,7 @@ export function Legal() {
                     { key: 'type', label: m.legal.type, render: (r: any) => <strong>{title(r.type)}</strong> },
                     { key: 'language', label: m.legal.language, render: (r: any) => r.language.toUpperCase() },
                     { key: 'version', label: m.legal.version, render: (r: any) => <span className="k-num">{r.version}</span> },
-                    { key: 'status', label: m.common.status, render: (r: any) => <Pill status={r.status === 'published' ? 'active' : r.status === 'superseded' ? 'expired' : 'pending'} label={r.status} /> },
+                    { key: 'status', label: m.common.status, render: (r: any) => <Pill status={r.status === 'published' ? 'active' : r.status === 'superseded' ? 'expired' : 'pending'} label={(m.legal.statuses as Record<string, string>)[r.status] ?? r.status} /> },
                     { key: 'draft', label: m.legal.lawyer, render: (r: any) => (r.isDraft ? <Pill status="pending" label={m.legal.draft} /> : <Pill status="active" label={m.legal.approved} />) },
                     { key: 'effectiveAt', label: m.legal.effective, render: (r: any) => date(r.effectiveAt ?? r.publishedAt, locale) },
                   ]}

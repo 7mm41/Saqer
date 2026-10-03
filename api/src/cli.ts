@@ -16,29 +16,42 @@ import { createAdmin } from './services/auth';
 import { verifyAudit } from './services/audit';
 import { buildApp } from './app';
 
-async function hidden(question: string): Promise<string> {
-  let muted = false;
-  const out = new Writable({
-    write(chunk, enc, cb) {
-      if (!muted) process.stdout.write(chunk, enc);
-      cb();
-    },
-  });
-  const rl = createInterface({ input: process.stdin, output: out, terminal: true });
+// One readline for all prompts, so piped answers (one per line) are not lost between questions.
+let muted = false;
+const out = new Writable({
+  write(chunk, enc, cb) {
+    if (!muted) process.stdout.write(chunk, enc);
+    cb();
+  },
+});
+let rl: ReturnType<typeof createInterface> | null = null;
+const lines: string[] = [];
+const waiting: ((s: string) => void)[] = [];
+function reader() {
+  if (!rl) {
+    rl = createInterface({ input: process.stdin, output: out, terminal: Boolean(process.stdin.isTTY) });
+    rl.on('line', (l) => (waiting.length ? waiting.shift()!(l) : lines.push(l)));
+    rl.on('close', () => waiting.splice(0).forEach((w) => w('')));
+  }
+  return rl;
+}
+function prompt(question: string, hide: boolean): Promise<string> {
+  reader();
+  process.stdout.write(question);
+  muted = hide;
   return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      rl.close();
-      process.stdout.write('\n');
-      resolve(answer);
-    });
-    muted = true;
+    const done = (l: string) => {
+      muted = false;
+      if (hide) process.stdout.write('\n');
+      resolve(l.trim());
+    };
+    if (lines.length) done(lines.shift()!);
+    else waiting.push(done);
   });
 }
-
-async function ask(question: string): Promise<string> {
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise((resolve) => rl.question(question, (a) => (rl.close(), resolve(a.trim()))));
-}
+const closeReader = () => rl?.close();
+const hidden = (q: string) => prompt(q, true);
+const ask = (q: string) => prompt(q, false);
 
 const cmd = process.argv[2];
 if (cmd === 'state-machine') {
@@ -80,5 +93,6 @@ try {
   console.error(String((e as Error).message));
   process.exitCode = 1;
 } finally {
+  closeReader();
   await ctx.handle.close();
 }

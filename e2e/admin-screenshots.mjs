@@ -27,7 +27,7 @@ const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/
 const problems = [];
 
 // sign in once and reuse the cookies
-const login = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const login = await browser.newContext({ viewport: { width: 1280, height: 900 }, ignoreHTTPSErrors: true });
 const p = await login.newPage();
 await p.goto(BASE, { waitUntil: 'load' });
 await p.waitForTimeout(800);
@@ -60,7 +60,7 @@ for (const c of [
   { locale: 'en', scheme: 'light', w: 1280 },
   { locale: 'ar', scheme: 'light', w: 390 },
 ]) {
-  const ctx = await browser.newContext({ storageState: state, viewport: { width: c.w, height: c.w < 500 ? 844 : 900 }, colorScheme: c.scheme });
+  const ctx = await browser.newContext({ storageState: state, viewport: { width: c.w, height: c.w < 500 ? 844 : 900 }, colorScheme: c.scheme, ignoreHTTPSErrors: true });
   await ctx.addInitScript((l) => localStorage.setItem('katf.admin.lang', l), c.locale);
   const page = await ctx.newPage();
   page.on('pageerror', (e) => problems.push(`${c.locale}/${c.scheme}/${c.w}: page error ${e.message}`));

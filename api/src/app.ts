@@ -68,7 +68,14 @@ export async function buildApp(ctx: Ctx, opts: { logger?: boolean } = {}): Promi
     crossOriginResourcePolicy: { policy: 'same-site' },
     hsts: ctx.config.NODE_ENV === 'production' ? { maxAge: 31536000, includeSubDomains: true } : false,
   });
-  await app.register(rateLimit, { global: true, max: 300 * ctx.config.RATE_LIMIT_SCALE, timeWindow: '1 minute', keyGenerator: (req) => req.ip, errorResponseBuilder: () => ({ statusCode: 429, error: 'rate_limited' }) });
+  await app.register(rateLimit, {
+    global: true,
+    max: 300 * ctx.config.RATE_LIMIT_SCALE,
+    timeWindow: '1 minute',
+    keyGenerator: (req) => req.ip,
+    // hashed admin-panel assets are cheap static files; counting them would lock out an office behind one IP
+    allowList: (req) => req.method === 'GET' && req.url.startsWith(`/${ctx.config.adminPath}/assets/`),
+    errorResponseBuilder: () => ({ statusCode: 429, error: 'rate_limited' }) });
   await app.register(multipart, { limits: { fileSize: 26 * 1024 * 1024, files: 1, fields: 5 } });
   await app.register(swagger, {
     openapi: { info: { title: 'Katf API', version: '0.1.0' } },

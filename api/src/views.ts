@@ -2,7 +2,7 @@
  * What each side may see (§7, §8.4, §12). The technician sees the exact address and the
  * customer's first name only after accepting; customers see only the technician's public card.
  */
-import { and, asc, desc, eq, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 import { label, BOOKING_PROBLEMS, trackingStep, techStep, settleVisitOnly, share } from '@katf/shared';
 import type { Ctx } from './ctx';
 import { areas, bookingEvents, callLogs, disputes, ledgerEntries, messages, payments, quotes, refunds, reviews, technicians, users, bookings } from './db/schema';

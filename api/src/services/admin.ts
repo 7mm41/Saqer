@@ -2,11 +2,10 @@
  * Admin operations (§9): disputes, technician and customer actions, break-glass reveals,
  * catalog and areas, settings with the legal-gate guard, overview metrics, document expiry.
  */
-import { and, desc, eq, gte, inArray, isNull, lte, sql, gt, ne } from 'drizzle-orm';
+import { and, eq, inArray, lte, sql } from 'drizzle-orm';
 import { formatOMR, settleRepairFailed, maskPhone, maskIban, type QuoteLine, share, muscatDate } from '@katf/shared';
 import type { Ctx, Actor } from '../ctx';
 import {
-  adminAccounts,
   areas,
   blockedIdentities,
   bookings,
@@ -85,7 +84,7 @@ export async function decideDispute(
     if (appeal && d.decidedBy === admin.id) throw forbidden('second_reviewer_required');
     const b = await loadBooking(tx, d.bookingId, true);
     const preview = await disputePreview(ctx, b.id, tx);
-    let amounts = i.amounts ?? null;
+    let amounts: { refund: number; technician: number; platform: number } | null;
     if (b.status === 'disputed') {
       if (i.decision === 'technician_full') {
         await confirmTx(ctx, tx, b, admin, 'decide_confirm');
@@ -290,7 +289,7 @@ export async function reveal(ctx: Ctx, admin: Actor, entity: 'technician' | 'cus
   if (!reason.trim()) throw badRequest('reason_required');
   if (admin.adminRole === 'support' && ['iban', 'civil_id', 'dob'].includes(field)) throw forbidden();
   if (admin.adminRole === 'finance' && ['civil_id', 'dob', 'references', 'emergency'].includes(field)) throw forbidden();
-  let value: unknown = null;
+  let value: unknown;
   const u = (await ctx.db.select().from(users).where(eq(users.id, id)))[0];
   if (!u) throw notFound();
   const t = entity === 'technician' ? (await ctx.db.select().from(technicians).where(eq(technicians.userId, id)))[0] : null;

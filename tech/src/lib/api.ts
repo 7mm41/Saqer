@@ -89,13 +89,14 @@ export async function signOut() {
   await secureSet('refresh', null);
 }
 
-export function uploadFile(file: File, purpose: string, onProgress: (p: number) => void): Promise<string> {
-  return new Promise(async (resolve, reject) => {
-    if (isNative() && (!access || access.exp * 1000 < Date.now() + 15_000)) await refresh();
+export async function uploadFile(file: File, purpose: string, onProgress: (p: number) => void): Promise<string> {
+  if (isNative() && (!access || access.exp * 1000 < Date.now() + 15_000)) await refresh();
+  const h = await headers();
+  return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${BASE}/api/uploads`);
     xhr.withCredentials = !isNative();
-    for (const [k, v] of Object.entries(await headers())) xhr.setRequestHeader(k, v);
+    for (const [k, v] of Object.entries(h)) xhr.setRequestHeader(k, v);
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total);
     xhr.onload = () => {
       try {

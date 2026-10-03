@@ -77,7 +77,7 @@ export const ar = {
   catalog: { title: 'الخدمات', add: 'إضافة خدمة', nameAr: 'الاسم بالعربية', nameEn: 'الاسم بالإنجليزية', descAr: 'الوصف بالعربية', descEn: 'الوصف بالإنجليزية', duration: 'المدة (دقيقة)', priceMin: 'أقل سعر استرشادي', priceMax: 'أعلى سعر استرشادي', active: 'مفعّلة', sort: 'الترتيب' },
   areas: { title: 'المناطق', active: 'مفعّلة', feeOverride: 'رسم زيارة خاص (فارغ = الافتراضي)', neighbourhoods: 'الأحياء', waitlist: 'في قائمة الانتظار', activate: 'تفعيل', deactivate: 'إيقاف', radius: 'نصف القطر (م)' },
   legal: {
-    title: 'الوثائق القانونية', lawyer: 'مراجعة المحامي', draft: 'مسودة — بانتظار المحامي', approved: 'معتمدة من المحامي', version: 'الإصدار', effective: 'تسري من', publish: 'نشر إصدار جديد', type: 'الوثيقة', language: 'اللغة', body: 'النص', titleField: 'العنوان', changeSummary: 'ملخص التغييرات',
+    title: 'الوثائق القانونية', lawyer: 'مراجعة المحامي', statuses: { editing: 'قيد التحرير', published: 'منشورة', superseded: 'استُبدلت' }, draft: 'مسودة — بانتظار المحامي', approved: 'معتمدة من المحامي', version: 'الإصدار', effective: 'تسري من', publish: 'نشر إصدار جديد', type: 'الوثيقة', language: 'اللغة', body: 'النص', titleField: 'العنوان', changeSummary: 'ملخص التغييرات',
     reaccept: 'يتطلب موافقة جديدة من المستخدمين', lawyerApproved: 'وافق المحامي على هذا النص', lawyerWarn: 'لا تعلّم هذا إلا بعد موافقة المحامي كتابياً. النصوص الحالية مسودات.', variables: 'متغيرات يمكن استخدامها', outOfDate: 'تغيّرت إعدادات مذكورة في هذه الوثائق — انشر إصداراً جديداً',
     consents: 'تقرير الموافقات', consentsCsv: 'تنزيل CSV', accepted: 'وافق في', withdrawn: 'سُحبت',
   },
@@ -176,7 +176,7 @@ export const en: Shape<typeof ar> = {
   catalog: { title: 'Services', add: 'Add service', nameAr: 'Name (Arabic)', nameEn: 'Name (English)', descAr: 'Description (Arabic)', descEn: 'Description (English)', duration: 'Duration (minutes)', priceMin: 'Lowest guide price', priceMax: 'Highest guide price', active: 'Active', sort: 'Order' },
   areas: { title: 'Areas', active: 'Active', feeOverride: 'Area visit fee (empty = default)', neighbourhoods: 'Neighbourhoods', waitlist: 'On the waitlist', activate: 'Activate', deactivate: 'Deactivate', radius: 'Radius (m)' },
   legal: {
-    title: 'Legal documents', lawyer: 'Lawyer review', draft: 'Draft — awaiting the lawyer', approved: 'Approved by the lawyer', version: 'Version', effective: 'Effective', publish: 'Publish a new version', type: 'Document', language: 'Language', body: 'Text', titleField: 'Title', changeSummary: 'Summary of changes',
+    title: 'Legal documents', lawyer: 'Lawyer review', statuses: { editing: 'Editing', published: 'Published', superseded: 'Superseded' }, draft: 'Draft — awaiting the lawyer', approved: 'Approved by the lawyer', version: 'Version', effective: 'Effective', publish: 'Publish a new version', type: 'Document', language: 'Language', body: 'Text', titleField: 'Title', changeSummary: 'Summary of changes',
     reaccept: 'Users must accept again', lawyerApproved: 'The lawyer approved this text', lawyerWarn: 'Only tick this after written approval from the lawyer. The current texts are drafts.', variables: 'Variables you can use', outOfDate: 'Settings used in these documents changed — publish a new version',
     consents: 'Consent report', consentsCsv: 'Download CSV', accepted: 'Accepted', withdrawn: 'Withdrawn',
   },

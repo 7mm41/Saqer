@@ -12,7 +12,6 @@ import {
   Button,
   Card,
   Checkbox,
-  ChipGroup,
   Progress,
   RadioCards,
   Select,

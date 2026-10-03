@@ -1,9 +1,13 @@
 import type { NextConfig } from 'next';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const api = process.env.API_INTERNAL_URL ?? 'http://localhost:4000';
 
 const config: NextConfig = {
   output: 'standalone',
+  // monorepo: trace dependencies from the repository root so the standalone build includes workspace packages
+  outputFileTracingRoot: join(dirname(fileURLToPath(import.meta.url)), '..'),
   transpilePackages: ['@katf/ui', '@katf/shared'],
   poweredByHeader: false,
   reactStrictMode: true,

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { eq, sql } from 'drizzle-orm';
-import { adminSession, advance, bookAndPay, bearer, expectOk, json, makeWorld, payMock, registeredTechnician, runJobs, setSetting, upload, type World } from './helpers';
+import { adminSession, advance, bookAndPay, expectOk, json, makeWorld, payMock, registeredTechnician, runJobs, setSetting, upload, type World } from './helpers';
 import { bookings, ledgerEntries, payableItems, strikes, technicians, auditLog } from '../src/db/schema';
 import { bookingBalance } from '../src/services/ledger';
 

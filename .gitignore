@@ -18,3 +18,5 @@ xcuserdata/
 .DS_Store
 __pycache__/
 *.tsbuildinfo
+deploy/backup.env
+.sandbox-ca.crt
