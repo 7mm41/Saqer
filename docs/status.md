@@ -17,10 +17,11 @@ _Last updated: 2026-10-03._
 | M9 | Customer site | Done | Browser test: book → pay → approve quote → pay rest → confirm → rate, in English; Arabic RTL screens checked by axe and screenshots |
 | M10 | Admin | Done | All pages in Arabic/English, light/dark; role matrix tested in the API; owner flow in the browser test |
 | M11 | Notifications | Done (providers need keys) | Templates editable with test-send; quiet hours; push then SMS fallback |
-| M12 | iPhone app | Built; **not yet compiled on a Mac** | Xcode project, Keychain, Face ID, camera, GPS, APNs sound, permission texts, privacy manifest; CI workflow builds it for the simulator on macOS |
+| M12 | iPhone app | Built; compiles in Xcode (simulator); not yet run on a device or TestFlight | Xcode project, Keychain, Face ID, camera, GPS, APNs sound, permission texts, privacy manifest; `BUILD SUCCEEDED` on GitHub's macOS runner for every change |
 | M13 | Hardening | Done | axe (8 screens × ar/en × light/dark), threat model in [security.md](security.md), backup + tested restore, install/update/rollback, key and admin-path rotation verified on a local production stack |
 
 Test counts at this commit: 43 shared unit tests, 28 API tests, 9 browser tests (5 journey + 4 accessibility).
+All CI jobs pass on GitHub: checks, end-to-end, security scan, Docker build, Xcode build.
 
 ## What is not done
 
@@ -41,8 +42,8 @@ Test counts at this commit: 43 shared unit tests, 28 API tests, 9 browser tests 
 
 **Technical gaps, known and accepted for now:**
 
-- The iPhone app has not been compiled here (no macOS in this environment). The CI job on a macOS runner
-  is the first real Xcode build; if it fails, the fix is in the Xcode project only.
+- The iPhone app compiles in Xcode for the simulator (CI on macOS), but has not yet been run on a real
+  iPhone or uploaded to TestFlight; that needs the Apple account (item 5 above).
 - Push delivery (APNs and Web Push) and email are untested against real services.
 - No uptime monitoring or error alerting beyond the health endpoint and logs. Recommended: an external
   uptime check on `/api/health` and on the backup log.
