@@ -161,6 +161,16 @@ describe('security', () => {
     w.clock.advance(61_000);
   }, 60_000);
 
+  it('payment return links must be exactly our own origin (no look-alike hosts)', async () => {
+    const t = await registeredTechnician(w, verifier);
+    const b = await bookAndPay(w, t.slug, { pay: false });
+    for (const bad of ['http://localhost:3000.evil.example/x', 'https://evil.example/?u=http://localhost:3000', 'javascript:alert(1)']) {
+      const r = await w.app.inject({ method: 'POST', url: `/api/bookings/${b.bookingId}/pay`, headers: b.H, payload: { returnUrl: bad } });
+      expect(r.statusCode, bad).toBe(400); // look-alikes: bad_return_url; non-URLs fail validation earlier
+    }
+    expectOk(await w.app.inject({ method: 'POST', url: `/api/bookings/${b.bookingId}/pay`, headers: b.H, payload: { returnUrl: 'http://localhost:3000/book/return' } }));
+  }, 60_000);
+
   it('admin: wrong TOTP fails, five failures lock the account', async () => {
     const a = await adminSession(w, 'support');
     let code = 0;

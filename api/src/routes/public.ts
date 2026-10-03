@@ -14,6 +14,7 @@ import { publicTechnician } from '../services/technicians';
 import { notifyAdmins } from '../services/notifications';
 import type { MockPayments } from '../providers';
 import { onPaymentPaid } from '../services/bookings';
+import { isOwnUrl } from '../lib/urls';
 
 /** Settings safe to show publicly (numbers used on public pages and in the booking flow). */
 const PUBLIC_KEYS = SETTINGS.filter((s) => s.group !== 'security' && !['registration_allowlist', 'sms_allowlist', 'work_status_documents', 'banks'].includes(s.key)).map((s) => s.key);
@@ -152,11 +153,13 @@ export function publicRoutes(app: FastifyInstance, ctx: Ctx) {
       if (!ctx.crypto.verify(req.params.ref, req.query.sig, 'url')) throw notFound();
       const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
       const html = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>دفع تجريبي</title>
-<style>body{font-family:system-ui;background:#0f1b21;color:#e7f0f3;display:grid;place-items:center;min-height:100vh;margin:0}main{background:#16262e;padding:28px;border-radius:20px;max-width:360px;width:calc(100% - 32px);border:1px solid #2b424c}h1{font-size:20px}p{color:#9db5bf}button{display:block;width:100%;padding:14px;border-radius:12px;border:0;font:inherit;font-weight:600;margin-top:12px;cursor:pointer}.pay{background:#e08a4f;color:#10303a}.fail{background:transparent;color:#e7f0f3;border:1px solid #2b424c}</style></head>
+<style>body{font-family:system-ui;background:#0f1b21;color:#e7f0f3;display:grid;place-items:center;min-height:100vh;margin:0}main{box-sizing:border-box;background:#16262e;padding:28px;border-radius:20px;max-width:360px;width:calc(100% - 32px);border:1px solid #2b424c}h1{font-size:20px}p{color:#9db5bf}button{display:block;width:100%;padding:14px;border-radius:12px;border:0;font:inherit;font-weight:600;margin-top:12px;cursor:pointer}.pay{background:#e08a4f;color:#10303a}.fail{background:transparent;color:#e7f0f3;border:1px solid #2b424c}</style></head>
 <body><main><h1>بوابة دفع تجريبية</h1><p>هذه صفحة اختبار. لا تُدخل بيانات بطاقة حقيقية ولا يُسحب أي مبلغ.</p>
 <form method="post" action="/api/mock-pay/${esc(req.params.ref)}/complete?sig=${esc(req.query.sig)}"><input type="hidden" name="ok" value="${esc(req.query.ok)}"><input type="hidden" name="cancel" value="${esc(req.query.cancel)}">
 <button class="pay" name="result" value="paid">ادفع (تجريبي)</button><button class="fail" name="result" value="cancelled">إلغاء</button></form></main></body></html>`;
-      reply.header('content-type', 'text/html; charset=utf-8').header('content-security-policy', "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'");
+      // form-action also governs the redirect back to the site, so our own return origins are listed
+      const back = [...new Set([ctx.config.PUBLIC_ORIGIN, ctx.config.TECH_ORIGIN])].join(' ');
+      reply.header('content-type', 'text/html; charset=utf-8').header('content-security-policy', `default-src 'none'; style-src 'unsafe-inline'; form-action 'self' ${back}`);
       return reply.send(html);
     });
     r.post('/api/mock-pay/:ref/complete', { schema: { params: z.object({ ref: z.string() }), querystring: z.object({ sig: z.string() }), body: z.object({ result: z.enum(['paid', 'cancelled']), ok: z.string(), cancel: z.string() }) } }, async (req, reply) => {
@@ -165,8 +168,7 @@ export function publicRoutes(app: FastifyInstance, ctx: Ctx) {
       const paymentId = req.params.ref.replace(/^mock_/, '');
       if (req.body.result === 'paid') await onPaymentPaid(ctx, paymentId, `${req.params.ref}_pay`);
       const target = req.body.result === 'paid' ? req.body.ok : req.body.cancel;
-      const allowed = [ctx.config.PUBLIC_ORIGIN, ctx.config.TECH_ORIGIN, ...ctx.config.corsOrigins];
-      if (!allowed.some((o) => target.startsWith(o))) throw badRequest('bad_return_url');
+      if (!isOwnUrl(ctx, target)) throw badRequest('bad_return_url');
       return reply.redirect(target, 303);
     });
   }

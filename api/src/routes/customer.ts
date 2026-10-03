@@ -29,6 +29,7 @@ import { markRead, notifyAdmins, renderInapp } from '../services/notifications';
 import { appealDispute, anonymiseCustomer } from '../services/admin';
 import { customerBookingView } from '../views';
 import { audit } from '../services/audit';
+import { isOwnUrl } from '../lib/urls';
 
 const zTimes = { windowStart: z.number().int(), windowEnd: z.number().int() };
 
@@ -112,8 +113,7 @@ export function customerRoutes(app: FastifyInstance, ctx: Ctx) {
         if (rows.length !== req.body.mediaIds.length || rows.some((f) => f.purpose !== 'booking_problem' || (f.ownerUserId && f.ownerUserId !== a.id))) throw badRequest('invalid_media');
         await ctx.db.update(files).set({ ownerUserId: a.id }).where(and(inArray(files.id, req.body.mediaIds), isNull(files.ownerUserId)));
       }
-      const allowed = [ctx.config.PUBLIC_ORIGIN, ...ctx.config.corsOrigins];
-      if (!allowed.some((o) => req.body.returnUrl.startsWith(o))) throw badRequest('bad_return_url');
+      if (!isOwnUrl(ctx, req.body.returnUrl)) throw badRequest('bad_return_url');
       return createBooking(ctx, a, { ...req.body, technicianSlug: req.body.technicianSlug ?? null, repeatOf: req.body.repeatOf ?? null, email: req.body.email ?? null }, { ip: req.ip, ua: String(req.headers['user-agent'] ?? '') });
     },
   );
@@ -141,6 +141,7 @@ export function customerRoutes(app: FastifyInstance, ctx: Ctx) {
   });
 
   r.post('/api/bookings/:id/pay', { schema: { params: z.object({ id: z.string().uuid() }), body: z.object({ returnUrl: z.string().url(), locale: z.enum(['ar', 'en']).default('ar') }) } }, async (req) => {
+    if (!isOwnUrl(ctx, req.body.returnUrl)) throw badRequest('bad_return_url');
     const { b } = await bookingCustomer(req, req.params.id);
     const p = (await ctx.db.select().from(payments).where(and(eq(payments.bookingId, b.id), eq(payments.status, 'pending'))).orderBy(desc(payments.createdAt)))[0];
     if (!p) throw conflict('payment_not_pending');

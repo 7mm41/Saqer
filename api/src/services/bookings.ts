@@ -45,6 +45,7 @@ import {
   type Booking,
 } from './booking-core';
 import { captureMeta } from './files';
+import { isOwnUrl } from '../lib/urls';
 
 const MIN = 60_000;
 const HOUR = 3_600_000;
@@ -290,6 +291,8 @@ export async function createBooking(ctx: Ctx, customer: Actor & { id: string }, 
 
 /** Create the provider's hosted checkout for an existing pending payment. */
 export async function startCheckout(ctx: Ctx, paymentId: string, returnUrl: string, locale: 'ar' | 'en' = 'ar') {
+  // payment providers send the customer back here; only our own origins (exact match) are allowed
+  if (!isOwnUrl(ctx, returnUrl)) throw badRequest('bad_return_url');
   const p = (await ctx.db.select().from(payments).where(eq(payments.id, paymentId)))[0];
   if (!p || p.status !== 'pending') throw conflict('payment_not_pending');
   const s = await ctx.settings.all();

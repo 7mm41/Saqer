@@ -35,6 +35,12 @@
   --info: #2b6cb0;
   --info-soft: rgba(43, 108, 176, 0.12);
   --focus: #2b6cb0;
+  /* text on the soft tints (pills): darker than the base colour so small text keeps 4.5:1 */
+  --accent-ink: #8a3f12;
+  --success-ink: #15603b;
+  --warning-ink: #74490c;
+  --danger-ink: #962015;
+  --info-ink: #22578f;
   --radius: 12px;
   --radius-lg: 20px;
   --radius-xl: 28px;
@@ -78,6 +84,11 @@
     --info: #7fb2e8;
     --info-soft: rgba(127, 178, 232, 0.14);
     --focus: #7fb2e8;
+    --accent-ink: #eb9d68;
+    --success-ink: #5fc495;
+    --warning-ink: #e3b25d;
+    --danger-ink: #f2877d;
+    --info-ink: #7fb2e8;
     --shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 14px 36px -14px rgba(0, 0, 0, 0.6), 0 2px 8px -2px rgba(0, 0, 0, 0.3);
     --shadow-float: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 52px -18px rgba(0, 0, 0, 0.7), 0 4px 14px -4px rgba(0, 0, 0, 0.35);
   }
@@ -113,6 +124,11 @@
   --info: #7fb2e8;
   --info-soft: rgba(127, 178, 232, 0.14);
   --focus: #7fb2e8;
+  --accent-ink: #eb9d68;
+  --success-ink: #5fc495;
+  --warning-ink: #e3b25d;
+  --danger-ink: #f2877d;
+  --info-ink: #7fb2e8;
   --shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 14px 36px -14px rgba(0, 0, 0, 0.6), 0 2px 8px -2px rgba(0, 0, 0, 0.3);
   --shadow-float: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 52px -18px rgba(0, 0, 0, 0.7), 0 4px 14px -4px rgba(0, 0, 0, 0.35);
 }
@@ -763,7 +779,7 @@ textarea {
   line-height: 1.8;
   white-space: nowrap;
   background: var(--info-soft);
-  color: var(--info);
+  color: var(--info-ink);
 }
 .k-pill::before {
   content: '';
@@ -778,19 +794,19 @@ textarea {
 }
 .k-pill-success {
   background: var(--success-soft);
-  color: var(--success);
+  color: var(--success-ink);
 }
 .k-pill-warning {
   background: var(--warning-soft);
-  color: var(--warning);
+  color: var(--warning-ink);
 }
 .k-pill-danger {
   background: var(--danger-soft);
-  color: var(--danger);
+  color: var(--danger-ink);
 }
 .k-pill-accent {
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 .k-pill-muted {
   background: var(--hairline);

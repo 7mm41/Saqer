@@ -666,7 +666,10 @@ export function PhotoUploader({ value, onChange, upload, max = 5, min = 0, label
     try {
       const id = await upload(file, (p) => setPending((x) => x.map((i) => (i.key === key ? { ...i, progress: p } : i))));
       setPending((x) => x.filter((i) => i.key !== key));
-      onChangeRef.current([...valueRef.current, { id, url: URL.createObjectURL(file), kind: file.type.startsWith('video') ? 'video' : 'image' }]);
+      // several uploads can finish before the parent re-renders: append to the latest list, not a stale one
+      const next = [...valueRef.current, { id, url: URL.createObjectURL(file), kind: file.type.startsWith('video') ? ('video' as const) : ('image' as const) }];
+      valueRef.current = next;
+      onChangeRef.current(next);
     } catch {
       setPending((x) => x.map((i) => (i.key === key ? { ...i, error: true } : i)));
     }

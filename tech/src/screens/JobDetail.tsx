@@ -396,7 +396,7 @@ interface Line {
 }
 
 function QuoteBuilder({ job, first, onSent }: { job: any; first: boolean; onSent: () => void }) {
-  const { m, locale, f, config } = useApp();
+  const { m, locale, f } = useApp();
   const t = useT();
   const toast = useToast();
   const [open, setOpen] = useState(first);
@@ -509,7 +509,6 @@ function QuoteBuilder({ job, first, onSent }: { job: any; first: boolean; onSent
           {m.job.sendQuote}
         </Button>
       </div>
-      <span hidden>{String(config.settings.app_name ?? '')}</span>
     </Card>
   );
 }

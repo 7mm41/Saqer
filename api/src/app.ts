@@ -18,6 +18,7 @@ import { customerRoutes } from './routes/customer';
 import { techRoutes } from './routes/tech';
 import { adminRoutes } from './routes/admin';
 import { webhookRoutes } from './routes/webhooks';
+import { devRoutes } from './routes/dev';
 
 /** Strip query strings (tokens) from logged URLs; never log headers or bodies (§13). */
 const safeUrl = (u: string) => u.split('?')[0]!.replace(/\/[0-9a-f-]{36}/gi, '/:id');
@@ -119,6 +120,7 @@ export async function buildApp(ctx: Ctx, opts: { logger?: boolean } = {}): Promi
   techRoutes(app, ctx);
   adminRoutes(app, ctx);
   webhookRoutes(app, ctx);
+  devRoutes(app, ctx);
 
   // The admin SPA, only under the secret path. Unknown admin URLs get the same 404 as anything else.
   const adminDist = process.env.ADMIN_DIST ?? join(process.cwd(), '..', 'admin', 'dist');

@@ -17,7 +17,6 @@ export function Header() {
     ['/join', m.nav.join],
     ['/track', m.nav.track],
   ];
-  const next = typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/';
   return (
     <header className="k-header">
       <div className="k-header-inner">
@@ -31,7 +30,17 @@ export function Header() {
             </a>
           ))}
         </nav>
-        <a className="k-icon-btn" href={`/lang?to=${locale === 'ar' ? 'en' : 'ar'}&next=${encodeURIComponent(next)}`} aria-label={m.nav.lang} title={m.nav.lang}>
+        <a
+          className="k-icon-btn"
+          href={`/lang?to=${locale === 'ar' ? 'en' : 'ar'}`}
+          aria-label={m.nav.lang}
+          title={m.nav.lang}
+          onClick={(e) => {
+            // keep the current page (and its query, e.g. a tracking token) after switching
+            e.preventDefault();
+            window.location.href = `/lang?to=${locale === 'ar' ? 'en' : 'ar'}&next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+          }}
+        >
           <Languages size={20} aria-hidden />
         </a>
         <button type="button" className="k-icon-btn hide-sm" aria-label={m.nav.theme} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>

@@ -84,3 +84,4 @@ export function clearSessionCookies(reply: FastifyReply, ctx: Ctx, admin = false
 }
 
 export const reason = (b: unknown) => String((b as { reason?: unknown })?.reason ?? '');
+
