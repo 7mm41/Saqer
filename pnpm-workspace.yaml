@@ -1,0 +1,13 @@
+packages:
+  - shared
+  - ui
+  - api
+  - web
+  - tech
+  - admin
+  - e2e
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - '@parcel/watcher'
+  - unrs-resolver
