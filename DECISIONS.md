@@ -4,7 +4,7 @@ One line each where the prompt allowed a choice. "Owner" = needs the owner's con
 بالعربي: كل قرار فيه سببه، وما يحتاج موافقتك أو المحامي مكتوب بوضوح.
 
 **Owner approval, 2026-10-03:** the owner approved every decision that was waiting for them, and named the app **كتف**. Items marked **Legal** keep that mark: the owner has approved the approach, but the lawyer's answer is still required, and an owner approval cannot replace it.
-بالعربي: وافقتَ في 2026-10-03 على كل القرارات التي كانت تنتظرك، واسم التطبيق «كتف». البنود القانونية تبقى بانتظار المحامي.
+بالعربي: سُجّلت موافقتك في 2026-10-03 على كل القرارات التي كانت تنتظرك، واسم التطبيق «كتف». البنود القانونية تبقى بانتظار المحامي.
 
 ## A. Product and money
 
@@ -84,7 +84,7 @@ One line each where the prompt allowed a choice. "Owner" = needs the owner's con
 
 ## G. Added after comparing with the builder's first draft (approved by the owner on 2026-10-03)
 
-بالعربي: نقاط ظهرت عند مقارنة نسختك بمسودتي الأولى، ووافقتَ عليها كلها في 2026-10-03.
+بالعربي: نقاط ظهرت عند مقارنة نسختك بمسودتي الأولى، وسُجّلت موافقتك عليها كلها في 2026-10-03.
 
 | # | Decision | Reason | Status |
 |---|---|---|---|

@@ -1,7 +1,7 @@
 # PLAN.md — كتف (Katf)
 
 Status: **Approved by the owner on 2026-10-03** (every decision that waited for the owner, see DECISIONS.md). No code has been written yet; Phase 1 starts when the owner says so (G0).
-بالعربي: هذه خطة العمل، ووافقتَ عليها في 2026-10-03. يبدأ الكود عندما تقول «ابدأ المرحلة الأولى»، وكل مرحلة تنتهي بتقرير وتنتظر موافقتك.
+بالعربي: هذه خطة العمل، وسُجّلت موافقتك عليها في 2026-10-03. يبدأ الكود عند وصول كلمة «ابدأ المرحلة الأولى»، وكل مرحلة تنتهي بتقرير وتنتظر موافقتك.
 
 Product: **كتف**, a marketplace where customers in Oman book a verified home-service technician. Launch category: A/C maintenance and repair. Launch area: Seeb and Bawshar. Three surfaces on one backend: customer website, technician app (PWA **and iPhone app from an Xcode project**, D48), admin panel.
 
