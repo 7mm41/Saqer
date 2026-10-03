@@ -158,7 +158,7 @@ async function isBlocked(ctx: Ctx, kind: string, index: string) {
   return r.length > 0;
 }
 
-export async function requestOtp(ctx: Ctx, i: { phone: string; role: 'customer' | 'technician'; ip?: string | null }) {
+export async function requestOtp(ctx: Ctx, i: { phone: string; role: 'customer' | 'technician'; ip?: string | null; purpose?: 'login' | 'bank_change' }) {
   const phone = normaliseOmanPhone(i.phone);
   if (!phone) throw badRequest('invalid_phone');
   const s = await ctx.settings.all();
@@ -183,7 +183,7 @@ export async function requestOtp(ctx: Ctx, i: { phone: string; role: 'customer' 
   await ctx.db.insert(otpChallenges).values({
     id,
     phoneIndex: phoneIdx,
-    purpose: i.role,
+    purpose: i.purpose === 'bank_change' ? 'bank_change' : i.role,
     codeHash: ctx.crypto.sign(`otp:${id}:${code}`),
     expiresAt: new Date(now + Number(s.otp_ttl_minutes) * 60_000),
   });
@@ -209,7 +209,7 @@ export async function verifyOtp(
   const phoneIdx = ctx.crypto.blindIndex('phone', phone);
   await assertNotLocked(ctx.db, `otp:${phoneIdx}`, now);
   const ch = (await ctx.db.select().from(otpChallenges).where(eq(otpChallenges.id, i.challengeId)))[0];
-  if (!ch || ch.phoneIndex !== phoneIdx || ch.consumedAt) throw badRequest('otp_invalid');
+  if (!ch || ch.phoneIndex !== phoneIdx || ch.consumedAt || ch.purpose !== i.role) throw badRequest('otp_invalid');
   if (ch.expiresAt.getTime() < now) throw badRequest('otp_expired');
   const ok = ch.attempts < Number(s.otp_max_attempts) && ctx.crypto.verify(`otp:${ch.id}:${i.code.trim()}`, ch.codeHash);
   if (!ok) {
@@ -240,6 +240,38 @@ export async function verifyOtp(
   await ctx.db.update(users).set({ lastLoginAt: new Date(now), lastLoginIpHash: ipHash }).where(eq(users.id, user.id));
   const t = await createSession(ctx, { userId: user.id, role: i.role }, { deviceId: i.deviceId, deviceLabel: i.deviceLabel, ipHash });
   return { ...t, userId: user.id, isNew };
+}
+
+/** Confirms a step-up OTP (e.g. changing bank details) for a signed-in user's own phone. Same attempt limits and locks as sign-in. */
+export async function consumeStepUpOtp(ctx: Ctx, i: { userId: string; challengeId: string; code: string; purpose: 'bank_change' }) {
+  const s = await ctx.settings.all();
+  const now = ctx.clock.now();
+  const u = (await ctx.db.select().from(users).where(eq(users.id, i.userId)))[0];
+  const phone = u ? normaliseOmanPhone(ctx.crypto.decrypt(u.phoneEnc) ?? '') : null;
+  if (!phone) throw badRequest('otp_invalid');
+  const phoneIdx = ctx.crypto.blindIndex('phone', phone);
+  await assertNotLocked(ctx.db, `otp:${phoneIdx}`, now);
+  const ch = (await ctx.db.select().from(otpChallenges).where(eq(otpChallenges.id, i.challengeId)))[0];
+  if (!ch || ch.phoneIndex !== phoneIdx || ch.consumedAt || ch.purpose !== i.purpose) throw badRequest('otp_invalid');
+  if (ch.expiresAt.getTime() < now) throw badRequest('otp_expired');
+  const ok = ch.attempts < Number(s.otp_max_attempts) && ctx.crypto.verify(`otp:${ch.id}:${i.code.trim()}`, ch.codeHash);
+  if (!ok) {
+    await ctx.db.update(otpChallenges).set({ attempts: ch.attempts + 1 }).where(eq(otpChallenges.id, ch.id));
+    const f = await recordFailure(ctx.db, `otp:${phoneIdx}`, now, { max: Number(s.otp_max_attempts), baseLockMinutes: Number(s.otp_lock_minutes), maxLockHours: Number(s.lock_max_hours) });
+    if (f.locked) throw tooMany('otp_locked', { minutes: f.minutes });
+    throw badRequest('otp_invalid');
+  }
+  await ctx.db.update(otpChallenges).set({ consumedAt: new Date(now) }).where(eq(otpChallenges.id, ch.id));
+  await recordSuccess(ctx.db, `otp:${phoneIdx}`);
+}
+
+/** Sends a step-up OTP to the signed-in user's own phone. */
+export async function requestStepUpOtp(ctx: Ctx, i: { userId: string; role: 'customer' | 'technician'; purpose: 'bank_change'; ip?: string | null }) {
+  const u = (await ctx.db.select().from(users).where(eq(users.id, i.userId)))[0];
+  const phone = u ? ctx.crypto.decrypt(u.phoneEnc) : null;
+  if (!phone) throw badRequest('invalid_phone');
+  const r = await requestOtp(ctx, { phone, role: i.role, ip: i.ip ?? null, purpose: i.purpose });
+  return { challengeId: r.challengeId, resendIn: r.resendIn, expiresIn: r.expiresIn };
 }
 
 // ---------------------------------------------------------------- admin

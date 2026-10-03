@@ -1,0 +1,6 @@
+/* English permission texts (shown by iOS when the app first asks) */
+"CFBundleDisplayName" = "Katf Pro";
+"NSCameraUsageDescription" = "Katf uses the camera to photograph the air conditioner before and after the job, and to upload your documents.";
+"NSPhotoLibraryUsageDescription" = "Katf opens your photo library only to pick the job photos or documents you choose.";
+"NSLocationWhenInUseUsageDescription" = "Katf uses your location only when you check in at the customer, to prove you arrived and protect your pay.";
+"NSFaceIDUsageDescription" = "Unlock Katf with Face ID instead of signing in again.";

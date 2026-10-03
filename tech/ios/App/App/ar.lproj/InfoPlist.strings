@@ -1,0 +1,6 @@
+/* Arabic permission texts (shown by iOS when the app first asks) */
+"CFBundleDisplayName" = "كتف للفنيين";
+"NSCameraUsageDescription" = "نستخدم الكاميرا لتصوير المكيّف قبل العمل وبعده ولرفع مستنداتك.";
+"NSPhotoLibraryUsageDescription" = "نستخدم مكتبة الصور لاختيار صور العمل أو المستندات التي تختارها أنت فقط.";
+"NSLocationWhenInUseUsageDescription" = "نستخدم موقعك عند تسجيل الوصول إلى الزبون فقط، لإثبات الحضور وحماية حقك.";
+"NSFaceIDUsageDescription" = "لفتح التطبيق بالوجه بدلاً من رمز الدخول.";

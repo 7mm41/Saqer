@@ -41,7 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         {config.demoMode && <div className="k-demo-banner">{locale === 'ar' ? 'بيانات تجريبية — ليست حقيقية' : 'Demo data — not real'}</div>}
         <Providers locale={locale} m={m} config={config}>
-          <a href="#main" className="k-sr">
+          <a href="#main" className="k-skip">
             {locale === 'ar' ? 'انتقل إلى المحتوى' : 'Skip to content'}
           </a>
           <Header />

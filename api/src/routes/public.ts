@@ -36,6 +36,7 @@ export function publicRoutes(app: FastifyInstance, ctx: Ctx) {
       mapTileUrl: ctx.config.MAP_TILE_URL,
       vapidPublicKey: ctx.config.VAPID_PUBLIC_KEY ?? null,
       banks: v.banks,
+      publicOrigin: ctx.config.PUBLIC_ORIGIN,
     };
   });
 

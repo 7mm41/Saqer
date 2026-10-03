@@ -208,6 +208,21 @@ textarea {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+/* skip link: hidden until focused by keyboard */
+.k-skip {
+  position: absolute;
+  inset-block-start: -100px;
+  inset-inline-start: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--surface-solid);
+  color: var(--ink);
+  box-shadow: var(--shadow-float);
+}
+.k-skip:focus {
+  inset-block-start: 12px;
+}
 .k-num,
 .k-money {
   font-variant-numeric: tabular-nums lining-nums;
@@ -690,6 +705,49 @@ textarea {
   border-color: var(--accent);
   background: var(--accent-soft);
   font-weight: 600;
+}
+
+/* on/off switch: a 44px-tall target, the knob moves along the inline axis so it mirrors in RTL */
+.k-switch {
+  position: relative;
+  flex: none;
+  inline-size: 60px;
+  block-size: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+.k-switch > span {
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 8px;
+  border-radius: 999px;
+  background: var(--line);
+  transition: background 0.2s var(--ease);
+}
+.k-switch > span::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-start: 3px;
+  inline-size: 22px;
+  block-size: 22px;
+  border-radius: 50%;
+  background: var(--surface-solid);
+  box-shadow: 0 2px 6px rgba(16, 48, 58, 0.25);
+  transition: inset-inline-start 0.2s var(--ease);
+}
+.k-switch[aria-checked='true'] > span {
+  background: var(--success);
+}
+.k-switch[aria-checked='true'] > span::after {
+  inset-inline-start: 35px;
+}
+.k-switch:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 999px;
 }
 
 /* ------------------------------------------------------------------ pills, badges, banners */

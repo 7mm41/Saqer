@@ -5,8 +5,8 @@ import { and, asc, desc, eq, gte, inArray, lt, or, sql, isNull, gt } from 'drizz
 import QRCode from 'qrcode';
 import { muscatDate, TECH_CANCEL_REASONS, DECLINE_REASONS, FAULT_TYPES, TECH_SERVICES, DOCUMENT_TYPES } from '@katf/shared';
 import type { Ctx } from '../ctx';
-import { bookingOffers, bookings, otpChallenges, reviews, serviceCatalog, strikes, technicians, technicianDocuments, users } from '../db/schema';
-import { badRequest, conflict, notFound } from '../lib/errors';
+import { bookingOffers, bookings, reviews, serviceCatalog, strikes, technicians, technicianDocuments } from '../db/schema';
+import { conflict, notFound } from '../lib/errors';
 import { requireRole } from '../http';
 import {
   acceptBooking,
@@ -43,7 +43,7 @@ import { pendingAcceptances } from '../services/legal';
 import { notifyAdmins } from '../services/notifications';
 import { techBookingView, techListItem } from '../views';
 import { signedFileUrl } from '../services/files';
-import { normaliseOmanPhone } from '@katf/shared';
+import { consumeStepUpOtp, requestStepUpOtp } from '../services/auth';
 
 export function techRoutes(app: FastifyInstance, ctx: Ctx) {
   const r = app.withTypeProvider<ZodTypeProvider>();
@@ -126,6 +126,7 @@ export function techRoutes(app: FastifyInstance, ctx: Ctx) {
       publicName: t.publicName,
       rating: t.ratingCount ? Math.round((t.ratingSum * 10) / t.ratingCount) / 10 : null,
       ratingCount: t.ratingCount,
+      probationJobsLeft: t.status === 'approved_probation' ? t.probationJobsLeft : null,
       requests: await Promise.all(requests.map((b) => techBookingView(ctx, b, a.id))),
       today: await Promise.all(todays.map((b) => techListItem(ctx, b))),
       next: active[0] ? await techBookingView(ctx, active[0], a.id) : null,
@@ -252,18 +253,17 @@ export function techRoutes(app: FastifyInstance, ctx: Ctx) {
     return { ...(await monthlyStatement(ctx, a.id, req.query.month)), technician: t.publicName, appName: s.app_name, company: s.company_name, cr: s.cr_number };
   });
 
+  r.post('/api/tech/bank/otp', { config: { rateLimit: { max: 5 * ctx.config.RATE_LIMIT_SCALE, timeWindow: '10 minutes' } } }, async (req) =>
+    requestStepUpOtp(ctx, { userId: tech(req).id, role: 'technician', purpose: 'bank_change', ip: req.ip }),
+  );
+
   r.post(
     '/api/tech/bank',
     { schema: { body: z.object({ bankName: z.string().max(60), iban: z.string().max(40), holderName: z.string().max(120), letterFileId: z.string().uuid().nullish(), challengeId: z.string().uuid(), code: z.string().min(4).max(8) }) } },
     async (req) => {
       const a = tech(req);
       // changing bank details needs a fresh OTP on the account phone
-      const u = (await ctx.db.select().from(users).where(eq(users.id, a.id)))[0]!;
-      const phone = ctx.crypto.decrypt(u.phoneEnc);
-      const ch = (await ctx.db.select().from(otpChallenges).where(eq(otpChallenges.id, req.body.challengeId)))[0];
-      if (!ch || ch.consumedAt || ch.expiresAt.getTime() < ctx.clock.now() || ch.phoneIndex !== ctx.crypto.blindIndex('phone', normaliseOmanPhone(phone!)!) || !ctx.crypto.verify(`otp:${ch.id}:${req.body.code}`, ch.codeHash))
-        throw badRequest('otp_invalid');
-      await ctx.db.update(otpChallenges).set({ consumedAt: new Date(ctx.clock.now()) }).where(eq(otpChallenges.id, ch.id));
+      await consumeStepUpOtp(ctx, { userId: a.id, challengeId: req.body.challengeId, code: req.body.code, purpose: 'bank_change' });
       return setBank(ctx, a.id, { bankName: req.body.bankName, iban: req.body.iban, holderName: req.body.holderName, letterFileId: req.body.letterFileId ?? null }, { initial: false });
     },
   );

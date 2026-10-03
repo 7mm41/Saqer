@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { eq } from 'drizzle-orm';
 import { randomBytes } from 'node:crypto';
-import { adminSession, advance, bookAndPay, expectOk, json, makeWorld, nextPhone, payMock, registeredTechnician, sms, upload, type World } from './helpers';
+import { adminSession, advance, bookAndPay, expectOk, json, makeIban, makeWorld, nextPhone, payMock, registeredTechnician, sms, upload, type World } from './helpers';
 import { bookings, disputes, payments, webhookEvents } from '../src/db/schema';
 import { bookingBalance } from '../src/services/ledger';
 import { loadConfig } from '../src/config';
@@ -140,6 +140,26 @@ describe('security', () => {
     const s2 = json(await w.app.inject({ method: 'POST', url: '/api/auth/otp/verify', headers: { 'x-device-id': 'device-bbbbbbbb' }, payload: { challengeId: ch2.challengeId, phone, code: code2, role: 'customer', tokenMode: 'bearer' } }));
     expect((await w.app.inject({ method: 'POST', url: '/api/auth/refresh', headers: { 'x-device-id': 'device-cccccccc' }, payload: { refreshToken: s2.refreshToken } })).statusCode).toBe(401);
   });
+
+  it('changing bank details needs a bank-change OTP; a sign-in code is refused and the OTP cannot sign in', async () => {
+    const t = await registeredTechnician(w, verifier);
+    const body = { bankName: 'بنك ظفار', iban: makeIban(), holderName: 'سالم بن خميس البلوشي' };
+    // a code sent for sign-in cannot change bank details
+    const login = json(expectOk(await w.app.inject({ method: 'POST', url: '/api/auth/otp/request', payload: { phone: t.phone, role: 'technician' } })));
+    const loginCode = sms(w).lastTo(`+968${t.phone}`)!.body.match(/\d{6}/)![0];
+    expect((await w.app.inject({ method: 'POST', url: '/api/tech/bank', headers: t.H, payload: { ...body, challengeId: login.challengeId, code: loginCode } })).statusCode).toBe(400);
+    w.clock.advance(61_000);
+    const ch = json(expectOk(await w.app.inject({ method: 'POST', url: '/api/tech/bank/otp', headers: t.H })));
+    const code = sms(w).lastTo(`+968${t.phone}`)!.body.match(/\d{6}/)![0];
+    // the bank-change code cannot be used to sign in
+    expect((await w.app.inject({ method: 'POST', url: '/api/auth/otp/verify', payload: { challengeId: ch.challengeId, phone: t.phone, code, role: 'technician', tokenMode: 'bearer' } })).statusCode).toBe(400);
+    // a wrong code counts as a failed attempt
+    expect((await w.app.inject({ method: 'POST', url: '/api/tech/bank', headers: t.H, payload: { ...body, challengeId: ch.challengeId, code: code === '000000' ? '111111' : '000000' } })).statusCode).toBe(400);
+    expectOk(await w.app.inject({ method: 'POST', url: '/api/tech/bank', headers: t.H, payload: { ...body, challengeId: ch.challengeId, code } }));
+    // single use
+    expect((await w.app.inject({ method: 'POST', url: '/api/tech/bank', headers: t.H, payload: { ...body, challengeId: ch.challengeId, code } })).statusCode).toBe(400);
+    w.clock.advance(61_000);
+  }, 60_000);
 
   it('admin: wrong TOTP fails, five failures lock the account', async () => {
     const a = await adminSession(w, 'support');
