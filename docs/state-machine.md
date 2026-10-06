@@ -1,7 +1,7 @@
 # Booking state machine
 
-The single source is the `TRANSITIONS` table in [`shared/src/booking.ts`](../shared/src/booking.ts).
-Every change goes through `transition()` in `api/src/services/booking-core.ts`, which:
+The single source is the `TRANSITIONS` table in [`packages/shared/src/booking.ts`](../packages/shared/src/booking.ts).
+Every change goes through `transition()` in `apps/api/src/services/booking-core.ts`, which:
 
 1. finds the allowed transition for (current status, event, actor role) — anything else is refused;
 2. updates the row only if `(id, status, version)` still match (compare-and-set), so two people acting

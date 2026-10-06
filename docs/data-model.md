@@ -1,7 +1,7 @@
 # Data model
 
-PostgreSQL 16 (PGlite in development and tests), schema in [`api/src/db/schema.ts`](../api/src/db/schema.ts),
-migrations in [`api/migrations`](../api/migrations). Money columns are `integer` baisa everywhere.
+PostgreSQL 16 (PGlite in development and tests), schema in [`apps/api/src/db/schema.ts`](../apps/api/src/db/schema.ts),
+migrations in [`apps/api/migrations`](../apps/api/migrations). Money columns are `integer` baisa everywhere.
 
 ## People and access
 

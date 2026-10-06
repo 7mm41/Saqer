@@ -32,17 +32,23 @@ Product: **كتف**, a marketplace where customers in Oman book a verified home-
  caddy (HTTPS) in front of web, tech, api and admin
 ```
 
-Repository layout (in `7mm41/Saqer` for now, D49)
+Repository layout (in `7mm41/Saqer` for now, D49; grouped into apps, packages and tests by D71)
 
 ```
-/api        Fastify routes, services, state machine, ledger, scheduler, providers, drizzle schema + migrations
-/web        Next.js: public site, booking flow, tracking page
-/tech       Technician app (React + Vite): served as the PWA at /tech and bundled into the iPhone app
-  /ios/App/App.xcodeproj   the Xcode project (Capacitor, Swift Package Manager)
-/admin      React + Vite control panel
-/shared     zod schemas, types, money library, i18n keys, status enums
+/apps
+  /api      Fastify routes, services, state machine, ledger, scheduler, providers, drizzle schema + migrations
+  /web      Next.js: public site, booking flow, tracking page
+  /tech     Technician app (React + Vite): served as the PWA at /tech and bundled into the iPhone app
+  /admin    React + Vite control panel
+/packages
+  /shared   zod schemas, types, money library, i18n keys, status enums
+  /ui       the floating-glass design system
+/ios
+  Katf.xcodeproj   the iPhone app's Xcode project (Capacitor, Swift Package Manager); builds without Node
+/tests/e2e  Playwright journeys and accessibility checks
 /deploy     docker-compose, Caddyfile, install.sh, update.sh (rollback), backup.sh, restore.sh
 /docs       architecture, data model, state machine, security notes, runbook
+/scripts    repository checks (RTL, integer money)
 /legacy/store-popup   the earlier store-popup tool, unchanged
 PLAN.md  DECISIONS.md  README.md  CHANGELOG.md  .env.example
 ```

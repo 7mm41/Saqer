@@ -6,7 +6,7 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**', '**/next-env.d.ts', 'legacy/**', 'tech/ios/**', 'e2e/shots*/**', '**/*.tsbuildinfo', '.claude/**'],
+    ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**', '**/next-env.d.ts', 'legacy/**', 'ios/**', 'tests/e2e/shots*/**', 'tests/e2e/playwright-report/**', '**/*.tsbuildinfo', '.claude/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -26,13 +26,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ['web/**/*.tsx', 'tech/src/**/*.tsx', 'admin/src/**/*.tsx', 'ui/src/**/*.tsx'],
+    files: ['apps/web/**/*.tsx', 'apps/tech/src/**/*.tsx', 'apps/admin/src/**/*.tsx', 'packages/ui/src/**/*.tsx'],
     plugins: { 'react-hooks': reactHooks },
     rules: { 'react-hooks/rules-of-hooks': 'error', 'react-hooks/exhaustive-deps': 'warn' },
   },
   {
     // service worker and scripts
-    files: ['tech/public/sw.js'],
+    files: ['apps/tech/public/sw.js'],
     languageOptions: { globals: { ...globals.serviceworker } },
   },
 );

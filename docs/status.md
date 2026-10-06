@@ -1,6 +1,6 @@
 # Status — Phase 1 build
 
-_Last updated: 2026-10-03._
+_Last updated: 2026-10-06._
 
 ## Milestones (PLAN.md §3)
 
@@ -17,7 +17,7 @@ _Last updated: 2026-10-03._
 | M9 | Customer site | Done | Browser test: book → pay → approve quote → pay rest → confirm → rate, in English; Arabic RTL screens checked by axe and screenshots |
 | M10 | Admin | Done | All pages in Arabic/English, light/dark; role matrix tested in the API; owner flow in the browser test |
 | M11 | Notifications | Done (providers need keys) | Templates editable with test-send; quiet hours; push then SMS fallback |
-| M12 | iPhone app | Built; compiles in Xcode (simulator); not yet run on a device or TestFlight | Xcode project, Keychain, Face ID, camera, GPS, APNs sound, permission texts, privacy manifest; `BUILD SUCCEEDED` on GitHub's macOS runner for every change |
+| M12 | iPhone app | Built; compiles in Xcode (simulator); not yet run on a device or TestFlight | Xcode project `ios/Katf.xcodeproj` that builds without Node, Keychain, Face ID, camera, GPS, APNs sound, permission texts, privacy manifest; `BUILD SUCCEEDED` on GitHub's macOS runner for every change, from the repository as committed |
 | M13 | Hardening | Done | axe (8 screens × ar/en × light/dark), threat model in [security.md](security.md), backup + tested restore, install/update/rollback, key and admin-path rotation verified on a local production stack |
 
 Test counts at this commit: 43 shared unit tests, 28 API tests, 9 browser tests (5 journey + 4 accessibility).

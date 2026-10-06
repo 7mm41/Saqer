@@ -1,0 +1,29 @@
+{
+	"appId": "om.katf.pro",
+	"appName": "Katf Pro",
+	"webDir": "dist",
+	"backgroundColor": "#0f1b21",
+	"ios": {
+		"contentInset": "never",
+		"scheme": "Katf",
+		"limitsNavigationsToAppBoundDomains": false
+	},
+	"plugins": {
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		}
+	},
+	"packageClassList": [
+		"BiometricAuthNative",
+		"SecureStorage",
+		"AppPlugin",
+		"CAPCameraPlugin",
+		"GeolocationPlugin",
+		"HapticsPlugin",
+		"PushNotificationsPlugin"
+	]
+}

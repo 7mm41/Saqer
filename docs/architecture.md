@@ -40,11 +40,11 @@ flowchart LR
   website. Any other admin-looking address is an ordinary 404.
 - **One API** owns every rule. The three front ends only display what it returns; prices, commission,
   timers and permissions are computed on the server.
-- **The iPhone app** is the same technician code bundled into a Capacitor shell
-  (`tech/ios/App/App.xcodeproj`). It talks to `https://<domain>/api` with bearer tokens kept in the
-  Keychain; the PWA uses HttpOnly cookies.
+- **The iPhone app** is the same technician code bundled into a Capacitor shell, the Xcode project
+  [`ios/Katf.xcodeproj`](../ios). It talks to the server set in the Xcode build setting `KATF_API_URL`
+  with bearer tokens kept in the Keychain; the PWA uses HttpOnly cookies.
 
-## Inside the API
+## Inside the API (`apps/api/src`)
 
 | Folder | Responsibility |
 |---|---|
@@ -63,7 +63,7 @@ flowchart LR
 
 ## Shared code
 
-`shared/` is used by the API and all three front ends, so a rule is written once:
+[`packages/shared`](../packages/shared) is used by the API and all three front ends, so a rule is written once:
 money (`share`, `split`, `settleCompleted`, `cancelSplit`…), the settings registry with bounds,
 the booking `TRANSITIONS` table, Omani phone/IBAN/civil-ID validation, Muscat time and slots, and the
 common Arabic/English texts including every API error message (a test fails if one is missing).
@@ -78,7 +78,7 @@ common Arabic/English texts including every API error message (a test fails if o
 
 ## Design system
 
-`ui/` holds the "floating glass" look: frosted surfaces over a soft aurora, one copper accent,
+[`packages/ui`](../packages/ui) holds the "floating glass" look: frosted surfaces over a soft aurora, one copper accent,
 IBM Plex Sans Arabic and Readex Pro (self-hosted; no third-party font requests). Light and dark themes,
 solid surfaces when the device asks for reduced transparency, and a 44 px minimum touch target.
 
@@ -86,7 +86,7 @@ solid surfaces when the device asks for reduced transparency, and a 44 px minimu
 
 | | Database | Payments | SMS | Notes |
 |---|---|---|---|---|
-| Development | PGlite (embedded, in `api/.data`) | mock page | printed to the log | `pnpm dev:*` |
+| Development | PGlite (embedded, in `apps/api/.data`) | mock page | printed to the log | `pnpm dev:*` |
 | Tests | PGlite in memory | mock | mock outbox | fake clock; `pnpm test` |
 | End-to-end | PGlite in a temp folder | mock page | mock outbox | own ports; `pnpm e2e` |
 | Production | PostgreSQL 16 in Docker | mock until the legal gate opens, then Thawani | provider of the owner's choice | `deploy/` |

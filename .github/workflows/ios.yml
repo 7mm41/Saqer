@@ -3,9 +3,9 @@ name: iPhone app
 on:
   push:
     branches: [main, 'claude/**']
-    paths: ['tech/**', 'ui/**', 'shared/**', '.github/workflows/ios.yml']
+    paths: ['ios/**', 'apps/tech/**', 'packages/ui/**', 'packages/shared/**', 'pnpm-lock.yaml', '.github/workflows/ios.yml']
   pull_request:
-    paths: ['tech/**', 'ui/**', 'shared/**']
+    paths: ['ios/**', 'apps/tech/**', 'packages/ui/**', 'packages/shared/**', 'pnpm-lock.yaml', '.github/workflows/ios.yml']
   workflow_dispatch:
 
 permissions:
@@ -17,20 +17,31 @@ defaults:
     shell: bash
 
 jobs:
-  simulator-build:
-    name: Xcode build for the iOS Simulator
-    runs-on: macos-15
-    timeout-minutes: 45
+  in-sync:
+    name: ios/ matches the technician app sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - name: Web assets for the app bundle
-        run: pnpm --filter @katf/tech exec sh -c "CAP_BUILD=1 VITE_API_URL=https://staging.example.invalid vite build && cap sync ios"
+      - run: pnpm ios:sync
+      - name: Committed ios/ is current (run `pnpm ios:sync` and commit if this fails)
+        run: |
+          git status --porcelain -- ios
+          git diff --exit-code --stat -- ios
+          test -z "$(git status --porcelain -- ios)"
+
+  simulator-build:
+    name: Xcode build for the iOS Simulator (from the repository as committed, no Node)
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
       - name: Build (no signing)
         run: |
-          xcodebuild -project tech/ios/App/App.xcodeproj -scheme App \
+          xcodebuild -project ios/Katf.xcodeproj -scheme Katf \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
             -configuration Debug CODE_SIGNING_ALLOWED=NO build | tail -50

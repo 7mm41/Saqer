@@ -1,11 +1,7 @@
 packages:
-  - shared
-  - ui
-  - api
-  - web
-  - tech
-  - admin
-  - e2e
+  - apps/*
+  - packages/*
+  - tests/*
 onlyBuiltDependencies:
   - esbuild
   - sharp

@@ -2,6 +2,21 @@
 
 All notable changes. Dates are Muscat time.
 
+## 0.1.1 — 2026-10-06
+
+### Changed
+- **Repository layout** (D71): `apps/` (api, web, tech, admin), `packages/` (shared, ui), `tests/e2e`, and
+  the iPhone project at `ios/`. Docker, CI, lint checks and docs follow the new paths.
+- **iPhone app**: the Xcode project is now `ios/Katf.xcodeproj` (target and scheme "Katf") and builds
+  straight after cloning, without Node: the app's web bundle and the Capacitor plugin sources are committed
+  under `ios/` and refreshed with `pnpm ios:sync` (CI checks they are current, then builds the committed
+  project on macOS without installing Node). The server address is the Xcode build setting `KATF_API_URL`.
+
+### Fixed
+- Sign-in codes, call logs, strikes and chat messages take their creation time from the app's clock, like
+  the checks that read them (resend wait, two-calls-before-absent, appeal window, flagged-chat window).
+  Before, the database's own clock was used, which only matched by coincidence in tests.
+
 ## 0.1.0 — 2026-10-03 (Phase 1 build, not live)
 
 ### Added

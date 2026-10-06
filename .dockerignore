@@ -10,6 +10,6 @@
 .git
 .env
 deploy/.env
-tech/ios
+ios
 legacy
 e2e/shots*

@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 // Money guard (§0): money is always an integer number of baisa. No floats, no decimal columns.
 // Fails on parseFloat anywhere, toFixed/Math.round on money-looking values, and non-integer money columns.
-// Formatting and parsing of OMR text happens only in shared/src/money.ts. A line can opt out with "money-ok".
+// Formatting and parsing of OMR text happens only in packages/shared/src/money.ts. A line can opt out with "money-ok".
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname;
-const dirs = ['shared/src', 'api/src', 'web/app', 'web/components', 'web/lib', 'tech/src', 'admin/src', 'ui/src'];
+const dirs = ['packages/shared/src', 'apps/api/src', 'apps/web/app', 'apps/web/components', 'apps/web/lib', 'apps/tech/src', 'apps/admin/src', 'packages/ui/src'];
 const skip = /node_modules|\.next|dist/;
 const MONEY = /(amount|fee|price|total|baisa|omr|commission|refund|payout|net|balance|labou?r|parts)/i;
-const allowFile = /shared\/src\/money\.ts$/;
+const allowFile = /packages\/shared\/src\/money\.ts$/;
 
 function* walk(dir) {
   for (const f of readdirSync(dir)) {
@@ -33,7 +33,7 @@ for (const d of dirs) {
         if (/\bparseFloat\(/.test(line)) problems.push(`${at}  → parseFloat: use parseOMR/parsePercent`);
         if (/\.toFixed\(/.test(line) && MONEY.test(line)) problems.push(`${at}  → toFixed on money: use formatOMR`);
         if (/(\*|\/)\s*1000\b/.test(line) && MONEY.test(line) && !/ms|seconds|_000|Date|time/i.test(line)) problems.push(`${at}  → manual OMR/baisa conversion: use formatOMR/parseOMR`);
-        if (rel === 'api/src/db/schema.ts' && /(real|doublePrecision|numeric|decimal)\(/.test(line) && MONEY.test(line)) problems.push(`${at}  → money column must be integer baisa`);
+        if (rel === 'apps/api/src/db/schema.ts' && /(real|doublePrecision|numeric|decimal)\(/.test(line) && MONEY.test(line)) problems.push(`${at}  → money column must be integer baisa`);
       });
   }
 }

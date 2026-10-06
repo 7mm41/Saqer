@@ -55,7 +55,7 @@ services:
     depends_on:
       api: { condition: service_healthy }
     read_only: true
-    tmpfs: ['/tmp', '/app/web/.next/cache']
+    tmpfs: ['/tmp', '/app/apps/web/.next/cache']
     security_opt: ['no-new-privileges:true']
     logging: *logging
 

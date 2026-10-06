@@ -10,10 +10,10 @@ coverage/
 !.env.example
 test-results/
 playwright-report/
-tech/ios/App/App/public/
-tech/ios/App/build/
-tech/ios/DerivedData/
-tech/ios/App/Pods/
+# iPhone: ios/Katf/public and the vendored plugins are committed on purpose (the Xcode project builds without Node)
+apps/tech/.cap-ios/
+ios/build/
+ios/DerivedData/
 xcuserdata/
 .DS_Store
 __pycache__/

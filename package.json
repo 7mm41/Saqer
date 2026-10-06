@@ -14,7 +14,8 @@
     "dev:web": "pnpm --filter @katf/web dev",
     "dev:tech": "pnpm --filter @katf/tech dev",
     "dev:admin": "pnpm --filter @katf/admin dev",
-    "e2e": "pnpm --filter @katf/e2e test"
+    "e2e": "pnpm --filter @katf/e2e test",
+    "ios:sync": "pnpm --filter @katf/tech ios:sync"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

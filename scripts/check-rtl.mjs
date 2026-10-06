@@ -5,7 +5,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname;
-const dirs = ['ui/src', 'web/app', 'web/components', 'tech/src', 'admin/src'];
+const dirs = ['packages/ui/src', 'apps/web/app', 'apps/web/components', 'apps/tech/src', 'apps/admin/src'];
 const skip = /node_modules|\.next|dist/;
 const CSS = [
   [/\b(margin|padding|border)-(left|right)\b/, 'use margin-inline-start/end, padding-inline-*, border-inline-*'],

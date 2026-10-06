@@ -12,15 +12,17 @@ and is paid after the customer confirms the work. Arabic first (RTL), English se
 
 | Folder | What it is |
 |---|---|
-| [`web/`](web) | Customer website (Next.js): public pages, technician link pages, 6-step booking, tracking, quote approval, receipts, account |
-| [`tech/`](tech) | Technician app (React + Vite). Ships as the PWA at `/tech` **and** as the iPhone app from the Xcode project in [`tech/ios/App/App.xcodeproj`](tech/ios/App) |
-| [`admin/`](admin) | Admin panel (React + Vite), served by the API only under a secret path |
-| [`api/`](api) | API (Fastify + Drizzle + PostgreSQL): money, ledger, booking state machine, auth, legal consent, payouts, notifications |
-| [`shared/`](shared) | Money library (integer baisa), settings registry, state machine, validation, Arabic/English common texts |
-| [`ui/`](ui) | "Floating glass" design system shared by the three front ends |
-| [`e2e/`](e2e) | Playwright end-to-end and accessibility tests |
-| [`deploy/`](deploy) | Docker images, Caddy, one-command install, update with rollback, encrypted backups |
-| [`docs/`](docs) | Architecture, data model, state machine, security, runbooks, iPhone guide |
+| [`apps/web`](apps/web) | Customer website (Next.js): public pages, technician link pages, 6-step booking, tracking, quote approval, receipts, account |
+| [`apps/tech`](apps/tech) | Technician app (React + Vite). Ships as the PWA at `/tech` and is the web part of the iPhone app |
+| [`apps/admin`](apps/admin) | Admin panel (React + Vite), served by the API only under a secret path |
+| [`apps/api`](apps/api) | API (Fastify + Drizzle + PostgreSQL): money, ledger, booking state machine, auth, legal consent, payouts, notifications |
+| [`packages/shared`](packages/shared) | Money library (integer baisa), settings registry, state machine, validation, Arabic/English common texts |
+| [`packages/ui`](packages/ui) | "Floating glass" design system shared by the three front ends |
+| [`ios`](ios) | **The iPhone app's Xcode project: [`ios/Katf.xcodeproj`](ios/Katf.xcodeproj).** Opens and builds in Xcode straight after cloning |
+| [`tests/e2e`](tests/e2e) | Playwright end-to-end and accessibility tests |
+| [`deploy`](deploy) | Docker images, Caddy, one-command install, update with rollback, encrypted backups |
+| [`docs`](docs) | Architecture, data model, state machine, security, runbooks, iPhone guide |
+| [`scripts`](scripts) | Repository checks (no physical left/right in styles, integer money) |
 | [`legacy/store-popup`](legacy/store-popup) | The earlier store-popup tool, unchanged |
 
 [`PLAN.md`](PLAN.md) and [`DECISIONS.md`](DECISIONS.md) record what was agreed with the owner.
@@ -43,6 +45,20 @@ pnpm dev:admin   # admin panel on http://localhost:5174/dev-admin/
   then start the API with `DEMO_MODE=true`. Every demo screen says "Demo data — not real".
 - Create an admin owner: `pnpm --filter @katf/api cli create-owner` (the password is typed into a
   hidden prompt and never printed). First sign-in sets up the authenticator app.
+
+## Open the iPhone app in Xcode
+
+On a Mac with Xcode 16 or newer, no Node or pnpm needed:
+
+1. Clone the repository and open **`ios/Katf.xcodeproj`** (double-click it, or `open ios/Katf.xcodeproj`).
+2. Choose the **Katf** scheme and an iPhone simulator, then **Run** (⌘R). The first build downloads
+   Capacitor's Swift packages, so it needs internet.
+3. The server the app talks to is the build setting **`KATF_API_URL`** (target Katf → Build Settings →
+   User-Defined): `http://localhost:4000` for Debug, the placeholder `https://katf.example` for Release.
+   Put your domain there before archiving for TestFlight.
+
+After changing the technician app's code, run `pnpm ios:sync` and commit `ios/`. CI checks that `ios/` is
+current and builds the project for the simulator. Signing, push and TestFlight: [docs/ios.md](docs/ios.md).
 
 ## Tests and checks
 
