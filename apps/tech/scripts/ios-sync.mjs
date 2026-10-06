@@ -4,13 +4,16 @@
 //   ios/Katf/public/                the technician app built for the iPhone (relative paths)
 //   ios/Katf/capacitor.config.json  Capacitor settings + the list of native plugin classes
 //   ios/Katf/config.xml             Capacitor's (empty) Cordova config
+//   ios/Katf/public/demo/           offline demo recording for the technician app (D72)
+//   ios/Katf/public/admin-demo/     read-only admin panel on its own recording (D72)
 //   ios/Plugins/<Name>/             native sources of each Capacitor plugin, copied from node_modules
 //   ios/CapApp-SPM/Package.swift    the Swift package that links those plugins into the app
 //
 // Usage: pnpm --filter @katf/tech ios:sync   (then commit the changes under ios/)
 // CI runs it and fails if ios/ differs from what is committed.
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -42,6 +45,25 @@ delete capJson.ios?.path; // only meaningful to the CLI on this machine
 writeFileSync(join(app, 'capacitor.config.json'), `${JSON.stringify(capJson, null, '\t')}\n`);
 cpSync(join(out, 'config.xml'), join(app, 'config.xml'));
 rmSync(stage, { recursive: true, force: true });
+
+// ---------------------------------------------------------------- 2b. offline demo (D72)
+// Labelled demo data recorded from the real API (pnpm demo:record). The Xcode build removes both folders
+// unless the build setting KATF_OFFLINE_DEMO is YES (Debug by default), so Release builds never carry them.
+const fixtures = join(tech, '..', '..', 'packages', 'demo', 'fixtures');
+mkdirSync(join(app, 'public', 'demo'), { recursive: true });
+cpSync(join(fixtures, 'tech.json'), join(app, 'public', 'demo', 'tech.json'));
+const adminBuild = mkdtempSync(join(tmpdir(), 'katf-admin-demo-'));
+execFileSync('pnpm', ['exec', 'vite', 'build', '--logLevel', 'warn'], {
+  cwd: join(tech, '..', 'admin'),
+  stdio: 'inherit',
+  env: { ...process.env, KATF_OFFLINE_DEMO: '1', KATF_ADMIN_OUT: adminBuild },
+});
+const adminDemo = join(app, 'public', 'admin-demo');
+cpSync(adminBuild, adminDemo, { recursive: true });
+rmSync(adminBuild, { recursive: true, force: true });
+const adminHtml = join(adminDemo, 'index.html');
+writeFileSync(adminHtml, readFileSync(adminHtml, 'utf8').replace('%ADMIN_BASE%', '/admin-demo/')); // the API fills this in for the real panel
+cpSync(join(fixtures, 'admin.json'), join(adminDemo, 'demo.json'));
 
 // ---------------------------------------------------------------- 3. native plugin sources
 const deps = Object.keys(readJson(join(tech, 'package.json')).dependencies ?? {});

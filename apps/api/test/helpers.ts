@@ -1,4 +1,3 @@
-import { expect } from 'vitest';
 import sharp from 'sharp';
 import * as OTPAuth from 'otpauth';
 import { randomBytes } from 'node:crypto';
@@ -12,7 +11,7 @@ import type { Ctx } from '../src/ctx';
 import type { MockSms } from '../src/providers';
 import { createAdmin } from '../src/services/auth';
 import { runDueJobs } from '../src/services/scheduler';
-import { muscatToEpoch, muscatDate } from '@katf/shared';
+import { muscatToEpoch, muscatDate, SEED_AREAS } from '@katf/shared';
 
 export const ADMIN_PATH = 'test-admin-path-0123456789abcdef';
 
@@ -49,7 +48,7 @@ export async function advance(w: World, ms: number) {
   await renew(w);
 }
 
-export async function makeWorld(): Promise<World> {
+export async function makeWorld(env: Record<string, string> = {}): Promise<World> {
   // Sunday 4 Oct 2026, 07:00 Muscat
   const clock = new FakeClock(muscatToEpoch('2026-10-04', '07:00'));
   const logs: string[] = [];
@@ -64,6 +63,7 @@ export async function makeWorld(): Promise<World> {
     API_PUBLIC_URL: 'http://localhost:4000',
     DATA_DIR: '/tmp/katf-test-unused',
     RATE_LIMIT_SCALE: '1000',
+    ...env,
   } as NodeJS.ProcessEnv);
   const ctx = await createContext({ config, memory: true, clock, log: log as never });
   await seedProduction(ctx);
@@ -133,10 +133,10 @@ export async function upload(w: World, token: string | null, purpose: string, da
 }
 
 /** Admin with TOTP; returns cookie jar for the admin path. */
-export async function adminSession(w: World, role: 'owner' | 'verifier' | 'support' | 'finance') {
+export async function adminSession(w: World, role: 'owner' | 'verifier' | 'support' | 'finance', displayName = `${role} admin`) {
   const email = `${role}-${randomBytes(3).toString('hex')}@example.invalid`;
   const password = 'correct horse battery staple';
-  await createAdmin(w.ctx, { email, password, role, displayName: `${role} admin` });
+  await createAdmin(w.ctx, { email, password, role, displayName });
   const first = json(await w.app.inject({ method: 'POST', url: `/${ADMIN_PATH}/api/auth/sign-in`, payload: { email, password } }));
   const secret = first.enrollment.secret as string;
   const totp = new OTPAuth.TOTP({ secret: OTPAuth.Secret.fromBase32(secret) }).generate({ timestamp: w.clock.now() });
@@ -161,7 +161,7 @@ export async function adminSession(w: World, role: 'owner' | 'verifier' | 'suppo
 }
 
 /** Full technician registration through the wizard, then approval by a verifier. Returns token and slug. */
-export async function registeredTechnician(w: World, verifier: Awaited<ReturnType<typeof adminSession>>, opts: { name?: string; iban?: string; civil?: string } = {}) {
+export async function registeredTechnician(w: World, verifier: Awaited<ReturnType<typeof adminSession>>, opts: { name?: string; nameEn?: string; iban?: string; civil?: string; approve?: boolean } = {}) {
   const phone = nextPhone('9');
   const allow = (await w.ctx.settings.get<string[]>('registration_allowlist')) ?? [];
   await setSetting(w, 'registration_allowlist', [...allow, `+968${phone}`]);
@@ -170,7 +170,7 @@ export async function registeredTechnician(w: World, verifier: Awaited<ReturnTyp
   const name = opts.name ?? 'سالم بن خميس البلوشي';
   const photo = await upload(w, t.token, 'profile_photo');
   const civil = opts.civil ?? String(10000000 + Math.floor(Math.random() * 89999999));
-  expectOk(await w.app.inject({ method: 'PUT', url: '/api/tech/application/step/2', headers: H, payload: { fullNameAr: name, fullNameEn: 'Salim Al Balushi', dob: '1990-05-01', nationality: 'OM', civilId: civil, locale: 'ar', photoFileId: photo } }));
+  expectOk(await w.app.inject({ method: 'PUT', url: '/api/tech/application/step/2', headers: H, payload: { fullNameAr: name, fullNameEn: opts.nameEn ?? 'Salim Al Balushi', dob: '1990-05-01', nationality: 'OM', civilId: civil, locale: 'ar', photoFileId: photo } }));
   expectOk(await w.app.inject({ method: 'PUT', url: '/api/tech/application/step/3', headers: H, payload: { workStatus: 'omani_self_employed', declaration: true } }));
   const expiry = muscatDate(w.clock.now() + 400 * 86_400_000);
   for (const type of ['civil_id_front', 'civil_id_back', 'selfie_with_id']) {
@@ -186,9 +186,9 @@ export async function registeredTechnician(w: World, verifier: Awaited<ReturnTyp
   const quiz = json(await w.app.inject({ method: 'GET', url: '/api/tech/quiz', headers: H }));
   const { QUIZ } = await import('../src/services/technicians');
   const answers = Object.fromEntries(QUIZ.map((q) => [q.id, q.correct]));
-  expect(quiz.length).toBe(10);
+  if (quiz.length !== 10) throw new Error(`quiz has ${quiz.length} questions, expected 10`);
   const qr = json(expectOk(await w.app.inject({ method: 'POST', url: '/api/tech/quiz', headers: H, payload: { answers } })));
-  expect(qr.passed).toBe(true);
+  if (!qr.passed) throw new Error('quiz not passed');
   const docs = json(await w.app.inject({ method: 'GET', url: '/api/legal' })) as { type: string; id: string }[];
   const need = ['technician_agreement', 'code_of_conduct', 'cancellation_refund', 'privacy'];
   const sig = await upload(w, t.token, 'signature', await png());
@@ -200,6 +200,7 @@ export async function registeredTechnician(w: World, verifier: Awaited<ReturnTyp
       payload: { acceptedDocIds: docs.filter((d) => need.includes(d.type)).map((d) => d.id), truthDeclaration: true, marketing: false, signatureName: name, signatureFileId: sig },
     }),
   );
+  if (opts.approve === false) return Object.assign(t, { phone, slug: '' });
   expectOk(await verifier.call('POST', `/applications/${t.userId}/decide`, { decision: 'approve', reason: 'كل المستندات سليمة' }));
   const link = json(expectOk(await w.app.inject({ method: 'GET', url: '/api/tech/link', headers: H })));
   return Object.assign(t, { phone, slug: link.url.split('/t/')[1] as string });
@@ -219,12 +220,14 @@ export function makeIban(): string {
 }
 
 /** A customer books the technician through their link and pays the visit fee with the mock provider. */
-export async function bookAndPay(w: World, techSlug: string, opts: { pay?: boolean } = {}) {
+export async function bookAndPay(w: World, techSlug: string, opts: { pay?: boolean; name?: string; problemText?: string; neighbourhood?: string; slot?: (slots: { start: number; end: number }[]) => { start: number; end: number } } = {}) {
   const phone = nextPhone('7');
+  const area = SEED_AREAS.find((a) => a.neighbourhoods.some((n) => n.id === (opts.neighbourhood ?? 'khoud')))!;
+  const pin = area.neighbourhoods.find((n) => n.id === (opts.neighbourhood ?? 'khoud'))!;
   const c = await signIn(w, phone, 'customer');
   const H = c.H;
   const slots = json(expectOk(await w.app.inject({ method: 'GET', url: `/api/slots?slug=${techSlug}` })));
-  const slot = slots[1];
+  const slot = opts.slot ? opts.slot(slots) : slots[1];
   const docs = json(await w.app.inject({ method: 'GET', url: '/api/legal' })) as { type: string; id: string }[];
   const media = await upload(w, null, 'booking_problem');
   const res = json(
@@ -237,15 +240,15 @@ export async function bookAndPay(w: World, techSlug: string, opts: { pay?: boole
           technicianSlug: techSlug,
           problem: 'not_cooling',
           units: [{ type: 'split', count: 1 }],
-          problemText: 'المكيف لا يبرد',
+          problemText: opts.problemText ?? 'المكيف لا يبرد',
           mediaIds: [media],
           urgency: 'day',
-          address: { wilayat: 'seeb', neighbourhood: 'khoud', wayNo: '1234', buildingNo: '56', landmark: 'قرب المسجد', notes: 'الطابق الثاني' },
-          lat: 23.587,
-          lng: 58.155,
+          address: { wilayat: area.wilayat, neighbourhood: pin.id, wayNo: '1234', buildingNo: '56', landmark: 'قرب المسجد', notes: 'الطابق الثاني' },
+          lat: pin.lat + 0.0003,
+          lng: pin.lng,
           windowStart: slot.start,
           windowEnd: slot.end,
-          name: 'مريم',
+          name: opts.name ?? 'مريم',
           acceptedDocIds: docs.filter((d) => ['customer_terms', 'cancellation_refund'].includes(d.type)).map((d) => d.id),
           returnUrl: 'http://localhost:3000/book/return',
         },
@@ -253,7 +256,7 @@ export async function bookAndPay(w: World, techSlug: string, opts: { pay?: boole
     ),
   );
   if (opts.pay !== false) await payMock(w, res.checkoutUrl);
-  return Object.assign(c, { bookingId: res.id as string, code: res.code as string, checkoutUrl: res.checkoutUrl as string });
+  return Object.assign(c, { phone, bookingId: res.id as string, code: res.code as string, checkoutUrl: res.checkoutUrl as string });
 }
 
 export async function payMock(w: World, checkoutUrl: string, result: 'paid' | 'cancelled' = 'paid') {

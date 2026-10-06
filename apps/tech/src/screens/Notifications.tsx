@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { formatDateTime } from '@katf/shared';
 import { Button, Card, EmptyState, SkeletonCard } from '@katf/ui';
 import { api } from '../lib/api';
@@ -27,13 +28,27 @@ export function Notifications() {
       ) : (
         <Card>
           <div className="k-list">
-            {rows.map((n) => (
-              <a key={n.id} className="k-list-row" href={n.link ? n.link.replace(/^https?:\/\/[^/]+(\/tech)?/, '/tech') : undefined} style={{ fontWeight: n.read ? 400 : 600 }}>
-                {!n.read && <span className="k-dot" aria-hidden />}
-                <span className="k-grow">{n.text}</span>
-                <span className="k-xs k-muted">{formatDateTime(Date.parse(n.at), locale)}</span>
-              </a>
-            ))}
+            {rows.map((n) => {
+              const body = (
+                <>
+                  {!n.read && <span className="k-dot" aria-hidden />}
+                  <span className="k-grow">{n.text}</span>
+                  <span className="k-xs k-muted">{formatDateTime(Date.parse(n.at), locale)}</span>
+                </>
+              );
+              // links point at the PWA (https://<domain>/tech/jobs/…); route inside the app instead, which
+              // also works in the iPhone app where the router has no /tech prefix
+              const to = n.link ? n.link.replace(/^https?:\/\/[^/]+/, '').replace(/^\/tech(?=\/|$)/, '') || '/' : null;
+              return to ? (
+                <Link key={n.id} className="k-list-row" to={to} style={{ fontWeight: n.read ? 400 : 600 }}>
+                  {body}
+                </Link>
+              ) : (
+                <div key={n.id} className="k-list-row" style={{ fontWeight: n.read ? 400 : 600 }}>
+                  {body}
+                </div>
+              );
+            })}
           </div>
         </Card>
       )}

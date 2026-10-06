@@ -6,6 +6,7 @@ import { commonAr, commonEn, interpolate } from '@katf/shared/i18n';
 import { ar, en, type TechMessages } from './messages';
 import { api } from './lib/api';
 import { biometricUnlock, isNative, secureGet } from './lib/native';
+import { demoActive, exitDemo } from './lib/demo';
 import { Welcome } from './screens/Welcome';
 import { Register } from './screens/Register';
 import { Status } from './screens/Status';
@@ -53,7 +54,16 @@ function Shell({ children }: { children: ReactNode }) {
   const name = String((locale === 'en' ? config.settings.app_name_en : config.settings.app_name) ?? 'كتف');
   return (
     <>
-      {config.demoMode && <div className="k-demo-banner">{m.app.demo}</div>}
+      {__KATF_OFFLINE_DEMO__ && demoActive() ? (
+        <div className="k-demo-banner" role="status">
+          {m.app.demoOffline}{' '}
+          <button type="button" className="k-demo-exit" onClick={exitDemo}>
+            {m.app.demoExit}
+          </button>
+        </div>
+      ) : (
+        config.demoMode && <div className="k-demo-banner">{m.app.demo}</div>
+      )}
       <a href="#main" className="k-skip">
         {m.app.skip}
       </a>

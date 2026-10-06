@@ -2,16 +2,19 @@ import UIKit
 import Capacitor
 
 /// The app's web view. It adds one small in-app plugin, `KatfConfig`, so the web code can read
-/// settings that belong to this build (the server address) instead of having them baked into the
-/// web bundle.
+/// settings that belong to this build (the server address, whether the offline demo is included)
+/// instead of having them baked into the web bundle.
 class KatfViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         bridge?.registerPluginInstance(KatfConfigPlugin())
     }
 }
 
-/// `KatfConfig.get()` → `{ apiUrl }`. The value comes from the `KatfAPIURL` key in Info.plist, which is
-/// set from the `KATF_API_URL` build setting (Xcode → target Katf → Build Settings → User-Defined).
+/// `KatfConfig.get()` → `{ apiUrl, offlineDemo }`, from Info.plist keys set by build settings
+/// (Xcode → target Katf → Build Settings → User-Defined):
+/// - `KatfAPIURL` ← `KATF_API_URL`: the server the app talks to.
+/// - `KatfOfflineDemo` ← `KATF_OFFLINE_DEMO`: YES shows the demo account that works without internet
+///   (Debug by default). When it is not YES, a build step also removes the demo data from the app.
 @objc(KatfConfigPlugin)
 public class KatfConfigPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "KatfConfigPlugin"
@@ -21,7 +24,10 @@ public class KatfConfigPlugin: CAPPlugin, CAPBridgedPlugin {
     ]
 
     @objc func get(_ call: CAPPluginCall) {
-        let apiUrl = Bundle.main.object(forInfoDictionaryKey: "KatfAPIURL") as? String ?? ""
-        call.resolve(["apiUrl": apiUrl])
+        let info = Bundle.main.infoDictionary ?? [:]
+        call.resolve([
+            "apiUrl": info["KatfAPIURL"] as? String ?? "",
+            "offlineDemo": (info["KatfOfflineDemo"] as? String) == "YES",
+        ])
     }
 }

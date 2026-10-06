@@ -3,9 +3,9 @@ name: iPhone app
 on:
   push:
     branches: [main, 'claude/**']
-    paths: ['ios/**', 'apps/tech/**', 'packages/ui/**', 'packages/shared/**', 'pnpm-lock.yaml', '.github/workflows/ios.yml']
+    paths: ['ios/**', 'apps/tech/**', 'apps/admin/**', 'packages/**', 'pnpm-lock.yaml', '.github/workflows/ios.yml']
   pull_request:
-    paths: ['ios/**', 'apps/tech/**', 'packages/ui/**', 'packages/shared/**', 'pnpm-lock.yaml', '.github/workflows/ios.yml']
+    paths: ['ios/**', 'apps/tech/**', 'apps/admin/**', 'packages/**', 'pnpm-lock.yaml', '.github/workflows/ios.yml']
   workflow_dispatch:
 
 permissions:
@@ -40,8 +40,28 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - name: Build (no signing)
+      - name: Build Debug (no signing)
         run: |
           xcodebuild -project ios/Katf.xcodeproj -scheme Katf \
             -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
-            -configuration Debug CODE_SIGNING_ALLOWED=NO build | tail -50
+            -configuration Debug -derivedDataPath build/dd CODE_SIGNING_ALLOWED=NO build | tail -50
+      - name: Debug includes the offline demo (D72)
+        run: |
+          app=build/dd/Build/Products/Debug-iphonesimulator/Katf.app
+          test -f "$app/public/index.html"
+          test -f "$app/public/demo/tech.json"
+          test -f "$app/public/admin-demo/index.html"
+          test -f "$app/public/admin-demo/demo.json"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :KatfOfflineDemo' "$app/Info.plist")" = YES
+      - name: Build Release (no signing)
+        run: |
+          xcodebuild -project ios/Katf.xcodeproj -scheme Katf \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -configuration Release -derivedDataPath build/dd CODE_SIGNING_ALLOWED=NO build | tail -50
+      - name: Release carries no demo data
+        run: |
+          app=build/dd/Build/Products/Release-iphonesimulator/Katf.app
+          test -f "$app/public/index.html"
+          test ! -e "$app/public/demo"
+          test ! -e "$app/public/admin-demo"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :KatfOfflineDemo' "$app/Info.plist")" = NO

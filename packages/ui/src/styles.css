@@ -368,9 +368,10 @@ textarea {
 
 .k-header {
   position: sticky;
-  top: 10px;
+  /* below the status bar and camera notch in the iPhone app (0 in browsers) */
+  top: calc(10px + env(safe-area-inset-top));
   z-index: 30;
-  margin: 10px 12px 0;
+  margin: calc(10px + env(safe-area-inset-top)) 12px 0;
   border-radius: 22px;
   background: var(--surface);
   -webkit-backdrop-filter: blur(var(--blur)) saturate(165%);
@@ -852,12 +853,33 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 60;
-  padding: 6px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 10px;
+  min-height: calc(44px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 12px 0;
   text-align: center;
   font-weight: 700;
   font-size: 0.85rem;
   background: repeating-linear-gradient(-45deg, #b7791f, #b7791f 12px, #8a5a12 12px, #8a5a12 24px);
   color: #fff;
+}
+/* the header sticks below the banner, which already covers the safe area */
+.k-demo-banner ~ .k-header {
+  top: calc(54px + env(safe-area-inset-top));
+  margin-top: 10px;
+}
+.k-demo-exit {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgb(255 255 255 / 75%);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 25%);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
 
 /* ------------------------------------------------------------------ stepper and timeline */

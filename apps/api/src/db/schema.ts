@@ -16,10 +16,13 @@ import {
   timestamp,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
+import { clockNow } from '../lib/clock';
 
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
-const created = () => ts('created_at').notNull().defaultNow();
-const updated = () => ts('updated_at').notNull().defaultNow();
+/** Set by the app's clock on insert (see lib/clock.ts); the SQL default stays for rows written by hand. */
+const now = (name: string) => ts(name).notNull().defaultNow().$defaultFn(clockNow);
+const created = () => now('created_at');
+const updated = () => now('updated_at');
 const id = () => text('id').primaryKey();
 
 // ---------------------------------------------------------------- people
@@ -231,7 +234,7 @@ export const consents = pgTable('consents', {
   legalDocumentId: text('legal_document_id').notNull(),
   docType: text('doc_type').notNull(),
   version: text('version').notNull(),
-  acceptedAt: ts('accepted_at').notNull().defaultNow(),
+  acceptedAt: now('accepted_at'),
   ipHash: text('ip_hash'),
   userAgent: text('user_agent'),
   locale: text('locale').notNull(),
@@ -404,7 +407,7 @@ export const bookingOffers = pgTable('booking_offers', {
   batch: integer('batch').notNull().default(1),
   status: text('status').notNull().default('offered'), // offered | accepted | declined | expired | withdrawn
   declineReason: text('decline_reason'),
-  offeredAt: ts('offered_at').notNull().defaultNow(),
+  offeredAt: now('offered_at'),
   respondedAt: ts('responded_at'),
   expiresAt: ts('expires_at').notNull(),
 });
@@ -712,7 +715,7 @@ export const attempts = pgTable('attempts', {
   count: integer('count').notNull().default(0),
   lockLevel: integer('lock_level').notNull().default(0),
   lockedUntil: ts('locked_until'),
-  windowStartedAt: ts('window_started_at').notNull().defaultNow(),
+  windowStartedAt: now('window_started_at'),
 });
 
 export const otpChallenges = pgTable('otp_challenges', {
@@ -739,7 +742,7 @@ export const sessions = pgTable(
     ipHash: text('ip_hash'),
     city: text('city'),
     createdAt: created(),
-    lastUsedAt: ts('last_used_at').notNull().defaultNow(),
+    lastUsedAt: now('last_used_at'),
     expiresAt: ts('expires_at').notNull(),
     revokedAt: ts('revoked_at'),
     revokedReason: text('revoked_reason'),

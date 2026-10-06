@@ -11,7 +11,8 @@
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "seed": "tsx src/cli.ts seed",
-    "cli": "tsx src/cli.ts"
+    "cli": "tsx src/cli.ts",
+    "demo:record": "tsx scripts/record-demo.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
@@ -37,6 +38,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@katf/demo": "workspace:*",
     "@types/node": "^22.20.5",
     "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.23.1",

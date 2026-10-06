@@ -2,7 +2,7 @@ import type { FastifyBaseLogger } from 'fastify';
 import { loadConfig, type Config } from './config';
 import { openDb } from './db';
 import { Crypto, deriveKeys } from './lib/crypto';
-import { systemClock, type Clock } from './lib/clock';
+import { systemClock, useClockForDefaults, type Clock } from './lib/clock';
 import { SettingsService } from './services/settings';
 import { Bus } from './services/bus';
 import { makeProviders } from './providers';
@@ -19,6 +19,7 @@ const consoleLog = { info: console.log, warn: console.warn, error: console.error
 
 export async function createContext(opts: { config?: Config; memory?: boolean; clock?: Clock; log?: Ctx['log'] } = {}): Promise<Ctx> {
   const config = opts.config ?? loadConfig();
+  useClockForDefaults(opts.clock ?? systemClock);
   const handle = await openDb({ url: config.DATABASE_URL, dataDir: config.DATA_DIR, memory: opts.memory });
   const crypto = new Crypto(deriveKeys(config.dataKey, config.previousDataKey));
   const log = opts.log ?? consoleLog;

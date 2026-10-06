@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite --port 5174",
     "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dev:demo": "KATF_OFFLINE_DEMO=1 vite --port 5176"
   },
   "dependencies": {
+    "@katf/demo": "workspace:*",
     "@katf/shared": "workspace:*",
     "@katf/ui": "workspace:*",
     "lucide-react": "^1.51.0",

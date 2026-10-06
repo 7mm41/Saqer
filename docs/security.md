@@ -38,6 +38,10 @@ carry tokens and masks client IPs. Error responses carry a code, never internal 
 checks the ledger balance and the audit chain. Keep `deploy/.env` and `deploy/backup.env` offline: without
 `DATA_KEY` the encrypted fields in a backup cannot be read.
 
+**Demo data.** Only in two clearly labelled places, never on by default: the server's `DEMO_MODE` (off unless
+set) and the iPhone app's offline demo, which Debug builds include and Release builds remove (D72). The public
+PWA and the real admin panel are built without the demo code.
+
 **Dependencies.** Lockfile, `pnpm audit` in CI, no analytics or ad trackers, fonts self-hosted.
 
 ## Known limits (accepted for Phase 1)

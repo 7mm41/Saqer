@@ -2,6 +2,8 @@
  * Admin API client. Same-origin, HttpOnly cookies scoped to the secret admin path (SameSite=Strict),
  * CSRF header on every request, one silent refresh on 401.
  */
+import { demoRequest } from './demo';
+
 export class ApiError extends Error {
   constructor(
     readonly status: number,
@@ -28,6 +30,12 @@ async function refresh(): Promise<boolean> {
 export const onSessionLost = { fn: () => {} };
 
 export async function api<T = any>(path: string, init: { method?: string; json?: unknown; raw?: boolean } = {}): Promise<T> {
+  if (__KATF_OFFLINE_DEMO__) {
+    if (init.raw) throw new ApiError(403, 'demo_read_only'); // downloads (CSV) are not part of the recording
+    const r = await demoRequest(init.method ?? 'GET', path);
+    if (r.status >= 400) throw new ApiError(r.status, (r.body as { error?: string } | null)?.error ?? 'generic');
+    return r.body as T;
+  }
   const go = () =>
     fetch(`${API}${path}`, {
       method: init.method ?? 'GET',

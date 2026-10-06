@@ -2,8 +2,8 @@
  * API client. In the browser (PWA at /tech) it uses same-origin HttpOnly cookies; inside the
  * iPhone app it uses bearer tokens kept in the Keychain, refreshed and rotated on use.
  */
-import { registerPlugin } from '@capacitor/core';
-import { isNative, secureGet, secureSet, deviceId } from './native';
+import { isNative, nativeConfig, secureGet, secureSet, deviceId } from './native';
+import { demoActive, demoRequest, exitDemo } from './demo';
 
 export class ApiError extends Error {
   constructor(
@@ -15,17 +15,17 @@ export class ApiError extends Error {
   }
 }
 
-// In the iPhone app the server address belongs to the Xcode build (Info.plist key KatfAPIURL, set from
-// the KATF_API_URL build setting), so one web bundle serves every build. The PWA uses its own origin.
-const KatfConfig = registerPlugin<{ get(): Promise<{ apiUrl: string }> }>('KatfConfig');
-let basePromise: Promise<string> | null = null;
-function base(): Promise<string> {
-  if (!isNative()) return Promise.resolve('');
-  basePromise ??= KatfConfig.get().then(
-    (c) => (c.apiUrl ?? '').trim().replace(/\/+$/, ''),
-    () => '',
-  );
-  return basePromise;
+// In the iPhone app the server address belongs to the Xcode build (build setting KATF_API_URL), so one web
+// bundle serves every build. The PWA uses its own origin.
+async function base(): Promise<string> {
+  return isNative() ? (await nativeConfig()).apiUrl : '';
+}
+
+/** The offline demo (D72) answers from the recording instead of the network. */
+async function fromDemo<T>(path: string, method: string): Promise<T> {
+  const r = await demoRequest(method, path);
+  if (r.status >= 400) throw new ApiError(r.status, (r.body as { error?: string } | null)?.error ?? 'generic');
+  return r.body as T;
 }
 let access: { token: string; exp: number } | null = null;
 let refreshing: Promise<boolean> | null = null;
@@ -64,6 +64,7 @@ async function refresh(): Promise<boolean> {
 }
 
 export async function api<T = unknown>(path: string, init: RequestInit & { json?: unknown } = {}): Promise<T> {
+  if (__KATF_OFFLINE_DEMO__ && demoActive()) return fromDemo<T>(path, init.method ?? 'GET');
   if (isNative() && (!access || access.exp * 1000 < Date.now() + 15_000)) await refresh();
   const root = await base();
   const go = async () =>
@@ -97,12 +98,19 @@ export async function signInWithOtp(i: { challengeId: string; phone: string; cod
 }
 
 export async function signOut() {
+  if (__KATF_OFFLINE_DEMO__ && demoActive()) return exitDemo();
   await api('/api/auth/logout', { method: 'POST' }).catch(() => {});
   access = null;
   await secureSet('refresh', null);
 }
 
+let demoUploads = 0;
 export async function uploadFile(file: File, purpose: string, onProgress: (p: number) => void): Promise<string> {
+  if (__KATF_OFFLINE_DEMO__ && demoActive()) {
+    // nothing leaves the device: the picture stays on the screen and the recorded step carries on
+    onProgress(1);
+    return `demo-upload-${++demoUploads}`;
+  }
   if (isNative() && (!access || access.exp * 1000 < Date.now() + 15_000)) await refresh();
   const h = await headers();
   const root = await base();

@@ -28,6 +28,7 @@ iPhone only, portrait, iOS 15+, push entitlement (`Katf.entitlements`).
 | `Katf/` | Swift sources, `Info.plist`, entitlements, icons, launch screen, permission texts, privacy manifest, alert sound | by hand (icons and sound: `pnpm --filter @katf/tech assets`) |
 | `Katf/KatfViewController.swift` | The web view; adds the small `KatfConfig` plugin that tells the web code which server to use | by hand |
 | `Katf/public/`, `Katf/capacitor.config.json`, `Katf/config.xml` | The technician app built for the iPhone, and Capacitor's settings | **generated** by `pnpm ios:sync` |
+| `Katf/public/demo/`, `Katf/public/admin-demo/` | The offline demo: the technician app's recording, and a read-only admin panel with its own recording (below) | **generated**; removed from builds where `KATF_OFFLINE_DEMO` is not YES |
 | `Plugins/` | Native sources of the Capacitor plugins (camera, GPS, push, haptics, app, Keychain, Face ID), copied from `node_modules` with their MIT licences | **generated** |
 | `CapApp-SPM/` | The Swift package that links Capacitor and those plugins into the app | `Package.swift` **generated** |
 | `debug.xcconfig` | Turns on Capacitor's debug logging in Debug builds | by hand |
@@ -68,6 +69,39 @@ Do not run `cap sync` or `cap open` directly: Capacitor's CLI only knows its own
 `ios:sync` lets it write into a scratch folder (`apps/tech/.cap-ios`, ignored) and copies the results into
 `ios/`. To add a Capacitor plugin, add it to `apps/tech/package.json` and run `pnpm ios:sync`; it is picked
 up automatically.
+
+## Try it without internet (offline demo)
+
+Debug builds (what **Run** in Xcode makes) show a card under the sign-in form, **"تجربة التطبيق بدون إنترنت"**,
+with two buttons:
+
+- **دخول الحساب التجريبي** — a demo technician account: home with a new request, jobs, earnings, statements,
+  link, reviews, documents, notifications. The new request can be taken through every step: accept → on the
+  way → arrived (photo) → diagnosis → quote → the customer approves and pays (simulated a few seconds later) →
+  work finished → the customer confirms.
+- **عرض لوحة الإدارة التجريبية** — the admin panel as the owner sees it: overview, applications (one waiting),
+  technicians with documents, customers, bookings, an open dispute, payments, a paid payout batch, reports,
+  settings, staff, security and the audit log.
+
+How it works and what it is not:
+
+- The answers were **recorded from the real API** (`pnpm demo:record`, [`apps/api/scripts/record-demo.ts`](../apps/api/scripts/record-demo.ts))
+  with `DEMO_MODE=true` and a made-up world: every person's name carries "تجريبي", phone numbers are
+  0000-numbers that cannot be dialled, pictures are labelled "صورة تجريبية". Dates move so the recording's
+  "today" is the viewer's today, and the new request's countdown runs.
+- Nothing is sent anywhere and nothing typed is kept: actions outside the recorded job answer "هذا عرض تجريبي
+  بدون إنترنت: لا يُحفظ هذا التغيير ولا يُرسل". A striped banner on every screen says it is a demo; **خروج من
+  العرض** (or **العودة إلى التطبيق** in the panel) goes back to the real sign-in.
+- It is controlled by the build setting **`KATF_OFFLINE_DEMO`**: YES for Debug, NO for Release. When it is not
+  YES, a build step ("Remove offline demo unless enabled") deletes the recordings and the demo panel from the
+  app, so TestFlight and App Store builds carry no demo data. CI builds both and checks this.
+- The public PWA is built without the demo; it never offers it.
+
+On a computer (Node installed): `pnpm dev:tech` → <http://localhost:5173/tech/> shows the same demo button, and
+`pnpm --filter @katf/admin dev:demo` → <http://localhost:5176/dev-admin/> opens the demo panel.
+
+To refresh the recording after API changes: `pnpm demo:record`, then `pnpm ios:sync`, and commit
+`packages/demo/fixtures` and `ios/`.
 
 ## Before TestFlight (owner's Apple account)
 

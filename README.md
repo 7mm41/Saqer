@@ -57,6 +57,11 @@ On a Mac with Xcode 16 or newer, no Node or pnpm needed:
    User-Defined): `http://localhost:4000` for Debug, the placeholder `https://katf.example` for Release.
    Put your domain there before archiving for TestFlight.
 
+**Without internet or a server:** the sign-in screen of a Debug build has **"تجربة التطبيق بدون إنترنت"** —
+a demo technician account whose new request can be taken through a whole job, and the admin panel as the owner
+sees it. Both run on recorded, clearly labelled demo data; nothing is saved or sent, and Release builds leave
+it out ([details](docs/ios.md#try-it-without-internet-offline-demo)).
+
 After changing the technician app's code, run `pnpm ios:sync` and commit `ios/`. CI checks that `ios/` is
 current and builds the project for the simulator. Signing, push and TestFlight: [docs/ios.md](docs/ios.md).
 

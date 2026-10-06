@@ -64,6 +64,7 @@ export const commonEn: Shape<typeof commonAr> = {
   errors: {
     generic: 'Something unexpected happened. Please try again.',
     network: "Couldn't connect. Check your internet and try again.",
+    demo_read_only: 'This is an offline demo: this change is not saved or sent.',
     invalid_phone: 'Enter an Omani number of 8 digits starting with 7 or 9.',
     invalid_iban: 'The IBAN is not valid. It starts with OM and has 23 characters.',
     invalid_civil_id: 'The civil number has 8 digits.',

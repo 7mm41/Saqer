@@ -2,6 +2,21 @@
 
 All notable changes. Dates are Muscat time.
 
+## 0.1.2 — 2026-10-06
+
+### Added
+- **Offline demo** (D72): Debug builds of the iPhone app offer "تجربة التطبيق بدون إنترنت" — a demo technician
+  account whose new request goes through a whole job, and a read-only demo admin panel. Both replay responses
+  recorded from the real API with labelled demo data (`pnpm demo:record`, `packages/demo`); nothing is saved
+  or sent. The Xcode setting `KATF_OFFLINE_DEMO` (Debug YES, Release NO) controls it, and Release builds have
+  the demo removed; CI checks both. Browser tests cover every demo screen and the whole demo job.
+
+### Fixed
+- Every database default time (`created_at`, `updated_at` and similar) now comes from the app's clock, so
+  "today" figures and time windows read one clock everywhere.
+- iPhone app: the header and the demo banner stay below the status bar and camera notch.
+- iPhone app: tapping a notification opens its job instead of reloading the app.
+
 ## 0.1.1 — 2026-10-06
 
 ### Changed

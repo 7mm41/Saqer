@@ -1,0 +1,5794 @@
+{
+ "version": 1,
+ "app": "tech",
+ "recordedAt": 1791435903000,
+ "responses": {
+  "GET /api/config": {
+   "status": 200,
+   "body": {
+    "settings": {
+     "visit_fee": 5000,
+     "commission_pct": 1500,
+     "own_customer_commission_pct": 500,
+     "repeat_customer_commission_pct": 500,
+     "visit_only_platform_share_pct": 1000,
+     "payment_gateway_fee_pct": 200,
+     "failed_repair_commission_pct": 0,
+     "late_cancel_fee_pct": 3000,
+     "on_the_way_cancel_fee_pct": 10000,
+     "vat_pct": 0,
+     "probation_max_quote": 100000,
+     "payment_expiry_minutes": 15,
+     "free_cancel_minutes": 10,
+     "technician_accept_timeout_minutes": 15,
+     "dispatch_batch_size": 3,
+     "arrival_geofence_meters": 300,
+     "arrival_grace_minutes": 20,
+     "customer_wait_minutes": 15,
+     "quote_expiry_minutes": 60,
+     "repair_payment_timeout_minutes": 30,
+     "auto_confirm_hours": 24,
+     "payout_delay_hours": 48,
+     "new_technician_payout_delay_hours": 72,
+     "new_technician_payout_jobs": 3,
+     "warranty_days": 14,
+     "max_free_revisits": 1,
+     "dispute_sla_hours": 48,
+     "appeal_days": 5,
+     "notice_days_before_terms_change": 7,
+     "review_window_days": 7,
+     "technician_cancel_strike_hours": 2,
+     "booking_days_ahead": 7,
+     "slot_length_minutes": 120,
+     "work_day_start": "08:00",
+     "work_day_end": "20:00",
+     "weekend_slots_enabled": false,
+     "quiet_hours_start": "22:00",
+     "quiet_hours_end": "07:00",
+     "probation_jobs": 5,
+     "experiment_target_paid_services": 50,
+     "strikes_for_suspension_review": 3,
+     "strikes_window_days": 60,
+     "rating_review_threshold": 40,
+     "rating_review_min_jobs": 10,
+     "doc_min_days_before_expiry_at_signup": 30,
+     "doc_expiry_reminder_days": [
+      30,
+      7
+     ],
+     "reapply_after_days": 30,
+     "bank_change_lock_hours": 48,
+     "chat_flags_for_review": 3,
+     "chat_flags_window_days": 30,
+     "quiz_pass_pct": 80,
+     "work_photos_min": 3,
+     "work_photos_max": 10,
+     "bio_max_chars": 300,
+     "review_sla_text": "يوم إلى يومي عمل",
+     "max_booking_media": 5,
+     "problem_text_max_chars": 500,
+     "booking_code_prefix": "KT",
+     "app_name": "كتف",
+     "app_name_en": "Katf",
+     "company_name": "",
+     "cr_number": "",
+     "company_address": "",
+     "contact_email": "",
+     "contact_phone": "",
+     "whatsapp_number": "",
+     "jurisdiction": "",
+     "social_links": {},
+     "escrow_mode": "manual_payout",
+     "marketplace_dispatch": false,
+     "live_location": false,
+     "whatsapp_api": false,
+     "vat_invoices": false,
+     "legal_gate_cleared": false,
+     "maintenance_mode": false
+    },
+    "rendered": {
+     "visit_fee": "5.000",
+     "commission_pct": "15",
+     "own_customer_commission_pct": "5",
+     "repeat_customer_commission_pct": "5",
+     "visit_only_platform_share_pct": "10",
+     "payment_gateway_fee_pct": "2",
+     "failed_repair_commission_pct": "0",
+     "late_cancel_fee_pct": "30",
+     "on_the_way_cancel_fee_pct": "100",
+     "vat_pct": "0",
+     "probation_max_quote": "100.000",
+     "payment_expiry_minutes": "15",
+     "free_cancel_minutes": "10",
+     "technician_accept_timeout_minutes": "15",
+     "dispatch_batch_size": "3",
+     "arrival_geofence_meters": "300",
+     "arrival_grace_minutes": "20",
+     "customer_wait_minutes": "15",
+     "quote_expiry_minutes": "60",
+     "repair_payment_timeout_minutes": "30",
+     "auto_confirm_hours": "24",
+     "payout_delay_hours": "48",
+     "new_technician_payout_delay_hours": "72",
+     "new_technician_payout_jobs": "3",
+     "warranty_days": "14",
+     "max_free_revisits": "1",
+     "dispute_sla_hours": "48",
+     "appeal_days": "5",
+     "notice_days_before_terms_change": "7",
+     "review_window_days": "7",
+     "technician_cancel_strike_hours": "2",
+     "booking_days_ahead": "7",
+     "slot_length_minutes": "120",
+     "work_day_start": "08:00",
+     "work_day_end": "20:00",
+     "weekend_slots_enabled": "لا",
+     "quiet_hours_start": "22:00",
+     "quiet_hours_end": "07:00",
+     "probation_jobs": "5",
+     "experiment_target_paid_services": "50",
+     "strikes_for_suspension_review": "3",
+     "strikes_window_days": "60",
+     "rating_review_threshold": "4.0",
+     "rating_review_min_jobs": "10",
+     "doc_min_days_before_expiry_at_signup": "30",
+     "doc_expiry_reminder_days": "[30,7]",
+     "reapply_after_days": "30",
+     "bank_change_lock_hours": "48",
+     "chat_flags_for_review": "3",
+     "chat_flags_window_days": "30",
+     "quiz_pass_pct": "80",
+     "work_photos_min": "3",
+     "work_photos_max": "10",
+     "bio_max_chars": "300",
+     "review_sla_text": "يوم إلى يومي عمل",
+     "max_booking_media": "5",
+     "problem_text_max_chars": "500",
+     "booking_code_prefix": "KT",
+     "app_name": "كتف",
+     "app_name_en": "Katf",
+     "company_name": "",
+     "cr_number": "",
+     "company_address": "",
+     "contact_email": "",
+     "contact_phone": "",
+     "whatsapp_number": "",
+     "jurisdiction": "",
+     "social_links": "{}",
+     "escrow_mode": "manual_payout",
+     "marketplace_dispatch": "لا",
+     "live_location": "لا",
+     "whatsapp_api": "لا",
+     "vat_invoices": "لا",
+     "legal_gate_cleared": "لا",
+     "maintenance_mode": "لا"
+    },
+    "demoMode": true,
+    "paymentsLive": false,
+    "paymentProvider": "mock",
+    "mapTileUrl": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "vapidPublicKey": null,
+    "banks": [
+     "بنك مسقط",
+     "صحار الدولي",
+     "البنك الوطني العُماني",
+     "بنك ظفار",
+     "HSBC عُمان",
+     "البنك الأهلي",
+     "بنك عُمان العربي",
+     "بنك نزوى",
+     "ميثاق",
+     "العز الإسلامي",
+     "أخرى"
+    ],
+    "publicOrigin": "https://katf.example"
+   }
+  },
+  "GET /api/me": {
+   "status": 200,
+   "body": {
+    "id": "4534ceaa-a706-4ce4-93dd-32427c08387f",
+    "role": "technician",
+    "name": "سالم ت.",
+    "email": null,
+    "phoneMasked": "••••••••0001",
+    "locale": "ar",
+    "marketingConsent": false,
+    "technicianStatus": "approved_probation"
+   }
+  },
+  "GET /api/tech/home": {
+   "status": 200,
+   "body": {
+    "status": "approved_probation",
+    "available": true,
+    "vacationUntil": null,
+    "publicName": "سالم ت.",
+    "rating": 4.5,
+    "ratingCount": 2,
+    "probationJobsLeft": 3,
+    "requests": [
+     {
+      "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+      "code": "KT-ZTXG5Z",
+      "status": "requested",
+      "step": "accepted",
+      "isRevisit": false,
+      "entryMode": "direct_link",
+      "problem": {
+       "id": "not_cooling",
+       "ar": "لا يبرّد",
+       "en": "Not cooling"
+      },
+      "units": [
+       {
+        "type": "split",
+        "count": 1
+       }
+      ],
+      "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+      "media": [
+       {
+        "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+        "url": "katf-demo-image:photo"
+       }
+      ],
+      "window": {
+       "start": "2026-10-08T08:00:00.000Z",
+       "end": "2026-10-08T10:00:00.000Z"
+      },
+      "area": {
+       "wilayat": {
+        "ar": "السيب",
+        "en": "Seeb"
+       },
+       "neighbourhood": {
+        "ar": "الخوض",
+        "en": "Al Khoudh"
+       }
+      },
+      "approx": {
+       "lat": 23.59,
+       "lng": 58.15
+      },
+      "location": null,
+      "address": null,
+      "customerFirstName": null,
+      "acceptDeadline": "2026-10-08T05:18:03.000Z",
+      "money": {
+       "visitFee": 5000,
+       "commissionBps": 500,
+       "commissionReason": "own_link",
+       "visitOnlyNet": 4500,
+       "quoteTotal": null,
+       "expectedNet": null,
+       "technicianNet": null,
+       "paid": 5000,
+       "payoutDueAt": null
+      },
+      "quote": null,
+      "diagnosis": null,
+      "completion": null,
+      "arrival": null,
+      "timeline": {
+       "requested": "2026-10-08T05:03:03.000Z",
+       "pending_payment": "2026-10-08T05:03:03.000Z"
+      },
+      "etaMinutes": null,
+      "callAttempts": 0,
+      "waitUntil": null,
+      "freeCancelUntil": 1791436383000,
+      "policy": {
+       "geofenceMeters": 300,
+       "warrantyDays": 14,
+       "quoteExpiryMinutes": 60,
+       "strikeHours": 2,
+       "probationMaxQuote": 100000
+      }
+     }
+    ],
+    "today": [
+     {
+      "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+      "code": "KT-GX2TQ1",
+      "status": "accepted",
+      "problem": "لا يبرّد",
+      "problemEn": "Not cooling",
+      "window": {
+       "start": "2026-10-08T06:00:00.000Z",
+       "end": "2026-10-08T08:00:00.000Z"
+      },
+      "area": {
+       "wilayat": {
+        "ar": "السيب",
+        "en": "Seeb"
+       },
+       "neighbourhood": {
+        "ar": "الموالح",
+        "en": "Al Mawaleh"
+       }
+      },
+      "visitFee": 5000,
+      "net": null,
+      "isRevisit": false
+     }
+    ],
+    "next": {
+     "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+     "code": "KT-GX2TQ1",
+     "status": "accepted",
+     "step": "accepted",
+     "isRevisit": false,
+     "entryMode": "direct_link",
+     "problem": {
+      "id": "not_cooling",
+      "ar": "لا يبرّد",
+      "en": "Not cooling"
+     },
+     "units": [
+      {
+       "type": "split",
+       "count": 1
+      }
+     ],
+     "problemText": "المكيف لا يبرد (طلب تجريبي)",
+     "media": [
+      {
+       "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+       "url": "katf-demo-image:photo"
+      }
+     ],
+     "window": {
+      "start": "2026-10-08T06:00:00.000Z",
+      "end": "2026-10-08T08:00:00.000Z"
+     },
+     "area": {
+      "wilayat": {
+       "ar": "السيب",
+       "en": "Seeb"
+      },
+      "neighbourhood": {
+       "ar": "الموالح",
+       "en": "Al Mawaleh"
+      }
+     },
+     "approx": {
+      "lat": 23.6,
+      "lng": 58.21
+     },
+     "location": {
+      "lat": 23.601399999999998,
+      "lng": 58.2093
+     },
+     "address": {
+      "wayNo": "1234",
+      "flatNo": null,
+      "wilayat": "seeb",
+      "landmark": "قرب المسجد",
+      "buildingNo": "56",
+      "neighbourhood": "mawaleh",
+      "notes": "الطابق الثاني"
+     },
+     "customerFirstName": "نورة",
+     "acceptDeadline": "2026-10-08T04:46:01.000Z",
+     "money": {
+      "visitFee": 5000,
+      "commissionBps": 500,
+      "commissionReason": "own_link",
+      "visitOnlyNet": 4500,
+      "quoteTotal": null,
+      "expectedNet": null,
+      "technicianNet": null,
+      "paid": 5000,
+      "payoutDueAt": null
+     },
+     "quote": null,
+     "diagnosis": null,
+     "completion": null,
+     "arrival": null,
+     "timeline": {
+      "accepted": "2026-10-08T04:31:01.000Z",
+      "requested": "2026-10-08T04:31:01.000Z",
+      "pending_payment": "2026-10-08T04:31:01.000Z"
+     },
+     "etaMinutes": null,
+     "callAttempts": 0,
+     "waitUntil": null,
+     "freeCancelUntil": 1791434461000,
+     "policy": {
+      "geofenceMeters": 300,
+      "warrantyDays": 14,
+      "quoteExpiryMinutes": 60,
+      "strikeHours": 2,
+      "probationMaxQuote": 100000
+     }
+    },
+    "week": {
+     "awaiting": 0,
+     "scheduled": 19000,
+     "paid": 23500
+    },
+    "alerts": {
+     "documentsExpiring": [],
+     "termsPending": [],
+     "strikes": 0,
+     "paused": null
+    }
+   }
+  },
+  "GET /api/tech/jobs?tab=today": {
+   "status": 200,
+   "body": [
+    {
+     "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+     "code": "KT-GX2TQ1",
+     "status": "accepted",
+     "problem": "لا يبرّد",
+     "problemEn": "Not cooling",
+     "window": {
+      "start": "2026-10-08T06:00:00.000Z",
+      "end": "2026-10-08T08:00:00.000Z"
+     },
+     "area": {
+      "wilayat": {
+       "ar": "السيب",
+       "en": "Seeb"
+      },
+      "neighbourhood": {
+       "ar": "الموالح",
+       "en": "Al Mawaleh"
+      }
+     },
+     "visitFee": 5000,
+     "net": null,
+     "isRevisit": false
+    }
+   ]
+  },
+  "GET /api/tech/jobs?tab=upcoming": {
+   "status": 200,
+   "body": [
+    {
+     "id": "faea99f2-9b26-4b73-b1e2-a4023ef4b15b",
+     "code": "KT-HXHDJH",
+     "status": "accepted",
+     "problem": "لا يبرّد",
+     "problemEn": "Not cooling",
+     "window": {
+      "start": "2026-10-11T04:00:00.000Z",
+      "end": "2026-10-11T06:00:00.000Z"
+     },
+     "area": {
+      "wilayat": {
+       "ar": "بوشر",
+       "en": "Bawshar"
+      },
+      "neighbourhood": {
+       "ar": "الخوير",
+       "en": "Al Khuwair"
+      }
+     },
+     "visitFee": 5000,
+     "net": null,
+     "isRevisit": false
+    }
+   ]
+  },
+  "GET /api/tech/jobs?tab=past": {
+   "status": 200,
+   "body": [
+    {
+     "id": "805d50d8-39dd-4959-8765-4e057484750d",
+     "code": "KT-D5HRJR",
+     "status": "settled",
+     "problem": "لا يبرّد",
+     "problemEn": "Not cooling",
+     "window": {
+      "start": "2026-10-05T10:00:00.000Z",
+      "end": "2026-10-05T12:00:00.000Z"
+     },
+     "area": {
+      "wilayat": {
+       "ar": "بوشر",
+       "en": "Bawshar"
+      },
+      "neighbourhood": {
+       "ar": "الغبرة",
+       "en": "Al Ghubrah"
+      }
+     },
+     "visitFee": 5000,
+     "net": 19000,
+     "isRevisit": false
+    },
+    {
+     "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+     "code": "KT-ET0FP8",
+     "status": "closed_visit_only",
+     "problem": "لا يبرّد",
+     "problemEn": "Not cooling",
+     "window": {
+      "start": "2026-10-04T08:00:00.000Z",
+      "end": "2026-10-04T10:00:00.000Z"
+     },
+     "area": {
+      "wilayat": {
+       "ar": "السيب",
+       "en": "Seeb"
+      },
+      "neighbourhood": {
+       "ar": "المعبيلة",
+       "en": "Al Mabelah"
+      }
+     },
+     "visitFee": 5000,
+     "net": 4500,
+     "isRevisit": false
+    },
+    {
+     "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+     "code": "KT-0B3Q7X",
+     "status": "paid_out",
+     "problem": "لا يبرّد",
+     "problemEn": "Not cooling",
+     "window": {
+      "start": "2026-10-04T08:00:00.000Z",
+      "end": "2026-10-04T10:00:00.000Z"
+     },
+     "area": {
+      "wilayat": {
+       "ar": "السيب",
+       "en": "Seeb"
+      },
+      "neighbourhood": {
+       "ar": "الخوض",
+       "en": "Al Khoudh"
+      }
+     },
+     "visitFee": 5000,
+     "net": 19000,
+     "isRevisit": false
+    }
+   ]
+  },
+  "GET /api/notifications": {
+   "status": 200,
+   "body": [
+    {
+     "id": "1ed0b726-6d77-4214-b798-7811162971f3",
+     "key": "new_request",
+     "text": "طلب جديد في الخوض: لا يبرّد · الخميس، 8 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+     "link": "https://katf.example/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+     "read": false,
+     "at": "2026-10-08T05:03:03.000Z"
+    },
+    {
+     "id": "47852cb2-7bb1-4abc-b4a7-33dcbc24c31c",
+     "key": "new_request",
+     "text": "طلب جديد في الخوير: لا يبرّد · الأحد، 11 أكتوبر · 8:00 ص – 10:00 ص. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+     "link": "https://katf.example/tech/jobs/faea99f2-9b26-4b73-b1e2-a4023ef4b15b",
+     "read": false,
+     "at": "2026-10-08T04:32:02.000Z"
+    },
+    {
+     "id": "2a70d1ac-275c-4756-95d3-f112311d475d",
+     "key": "new_request",
+     "text": "طلب جديد في الموالح: لا يبرّد · الخميس، 8 أكتوبر · 10:00 ص – 12:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+     "link": "https://katf.example/tech/jobs/1f62a01a-e277-423d-88d2-f11284f56f46",
+     "read": false,
+     "at": "2026-10-08T04:31:01.000Z"
+    },
+    {
+     "id": "33bb777e-3173-4e74-8a0b-2f645f6bea31",
+     "key": "payout_sent",
+     "text": "تم تحويل 23.500 ر.ع إلى حسابك. المرجع DEMO-REF-1.",
+     "link": null,
+     "read": false,
+     "at": "2026-10-07T07:00:00.000Z"
+    },
+    {
+     "id": "23b9cd09-00c3-45bb-98a1-f507a2eef52c",
+     "key": "new_request",
+     "text": "طلب جديد في الغبرة: لا يبرّد · الاثنين، 5 أكتوبر · 2:00 م – 4:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+     "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+     "read": false,
+     "at": "2026-10-05T05:01:01.000Z"
+    },
+    {
+     "id": "9ded9ae9-786a-46c2-8a1e-7a044f41bac6",
+     "key": "quote_decision",
+     "text": "ردّ الزبون على عرض الطلب KT-D5HRJR: وافق ودفع — ابدأ العمل.",
+     "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+     "read": false,
+     "at": "2026-10-05T05:01:01.000Z"
+    },
+    {
+     "id": "1ad653d1-c7d1-481c-b853-e597601a5dc8",
+     "key": "job_confirmed_tech",
+     "text": "أكّد الزبون إنجاز الطلب KT-D5HRJR. يُصرف مستحقك في 8 أكتوبر 2026.",
+     "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+     "read": false,
+     "at": "2026-10-05T05:01:01.000Z"
+    },
+    {
+     "id": "e2983412-d55d-4255-bd28-f2a65842392b",
+     "key": "review_received",
+     "text": "حصلت على تقييم 4 نجوم على الطلب KT-D5HRJR.",
+     "link": null,
+     "read": false,
+     "at": "2026-10-05T05:01:01.000Z"
+    },
+    {
+     "id": "02f5786a-7ac8-4afa-944b-7438ae547c57",
+     "key": "new_request",
+     "text": "طلب جديد في المعبيلة: لا يبرّد · الأحد، 4 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+     "link": "https://katf.example/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c",
+     "read": false,
+     "at": "2026-10-04T03:05:05.000Z"
+    },
+    {
+     "id": "8f83ec86-83f2-43c2-8750-e10a3e1597c5",
+     "key": "quote_decision",
+     "text": "ردّ الزبون على عرض الطلب KT-ET0FP8: رفض العرض — أنهِ الزيارة.",
+     "link": "https://katf.example/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c",
+     "read": false,
+     "at": "2026-10-04T03:05:05.000Z"
+    },
+    {
+     "id": "4d4f7de2-e387-4925-aeec-633e186b20a0",
+     "key": "new_request",
+     "text": "طلب جديد في الخوض: لا يبرّد · الأحد، 4 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+     "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+     "read": false,
+     "at": "2026-10-04T03:04:04.000Z"
+    },
+    {
+     "id": "9941e22a-a770-4dcc-b312-2e4c15a44e92",
+     "key": "review_received",
+     "text": "حصلت على تقييم 5 نجوم على الطلب KT-0B3Q7X.",
+     "link": null,
+     "read": false,
+     "at": "2026-10-04T03:04:04.000Z"
+    },
+    {
+     "id": "98d426b2-1ada-449d-a3b5-89252da5bd58",
+     "key": "job_confirmed_tech",
+     "text": "أكّد الزبون إنجاز الطلب KT-0B3Q7X. يُصرف مستحقك في 7 أكتوبر 2026.",
+     "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+     "read": false,
+     "at": "2026-10-04T03:04:04.000Z"
+    },
+    {
+     "id": "35c052ce-f16f-492e-88c3-bae50c203dc7",
+     "key": "quote_decision",
+     "text": "ردّ الزبون على عرض الطلب KT-0B3Q7X: وافق ودفع — ابدأ العمل.",
+     "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+     "read": false,
+     "at": "2026-10-04T03:04:04.000Z"
+    },
+    {
+     "id": "89257805-fa40-4dc7-af7f-317afc599b60",
+     "key": "app_received",
+     "text": "وصلنا طلب انضمامك. نراجعه ونخبرك قريباً.",
+     "link": null,
+     "read": false,
+     "at": "2026-10-04T03:01:01.000Z"
+    },
+    {
+     "id": "db545a8d-9b3d-437b-a964-2d2e87efd5e3",
+     "key": "approved",
+     "text": "تم اعتماد حسابك. يمكنك الآن استقبال الطلبات. أهلاً بك في كتف.",
+     "link": null,
+     "read": false,
+     "at": "2026-10-04T03:01:01.000Z"
+    }
+   ]
+  },
+  "GET /api/tech/earnings": {
+   "status": 200,
+   "body": {
+    "awaitingConfirmation": [],
+    "scheduled": 19000,
+    "scheduledItems": [
+     {
+      "id": "60656977-722f-472b-8eb2-814fad023c64",
+      "bookingId": "805d50d8-39dd-4959-8765-4e057484750d",
+      "amount": 19000,
+      "dueAt": "2026-10-08T05:01:01.000Z",
+      "status": "scheduled",
+      "due": true
+     }
+    ],
+    "inBatch": 0,
+    "paid": 23500,
+    "jobs": [
+     {
+      "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+      "code": "KT-0B3Q7X",
+      "status": "paid_out",
+      "customerPaid": 20000,
+      "commissionBps": 500,
+      "commission": 1000,
+      "net": 19000,
+      "payoutDueAt": "2026-10-07T03:04:04.000Z",
+      "date": "2026-10-04T08:00:00.000Z"
+     },
+     {
+      "id": "805d50d8-39dd-4959-8765-4e057484750d",
+      "code": "KT-D5HRJR",
+      "status": "settled",
+      "customerPaid": 20000,
+      "commissionBps": 500,
+      "commission": 1000,
+      "net": 19000,
+      "payoutDueAt": "2026-10-08T05:01:01.000Z",
+      "date": "2026-10-05T10:00:00.000Z"
+     },
+     {
+      "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+      "code": "KT-ET0FP8",
+      "status": "closed_visit_only",
+      "customerPaid": 5000,
+      "commissionBps": 500,
+      "commission": 500,
+      "net": 4500,
+      "payoutDueAt": "2026-10-07T03:05:05.000Z",
+      "date": "2026-10-04T08:00:00.000Z"
+     }
+    ],
+    "payouts": [
+     {
+      "id": "6e701d37-e7d4-49c2-9a16-34fc74dfd4df",
+      "amount": 23500,
+      "status": "paid",
+      "bankReference": "DEMO-REF-1",
+      "paidAt": "2026-10-07T07:00:00.000Z",
+      "createdAt": "2026-10-07T07:00:00.000Z"
+     }
+    ],
+    "adjustments": []
+   }
+  },
+  "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+   "status": 200,
+   "body": {
+    "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+    "code": "KT-ZTXG5Z",
+    "status": "requested",
+    "step": "accepted",
+    "isRevisit": false,
+    "entryMode": "direct_link",
+    "problem": {
+     "id": "not_cooling",
+     "ar": "لا يبرّد",
+     "en": "Not cooling"
+    },
+    "units": [
+     {
+      "type": "split",
+      "count": 1
+     }
+    ],
+    "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+    "media": [
+     {
+      "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+      "url": "katf-demo-image:photo"
+     }
+    ],
+    "window": {
+     "start": "2026-10-08T08:00:00.000Z",
+     "end": "2026-10-08T10:00:00.000Z"
+    },
+    "area": {
+     "wilayat": {
+      "ar": "السيب",
+      "en": "Seeb"
+     },
+     "neighbourhood": {
+      "ar": "الخوض",
+      "en": "Al Khoudh"
+     }
+    },
+    "approx": {
+     "lat": 23.59,
+     "lng": 58.15
+    },
+    "location": null,
+    "address": null,
+    "customerFirstName": null,
+    "acceptDeadline": "2026-10-08T05:18:03.000Z",
+    "money": {
+     "visitFee": 5000,
+     "commissionBps": 500,
+     "commissionReason": "own_link",
+     "visitOnlyNet": 4500,
+     "quoteTotal": null,
+     "expectedNet": null,
+     "technicianNet": null,
+     "paid": 5000,
+     "payoutDueAt": null
+    },
+    "quote": null,
+    "diagnosis": null,
+    "completion": null,
+    "arrival": null,
+    "timeline": {
+     "requested": "2026-10-08T05:03:03.000Z",
+     "pending_payment": "2026-10-08T05:03:03.000Z"
+    },
+    "etaMinutes": null,
+    "callAttempts": 0,
+    "waitUntil": null,
+    "freeCancelUntil": 1791436383000,
+    "policy": {
+     "geofenceMeters": 300,
+     "warrantyDays": 14,
+     "quoteExpiryMinutes": 60,
+     "strikeHours": 2,
+     "probationMaxQuote": 100000
+    }
+   }
+  },
+  "GET /api/bookings/a0b99631-d8a8-4181-8714-30fc2a69c2a2/messages": {
+   "status": 200,
+   "body": []
+  },
+  "GET /api/tech/jobs/1f62a01a-e277-423d-88d2-f11284f56f46": {
+   "status": 200,
+   "body": {
+    "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+    "code": "KT-GX2TQ1",
+    "status": "accepted",
+    "step": "accepted",
+    "isRevisit": false,
+    "entryMode": "direct_link",
+    "problem": {
+     "id": "not_cooling",
+     "ar": "لا يبرّد",
+     "en": "Not cooling"
+    },
+    "units": [
+     {
+      "type": "split",
+      "count": 1
+     }
+    ],
+    "problemText": "المكيف لا يبرد (طلب تجريبي)",
+    "media": [
+     {
+      "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+      "url": "katf-demo-image:photo"
+     }
+    ],
+    "window": {
+     "start": "2026-10-08T06:00:00.000Z",
+     "end": "2026-10-08T08:00:00.000Z"
+    },
+    "area": {
+     "wilayat": {
+      "ar": "السيب",
+      "en": "Seeb"
+     },
+     "neighbourhood": {
+      "ar": "الموالح",
+      "en": "Al Mawaleh"
+     }
+    },
+    "approx": {
+     "lat": 23.6,
+     "lng": 58.21
+    },
+    "location": {
+     "lat": 23.601399999999998,
+     "lng": 58.2093
+    },
+    "address": {
+     "wayNo": "1234",
+     "flatNo": null,
+     "wilayat": "seeb",
+     "landmark": "قرب المسجد",
+     "buildingNo": "56",
+     "neighbourhood": "mawaleh",
+     "notes": "الطابق الثاني"
+    },
+    "customerFirstName": "نورة",
+    "acceptDeadline": "2026-10-08T04:46:01.000Z",
+    "money": {
+     "visitFee": 5000,
+     "commissionBps": 500,
+     "commissionReason": "own_link",
+     "visitOnlyNet": 4500,
+     "quoteTotal": null,
+     "expectedNet": null,
+     "technicianNet": null,
+     "paid": 5000,
+     "payoutDueAt": null
+    },
+    "quote": null,
+    "diagnosis": null,
+    "completion": null,
+    "arrival": null,
+    "timeline": {
+     "accepted": "2026-10-08T04:31:01.000Z",
+     "requested": "2026-10-08T04:31:01.000Z",
+     "pending_payment": "2026-10-08T04:31:01.000Z"
+    },
+    "etaMinutes": null,
+    "callAttempts": 0,
+    "waitUntil": null,
+    "freeCancelUntil": 1791434461000,
+    "policy": {
+     "geofenceMeters": 300,
+     "warrantyDays": 14,
+     "quoteExpiryMinutes": 60,
+     "strikeHours": 2,
+     "probationMaxQuote": 100000
+    }
+   }
+  },
+  "GET /api/bookings/1f62a01a-e277-423d-88d2-f11284f56f46/messages": {
+   "status": 200,
+   "body": [
+    {
+     "id": "e00042b9-edac-4b2c-8c6c-7e24e72b57b0",
+     "mine": false,
+     "role": "customer",
+     "body": "أنا في البيت من الساعة 10 (رسالة تجريبية)",
+     "flagged": false,
+     "at": "2026-10-08T04:31:01.000Z"
+    },
+    {
+     "id": "85713741-a880-4c5a-864a-2d50aa60f441",
+     "mine": false,
+     "role": "customer",
+     "body": "أو كلمني على•••",
+     "flagged": true,
+     "at": "2026-10-08T04:31:01.000Z"
+    }
+   ]
+  },
+  "GET /api/tech/jobs/faea99f2-9b26-4b73-b1e2-a4023ef4b15b": {
+   "status": 200,
+   "body": {
+    "id": "faea99f2-9b26-4b73-b1e2-a4023ef4b15b",
+    "code": "KT-HXHDJH",
+    "status": "accepted",
+    "step": "accepted",
+    "isRevisit": false,
+    "entryMode": "direct_link",
+    "problem": {
+     "id": "not_cooling",
+     "ar": "لا يبرّد",
+     "en": "Not cooling"
+    },
+    "units": [
+     {
+      "type": "split",
+      "count": 1
+     }
+    ],
+    "problemText": "المكيف لا يبرد (طلب تجريبي)",
+    "media": [
+     {
+      "id": "3c9dd8d4-1e77-4ee2-802a-672ac5ed6913",
+      "url": "katf-demo-image:photo"
+     }
+    ],
+    "window": {
+     "start": "2026-10-11T04:00:00.000Z",
+     "end": "2026-10-11T06:00:00.000Z"
+    },
+    "area": {
+     "wilayat": {
+      "ar": "بوشر",
+      "en": "Bawshar"
+     },
+     "neighbourhood": {
+      "ar": "الخوير",
+      "en": "Al Khuwair"
+     }
+    },
+    "approx": {
+     "lat": 23.59,
+     "lng": 58.43
+    },
+    "location": {
+     "lat": 23.5865,
+     "lng": 58.4294
+    },
+    "address": {
+     "wayNo": "1234",
+     "flatNo": null,
+     "wilayat": "bawshar",
+     "landmark": "قرب المسجد",
+     "buildingNo": "56",
+     "neighbourhood": "khuwair",
+     "notes": "الطابق الثاني"
+    },
+    "customerFirstName": "هلال",
+    "acceptDeadline": "2026-10-08T04:47:02.000Z",
+    "money": {
+     "visitFee": 5000,
+     "commissionBps": 500,
+     "commissionReason": "own_link",
+     "visitOnlyNet": 4500,
+     "quoteTotal": null,
+     "expectedNet": null,
+     "technicianNet": null,
+     "paid": 5000,
+     "payoutDueAt": null
+    },
+    "quote": null,
+    "diagnosis": null,
+    "completion": null,
+    "arrival": null,
+    "timeline": {
+     "accepted": "2026-10-08T04:32:02.000Z",
+     "requested": "2026-10-08T04:32:02.000Z",
+     "pending_payment": "2026-10-08T04:32:02.000Z"
+    },
+    "etaMinutes": null,
+    "callAttempts": 0,
+    "waitUntil": null,
+    "freeCancelUntil": 1791434522000,
+    "policy": {
+     "geofenceMeters": 300,
+     "warrantyDays": 14,
+     "quoteExpiryMinutes": 60,
+     "strikeHours": 2,
+     "probationMaxQuote": 100000
+    }
+   }
+  },
+  "GET /api/bookings/faea99f2-9b26-4b73-b1e2-a4023ef4b15b/messages": {
+   "status": 200,
+   "body": []
+  },
+  "GET /api/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d": {
+   "status": 200,
+   "body": {
+    "id": "805d50d8-39dd-4959-8765-4e057484750d",
+    "code": "KT-D5HRJR",
+    "status": "settled",
+    "step": "customer_confirmed",
+    "isRevisit": false,
+    "entryMode": "direct_link",
+    "problem": {
+     "id": "not_cooling",
+     "ar": "لا يبرّد",
+     "en": "Not cooling"
+    },
+    "units": [
+     {
+      "type": "split",
+      "count": 1
+     }
+    ],
+    "problemText": "المكيف لا يبرد (طلب تجريبي)",
+    "media": [
+     {
+      "id": "46ab2868-9d00-4870-bfe3-2a710f0f4c6d",
+      "url": "katf-demo-image:photo"
+     }
+    ],
+    "window": {
+     "start": "2026-10-05T10:00:00.000Z",
+     "end": "2026-10-05T12:00:00.000Z"
+    },
+    "area": {
+     "wilayat": {
+      "ar": "بوشر",
+      "en": "Bawshar"
+     },
+     "neighbourhood": {
+      "ar": "الغبرة",
+      "en": "Al Ghubrah"
+     }
+    },
+    "approx": {
+     "lat": 23.6,
+     "lng": 58.4
+    },
+    "location": {
+     "lat": 23.5961,
+     "lng": 58.4016
+    },
+    "address": {
+     "wayNo": "1234",
+     "flatNo": null,
+     "wilayat": "bawshar",
+     "landmark": "قرب المسجد",
+     "buildingNo": "56",
+     "neighbourhood": "ghubra",
+     "notes": "الطابق الثاني"
+    },
+    "customerFirstName": "فاطمة",
+    "acceptDeadline": "2026-10-05T05:16:01.000Z",
+    "money": {
+     "visitFee": 5000,
+     "commissionBps": 500,
+     "commissionReason": "own_link",
+     "visitOnlyNet": 4500,
+     "quoteTotal": 20000,
+     "expectedNet": 19000,
+     "technicianNet": 19000,
+     "paid": 20000,
+     "payoutDueAt": "2026-10-08T05:01:01.000Z"
+    },
+    "quote": {
+     "id": "8ddca7b1-6f9a-4b03-9f8a-19c522e7ab29",
+     "version": 1,
+     "status": "approved",
+     "items": [
+      {
+       "kind": "labor",
+       "label": "تنظيف وإعادة تعبئة الغاز",
+       "qty": 1,
+       "unitPrice": 12000,
+       "amount": 12000
+      },
+      {
+       "kind": "part",
+       "label": "صمام",
+       "qty": 1,
+       "unitPrice": 8000,
+       "amount": 8000
+      }
+     ],
+     "total": 20000,
+     "laborTotal": 12000,
+     "partsTotal": 8000,
+     "visitFee": 5000,
+     "alreadyPaid": 20000,
+     "due": 0,
+     "validUntil": "2026-10-05T06:01:01.000Z",
+     "warrantyDays": 14
+    },
+    "diagnosis": {
+     "notes": "نقص غاز وتسريب بسيط عند الصمام",
+     "faults": [
+      "not_cooling"
+     ],
+     "photos": [
+      {
+       "id": "abe0b1ef-6628-4175-bd4f-881cab71ca06",
+       "url": "katf-demo-image:photo"
+      },
+      {
+       "id": "fde54793-13d7-413c-bb22-019143cbd7f9",
+       "url": "katf-demo-image:photo"
+      }
+     ],
+     "durationMin": 60
+    },
+    "completion": {
+     "after": [
+      {
+       "id": "31f57702-f52a-4b6e-b9ad-c6f9f0375c69",
+       "url": "katf-demo-image:photo"
+      }
+     ],
+     "notes": "تم الإصلاح وتجربة التبريد",
+     "parts": [
+      {
+       "label": "صمام"
+      }
+     ],
+     "before": [
+      {
+       "id": "f0d343cd-9989-4080-87ba-f4dc30e0b264",
+       "url": "katf-demo-image:photo"
+      }
+     ]
+    },
+    "arrival": {
+     "lat": 23.5966,
+     "lng": 58.4016,
+     "distance": 56,
+     "override": false,
+     "simulated": false,
+     "photoFileId": "acd4cc71-5fef-4a60-8768-33ce5145f16b"
+    },
+    "timeline": {
+     "arrived": "2026-10-05T05:01:01.000Z",
+     "settled": "2026-10-05T05:01:01.000Z",
+     "accepted": "2026-10-05T05:01:01.000Z",
+     "confirmed": "2026-10-05T05:01:01.000Z",
+     "requested": "2026-10-05T05:01:01.000Z",
+     "diagnosing": "2026-10-05T05:01:01.000Z",
+     "on_the_way": "2026-10-05T05:01:01.000Z",
+     "quote_sent": "2026-10-05T05:01:01.000Z",
+     "in_progress": "2026-10-05T05:01:01.000Z",
+     "pending_payment": "2026-10-05T05:01:01.000Z",
+     "repair_payment_pending": "2026-10-05T05:01:01.000Z",
+     "completed_pending_confirmation": "2026-10-05T05:01:01.000Z"
+    },
+    "etaMinutes": 20,
+    "callAttempts": 0,
+    "waitUntil": 1791177361000,
+    "freeCancelUntil": 1791177061000,
+    "policy": {
+     "geofenceMeters": 300,
+     "warrantyDays": 14,
+     "quoteExpiryMinutes": 60,
+     "strikeHours": 2,
+     "probationMaxQuote": 100000
+    }
+   }
+  },
+  "GET /api/bookings/805d50d8-39dd-4959-8765-4e057484750d/messages": {
+   "status": 200,
+   "body": []
+  },
+  "GET /api/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c": {
+   "status": 200,
+   "body": {
+    "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+    "code": "KT-ET0FP8",
+    "status": "closed_visit_only",
+    "step": "accepted",
+    "isRevisit": false,
+    "entryMode": "direct_link",
+    "problem": {
+     "id": "not_cooling",
+     "ar": "لا يبرّد",
+     "en": "Not cooling"
+    },
+    "units": [
+     {
+      "type": "split",
+      "count": 1
+     }
+    ],
+    "problemText": "المكيف لا يبرد (طلب تجريبي)",
+    "media": [
+     {
+      "id": "72978092-2e86-4f00-a421-62da7bb03eed",
+      "url": "katf-demo-image:photo"
+     }
+    ],
+    "window": {
+     "start": "2026-10-04T08:00:00.000Z",
+     "end": "2026-10-04T10:00:00.000Z"
+    },
+    "area": {
+     "wilayat": {
+      "ar": "السيب",
+      "en": "Seeb"
+     },
+     "neighbourhood": {
+      "ar": "المعبيلة",
+      "en": "Al Mabelah"
+     }
+    },
+    "approx": {
+     "lat": 23.62,
+     "lng": 58.11
+    },
+    "location": {
+     "lat": 23.619799999999998,
+     "lng": 58.1129
+    },
+    "address": {
+     "wayNo": "1234",
+     "flatNo": null,
+     "wilayat": "seeb",
+     "landmark": "قرب المسجد",
+     "buildingNo": "56",
+     "neighbourhood": "mabela",
+     "notes": "الطابق الثاني"
+    },
+    "customerFirstName": "أحمد",
+    "acceptDeadline": "2026-10-04T03:20:05.000Z",
+    "money": {
+     "visitFee": 5000,
+     "commissionBps": 500,
+     "commissionReason": "own_link",
+     "visitOnlyNet": 4500,
+     "quoteTotal": null,
+     "expectedNet": null,
+     "technicianNet": 4500,
+     "paid": 5000,
+     "payoutDueAt": "2026-10-07T03:05:05.000Z"
+    },
+    "quote": null,
+    "diagnosis": {
+     "notes": "نقص غاز وتسريب بسيط عند الصمام",
+     "faults": [
+      "not_cooling"
+     ],
+     "photos": [
+      {
+       "id": "1a5ff364-dcbd-4a13-a23d-a23563e2b729",
+       "url": "katf-demo-image:photo"
+      },
+      {
+       "id": "ef5c7eab-bb1a-456a-9940-7843dbaef9a2",
+       "url": "katf-demo-image:photo"
+      }
+     ],
+     "durationMin": 60
+    },
+    "completion": null,
+    "arrival": {
+     "lat": 23.620299999999997,
+     "lng": 58.1129,
+     "distance": 56,
+     "override": false,
+     "simulated": false,
+     "photoFileId": "45446aa4-cee7-4f91-b191-89d59931d440"
+    },
+    "timeline": {
+     "arrived": "2026-10-04T03:05:05.000Z",
+     "accepted": "2026-10-04T03:05:05.000Z",
+     "requested": "2026-10-04T03:05:05.000Z",
+     "diagnosing": "2026-10-04T03:05:05.000Z",
+     "on_the_way": "2026-10-04T03:05:05.000Z",
+     "quote_sent": "2026-10-04T03:05:05.000Z",
+     "pending_payment": "2026-10-04T03:05:05.000Z",
+     "closed_visit_only": "2026-10-04T03:05:05.000Z"
+    },
+    "etaMinutes": 10,
+    "callAttempts": 0,
+    "waitUntil": 1791084005000,
+    "freeCancelUntil": 1791083705000,
+    "policy": {
+     "geofenceMeters": 300,
+     "warrantyDays": 14,
+     "quoteExpiryMinutes": 60,
+     "strikeHours": 2,
+     "probationMaxQuote": 100000
+    }
+   }
+  },
+  "GET /api/bookings/1bea9cd5-9792-4d74-b4ef-83117819d30c/messages": {
+   "status": 200,
+   "body": []
+  },
+  "GET /api/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1": {
+   "status": 200,
+   "body": {
+    "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+    "code": "KT-0B3Q7X",
+    "status": "paid_out",
+    "step": "payout",
+    "isRevisit": false,
+    "entryMode": "direct_link",
+    "problem": {
+     "id": "not_cooling",
+     "ar": "لا يبرّد",
+     "en": "Not cooling"
+    },
+    "units": [
+     {
+      "type": "split",
+      "count": 1
+     }
+    ],
+    "problemText": "المكيف لا يبرد (طلب تجريبي)",
+    "media": [
+     {
+      "id": "d7e6cef2-5406-423f-9466-031b88c9d9ef",
+      "url": "katf-demo-image:photo"
+     }
+    ],
+    "window": {
+     "start": "2026-10-04T08:00:00.000Z",
+     "end": "2026-10-04T10:00:00.000Z"
+    },
+    "area": {
+     "wilayat": {
+      "ar": "السيب",
+      "en": "Seeb"
+     },
+     "neighbourhood": {
+      "ar": "الخوض",
+      "en": "Al Khoudh"
+     }
+    },
+    "approx": {
+     "lat": 23.59,
+     "lng": 58.15
+    },
+    "location": {
+     "lat": 23.5872,
+     "lng": 58.1543
+    },
+    "address": {
+     "wayNo": "1234",
+     "flatNo": null,
+     "wilayat": "seeb",
+     "landmark": "قرب المسجد",
+     "buildingNo": "56",
+     "neighbourhood": "khoud",
+     "notes": "الطابق الثاني"
+    },
+    "customerFirstName": "مريم",
+    "acceptDeadline": "2026-10-04T03:19:04.000Z",
+    "money": {
+     "visitFee": 5000,
+     "commissionBps": 500,
+     "commissionReason": "own_link",
+     "visitOnlyNet": 4500,
+     "quoteTotal": 20000,
+     "expectedNet": 19000,
+     "technicianNet": 19000,
+     "paid": 20000,
+     "payoutDueAt": "2026-10-07T03:04:04.000Z"
+    },
+    "quote": {
+     "id": "e1e5ac5e-ffe0-4ff5-acdb-476de3910141",
+     "version": 1,
+     "status": "approved",
+     "items": [
+      {
+       "kind": "labor",
+       "label": "تنظيف وإعادة تعبئة الغاز",
+       "qty": 1,
+       "unitPrice": 12000,
+       "amount": 12000
+      },
+      {
+       "kind": "part",
+       "label": "صمام",
+       "qty": 1,
+       "unitPrice": 8000,
+       "amount": 8000
+      }
+     ],
+     "total": 20000,
+     "laborTotal": 12000,
+     "partsTotal": 8000,
+     "visitFee": 5000,
+     "alreadyPaid": 20000,
+     "due": 0,
+     "validUntil": "2026-10-04T04:04:04.000Z",
+     "warrantyDays": 14
+    },
+    "diagnosis": {
+     "notes": "نقص غاز وتسريب بسيط عند الصمام",
+     "faults": [
+      "not_cooling"
+     ],
+     "photos": [
+      {
+       "id": "711b021b-37da-461a-b523-c689bf8801fa",
+       "url": "katf-demo-image:photo"
+      },
+      {
+       "id": "1f14f459-17b7-46c2-a661-44d5d70e50b4",
+       "url": "katf-demo-image:photo"
+      }
+     ],
+     "durationMin": 60
+    },
+    "completion": {
+     "after": [
+      {
+       "id": "04c6427d-4656-492d-a342-8851815919ca",
+       "url": "katf-demo-image:photo"
+      }
+     ],
+     "notes": "تم الإصلاح وتجربة التبريد",
+     "parts": [
+      {
+       "label": "صمام"
+      }
+     ],
+     "before": [
+      {
+       "id": "e76840aa-dee0-4760-9a45-80327c9cad0b",
+       "url": "katf-demo-image:photo"
+      }
+     ]
+    },
+    "arrival": {
+     "lat": 23.587699999999998,
+     "lng": 58.1543,
+     "distance": 56,
+     "override": false,
+     "simulated": false,
+     "photoFileId": "2fc9c7b5-3969-41a8-bb9c-1161d8365d1b"
+    },
+    "timeline": {
+     "arrived": "2026-10-04T03:04:04.000Z",
+     "settled": "2026-10-04T03:04:04.000Z",
+     "accepted": "2026-10-04T03:04:04.000Z",
+     "paid_out": "2026-10-07T07:00:00.000Z",
+     "confirmed": "2026-10-04T03:04:04.000Z",
+     "requested": "2026-10-04T03:04:04.000Z",
+     "diagnosing": "2026-10-04T03:04:04.000Z",
+     "on_the_way": "2026-10-04T03:04:04.000Z",
+     "quote_sent": "2026-10-04T03:04:04.000Z",
+     "in_progress": "2026-10-04T03:04:04.000Z",
+     "pending_payment": "2026-10-04T03:04:04.000Z",
+     "repair_payment_pending": "2026-10-04T03:04:04.000Z",
+     "completed_pending_confirmation": "2026-10-04T03:04:04.000Z"
+    },
+    "etaMinutes": 20,
+    "callAttempts": 0,
+    "waitUntil": 1791083944000,
+    "freeCancelUntil": 1791083644000,
+    "policy": {
+     "geofenceMeters": 300,
+     "warrantyDays": 14,
+     "quoteExpiryMinutes": 60,
+     "strikeHours": 2,
+     "probationMaxQuote": 100000
+    }
+   }
+  },
+  "GET /api/bookings/acbb1e8f-9ff2-4d94-934d-2585e44d60c1/messages": {
+   "status": 200,
+   "body": []
+  },
+  "GET /api/tech/profile": {
+   "status": 200,
+   "body": {
+    "status": "approved_probation",
+    "publicName": "سالم ت.",
+    "photoFileId": "44afa7c2-e503-41ed-920f-6ca73e80a2c4",
+    "bio": "فني مكيفات بخبرة",
+    "experienceBand": "5-10",
+    "services": [
+     "cleaning",
+     "gas",
+     "leak"
+    ],
+    "acTypes": [
+     "split"
+    ],
+    "brands": [
+     "LG"
+    ],
+    "areas": [
+     {
+      "wilayat": "seeb",
+      "neighbourhoods": []
+     },
+     {
+      "wilayat": "bawshar",
+      "neighbourhoods": []
+     }
+    ],
+    "workingDays": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "workingHours": {
+     "to": "20:00",
+     "from": "08:00"
+    },
+    "maxJobsPerDay": 4,
+    "vacationUntil": null,
+    "available": true,
+    "bookingSlug": "salim-demo-4s18",
+    "rating": 4.5,
+    "ratingCount": 2,
+    "jobsCompleted": 2,
+    "probationJobsLeft": 3,
+    "workPhotoIds": [
+     "a7685eb4-927e-4858-9b83-7c3ca4f28a7d",
+     "674af55b-eb03-4982-8883-0b7470ea59eb",
+     "f42d07d6-d797-4509-87a1-4ba3ba2db445"
+    ],
+    "bank": {
+     "bankName": "بنك مسقط",
+     "ibanMasked": "OM81 •••• •••• 1001",
+     "lockedUntil": null,
+     "nameMismatch": false
+    },
+    "documents": [
+     {
+      "id": "afdc5c69-a054-4bdb-9997-0b584a621e4a",
+      "type": "civil_id_front",
+      "status": "approved",
+      "expiresAt": "2027-11-08"
+     },
+     {
+      "id": "5567ceec-92da-4f34-ab32-e56283fecb06",
+      "type": "civil_id_back",
+      "status": "approved",
+      "expiresAt": null
+     },
+     {
+      "id": "6d7a479c-21c2-4a97-a8fb-e1c3a5b09374",
+      "type": "selfie_with_id",
+      "status": "approved",
+      "expiresAt": null
+     }
+    ],
+    "pendingEdits": [],
+    "strikes": [],
+    "commissionOwnPct": null,
+    "photoUrl": "katf-demo-image:profile",
+    "workPhotos": [
+     {
+      "id": "a7685eb4-927e-4858-9b83-7c3ca4f28a7d",
+      "url": "katf-demo-image:photo"
+     },
+     {
+      "id": "674af55b-eb03-4982-8883-0b7470ea59eb",
+      "url": "katf-demo-image:photo"
+     },
+     {
+      "id": "f42d07d6-d797-4509-87a1-4ba3ba2db445",
+      "url": "katf-demo-image:photo"
+     }
+    ]
+   }
+  },
+  "GET /api/tech/link": {
+   "status": 200,
+   "body": {
+    "url": "https://katf.example/t/salim-demo-4s18",
+    "qrSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 31 31\" shape-rendering=\"crispEdges\"><path fill=\"#FFFFFF\" d=\"M0 0h31v31H0z\"/><path stroke=\"#10303A\" d=\"M1 1.5h7m1 0h3m1 0h2m3 0h1m4 0h7M1 2.5h1m5 0h1m3 0h2m1 0h1m4 0h1m1 0h1m1 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m1 0h1m3 0h2m1 0h1m1 0h2m3 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m3 0h4m2 0h2m1 0h1m2 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m2 0h5m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h4m4 0h3m3 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 8.5h2m1 0h1m1 0h1m1 0h1M1 9.5h1m1 0h1m3 0h2m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m3 0h1m2 0h1m1 0h1M1 10.5h2m2 0h1m3 0h1m2 0h5m2 0h2m2 0h2m3 0h2M2 11.5h3m2 0h1m1 0h2m1 0h5m2 0h4m1 0h4m1 0h1M3 12.5h4m2 0h3m4 0h2m1 0h1m4 0h2M4 13.5h1m2 0h2m1 0h1m1 0h4m1 0h1m2 0h1m2 0h2m4 0h1M1 14.5h2m1 0h2m4 0h1m1 0h1m1 0h1m1 0h2m2 0h1m2 0h2m2 0h3M1 15.5h1m2 0h1m2 0h2m2 0h1m4 0h1m1 0h4m3 0h2m2 0h1M2 16.5h2m4 0h2m2 0h3m2 0h1m1 0h1m2 0h2M2 17.5h1m1 0h1m1 0h4m2 0h1m1 0h1m2 0h1m2 0h1m2 0h2m1 0h1m2 0h1M3 18.5h1m1 0h2m3 0h1m1 0h2m2 0h3m1 0h1m1 0h3m1 0h4M1 19.5h2m1 0h7m1 0h5m1 0h1m1 0h1m1 0h2m5 0h1M3 20.5h1m2 0h1m4 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2M1 21.5h4m2 0h4m3 0h4m2 0h7m1 0h1M9 22.5h1m1 0h2m1 0h5m1 0h2m3 0h3m1 0h1M1 23.5h7m1 0h1m6 0h4m1 0h1m1 0h1m1 0h1m3 0h1M1 24.5h1m5 0h1m3 0h4m2 0h1m1 0h1m1 0h1m3 0h2m1 0h2M1 25.5h1m1 0h3m1 0h1m2 0h5m1 0h2m2 0h7m2 0h1M1 26.5h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h3m2 0h2m2 0h3m1 0h1M1 27.5h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h2m1 0h1m1 0h1m4 0h5M1 28.5h1m5 0h1m2 0h1m2 0h2m2 0h1m1 0h4m1 0h3M1 29.5h7m1 0h1m1 0h5m1 0h1m1 0h5m2 0h1m2 0h1\"/></svg>\n",
+    "ownCustomers": 6,
+    "repeatCustomers": 0,
+    "ownCommissionBps": 500,
+    "standardCommissionBps": 1500
+   }
+  },
+  "GET /api/tech/reviews": {
+   "status": 200,
+   "body": {
+    "distribution": [
+     0,
+     0,
+     0,
+     1,
+     1
+    ],
+    "reviews": [
+     {
+      "id": "2dc9d9e1-3e09-4ebf-85a8-e61e6a138790",
+      "rating": 4,
+      "tags": [
+       "on_time"
+      ],
+      "comment": "عمل جيد، تأخر قليلاً (تقييم تجريبي)",
+      "reply": null,
+      "at": "2026-10-05T05:01:01.000Z"
+     },
+     {
+      "id": "c0967cd9-3813-474a-a5b7-403c58f8becb",
+      "rating": 5,
+      "tags": [
+       "on_time"
+      ],
+      "comment": "ممتاز وفي الموعد (تقييم تجريبي)",
+      "reply": null,
+      "at": "2026-10-04T03:04:04.000Z"
+     }
+    ]
+   }
+  },
+  "GET /api/tech/catalog": {
+   "status": 200,
+   "body": {
+    "catalog": [
+     {
+      "id": "8677e447-8751-4e6a-ae9b-cfd3858bd45b",
+      "category": "ac",
+      "nameAr": "فحص وتشخيص",
+      "nameEn": "Inspection and diagnosis",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 30,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 0,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "95056626-d716-4b45-9c0e-bb28ad8f02d3",
+      "category": "ac",
+      "nameAr": "تنظيف وغسيل",
+      "nameEn": "Cleaning and washing",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 60,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 1,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "c0ea9f08-366c-47ad-a5bb-506cc241115c",
+      "category": "ac",
+      "nameAr": "تعبئة غاز",
+      "nameEn": "Gas refill",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 45,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 2,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "fe323ce8-d8fb-474c-9aaa-ffe841019a41",
+      "category": "ac",
+      "nameAr": "إصلاح تسريب",
+      "nameEn": "Leak repair",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 90,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 3,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "86b991f7-2565-44cc-9b23-e2acb59d36bd",
+      "category": "ac",
+      "nameAr": "كمبروسر",
+      "nameEn": "Compressor",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 180,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 4,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "e23ac94e-1088-4cbf-bd75-57743592b976",
+      "category": "ac",
+      "nameAr": "لوحة إلكترونية",
+      "nameEn": "Control board",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 90,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 5,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "1516002d-135b-4d3c-8333-6b1396591a19",
+      "category": "ac",
+      "nameAr": "تركيب وفك",
+      "nameEn": "Install and remove",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 120,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 6,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     },
+     {
+      "id": "8ed3d2ae-e274-4028-8939-bb65dddc35cb",
+      "category": "ac",
+      "nameAr": "مكيّفات مركزية ومخفية",
+      "nameEn": "Central and ducted units",
+      "descriptionAr": null,
+      "descriptionEn": null,
+      "durationMin": 120,
+      "priceGuideMin": null,
+      "priceGuideMax": null,
+      "active": true,
+      "sort": 7,
+      "updatedAt": "2026-10-04T03:00:00.000Z"
+     }
+    ],
+    "services": [
+     {
+      "id": "cleaning",
+      "ar": "تنظيف وغسيل",
+      "en": "Cleaning and washing"
+     },
+     {
+      "id": "gas",
+      "ar": "تعبئة غاز",
+      "en": "Gas refill"
+     },
+     {
+      "id": "leak",
+      "ar": "إصلاح تسريب",
+      "en": "Leak repair"
+     },
+     {
+      "id": "compressor",
+      "ar": "كمبروسر",
+      "en": "Compressor"
+     },
+     {
+      "id": "board",
+      "ar": "لوحة إلكترونية",
+      "en": "Control board"
+     },
+     {
+      "id": "install",
+      "ar": "تركيب وفك",
+      "en": "Install and remove"
+     },
+     {
+      "id": "diagnosis",
+      "ar": "فحص وتشخيص",
+      "en": "Inspection and diagnosis"
+     },
+     {
+      "id": "central",
+      "ar": "مكيّفات مركزية ومخفية",
+      "en": "Central and ducted units"
+     }
+    ]
+   }
+  },
+  "GET /api/tech/statement?month=2026-10": {
+   "status": 200,
+   "body": {
+    "month": "2026-10",
+    "jobs": [
+     {
+      "code": "KT-ET0FP8",
+      "date": "2026-10-04T08:00:00.000Z",
+      "status": "closed_visit_only",
+      "customerPaid": 5000,
+      "commission": 500,
+      "net": 4500
+     },
+     {
+      "code": "KT-0B3Q7X",
+      "date": "2026-10-04T08:00:00.000Z",
+      "status": "paid_out",
+      "customerPaid": 20000,
+      "commission": 1000,
+      "net": 19000
+     },
+     {
+      "code": "KT-D5HRJR",
+      "date": "2026-10-05T10:00:00.000Z",
+      "status": "settled",
+      "customerPaid": 20000,
+      "commission": 1000,
+      "net": 19000
+     }
+    ],
+    "adjustments": [],
+    "payouts": [
+     {
+      "amount": 23500,
+      "reference": "DEMO-REF-1",
+      "date": "2026-10-07T07:00:00.000Z"
+     }
+    ],
+    "totals": {
+     "net": 42500,
+     "commission": 2500,
+     "paid": 23500
+    },
+    "technician": "سالم ت.",
+    "appName": "كتف",
+    "company": "",
+    "cr": ""
+   }
+  },
+  "GET /api/tech/statement?month=2026-09": {
+   "status": 200,
+   "body": {
+    "month": "2026-09",
+    "jobs": [],
+    "adjustments": [],
+    "payouts": [],
+    "totals": {
+     "net": 0,
+     "commission": 0,
+     "paid": 0
+    },
+    "technician": "سالم ت.",
+    "appName": "كتف",
+    "company": "",
+    "cr": ""
+   }
+  },
+  "GET /api/terms/pending": {
+   "status": 200,
+   "body": []
+  },
+  "GET /api/legal": {
+   "status": 200,
+   "body": [
+    {
+     "type": "technician_agreement",
+     "id": "e5b67635-927a-4443-8b55-2218ebd8eb3b",
+     "version": "0.1",
+     "title": "اتفاقية الفني",
+     "isDraft": true,
+     "publishedAt": "2026-10-04T03:00:00.000Z",
+     "titleEn": "Technician agreement"
+    },
+    {
+     "type": "code_of_conduct",
+     "id": "2128f1cc-2d94-4ac1-8aab-21ad130ff5fa",
+     "version": "0.1",
+     "title": "مدونة السلوك والسلامة",
+     "isDraft": true,
+     "publishedAt": "2026-10-04T03:00:00.000Z",
+     "titleEn": "Code of conduct and safety"
+    },
+    {
+     "type": "cancellation_refund",
+     "id": "fe4dac45-1f21-4c25-a8e5-bedc01e7dfa2",
+     "version": "0.1",
+     "title": "سياسة الإلغاء والاسترداد",
+     "isDraft": true,
+     "publishedAt": "2026-10-04T03:00:00.000Z",
+     "titleEn": "Cancellation and refund policy"
+    },
+    {
+     "type": "customer_terms",
+     "id": "affbd2ae-2346-4db1-83ca-ff786b24ddb2",
+     "version": "0.1",
+     "title": "شروط استخدام الزبون",
+     "isDraft": true,
+     "publishedAt": "2026-10-04T03:00:00.000Z",
+     "titleEn": "Customer terms of use"
+    },
+    {
+     "type": "privacy",
+     "id": "9066b8cb-d895-4393-8afd-68a4efb7b013",
+     "version": "0.1",
+     "title": "سياسة الخصوصية",
+     "isDraft": true,
+     "publishedAt": "2026-10-04T03:00:00.000Z",
+     "titleEn": "Privacy policy"
+    }
+   ]
+  },
+  "GET /api/areas": {
+   "status": 200,
+   "body": [
+    {
+     "wilayat": "seeb",
+     "nameAr": "السيب",
+     "nameEn": "Seeb",
+     "active": true,
+     "visitFeeOverride": null,
+     "neighbourhoods": [
+      {
+       "ar": "المعبيلة",
+       "en": "Al Mabelah",
+       "id": "mabela",
+       "lat": 23.6195,
+       "lng": 58.1129
+      },
+      {
+       "ar": "الخوض",
+       "en": "Al Khoudh",
+       "id": "khoud",
+       "lat": 23.5869,
+       "lng": 58.1543
+      },
+      {
+       "ar": "الموالح",
+       "en": "Al Mawaleh",
+       "id": "mawaleh",
+       "lat": 23.6011,
+       "lng": 58.2093
+      },
+      {
+       "ar": "الحيل",
+       "en": "Al Hail",
+       "id": "hail",
+       "lat": 23.6278,
+       "lng": 58.2299
+      },
+      {
+       "ar": "السيب",
+       "en": "Seeb",
+       "id": "seeb_center",
+       "lat": 23.6703,
+       "lng": 58.1889
+      },
+      {
+       "ar": "سور آل حديد",
+       "en": "Sur Al Hadid",
+       "id": "sur_hadid",
+       "lat": 23.6522,
+       "lng": 58.1606
+      },
+      {
+       "ar": "مدينة المعرفة / الحيل الجنوبية",
+       "en": "Al Hail South",
+       "id": "mazoon",
+       "lat": 23.6072,
+       "lng": 58.2412
+      }
+     ]
+    },
+    {
+     "wilayat": "bawshar",
+     "nameAr": "بوشر",
+     "nameEn": "Bawshar",
+     "active": true,
+     "visitFeeOverride": null,
+     "neighbourhoods": [
+      {
+       "ar": "الغبرة",
+       "en": "Al Ghubrah",
+       "id": "ghubra",
+       "lat": 23.5958,
+       "lng": 58.4016
+      },
+      {
+       "ar": "العذيبة",
+       "en": "Al Azaiba",
+       "id": "azaiba",
+       "lat": 23.5937,
+       "lng": 58.3733
+      },
+      {
+       "ar": "الخوير",
+       "en": "Al Khuwair",
+       "id": "khuwair",
+       "lat": 23.5862,
+       "lng": 58.4294
+      },
+      {
+       "ar": "الأنصب",
+       "en": "Al Ansab",
+       "id": "ansab",
+       "lat": 23.5458,
+       "lng": 58.3687
+      },
+      {
+       "ar": "بوشر",
+       "en": "Bawshar",
+       "id": "bawshar_center",
+       "lat": 23.5662,
+       "lng": 58.4037
+      },
+      {
+       "ar": "المسفاة",
+       "en": "Al Misfah",
+       "id": "misfah",
+       "lat": 23.5276,
+       "lng": 58.4101
+      },
+      {
+       "ar": "مرتفعات المطار",
+       "en": "Airport Heights",
+       "id": "airport_heights",
+       "lat": 23.5794,
+       "lng": 58.3466
+      }
+     ]
+    },
+    {
+     "wilayat": "muttrah",
+     "nameAr": "مطرح",
+     "nameEn": "Muttrah",
+     "active": false,
+     "visitFeeOverride": null,
+     "neighbourhoods": []
+    },
+    {
+     "wilayat": "amerat",
+     "nameAr": "العامرات",
+     "nameEn": "Al Amerat",
+     "active": false,
+     "visitFeeOverride": null,
+     "neighbourhoods": []
+    },
+    {
+     "wilayat": "muscat",
+     "nameAr": "مسقط",
+     "nameEn": "Muscat",
+     "active": false,
+     "visitFeeOverride": null,
+     "neighbourhoods": []
+    },
+    {
+     "wilayat": "qurayyat",
+     "nameAr": "قريات",
+     "nameEn": "Qurayyat",
+     "active": false,
+     "visitFeeOverride": null,
+     "neighbourhoods": []
+    }
+   ]
+  },
+  "GET /api/legal/technician_agreement?lang=ar": {
+   "status": 200,
+   "body": {
+    "id": "e5b67635-927a-4443-8b55-2218ebd8eb3b",
+    "type": "technician_agreement",
+    "language": "ar",
+    "version": "0.1",
+    "title": "اتفاقية الفني",
+    "body": "اتفاقية تقديم الخدمات عبر منصة كتف\nبين: [COMPANY_NAME]، سجل تجاري رقم [CR_NUMBER]، وعنوانها [COMPANY_ADDRESS] («المنصة»)، والفني المسجّلة بياناته في التطبيق («الفني»).\n\n١. طبيعة العلاقة: المنصة وسيط تقني يربط الفني بالزبائن. الفني مقدّم خدمة مستقل وليس موظفاً لدى المنصة، وتنفيذ العمل مسؤوليته. لا تضمن المنصة له عدداً معيناً من الطلبات أو دخلاً محدداً.\n٢. الأهلية والمستندات: يقرّ الفني بأنه بالغ، وأن بياناته ومستنداته صحيحة وسارية، وأنه مخوّل نظاماً بمزاولة هذا العمل في سلطنة عُمان حسب وضعه (مواطن يعمل لحسابه، أو وافد بإقامة وبطاقة عمل، أو مؤسسة بسجل تجاري). يلتزم بتجديد المستندات قبل انتهائها، وإلا أُوقف استقبال الطلبات تلقائياً حتى التجديد.\n٣. التحقق: يوافق الفني على فحص هويته ومستنداته ومراجعتها من فريق المنصة، وعلى الاتصال بالمرجعين إن ذكرهما. يحق للمنصة رفض الطلب أو إيقاف الحساب بسبب مبيّن.\n٤. قبول الطلبات والحضور: إذا قبل الفني طلباً التزم بالحضور في الفترة المحددة وبإبلاغ الزبون والمنصة فوراً عند التأخر. التأخر المتكرر أو عدم الحضور بلا عذر يعرّضه لنقاط مخالفة ثم الإيقاف.\n٥. إثبات الحضور والموقع: يسجّل الفني وصوله من داخل التطبيق عند موقع الزبون مع صورة. يوافق على تسجيل موقعه الجغرافي أثناء تنفيذ الطلب فقط، ولا يُتتبَّع خارج ذلك.\n٦. التشخيص والتسعير: يشخّص العطل بأمانة ويرسل عرض سعر مفصّلاً (أجرة وقطع) عبر التطبيق، ولا يبدأ العمل قبل موافقة الزبون عليه، ولا يطلب مبلغاً يزيد على ما وافق عليه الزبون في التطبيق. أي عمل إضافي يحتاج موافقة جديدة.\n٧. رسم الزيارة: يستحق الفني رسم الزيارة (بعد حصة المنصة المبيّنة في سياسة الرسوم) متى وصل في الموعد وسجّل وصوله، ولو رفض الزبون عرض السعر.\n٨. العمولة: تستقطع المنصة عمولة 15% من قيمة الخدمة، و5% من الزبائن الذين حجزوا عبر رابط الفني الخاص أو أعادوا الحجز معه. تظهر النسبة المطبّقة في التطبيق قبل قبول كل طلب. لا تُغيَّر النسب إلا بإشعار قبل 7 أيام. لا عمولة على إصلاح لم ينجح.\n٩. الدفع والصرف: يدفع الزبون عبر المنصة فقط. يُصرف مستحق الفني خلال 48 ساعة من تأكيد الزبون (أو من التأكيد التلقائي بعد 24 ساعة) إلى حساب بنكي باسم الفني. للطلبات الثلاثة الأولى مدة الصرف 72 ساعة. المبالغ المتنازع عليها تُجمَّد حتى الفصل في النزاع.\n١٠. عدم الدفع خارج المنصة: لا يجوز للفني طلب أو قبول دفع خارج المنصة عن خدمة حُجزت عبرها، ولا نقل الزبون إلى وسيلة أخرى للتحايل على الرسوم. المخالفة تؤدي إلى إيقاف الحساب واحتجاز المستحقات بقدر الرسوم المتهرَّب منها. [للمحامي: صياغة هذا البند وحدوده الزمنية]\n١١. جودة العمل والضمان: يضمن الفني عمله على العطل نفسه مدة 14 يوماً من الإنجاز، ويعيد الزيارة مجاناً مرة واحدة إن عاد العطل. إذا تعذّر الإصلاح يُردّ للزبون أجر العمل دون ثمن القطع الموثّقة، ويحتفظ الفني برسم الزيارة وبثمن القطع.\n١٢. المسؤولية عن الأضرار: الفني مسؤول عن الضرر الذي يلحق بممتلكات الزبون بسبب خطئه أو إهماله، وعليه امتلاك العدة اللازمة والتصرف باحتراف. [للمحامي: التأمين وحدود المسؤولية ودور المنصة في تسهيل المطالبات]\n١٣. السلوك والسلامة والخصوصية: يلتزم الفني بمدونة السلوك والسلامة المرفقة، ويحافظ على سرية بيانات الزبائن ولا يستعملها لغير الخدمة.\n١٤. التقييمات: تظهر تقييمات الزبائن في ملف الفني. إذا انخفض متوسط تقييمه دون 4.0 بعد ١٠ طلبات تراجعه المنصة، وقد تنذره أو توقفه.\n١٥. المخالفات والإيقاف والإنهاء: للمنصة إيقاف الحساب فوراً عند مخالفة جسيمة (احتيال، تزوير، عنف أو تحرش، تهديد، دفع خارج المنصة)، وإنذاره أو إيقافه مؤقتاً عند المخالفات الأخرى. يُبلَّغ بالسبب ويحق له الاعتراض خلال 5 أيام. وللفني إغلاق حسابه متى شاء بعد إنهاء الطلبات المفتوحة وتسوية المبالغ.\n١٦. البيانات الشخصية: يوافق الفني على معالجة بياناته ومستنداته للتحقق والتشغيل والدفع والامتثال النظامي وفق سياسة الخصوصية، وعلى أن يرى الزبائن اسمه الأول وصورته وتقييمه وخدماته وصور أعماله.\n١٧. تعديل الاتفاقية: عند التعديل تُنشر نسخة جديدة ويُخطَر الفني، ولا يستقبل طلبات جديدة قبل موافقته عليها.\n١٨. القانون والاختصاص: تخضع الاتفاقية لقوانين سلطنة عُمان، وتختص [JURISDICTION] بالنظر في أي نزاع بعد محاولة الحل الودي عبر المنصة.\nالإقرار: أقرّ بأنني قرأت هذه الاتفاقية وفهمتها ووافقت عليها بكامل إرادتي.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "e5b67635-927a-4443-8b55-2218ebd8eb3b",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/technician_agreement?lang=en": {
+   "status": 200,
+   "body": {
+    "id": "e5b67635-927a-4443-8b55-2218ebd8eb3b",
+    "type": "technician_agreement",
+    "language": "ar",
+    "version": "0.1",
+    "title": "اتفاقية الفني",
+    "body": "اتفاقية تقديم الخدمات عبر منصة كتف\nبين: [COMPANY_NAME]، سجل تجاري رقم [CR_NUMBER]، وعنوانها [COMPANY_ADDRESS] («المنصة»)، والفني المسجّلة بياناته في التطبيق («الفني»).\n\n١. طبيعة العلاقة: المنصة وسيط تقني يربط الفني بالزبائن. الفني مقدّم خدمة مستقل وليس موظفاً لدى المنصة، وتنفيذ العمل مسؤوليته. لا تضمن المنصة له عدداً معيناً من الطلبات أو دخلاً محدداً.\n٢. الأهلية والمستندات: يقرّ الفني بأنه بالغ، وأن بياناته ومستنداته صحيحة وسارية، وأنه مخوّل نظاماً بمزاولة هذا العمل في سلطنة عُمان حسب وضعه (مواطن يعمل لحسابه، أو وافد بإقامة وبطاقة عمل، أو مؤسسة بسجل تجاري). يلتزم بتجديد المستندات قبل انتهائها، وإلا أُوقف استقبال الطلبات تلقائياً حتى التجديد.\n٣. التحقق: يوافق الفني على فحص هويته ومستنداته ومراجعتها من فريق المنصة، وعلى الاتصال بالمرجعين إن ذكرهما. يحق للمنصة رفض الطلب أو إيقاف الحساب بسبب مبيّن.\n٤. قبول الطلبات والحضور: إذا قبل الفني طلباً التزم بالحضور في الفترة المحددة وبإبلاغ الزبون والمنصة فوراً عند التأخر. التأخر المتكرر أو عدم الحضور بلا عذر يعرّضه لنقاط مخالفة ثم الإيقاف.\n٥. إثبات الحضور والموقع: يسجّل الفني وصوله من داخل التطبيق عند موقع الزبون مع صورة. يوافق على تسجيل موقعه الجغرافي أثناء تنفيذ الطلب فقط، ولا يُتتبَّع خارج ذلك.\n٦. التشخيص والتسعير: يشخّص العطل بأمانة ويرسل عرض سعر مفصّلاً (أجرة وقطع) عبر التطبيق، ولا يبدأ العمل قبل موافقة الزبون عليه، ولا يطلب مبلغاً يزيد على ما وافق عليه الزبون في التطبيق. أي عمل إضافي يحتاج موافقة جديدة.\n٧. رسم الزيارة: يستحق الفني رسم الزيارة (بعد حصة المنصة المبيّنة في سياسة الرسوم) متى وصل في الموعد وسجّل وصوله، ولو رفض الزبون عرض السعر.\n٨. العمولة: تستقطع المنصة عمولة 15% من قيمة الخدمة، و5% من الزبائن الذين حجزوا عبر رابط الفني الخاص أو أعادوا الحجز معه. تظهر النسبة المطبّقة في التطبيق قبل قبول كل طلب. لا تُغيَّر النسب إلا بإشعار قبل 7 أيام. لا عمولة على إصلاح لم ينجح.\n٩. الدفع والصرف: يدفع الزبون عبر المنصة فقط. يُصرف مستحق الفني خلال 48 ساعة من تأكيد الزبون (أو من التأكيد التلقائي بعد 24 ساعة) إلى حساب بنكي باسم الفني. للطلبات الثلاثة الأولى مدة الصرف 72 ساعة. المبالغ المتنازع عليها تُجمَّد حتى الفصل في النزاع.\n١٠. عدم الدفع خارج المنصة: لا يجوز للفني طلب أو قبول دفع خارج المنصة عن خدمة حُجزت عبرها، ولا نقل الزبون إلى وسيلة أخرى للتحايل على الرسوم. المخالفة تؤدي إلى إيقاف الحساب واحتجاز المستحقات بقدر الرسوم المتهرَّب منها. [للمحامي: صياغة هذا البند وحدوده الزمنية]\n١١. جودة العمل والضمان: يضمن الفني عمله على العطل نفسه مدة 14 يوماً من الإنجاز، ويعيد الزيارة مجاناً مرة واحدة إن عاد العطل. إذا تعذّر الإصلاح يُردّ للزبون أجر العمل دون ثمن القطع الموثّقة، ويحتفظ الفني برسم الزيارة وبثمن القطع.\n١٢. المسؤولية عن الأضرار: الفني مسؤول عن الضرر الذي يلحق بممتلكات الزبون بسبب خطئه أو إهماله، وعليه امتلاك العدة اللازمة والتصرف باحتراف. [للمحامي: التأمين وحدود المسؤولية ودور المنصة في تسهيل المطالبات]\n١٣. السلوك والسلامة والخصوصية: يلتزم الفني بمدونة السلوك والسلامة المرفقة، ويحافظ على سرية بيانات الزبائن ولا يستعملها لغير الخدمة.\n١٤. التقييمات: تظهر تقييمات الزبائن في ملف الفني. إذا انخفض متوسط تقييمه دون 4.0 بعد ١٠ طلبات تراجعه المنصة، وقد تنذره أو توقفه.\n١٥. المخالفات والإيقاف والإنهاء: للمنصة إيقاف الحساب فوراً عند مخالفة جسيمة (احتيال، تزوير، عنف أو تحرش، تهديد، دفع خارج المنصة)، وإنذاره أو إيقافه مؤقتاً عند المخالفات الأخرى. يُبلَّغ بالسبب ويحق له الاعتراض خلال 5 أيام. وللفني إغلاق حسابه متى شاء بعد إنهاء الطلبات المفتوحة وتسوية المبالغ.\n١٦. البيانات الشخصية: يوافق الفني على معالجة بياناته ومستنداته للتحقق والتشغيل والدفع والامتثال النظامي وفق سياسة الخصوصية، وعلى أن يرى الزبائن اسمه الأول وصورته وتقييمه وخدماته وصور أعماله.\n١٧. تعديل الاتفاقية: عند التعديل تُنشر نسخة جديدة ويُخطَر الفني، ولا يستقبل طلبات جديدة قبل موافقته عليها.\n١٨. القانون والاختصاص: تخضع الاتفاقية لقوانين سلطنة عُمان، وتختص [JURISDICTION] بالنظر في أي نزاع بعد محاولة الحل الودي عبر المنصة.\nالإقرار: أقرّ بأنني قرأت هذه الاتفاقية وفهمتها ووافقت عليها بكامل إرادتي.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "e5b67635-927a-4443-8b55-2218ebd8eb3b",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/code_of_conduct?lang=ar": {
+   "status": 200,
+   "body": {
+    "id": "2128f1cc-2d94-4ac1-8aab-21ad130ff5fa",
+    "type": "code_of_conduct",
+    "language": "ar",
+    "version": "0.1",
+    "title": "مدونة السلوك والسلامة",
+    "body": "١. احترم خصوصية البيت وأهله وعاداتهم؛ لا تدخل غرفاً لا يتطلبها العمل، ولا تبدأ العمل إلا بوجود شخص بالغ من أهل البيت.\n٢. التزم باللباس اللائق والنظافة، وعرّف بنفسك باسمك الأول وبأنك فنّي كتف.\n٣. لا تصوّر إلا ما يخص العمل (الجهاز ومكانه) ولا تصوّر الأشخاص أو محتويات البيت.\n٤. لا تحتفظ ببيانات الزبون ولا تنشرها، ولا تتصل به أو تراسله بعد انتهاء الخدمة إلا بسبب يتعلق بها.\n٥. لا تطلب مبلغاً غير المتفق عليه في التطبيق، ولا تطلب بقشيشاً أو دفعاً نقدياً، ولا تضغط على الزبون للموافقة.\n٦. شخّص بأمانة: لا تضخّم العطل ولا تستبدل قطعة سليمة، واحتفظ بالقطع المستبدلة إن طلبها الزبون.\n٧. اعمل بأمان: افصل الكهرباء قبل العمل، واستعمل السلّم والعدة الآمنة، وتوقّف إن كان الموقع غير آمن وأبلغ المنصة.\n٨. لا تعمل تحت تأثير مسكر أو مخدر، ولا تدخّن داخل بيت الزبون.\n٩. عامل الجميع بأدب، وأبلغ فوراً عن أي مضايقة أو تهديد. زر «بلاغ سلامة» في التطبيق، ورقم طوارئ الشرطة ٩٩٩٩.\n١٠. نظّف مكان العمل بعد الانتهاء وسلّم الزبون ملخصاً بما أُنجز.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "2128f1cc-2d94-4ac1-8aab-21ad130ff5fa",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/code_of_conduct?lang=en": {
+   "status": 200,
+   "body": {
+    "id": "2128f1cc-2d94-4ac1-8aab-21ad130ff5fa",
+    "type": "code_of_conduct",
+    "language": "ar",
+    "version": "0.1",
+    "title": "مدونة السلوك والسلامة",
+    "body": "١. احترم خصوصية البيت وأهله وعاداتهم؛ لا تدخل غرفاً لا يتطلبها العمل، ولا تبدأ العمل إلا بوجود شخص بالغ من أهل البيت.\n٢. التزم باللباس اللائق والنظافة، وعرّف بنفسك باسمك الأول وبأنك فنّي كتف.\n٣. لا تصوّر إلا ما يخص العمل (الجهاز ومكانه) ولا تصوّر الأشخاص أو محتويات البيت.\n٤. لا تحتفظ ببيانات الزبون ولا تنشرها، ولا تتصل به أو تراسله بعد انتهاء الخدمة إلا بسبب يتعلق بها.\n٥. لا تطلب مبلغاً غير المتفق عليه في التطبيق، ولا تطلب بقشيشاً أو دفعاً نقدياً، ولا تضغط على الزبون للموافقة.\n٦. شخّص بأمانة: لا تضخّم العطل ولا تستبدل قطعة سليمة، واحتفظ بالقطع المستبدلة إن طلبها الزبون.\n٧. اعمل بأمان: افصل الكهرباء قبل العمل، واستعمل السلّم والعدة الآمنة، وتوقّف إن كان الموقع غير آمن وأبلغ المنصة.\n٨. لا تعمل تحت تأثير مسكر أو مخدر، ولا تدخّن داخل بيت الزبون.\n٩. عامل الجميع بأدب، وأبلغ فوراً عن أي مضايقة أو تهديد. زر «بلاغ سلامة» في التطبيق، ورقم طوارئ الشرطة ٩٩٩٩.\n١٠. نظّف مكان العمل بعد الانتهاء وسلّم الزبون ملخصاً بما أُنجز.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "2128f1cc-2d94-4ac1-8aab-21ad130ff5fa",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/cancellation_refund?lang=ar": {
+   "status": 200,
+   "body": {
+    "id": "fe4dac45-1f21-4c25-a8e5-bedc01e7dfa2",
+    "type": "cancellation_refund",
+    "language": "ar",
+    "version": "0.1",
+    "title": "سياسة الإلغاء والاسترداد",
+    "body": "تسري هذه السياسة على كل حجز. الأرقام المذكورة هي المعمول بها وقت الحجز.\n\nالحالة — ما يدفعه الزبون — ما يستلمه الفني\n١. إلغاء خلال أول 10 دقائق من الحجز — لا شيء، استرداد كامل — لا شيء\n٢. إلغاء بعد ذلك، وفنّي قد قبل ولم يبدأ الطريق — 30% من رسم الزيارة والباقي يُرَدّ — ذلك المبلغ بعد حصة المنصة\n٣. إلغاء بعد أن بدأ الفني الطريق — 100% من رسم الزيارة — ذلك المبلغ بعد حصة المنصة\n٤. لم يحضر الفني أو ألغى — استرداد كامل فوراً — لا شيء، وتُسجَّل عليه مخالفة\n٥. تأخر الفني أكثر من 20 دقيقة عن نهاية فترة الوصول — للزبون الإلغاء مجاناً واسترداد كامل — لا شيء\n٦. لم يقبل أي فني الطلب — استرداد كامل — لا شيء\n٧. وصل الفني ورفض الزبون عرض السعر — رسم الزيارة فقط — رسم الزيارة بعد حصة المنصة\n٨. وصل الفني ولم يكن الزبون موجوداً بعد انتظار 15 دقيقة — رسم الزيارة — رسم الزيارة بعد حصة المنصة\n٩. نُفّذ العمل ثم لم يُصلَح العطل بعد زيارة مجانية إضافية — يُرَدّ أجر العمل دون ثمن القطع الموثّقة — رسم الزيارة وثمن القطع، دون عمولة\n١٠. نُفّذ العمل ولا اعتراض — السعر الموافَق عليه كاملاً — السعر مطروحاً منه العمولة خلال 48 ساعة من التأكيد\nملاحظات: يُرَدّ المبلغ إلى وسيلة الدفع نفسها، وتصل المبالغ عادةً خلال أيام عمل البنك. رسم الزيارة يُخصم من السعر النهائي إن وافق الزبون. لا تُسترد المبالغ المحتجزة لقطع استُخدمت فعلاً وثُبت شراؤها.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "fe4dac45-1f21-4c25-a8e5-bedc01e7dfa2",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/cancellation_refund?lang=en": {
+   "status": 200,
+   "body": {
+    "id": "fe4dac45-1f21-4c25-a8e5-bedc01e7dfa2",
+    "type": "cancellation_refund",
+    "language": "ar",
+    "version": "0.1",
+    "title": "سياسة الإلغاء والاسترداد",
+    "body": "تسري هذه السياسة على كل حجز. الأرقام المذكورة هي المعمول بها وقت الحجز.\n\nالحالة — ما يدفعه الزبون — ما يستلمه الفني\n١. إلغاء خلال أول 10 دقائق من الحجز — لا شيء، استرداد كامل — لا شيء\n٢. إلغاء بعد ذلك، وفنّي قد قبل ولم يبدأ الطريق — 30% من رسم الزيارة والباقي يُرَدّ — ذلك المبلغ بعد حصة المنصة\n٣. إلغاء بعد أن بدأ الفني الطريق — 100% من رسم الزيارة — ذلك المبلغ بعد حصة المنصة\n٤. لم يحضر الفني أو ألغى — استرداد كامل فوراً — لا شيء، وتُسجَّل عليه مخالفة\n٥. تأخر الفني أكثر من 20 دقيقة عن نهاية فترة الوصول — للزبون الإلغاء مجاناً واسترداد كامل — لا شيء\n٦. لم يقبل أي فني الطلب — استرداد كامل — لا شيء\n٧. وصل الفني ورفض الزبون عرض السعر — رسم الزيارة فقط — رسم الزيارة بعد حصة المنصة\n٨. وصل الفني ولم يكن الزبون موجوداً بعد انتظار 15 دقيقة — رسم الزيارة — رسم الزيارة بعد حصة المنصة\n٩. نُفّذ العمل ثم لم يُصلَح العطل بعد زيارة مجانية إضافية — يُرَدّ أجر العمل دون ثمن القطع الموثّقة — رسم الزيارة وثمن القطع، دون عمولة\n١٠. نُفّذ العمل ولا اعتراض — السعر الموافَق عليه كاملاً — السعر مطروحاً منه العمولة خلال 48 ساعة من التأكيد\nملاحظات: يُرَدّ المبلغ إلى وسيلة الدفع نفسها، وتصل المبالغ عادةً خلال أيام عمل البنك. رسم الزيارة يُخصم من السعر النهائي إن وافق الزبون. لا تُسترد المبالغ المحتجزة لقطع استُخدمت فعلاً وثُبت شراؤها.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "fe4dac45-1f21-4c25-a8e5-bedc01e7dfa2",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/customer_terms?lang=ar": {
+   "status": 200,
+   "body": {
+    "id": "affbd2ae-2346-4db1-83ca-ff786b24ddb2",
+    "type": "customer_terms",
+    "language": "ar",
+    "version": "0.1",
+    "title": "شروط استخدام الزبون",
+    "body": "١. من نحن: كتف منصة وساطة تقنية تملكها [COMPANY_NAME] (سجل تجاري [CR_NUMBER]). تربطك بفنيين مستقلين متحقَّق منهم. الفنّي هو من ينفّذ العمل، وتحمي المنصة دفعتك وتفصل في النزاعات وفق هذه الشروط.\n٢. الأهلية والمعلومات: يجب أن تكون بالغاً. قدّم بيانات صحيحة (العنوان، الهاتف، وصف العطل) ويسّر وصول الفنّي إلى الجهاز. يلزم وجود شخص بالغ في الموقع أثناء الزيارة.\n٣. رسم الزيارة: تدفع عند الحجز رسم زيارة قدره 5.000 ر.ع، يُحتجز لدى المنصة، ويُخصم من سعر الإصلاح إن وافقت على العرض.\n٤. السعر بعد التشخيص: يرسل الفنّي عرضاً مفصّلاً بعد الفحص. لا يبدأ العمل إلا بموافقتك داخل التطبيق ولا يُطلب منك أكثر مما وافقت عليه. أي عمل إضافي يحتاج موافقتك من جديد.\n٥. رفض العرض: لك رفض العرض دون أي التزام آخر؛ تدفع رسم الزيارة فقط.\n٦. الدفع عبر المنصة فقط: لا تدفع للفنّي نقداً أو بتحويل مباشر. إن طلب ذلك فبلّغنا. يُحتجز المبلغ ولا يُصرف للفنّي إلا بعد تأكيدك الإنجاز أو مرور 24 ساعة دون اعتراض.\n٧. تأكيد الإنجاز والاعتراض: بعد انتهاء العمل لديك 24 ساعة لتأكيده أو الإبلاغ عن مشكلة مع صور. عند الإبلاغ يُجمَّد المبلغ وتفصل المنصة خلال 48 ساعة.\n٨. الإلغاء والاسترداد: تسري سياسة الإلغاء والاسترداد المنشورة، وهي جزء من هذه الشروط.\n٩. الضمان: يضمن الفنّي عمله على العطل نفسه 14 يوماً. إن عاد العطل فلك زيارة مجانية مرة واحدة، فإن تعذّر الإصلاح استرددت أجر العمل دون ثمن القطع الموثّقة.\n١٠. عدم حضور الفنّي: تسترد كل ما دفعته فوراً.\n١١. حدود المسؤولية: المنصة وسيط ولا تنفّذ العمل الفني بنفسها، وتتحمل مسؤوليتها بالقدر الذي يقرره النظام. [للمحامي: مسؤولية الفنّي عن الأضرار، دور المنصة في التعويض، حدود المسؤولية]\n١٢. سلوكك: عامل الفنّي باحترام. يحق للمنصة حظر الحساب عند الإساءة أو التهديد أو الاحتيال أو تكرار الإلغاء أو الطلبات الوهمية.\n١٣. بياناتك: نستخدمها لتنفيذ الحجز والدفع والدعم وتحسين الخدمة وفق سياسة الخصوصية. لا يرى الفنّي رقمك وعنوانك الدقيق إلا بعد قبوله الطلب.\n١٤. التعديل والقانون: قد نعدّل الشروط وننشر النسخة الجديدة ونطلب موافقتك عليها. تخضع الشروط لقوانين سلطنة عُمان وتختص [JURISDICTION] بأي نزاع بعد محاولة الحل الودي.\nنص مربع الموافقة عند الحجز: «قرأتُ شروط الاستخدام وسياسة الإلغاء والاسترداد وأوافق عليها».",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "affbd2ae-2346-4db1-83ca-ff786b24ddb2",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/customer_terms?lang=en": {
+   "status": 200,
+   "body": {
+    "id": "affbd2ae-2346-4db1-83ca-ff786b24ddb2",
+    "type": "customer_terms",
+    "language": "ar",
+    "version": "0.1",
+    "title": "شروط استخدام الزبون",
+    "body": "١. من نحن: كتف منصة وساطة تقنية تملكها [COMPANY_NAME] (سجل تجاري [CR_NUMBER]). تربطك بفنيين مستقلين متحقَّق منهم. الفنّي هو من ينفّذ العمل، وتحمي المنصة دفعتك وتفصل في النزاعات وفق هذه الشروط.\n٢. الأهلية والمعلومات: يجب أن تكون بالغاً. قدّم بيانات صحيحة (العنوان، الهاتف، وصف العطل) ويسّر وصول الفنّي إلى الجهاز. يلزم وجود شخص بالغ في الموقع أثناء الزيارة.\n٣. رسم الزيارة: تدفع عند الحجز رسم زيارة قدره 5.000 ر.ع، يُحتجز لدى المنصة، ويُخصم من سعر الإصلاح إن وافقت على العرض.\n٤. السعر بعد التشخيص: يرسل الفنّي عرضاً مفصّلاً بعد الفحص. لا يبدأ العمل إلا بموافقتك داخل التطبيق ولا يُطلب منك أكثر مما وافقت عليه. أي عمل إضافي يحتاج موافقتك من جديد.\n٥. رفض العرض: لك رفض العرض دون أي التزام آخر؛ تدفع رسم الزيارة فقط.\n٦. الدفع عبر المنصة فقط: لا تدفع للفنّي نقداً أو بتحويل مباشر. إن طلب ذلك فبلّغنا. يُحتجز المبلغ ولا يُصرف للفنّي إلا بعد تأكيدك الإنجاز أو مرور 24 ساعة دون اعتراض.\n٧. تأكيد الإنجاز والاعتراض: بعد انتهاء العمل لديك 24 ساعة لتأكيده أو الإبلاغ عن مشكلة مع صور. عند الإبلاغ يُجمَّد المبلغ وتفصل المنصة خلال 48 ساعة.\n٨. الإلغاء والاسترداد: تسري سياسة الإلغاء والاسترداد المنشورة، وهي جزء من هذه الشروط.\n٩. الضمان: يضمن الفنّي عمله على العطل نفسه 14 يوماً. إن عاد العطل فلك زيارة مجانية مرة واحدة، فإن تعذّر الإصلاح استرددت أجر العمل دون ثمن القطع الموثّقة.\n١٠. عدم حضور الفنّي: تسترد كل ما دفعته فوراً.\n١١. حدود المسؤولية: المنصة وسيط ولا تنفّذ العمل الفني بنفسها، وتتحمل مسؤوليتها بالقدر الذي يقرره النظام. [للمحامي: مسؤولية الفنّي عن الأضرار، دور المنصة في التعويض، حدود المسؤولية]\n١٢. سلوكك: عامل الفنّي باحترام. يحق للمنصة حظر الحساب عند الإساءة أو التهديد أو الاحتيال أو تكرار الإلغاء أو الطلبات الوهمية.\n١٣. بياناتك: نستخدمها لتنفيذ الحجز والدفع والدعم وتحسين الخدمة وفق سياسة الخصوصية. لا يرى الفنّي رقمك وعنوانك الدقيق إلا بعد قبوله الطلب.\n١٤. التعديل والقانون: قد نعدّل الشروط وننشر النسخة الجديدة ونطلب موافقتك عليها. تخضع الشروط لقوانين سلطنة عُمان وتختص [JURISDICTION] بأي نزاع بعد محاولة الحل الودي.\nنص مربع الموافقة عند الحجز: «قرأتُ شروط الاستخدام وسياسة الإلغاء والاسترداد وأوافق عليها».",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "affbd2ae-2346-4db1-83ca-ff786b24ddb2",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/privacy?lang=ar": {
+   "status": 200,
+   "body": {
+    "id": "9066b8cb-d895-4393-8afd-68a4efb7b013",
+    "type": "privacy",
+    "language": "ar",
+    "version": "0.1",
+    "title": "سياسة الخصوصية",
+    "body": "١. ما نجمعه من الزبائن: الاسم، رقم الهاتف، عنوان الخدمة وموقعها، وصف العطل وصوره، سجل الحجوزات، وبيانات الدفع (يعالجها مزوّد الدفع ولا نخزّن أرقام البطاقات).\n٢. ما نجمعه من الفنيين: الاسم، الرقم المدني، تاريخ الميلاد، صور البطاقة والإقامة وبطاقة العمل أو السجل التجاري، صورة السيلفي، الخبرة والأعمال، بيانات الحساب البنكي، المرجعان وجهة الطوارئ، وموقعهم الجغرافي أثناء تنفيذ الطلبات فقط.\n٣. لماذا: لتنفيذ الحجوزات والدفع والصرف، وللتحقق من الهوية ومنع الاحتيال، وللدعم وفضّ النزاعات، وللالتزام بالأنظمة، ولتحسين الخدمة.\n٤. من يرى ماذا: الزبون يرى اسم الفنّي الأول وصورته وتقييمه وأعماله. الفنّي يرى اسم الزبون الأول ورقمه وعنوانه الدقيق بعد قبوله الطلب فقط. فريق المنصة يصل إلى ما تتطلبه مهمته وكل وصول للمستندات مسجَّل.\n٥. مع من نشاركها: مزوّد الدفع، ومزوّد الرسائل، وخدمات الخرائط والاستضافة، والجهات الرسمية عند الطلب النظامي. لا نبيع بياناتك.\n٦. الحماية: تُشفَّر البيانات الحساسة وصور المستندات، ويقتصر الوصول إليها على المخوّلين مع تسجيل كل وصول.\n٧. المدة: نحتفظ بالبيانات مدة الاستخدام ثم 24 شهراً للمستندات بعد إغلاق الحساب، وبسجلات الدفع المدة التي يفرضها النظام. [للمحامي: المدد بحسب قانون حماية البيانات الشخصية]\n٨. حقوقك: الاطلاع على بياناتك وتصحيحها وتنزيلها وطلب حذفها (ما لم يمنع نظام الاحتفاظ)، وسحب موافقة التسويق. للتواصل: [CONTACT_EMAIL].\n٩. ملفات تعريف الارتباط: نستخدم ما يلزم لتشغيل الموقع، ولا نستخدم ملفات تتبّع إعلانية دون موافقتك.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "9066b8cb-d895-4393-8afd-68a4efb7b013",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  },
+  "GET /api/legal/privacy?lang=en": {
+   "status": 200,
+   "body": {
+    "id": "9066b8cb-d895-4393-8afd-68a4efb7b013",
+    "type": "privacy",
+    "language": "ar",
+    "version": "0.1",
+    "title": "سياسة الخصوصية",
+    "body": "١. ما نجمعه من الزبائن: الاسم، رقم الهاتف، عنوان الخدمة وموقعها، وصف العطل وصوره، سجل الحجوزات، وبيانات الدفع (يعالجها مزوّد الدفع ولا نخزّن أرقام البطاقات).\n٢. ما نجمعه من الفنيين: الاسم، الرقم المدني، تاريخ الميلاد، صور البطاقة والإقامة وبطاقة العمل أو السجل التجاري، صورة السيلفي، الخبرة والأعمال، بيانات الحساب البنكي، المرجعان وجهة الطوارئ، وموقعهم الجغرافي أثناء تنفيذ الطلبات فقط.\n٣. لماذا: لتنفيذ الحجوزات والدفع والصرف، وللتحقق من الهوية ومنع الاحتيال، وللدعم وفضّ النزاعات، وللالتزام بالأنظمة، ولتحسين الخدمة.\n٤. من يرى ماذا: الزبون يرى اسم الفنّي الأول وصورته وتقييمه وأعماله. الفنّي يرى اسم الزبون الأول ورقمه وعنوانه الدقيق بعد قبوله الطلب فقط. فريق المنصة يصل إلى ما تتطلبه مهمته وكل وصول للمستندات مسجَّل.\n٥. مع من نشاركها: مزوّد الدفع، ومزوّد الرسائل، وخدمات الخرائط والاستضافة، والجهات الرسمية عند الطلب النظامي. لا نبيع بياناتك.\n٦. الحماية: تُشفَّر البيانات الحساسة وصور المستندات، ويقتصر الوصول إليها على المخوّلين مع تسجيل كل وصول.\n٧. المدة: نحتفظ بالبيانات مدة الاستخدام ثم 24 شهراً للمستندات بعد إغلاق الحساب، وبسجلات الدفع المدة التي يفرضها النظام. [للمحامي: المدد بحسب قانون حماية البيانات الشخصية]\n٨. حقوقك: الاطلاع على بياناتك وتصحيحها وتنزيلها وطلب حذفها (ما لم يمنع نظام الاحتفاظ)، وسحب موافقة التسويق. للتواصل: [CONTACT_EMAIL].\n٩. ملفات تعريف الارتباط: نستخدم ما يلزم لتشغيل الموقع، ولا نستخدم ملفات تتبّع إعلانية دون موافقتك.",
+    "isDraft": true,
+    "publishedAt": "2026-10-04T03:00:00.000Z",
+    "effectiveAt": "2026-10-04T03:00:00.000Z",
+    "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي",
+    "versions": [
+     {
+      "id": "9066b8cb-d895-4393-8afd-68a4efb7b013",
+      "version": "0.1",
+      "language": "ar",
+      "publishedAt": "2026-10-04T03:00:00.000Z",
+      "status": "published",
+      "isDraft": true,
+      "changeSummary": "مسودة أولى — بانتظار مراجعة المحامي"
+     }
+    ]
+   }
+  }
+ },
+ "flows": [
+  [
+   {
+    "on": "POST /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2/accept",
+    "response": {
+     "status": 200,
+     "body": {
+      "ok": true
+     }
+    },
+    "set": {
+     "GET /api/tech/home": {
+      "status": 200,
+      "body": {
+       "status": "approved_probation",
+       "available": true,
+       "vacationUntil": null,
+       "publicName": "سالم ت.",
+       "rating": 4.5,
+       "ratingCount": 2,
+       "probationJobsLeft": 3,
+       "requests": [],
+       "today": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ],
+       "next": {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "step": "accepted",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف لا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "approx": {
+         "lat": 23.6,
+         "lng": 58.21
+        },
+        "location": {
+         "lat": 23.601399999999998,
+         "lng": 58.2093
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "mawaleh",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "نورة",
+        "acceptDeadline": "2026-10-08T04:46:01.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": null,
+         "expectedNet": null,
+         "technicianNet": null,
+         "paid": 5000,
+         "payoutDueAt": null
+        },
+        "quote": null,
+        "diagnosis": null,
+        "completion": null,
+        "arrival": null,
+        "timeline": {
+         "accepted": "2026-10-08T04:31:01.000Z",
+         "requested": "2026-10-08T04:31:01.000Z",
+         "pending_payment": "2026-10-08T04:31:01.000Z"
+        },
+        "etaMinutes": null,
+        "callAttempts": 0,
+        "waitUntil": null,
+        "freeCancelUntil": 1791434461000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       },
+       "week": {
+        "awaiting": 0,
+        "scheduled": 19000,
+        "paid": 23500
+       },
+       "alerts": {
+        "documentsExpiring": [],
+        "termsPending": [],
+        "strikes": 0,
+        "paused": null
+       }
+      }
+     },
+     "GET /api/tech/jobs?tab=today": {
+      "status": 200,
+      "body": [
+       {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       },
+       {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       }
+      ]
+     },
+     "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+      "status": 200,
+      "body": {
+       "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+       "code": "KT-ZTXG5Z",
+       "status": "accepted",
+       "step": "accepted",
+       "isRevisit": false,
+       "entryMode": "direct_link",
+       "problem": {
+        "id": "not_cooling",
+        "ar": "لا يبرّد",
+        "en": "Not cooling"
+       },
+       "units": [
+        {
+         "type": "split",
+         "count": 1
+        }
+       ],
+       "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+       "media": [
+        {
+         "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+         "url": "katf-demo-image:photo"
+        }
+       ],
+       "window": {
+        "start": "2026-10-08T08:00:00.000Z",
+        "end": "2026-10-08T10:00:00.000Z"
+       },
+       "area": {
+        "wilayat": {
+         "ar": "السيب",
+         "en": "Seeb"
+        },
+        "neighbourhood": {
+         "ar": "الخوض",
+         "en": "Al Khoudh"
+        }
+       },
+       "approx": {
+        "lat": 23.59,
+        "lng": 58.15
+       },
+       "location": {
+        "lat": 23.5872,
+        "lng": 58.1543
+       },
+       "address": {
+        "wayNo": "1234",
+        "flatNo": null,
+        "wilayat": "seeb",
+        "landmark": "قرب المسجد",
+        "buildingNo": "56",
+        "neighbourhood": "khoud",
+        "notes": "الطابق الثاني"
+       },
+       "customerFirstName": "عائشة",
+       "acceptDeadline": "2026-10-08T05:18:03.000Z",
+       "money": {
+        "visitFee": 5000,
+        "commissionBps": 500,
+        "commissionReason": "own_link",
+        "visitOnlyNet": 4500,
+        "quoteTotal": null,
+        "expectedNet": null,
+        "technicianNet": null,
+        "paid": 5000,
+        "payoutDueAt": null
+       },
+       "quote": null,
+       "diagnosis": null,
+       "completion": null,
+       "arrival": null,
+       "timeline": {
+        "accepted": "2026-10-08T05:06:03.000Z",
+        "requested": "2026-10-08T05:03:03.000Z",
+        "pending_payment": "2026-10-08T05:03:03.000Z"
+       },
+       "etaMinutes": null,
+       "callAttempts": 0,
+       "waitUntil": null,
+       "freeCancelUntil": 1791436383000,
+       "policy": {
+        "geofenceMeters": 300,
+        "warrantyDays": 14,
+        "quoteExpiryMinutes": 60,
+        "strikeHours": 2,
+        "probationMaxQuote": 100000
+       }
+      }
+     }
+    }
+   },
+   {
+    "on": "POST /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2/travel",
+    "response": {
+     "status": 200,
+     "body": {
+      "ok": true
+     }
+    },
+    "set": {
+     "GET /api/tech/home": {
+      "status": 200,
+      "body": {
+       "status": "approved_probation",
+       "available": true,
+       "vacationUntil": null,
+       "publicName": "سالم ت.",
+       "rating": 4.5,
+       "ratingCount": 2,
+       "probationJobsLeft": 3,
+       "requests": [],
+       "today": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "on_the_way",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ],
+       "next": {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "step": "accepted",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف لا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "approx": {
+         "lat": 23.6,
+         "lng": 58.21
+        },
+        "location": {
+         "lat": 23.601399999999998,
+         "lng": 58.2093
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "mawaleh",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "نورة",
+        "acceptDeadline": "2026-10-08T04:46:01.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": null,
+         "expectedNet": null,
+         "technicianNet": null,
+         "paid": 5000,
+         "payoutDueAt": null
+        },
+        "quote": null,
+        "diagnosis": null,
+        "completion": null,
+        "arrival": null,
+        "timeline": {
+         "accepted": "2026-10-08T04:31:01.000Z",
+         "requested": "2026-10-08T04:31:01.000Z",
+         "pending_payment": "2026-10-08T04:31:01.000Z"
+        },
+        "etaMinutes": null,
+        "callAttempts": 0,
+        "waitUntil": null,
+        "freeCancelUntil": 1791434461000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       },
+       "week": {
+        "awaiting": 0,
+        "scheduled": 19000,
+        "paid": 23500
+       },
+       "alerts": {
+        "documentsExpiring": [],
+        "termsPending": [],
+        "strikes": 0,
+        "paused": null
+       }
+      }
+     },
+     "GET /api/tech/jobs?tab=today": {
+      "status": 200,
+      "body": [
+       {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "on_the_way",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       },
+       {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       }
+      ]
+     },
+     "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+      "status": 200,
+      "body": {
+       "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+       "code": "KT-ZTXG5Z",
+       "status": "on_the_way",
+       "step": "on_the_way",
+       "isRevisit": false,
+       "entryMode": "direct_link",
+       "problem": {
+        "id": "not_cooling",
+        "ar": "لا يبرّد",
+        "en": "Not cooling"
+       },
+       "units": [
+        {
+         "type": "split",
+         "count": 1
+        }
+       ],
+       "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+       "media": [
+        {
+         "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+         "url": "katf-demo-image:photo"
+        }
+       ],
+       "window": {
+        "start": "2026-10-08T08:00:00.000Z",
+        "end": "2026-10-08T10:00:00.000Z"
+       },
+       "area": {
+        "wilayat": {
+         "ar": "السيب",
+         "en": "Seeb"
+        },
+        "neighbourhood": {
+         "ar": "الخوض",
+         "en": "Al Khoudh"
+        }
+       },
+       "approx": {
+        "lat": 23.59,
+        "lng": 58.15
+       },
+       "location": {
+        "lat": 23.5872,
+        "lng": 58.1543
+       },
+       "address": {
+        "wayNo": "1234",
+        "flatNo": null,
+        "wilayat": "seeb",
+        "landmark": "قرب المسجد",
+        "buildingNo": "56",
+        "neighbourhood": "khoud",
+        "notes": "الطابق الثاني"
+       },
+       "customerFirstName": "عائشة",
+       "acceptDeadline": "2026-10-08T05:18:03.000Z",
+       "money": {
+        "visitFee": 5000,
+        "commissionBps": 500,
+        "commissionReason": "own_link",
+        "visitOnlyNet": 4500,
+        "quoteTotal": null,
+        "expectedNet": null,
+        "technicianNet": null,
+        "paid": 5000,
+        "payoutDueAt": null
+       },
+       "quote": null,
+       "diagnosis": null,
+       "completion": null,
+       "arrival": null,
+       "timeline": {
+        "accepted": "2026-10-08T05:06:03.000Z",
+        "requested": "2026-10-08T05:03:03.000Z",
+        "on_the_way": "2026-10-08T05:07:03.000Z",
+        "pending_payment": "2026-10-08T05:03:03.000Z"
+       },
+       "etaMinutes": 20,
+       "callAttempts": 0,
+       "waitUntil": null,
+       "freeCancelUntil": 1791436383000,
+       "policy": {
+        "geofenceMeters": 300,
+        "warrantyDays": 14,
+        "quoteExpiryMinutes": 60,
+        "strikeHours": 2,
+        "probationMaxQuote": 100000
+       }
+      }
+     }
+    }
+   },
+   {
+    "on": "POST /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2/arrive",
+    "response": {
+     "status": 200,
+     "body": {
+      "ok": true
+     }
+    },
+    "set": {
+     "GET /api/tech/home": {
+      "status": 200,
+      "body": {
+       "status": "approved_probation",
+       "available": true,
+       "vacationUntil": null,
+       "publicName": "سالم ت.",
+       "rating": 4.5,
+       "ratingCount": 2,
+       "probationJobsLeft": 3,
+       "requests": [],
+       "today": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "arrived",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ],
+       "next": {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "step": "accepted",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف لا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "approx": {
+         "lat": 23.6,
+         "lng": 58.21
+        },
+        "location": {
+         "lat": 23.601399999999998,
+         "lng": 58.2093
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "mawaleh",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "نورة",
+        "acceptDeadline": "2026-10-08T04:46:01.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": null,
+         "expectedNet": null,
+         "technicianNet": null,
+         "paid": 5000,
+         "payoutDueAt": null
+        },
+        "quote": null,
+        "diagnosis": null,
+        "completion": null,
+        "arrival": null,
+        "timeline": {
+         "accepted": "2026-10-08T04:31:01.000Z",
+         "requested": "2026-10-08T04:31:01.000Z",
+         "pending_payment": "2026-10-08T04:31:01.000Z"
+        },
+        "etaMinutes": null,
+        "callAttempts": 0,
+        "waitUntil": null,
+        "freeCancelUntil": 1791434461000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       },
+       "week": {
+        "awaiting": 0,
+        "scheduled": 19000,
+        "paid": 23500
+       },
+       "alerts": {
+        "documentsExpiring": [],
+        "termsPending": [],
+        "strikes": 0,
+        "paused": null
+       }
+      }
+     },
+     "GET /api/tech/jobs?tab=today": {
+      "status": 200,
+      "body": [
+       {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "arrived",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       },
+       {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       }
+      ]
+     },
+     "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+      "status": 200,
+      "body": {
+       "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+       "code": "KT-ZTXG5Z",
+       "status": "arrived",
+       "step": "arrived",
+       "isRevisit": false,
+       "entryMode": "direct_link",
+       "problem": {
+        "id": "not_cooling",
+        "ar": "لا يبرّد",
+        "en": "Not cooling"
+       },
+       "units": [
+        {
+         "type": "split",
+         "count": 1
+        }
+       ],
+       "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+       "media": [
+        {
+         "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+         "url": "katf-demo-image:photo"
+        }
+       ],
+       "window": {
+        "start": "2026-10-08T08:00:00.000Z",
+        "end": "2026-10-08T10:00:00.000Z"
+       },
+       "area": {
+        "wilayat": {
+         "ar": "السيب",
+         "en": "Seeb"
+        },
+        "neighbourhood": {
+         "ar": "الخوض",
+         "en": "Al Khoudh"
+        }
+       },
+       "approx": {
+        "lat": 23.59,
+        "lng": 58.15
+       },
+       "location": {
+        "lat": 23.5872,
+        "lng": 58.1543
+       },
+       "address": {
+        "wayNo": "1234",
+        "flatNo": null,
+        "wilayat": "seeb",
+        "landmark": "قرب المسجد",
+        "buildingNo": "56",
+        "neighbourhood": "khoud",
+        "notes": "الطابق الثاني"
+       },
+       "customerFirstName": "عائشة",
+       "acceptDeadline": "2026-10-08T05:18:03.000Z",
+       "money": {
+        "visitFee": 5000,
+        "commissionBps": 500,
+        "commissionReason": "own_link",
+        "visitOnlyNet": 4500,
+        "quoteTotal": null,
+        "expectedNet": null,
+        "technicianNet": null,
+        "paid": 5000,
+        "payoutDueAt": null
+       },
+       "quote": null,
+       "diagnosis": null,
+       "completion": null,
+       "arrival": {
+        "lat": 23.587699999999998,
+        "lng": 58.1543,
+        "distance": 56,
+        "override": false,
+        "simulated": false,
+        "photoFileId": "82b26683-1456-4685-918b-b946d67d3bef"
+       },
+       "timeline": {
+        "arrived": "2026-10-08T05:08:03.000Z",
+        "accepted": "2026-10-08T05:06:03.000Z",
+        "requested": "2026-10-08T05:03:03.000Z",
+        "on_the_way": "2026-10-08T05:07:03.000Z",
+        "pending_payment": "2026-10-08T05:03:03.000Z"
+       },
+       "etaMinutes": 20,
+       "callAttempts": 0,
+       "waitUntil": 1791436983000,
+       "freeCancelUntil": 1791436383000,
+       "policy": {
+        "geofenceMeters": 300,
+        "warrantyDays": 14,
+        "quoteExpiryMinutes": 60,
+        "strikeHours": 2,
+        "probationMaxQuote": 100000
+       }
+      }
+     }
+    }
+   },
+   {
+    "on": "POST /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2/diagnose",
+    "response": {
+     "status": 200,
+     "body": {
+      "ok": true
+     }
+    },
+    "set": {
+     "GET /api/tech/home": {
+      "status": 200,
+      "body": {
+       "status": "approved_probation",
+       "available": true,
+       "vacationUntil": null,
+       "publicName": "سالم ت.",
+       "rating": 4.5,
+       "ratingCount": 2,
+       "probationJobsLeft": 3,
+       "requests": [],
+       "today": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "diagnosing",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ],
+       "next": {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "step": "accepted",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف لا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "approx": {
+         "lat": 23.6,
+         "lng": 58.21
+        },
+        "location": {
+         "lat": 23.601399999999998,
+         "lng": 58.2093
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "mawaleh",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "نورة",
+        "acceptDeadline": "2026-10-08T04:46:01.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": null,
+         "expectedNet": null,
+         "technicianNet": null,
+         "paid": 5000,
+         "payoutDueAt": null
+        },
+        "quote": null,
+        "diagnosis": null,
+        "completion": null,
+        "arrival": null,
+        "timeline": {
+         "accepted": "2026-10-08T04:31:01.000Z",
+         "requested": "2026-10-08T04:31:01.000Z",
+         "pending_payment": "2026-10-08T04:31:01.000Z"
+        },
+        "etaMinutes": null,
+        "callAttempts": 0,
+        "waitUntil": null,
+        "freeCancelUntil": 1791434461000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       },
+       "week": {
+        "awaiting": 0,
+        "scheduled": 19000,
+        "paid": 23500
+       },
+       "alerts": {
+        "documentsExpiring": [],
+        "termsPending": [],
+        "strikes": 0,
+        "paused": null
+       }
+      }
+     },
+     "GET /api/tech/jobs?tab=today": {
+      "status": 200,
+      "body": [
+       {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "diagnosing",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       },
+       {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       }
+      ]
+     },
+     "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+      "status": 200,
+      "body": {
+       "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+       "code": "KT-ZTXG5Z",
+       "status": "diagnosing",
+       "step": "diagnosing",
+       "isRevisit": false,
+       "entryMode": "direct_link",
+       "problem": {
+        "id": "not_cooling",
+        "ar": "لا يبرّد",
+        "en": "Not cooling"
+       },
+       "units": [
+        {
+         "type": "split",
+         "count": 1
+        }
+       ],
+       "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+       "media": [
+        {
+         "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+         "url": "katf-demo-image:photo"
+        }
+       ],
+       "window": {
+        "start": "2026-10-08T08:00:00.000Z",
+        "end": "2026-10-08T10:00:00.000Z"
+       },
+       "area": {
+        "wilayat": {
+         "ar": "السيب",
+         "en": "Seeb"
+        },
+        "neighbourhood": {
+         "ar": "الخوض",
+         "en": "Al Khoudh"
+        }
+       },
+       "approx": {
+        "lat": 23.59,
+        "lng": 58.15
+       },
+       "location": {
+        "lat": 23.5872,
+        "lng": 58.1543
+       },
+       "address": {
+        "wayNo": "1234",
+        "flatNo": null,
+        "wilayat": "seeb",
+        "landmark": "قرب المسجد",
+        "buildingNo": "56",
+        "neighbourhood": "khoud",
+        "notes": "الطابق الثاني"
+       },
+       "customerFirstName": "عائشة",
+       "acceptDeadline": "2026-10-08T05:18:03.000Z",
+       "money": {
+        "visitFee": 5000,
+        "commissionBps": 500,
+        "commissionReason": "own_link",
+        "visitOnlyNet": 4500,
+        "quoteTotal": null,
+        "expectedNet": null,
+        "technicianNet": null,
+        "paid": 5000,
+        "payoutDueAt": null
+       },
+       "quote": null,
+       "diagnosis": null,
+       "completion": null,
+       "arrival": {
+        "lat": 23.587699999999998,
+        "lng": 58.1543,
+        "distance": 56,
+        "override": false,
+        "simulated": false,
+        "photoFileId": "82b26683-1456-4685-918b-b946d67d3bef"
+       },
+       "timeline": {
+        "arrived": "2026-10-08T05:08:03.000Z",
+        "accepted": "2026-10-08T05:06:03.000Z",
+        "requested": "2026-10-08T05:03:03.000Z",
+        "diagnosing": "2026-10-08T05:09:03.000Z",
+        "on_the_way": "2026-10-08T05:07:03.000Z",
+        "pending_payment": "2026-10-08T05:03:03.000Z"
+       },
+       "etaMinutes": 20,
+       "callAttempts": 0,
+       "waitUntil": 1791436983000,
+       "freeCancelUntil": 1791436383000,
+       "policy": {
+        "geofenceMeters": 300,
+        "warrantyDays": 14,
+        "quoteExpiryMinutes": 60,
+        "strikeHours": 2,
+        "probationMaxQuote": 100000
+       }
+      }
+     }
+    }
+   },
+   {
+    "on": "POST /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2/quote",
+    "response": {
+     "status": 200,
+     "body": {
+      "quoteId": "54c7e95c-bbe8-40eb-885b-333253388240",
+      "status": "sent"
+     }
+    },
+    "set": {
+     "GET /api/tech/home": {
+      "status": 200,
+      "body": {
+       "status": "approved_probation",
+       "available": true,
+       "vacationUntil": null,
+       "publicName": "سالم ت.",
+       "rating": 4.5,
+       "ratingCount": 2,
+       "probationJobsLeft": 3,
+       "requests": [],
+       "today": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "quote_sent",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ],
+       "next": {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "step": "accepted",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف لا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "approx": {
+         "lat": 23.6,
+         "lng": 58.21
+        },
+        "location": {
+         "lat": 23.601399999999998,
+         "lng": 58.2093
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "mawaleh",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "نورة",
+        "acceptDeadline": "2026-10-08T04:46:01.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": null,
+         "expectedNet": null,
+         "technicianNet": null,
+         "paid": 5000,
+         "payoutDueAt": null
+        },
+        "quote": null,
+        "diagnosis": null,
+        "completion": null,
+        "arrival": null,
+        "timeline": {
+         "accepted": "2026-10-08T04:31:01.000Z",
+         "requested": "2026-10-08T04:31:01.000Z",
+         "pending_payment": "2026-10-08T04:31:01.000Z"
+        },
+        "etaMinutes": null,
+        "callAttempts": 0,
+        "waitUntil": null,
+        "freeCancelUntil": 1791434461000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       },
+       "week": {
+        "awaiting": 0,
+        "scheduled": 19000,
+        "paid": 23500
+       },
+       "alerts": {
+        "documentsExpiring": [],
+        "termsPending": [],
+        "strikes": 0,
+        "paused": null
+       }
+      }
+     },
+     "GET /api/tech/jobs?tab=today": {
+      "status": 200,
+      "body": [
+       {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "quote_sent",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       },
+       {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       }
+      ]
+     },
+     "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+      "status": 200,
+      "body": {
+       "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+       "code": "KT-ZTXG5Z",
+       "status": "quote_sent",
+       "step": "quote",
+       "isRevisit": false,
+       "entryMode": "direct_link",
+       "problem": {
+        "id": "not_cooling",
+        "ar": "لا يبرّد",
+        "en": "Not cooling"
+       },
+       "units": [
+        {
+         "type": "split",
+         "count": 1
+        }
+       ],
+       "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+       "media": [
+        {
+         "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+         "url": "katf-demo-image:photo"
+        }
+       ],
+       "window": {
+        "start": "2026-10-08T08:00:00.000Z",
+        "end": "2026-10-08T10:00:00.000Z"
+       },
+       "area": {
+        "wilayat": {
+         "ar": "السيب",
+         "en": "Seeb"
+        },
+        "neighbourhood": {
+         "ar": "الخوض",
+         "en": "Al Khoudh"
+        }
+       },
+       "approx": {
+        "lat": 23.59,
+        "lng": 58.15
+       },
+       "location": {
+        "lat": 23.5872,
+        "lng": 58.1543
+       },
+       "address": {
+        "wayNo": "1234",
+        "flatNo": null,
+        "wilayat": "seeb",
+        "landmark": "قرب المسجد",
+        "buildingNo": "56",
+        "neighbourhood": "khoud",
+        "notes": "الطابق الثاني"
+       },
+       "customerFirstName": "عائشة",
+       "acceptDeadline": "2026-10-08T05:18:03.000Z",
+       "money": {
+        "visitFee": 5000,
+        "commissionBps": 500,
+        "commissionReason": "own_link",
+        "visitOnlyNet": 4500,
+        "quoteTotal": null,
+        "expectedNet": null,
+        "technicianNet": null,
+        "paid": 5000,
+        "payoutDueAt": null
+       },
+       "quote": {
+        "id": "54c7e95c-bbe8-40eb-885b-333253388240",
+        "version": 1,
+        "status": "sent",
+        "items": [
+         {
+          "kind": "labor",
+          "label": "تنظيف وإعادة تعبئة الغاز",
+          "qty": 1,
+          "unitPrice": 12000,
+          "amount": 12000
+         },
+         {
+          "kind": "part",
+          "label": "صمام",
+          "qty": 1,
+          "unitPrice": 8000,
+          "amount": 8000
+         }
+        ],
+        "total": 20000,
+        "laborTotal": 12000,
+        "partsTotal": 8000,
+        "visitFee": 5000,
+        "alreadyPaid": 5000,
+        "due": 15000,
+        "validUntil": "2026-10-08T06:10:03.000Z",
+        "warrantyDays": 14
+       },
+       "diagnosis": {
+        "notes": "نقص غاز وتسريب بسيط عند الصمام",
+        "faults": [
+         "not_cooling"
+        ],
+        "photos": [
+         {
+          "id": "32c725e0-7c59-44a3-8937-36d65a545b73",
+          "url": "katf-demo-image:photo"
+         },
+         {
+          "id": "e957c4bd-6b59-4987-b7a6-a0fb9306c62c",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "durationMin": 60
+       },
+       "completion": null,
+       "arrival": {
+        "lat": 23.587699999999998,
+        "lng": 58.1543,
+        "distance": 56,
+        "override": false,
+        "simulated": false,
+        "photoFileId": "82b26683-1456-4685-918b-b946d67d3bef"
+       },
+       "timeline": {
+        "arrived": "2026-10-08T05:08:03.000Z",
+        "accepted": "2026-10-08T05:06:03.000Z",
+        "requested": "2026-10-08T05:03:03.000Z",
+        "diagnosing": "2026-10-08T05:09:03.000Z",
+        "on_the_way": "2026-10-08T05:07:03.000Z",
+        "quote_sent": "2026-10-08T05:10:03.000Z",
+        "pending_payment": "2026-10-08T05:03:03.000Z"
+       },
+       "etaMinutes": 20,
+       "callAttempts": 0,
+       "waitUntil": 1791436983000,
+       "freeCancelUntil": 1791436383000,
+       "policy": {
+        "geofenceMeters": 300,
+        "warrantyDays": 14,
+        "quoteExpiryMinutes": 60,
+        "strikeHours": 2,
+        "probationMaxQuote": 100000
+       }
+      }
+     }
+    },
+    "then": {
+     "afterMs": 6000,
+     "set": {
+      "GET /api/tech/home": {
+       "status": 200,
+       "body": {
+        "status": "approved_probation",
+        "available": true,
+        "vacationUntil": null,
+        "publicName": "سالم ت.",
+        "rating": 4.5,
+        "ratingCount": 2,
+        "probationJobsLeft": 3,
+        "requests": [],
+        "today": [
+         {
+          "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+          "code": "KT-GX2TQ1",
+          "status": "accepted",
+          "problem": "لا يبرّد",
+          "problemEn": "Not cooling",
+          "window": {
+           "start": "2026-10-08T06:00:00.000Z",
+           "end": "2026-10-08T08:00:00.000Z"
+          },
+          "area": {
+           "wilayat": {
+            "ar": "السيب",
+            "en": "Seeb"
+           },
+           "neighbourhood": {
+            "ar": "الموالح",
+            "en": "Al Mawaleh"
+           }
+          },
+          "visitFee": 5000,
+          "net": null,
+          "isRevisit": false
+         },
+         {
+          "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+          "code": "KT-ZTXG5Z",
+          "status": "in_progress",
+          "problem": "لا يبرّد",
+          "problemEn": "Not cooling",
+          "window": {
+           "start": "2026-10-08T08:00:00.000Z",
+           "end": "2026-10-08T10:00:00.000Z"
+          },
+          "area": {
+           "wilayat": {
+            "ar": "السيب",
+            "en": "Seeb"
+           },
+           "neighbourhood": {
+            "ar": "الخوض",
+            "en": "Al Khoudh"
+           }
+          },
+          "visitFee": 5000,
+          "net": null,
+          "isRevisit": false
+         }
+        ],
+        "next": {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "step": "accepted",
+         "isRevisit": false,
+         "entryMode": "direct_link",
+         "problem": {
+          "id": "not_cooling",
+          "ar": "لا يبرّد",
+          "en": "Not cooling"
+         },
+         "units": [
+          {
+           "type": "split",
+           "count": 1
+          }
+         ],
+         "problemText": "المكيف لا يبرد (طلب تجريبي)",
+         "media": [
+          {
+           "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+           "url": "katf-demo-image:photo"
+          }
+         ],
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "approx": {
+          "lat": 23.6,
+          "lng": 58.21
+         },
+         "location": {
+          "lat": 23.601399999999998,
+          "lng": 58.2093
+         },
+         "address": {
+          "wayNo": "1234",
+          "flatNo": null,
+          "wilayat": "seeb",
+          "landmark": "قرب المسجد",
+          "buildingNo": "56",
+          "neighbourhood": "mawaleh",
+          "notes": "الطابق الثاني"
+         },
+         "customerFirstName": "نورة",
+         "acceptDeadline": "2026-10-08T04:46:01.000Z",
+         "money": {
+          "visitFee": 5000,
+          "commissionBps": 500,
+          "commissionReason": "own_link",
+          "visitOnlyNet": 4500,
+          "quoteTotal": null,
+          "expectedNet": null,
+          "technicianNet": null,
+          "paid": 5000,
+          "payoutDueAt": null
+         },
+         "quote": null,
+         "diagnosis": null,
+         "completion": null,
+         "arrival": null,
+         "timeline": {
+          "accepted": "2026-10-08T04:31:01.000Z",
+          "requested": "2026-10-08T04:31:01.000Z",
+          "pending_payment": "2026-10-08T04:31:01.000Z"
+         },
+         "etaMinutes": null,
+         "callAttempts": 0,
+         "waitUntil": null,
+         "freeCancelUntil": 1791434461000,
+         "policy": {
+          "geofenceMeters": 300,
+          "warrantyDays": 14,
+          "quoteExpiryMinutes": 60,
+          "strikeHours": 2,
+          "probationMaxQuote": 100000
+         }
+        },
+        "week": {
+         "awaiting": 1,
+         "scheduled": 19000,
+         "paid": 23500
+        },
+        "alerts": {
+         "documentsExpiring": [],
+         "termsPending": [],
+         "strikes": 0,
+         "paused": null
+        }
+       }
+      },
+      "GET /api/tech/jobs?tab=today": {
+       "status": 200,
+       "body": [
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "in_progress",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ]
+      },
+      "GET /api/notifications": {
+       "status": 200,
+       "body": [
+        {
+         "id": "074dd778-35c9-4ac7-8c0d-f826549c03ec",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-ZTXG5Z: وافق ودفع — ابدأ العمل.",
+         "link": "https://katf.example/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "read": false,
+         "at": "2026-10-08T05:10:03.000Z"
+        },
+        {
+         "id": "1ed0b726-6d77-4214-b798-7811162971f3",
+         "key": "new_request",
+         "text": "طلب جديد في الخوض: لا يبرّد · الخميس، 8 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "read": false,
+         "at": "2026-10-08T05:03:03.000Z"
+        },
+        {
+         "id": "47852cb2-7bb1-4abc-b4a7-33dcbc24c31c",
+         "key": "new_request",
+         "text": "طلب جديد في الخوير: لا يبرّد · الأحد، 11 أكتوبر · 8:00 ص – 10:00 ص. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/faea99f2-9b26-4b73-b1e2-a4023ef4b15b",
+         "read": false,
+         "at": "2026-10-08T04:32:02.000Z"
+        },
+        {
+         "id": "2a70d1ac-275c-4756-95d3-f112311d475d",
+         "key": "new_request",
+         "text": "طلب جديد في الموالح: لا يبرّد · الخميس، 8 أكتوبر · 10:00 ص – 12:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/1f62a01a-e277-423d-88d2-f11284f56f46",
+         "read": false,
+         "at": "2026-10-08T04:31:01.000Z"
+        },
+        {
+         "id": "33bb777e-3173-4e74-8a0b-2f645f6bea31",
+         "key": "payout_sent",
+         "text": "تم تحويل 23.500 ر.ع إلى حسابك. المرجع DEMO-REF-1.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-07T07:00:00.000Z"
+        },
+        {
+         "id": "23b9cd09-00c3-45bb-98a1-f507a2eef52c",
+         "key": "new_request",
+         "text": "طلب جديد في الغبرة: لا يبرّد · الاثنين، 5 أكتوبر · 2:00 م – 4:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "9ded9ae9-786a-46c2-8a1e-7a044f41bac6",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-D5HRJR: وافق ودفع — ابدأ العمل.",
+         "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "1ad653d1-c7d1-481c-b853-e597601a5dc8",
+         "key": "job_confirmed_tech",
+         "text": "أكّد الزبون إنجاز الطلب KT-D5HRJR. يُصرف مستحقك في 8 أكتوبر 2026.",
+         "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "e2983412-d55d-4255-bd28-f2a65842392b",
+         "key": "review_received",
+         "text": "حصلت على تقييم 4 نجوم على الطلب KT-D5HRJR.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "8f83ec86-83f2-43c2-8750-e10a3e1597c5",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-ET0FP8: رفض العرض — أنهِ الزيارة.",
+         "link": "https://katf.example/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c",
+         "read": false,
+         "at": "2026-10-04T03:05:05.000Z"
+        },
+        {
+         "id": "02f5786a-7ac8-4afa-944b-7438ae547c57",
+         "key": "new_request",
+         "text": "طلب جديد في المعبيلة: لا يبرّد · الأحد، 4 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c",
+         "read": false,
+         "at": "2026-10-04T03:05:05.000Z"
+        },
+        {
+         "id": "9941e22a-a770-4dcc-b312-2e4c15a44e92",
+         "key": "review_received",
+         "text": "حصلت على تقييم 5 نجوم على الطلب KT-0B3Q7X.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "98d426b2-1ada-449d-a3b5-89252da5bd58",
+         "key": "job_confirmed_tech",
+         "text": "أكّد الزبون إنجاز الطلب KT-0B3Q7X. يُصرف مستحقك في 7 أكتوبر 2026.",
+         "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "35c052ce-f16f-492e-88c3-bae50c203dc7",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-0B3Q7X: وافق ودفع — ابدأ العمل.",
+         "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "4d4f7de2-e387-4925-aeec-633e186b20a0",
+         "key": "new_request",
+         "text": "طلب جديد في الخوض: لا يبرّد · الأحد، 4 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "db545a8d-9b3d-437b-a964-2d2e87efd5e3",
+         "key": "approved",
+         "text": "تم اعتماد حسابك. يمكنك الآن استقبال الطلبات. أهلاً بك في كتف.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-04T03:01:01.000Z"
+        },
+        {
+         "id": "89257805-fa40-4dc7-af7f-317afc599b60",
+         "key": "app_received",
+         "text": "وصلنا طلب انضمامك. نراجعه ونخبرك قريباً.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-04T03:01:01.000Z"
+        }
+       ]
+      },
+      "GET /api/tech/earnings": {
+       "status": 200,
+       "body": {
+        "awaitingConfirmation": [
+         {
+          "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+          "code": "KT-ZTXG5Z",
+          "status": "in_progress",
+          "expected": 19000
+         }
+        ],
+        "scheduled": 19000,
+        "scheduledItems": [
+         {
+          "id": "60656977-722f-472b-8eb2-814fad023c64",
+          "bookingId": "805d50d8-39dd-4959-8765-4e057484750d",
+          "amount": 19000,
+          "dueAt": "2026-10-08T05:01:01.000Z",
+          "status": "scheduled",
+          "due": true
+         }
+        ],
+        "inBatch": 0,
+        "paid": 23500,
+        "jobs": [
+         {
+          "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+          "code": "KT-0B3Q7X",
+          "status": "paid_out",
+          "customerPaid": 20000,
+          "commissionBps": 500,
+          "commission": 1000,
+          "net": 19000,
+          "payoutDueAt": "2026-10-07T03:04:04.000Z",
+          "date": "2026-10-04T08:00:00.000Z"
+         },
+         {
+          "id": "805d50d8-39dd-4959-8765-4e057484750d",
+          "code": "KT-D5HRJR",
+          "status": "settled",
+          "customerPaid": 20000,
+          "commissionBps": 500,
+          "commission": 1000,
+          "net": 19000,
+          "payoutDueAt": "2026-10-08T05:01:01.000Z",
+          "date": "2026-10-05T10:00:00.000Z"
+         },
+         {
+          "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+          "code": "KT-ET0FP8",
+          "status": "closed_visit_only",
+          "customerPaid": 5000,
+          "commissionBps": 500,
+          "commission": 500,
+          "net": 4500,
+          "payoutDueAt": "2026-10-07T03:05:05.000Z",
+          "date": "2026-10-04T08:00:00.000Z"
+         }
+        ],
+        "payouts": [
+         {
+          "id": "6e701d37-e7d4-49c2-9a16-34fc74dfd4df",
+          "amount": 23500,
+          "status": "paid",
+          "bankReference": "DEMO-REF-1",
+          "paidAt": "2026-10-07T07:00:00.000Z",
+          "createdAt": "2026-10-07T07:00:00.000Z"
+         }
+        ],
+        "adjustments": []
+       }
+      },
+      "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+       "status": 200,
+       "body": {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "in_progress",
+        "step": "in_progress",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "approx": {
+         "lat": 23.59,
+         "lng": 58.15
+        },
+        "location": {
+         "lat": 23.5872,
+         "lng": 58.1543
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "khoud",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "عائشة",
+        "acceptDeadline": "2026-10-08T05:18:03.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": 20000,
+         "expectedNet": 19000,
+         "technicianNet": null,
+         "paid": 20000,
+         "payoutDueAt": null
+        },
+        "quote": {
+         "id": "54c7e95c-bbe8-40eb-885b-333253388240",
+         "version": 1,
+         "status": "approved",
+         "items": [
+          {
+           "kind": "labor",
+           "label": "تنظيف وإعادة تعبئة الغاز",
+           "qty": 1,
+           "unitPrice": 12000,
+           "amount": 12000
+          },
+          {
+           "kind": "part",
+           "label": "صمام",
+           "qty": 1,
+           "unitPrice": 8000,
+           "amount": 8000
+          }
+         ],
+         "total": 20000,
+         "laborTotal": 12000,
+         "partsTotal": 8000,
+         "visitFee": 5000,
+         "alreadyPaid": 20000,
+         "due": 0,
+         "validUntil": "2026-10-08T06:10:03.000Z",
+         "warrantyDays": 14
+        },
+        "diagnosis": {
+         "notes": "نقص غاز وتسريب بسيط عند الصمام",
+         "faults": [
+          "not_cooling"
+         ],
+         "photos": [
+          {
+           "id": "32c725e0-7c59-44a3-8937-36d65a545b73",
+           "url": "katf-demo-image:photo"
+          },
+          {
+           "id": "e957c4bd-6b59-4987-b7a6-a0fb9306c62c",
+           "url": "katf-demo-image:photo"
+          }
+         ],
+         "durationMin": 60
+        },
+        "completion": null,
+        "arrival": {
+         "lat": 23.587699999999998,
+         "lng": 58.1543,
+         "distance": 56,
+         "override": false,
+         "simulated": false,
+         "photoFileId": "82b26683-1456-4685-918b-b946d67d3bef"
+        },
+        "timeline": {
+         "arrived": "2026-10-08T05:08:03.000Z",
+         "accepted": "2026-10-08T05:06:03.000Z",
+         "requested": "2026-10-08T05:03:03.000Z",
+         "diagnosing": "2026-10-08T05:09:03.000Z",
+         "on_the_way": "2026-10-08T05:07:03.000Z",
+         "quote_sent": "2026-10-08T05:10:03.000Z",
+         "in_progress": "2026-10-08T05:10:03.000Z",
+         "pending_payment": "2026-10-08T05:03:03.000Z",
+         "repair_payment_pending": "2026-10-08T05:10:03.000Z"
+        },
+        "etaMinutes": 20,
+        "callAttempts": 0,
+        "waitUntil": 1791436983000,
+        "freeCancelUntil": 1791436383000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       }
+      }
+     }
+    }
+   },
+   {
+    "on": "POST /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2/complete",
+    "response": {
+     "status": 200,
+     "body": {
+      "ok": true
+     }
+    },
+    "set": {
+     "GET /api/tech/home": {
+      "status": 200,
+      "body": {
+       "status": "approved_probation",
+       "available": true,
+       "vacationUntil": null,
+       "publicName": "سالم ت.",
+       "rating": 4.5,
+       "ratingCount": 2,
+       "probationJobsLeft": 3,
+       "requests": [],
+       "today": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        },
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "completed_pending_confirmation",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ],
+       "next": {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "step": "accepted",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف لا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "approx": {
+         "lat": 23.6,
+         "lng": 58.21
+        },
+        "location": {
+         "lat": 23.601399999999998,
+         "lng": 58.2093
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "mawaleh",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "نورة",
+        "acceptDeadline": "2026-10-08T04:46:01.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": null,
+         "expectedNet": null,
+         "technicianNet": null,
+         "paid": 5000,
+         "payoutDueAt": null
+        },
+        "quote": null,
+        "diagnosis": null,
+        "completion": null,
+        "arrival": null,
+        "timeline": {
+         "accepted": "2026-10-08T04:31:01.000Z",
+         "requested": "2026-10-08T04:31:01.000Z",
+         "pending_payment": "2026-10-08T04:31:01.000Z"
+        },
+        "etaMinutes": null,
+        "callAttempts": 0,
+        "waitUntil": null,
+        "freeCancelUntil": 1791434461000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       },
+       "week": {
+        "awaiting": 1,
+        "scheduled": 19000,
+        "paid": 23500
+       },
+       "alerts": {
+        "documentsExpiring": [],
+        "termsPending": [],
+        "strikes": 0,
+        "paused": null
+       }
+      }
+     },
+     "GET /api/tech/jobs?tab=today": {
+      "status": 200,
+      "body": [
+       {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "completed_pending_confirmation",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       },
+       {
+        "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+        "code": "KT-GX2TQ1",
+        "status": "accepted",
+        "problem": "لا يبرّد",
+        "problemEn": "Not cooling",
+        "window": {
+         "start": "2026-10-08T06:00:00.000Z",
+         "end": "2026-10-08T08:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الموالح",
+          "en": "Al Mawaleh"
+         }
+        },
+        "visitFee": 5000,
+        "net": null,
+        "isRevisit": false
+       }
+      ]
+     },
+     "GET /api/tech/earnings": {
+      "status": 200,
+      "body": {
+       "awaitingConfirmation": [
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "completed_pending_confirmation",
+         "expected": 19000
+        }
+       ],
+       "scheduled": 19000,
+       "scheduledItems": [
+        {
+         "id": "60656977-722f-472b-8eb2-814fad023c64",
+         "bookingId": "805d50d8-39dd-4959-8765-4e057484750d",
+         "amount": 19000,
+         "dueAt": "2026-10-08T05:01:01.000Z",
+         "status": "scheduled",
+         "due": true
+        }
+       ],
+       "inBatch": 0,
+       "paid": 23500,
+       "jobs": [
+        {
+         "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "code": "KT-0B3Q7X",
+         "status": "paid_out",
+         "customerPaid": 20000,
+         "commissionBps": 500,
+         "commission": 1000,
+         "net": 19000,
+         "payoutDueAt": "2026-10-07T03:04:04.000Z",
+         "date": "2026-10-04T08:00:00.000Z"
+        },
+        {
+         "id": "805d50d8-39dd-4959-8765-4e057484750d",
+         "code": "KT-D5HRJR",
+         "status": "settled",
+         "customerPaid": 20000,
+         "commissionBps": 500,
+         "commission": 1000,
+         "net": 19000,
+         "payoutDueAt": "2026-10-08T05:01:01.000Z",
+         "date": "2026-10-05T10:00:00.000Z"
+        },
+        {
+         "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+         "code": "KT-ET0FP8",
+         "status": "closed_visit_only",
+         "customerPaid": 5000,
+         "commissionBps": 500,
+         "commission": 500,
+         "net": 4500,
+         "payoutDueAt": "2026-10-07T03:05:05.000Z",
+         "date": "2026-10-04T08:00:00.000Z"
+        }
+       ],
+       "payouts": [
+        {
+         "id": "6e701d37-e7d4-49c2-9a16-34fc74dfd4df",
+         "amount": 23500,
+         "status": "paid",
+         "bankReference": "DEMO-REF-1",
+         "paidAt": "2026-10-07T07:00:00.000Z",
+         "createdAt": "2026-10-07T07:00:00.000Z"
+        }
+       ],
+       "adjustments": []
+      }
+     },
+     "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+      "status": 200,
+      "body": {
+       "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+       "code": "KT-ZTXG5Z",
+       "status": "completed_pending_confirmation",
+       "step": "completed",
+       "isRevisit": false,
+       "entryMode": "direct_link",
+       "problem": {
+        "id": "not_cooling",
+        "ar": "لا يبرّد",
+        "en": "Not cooling"
+       },
+       "units": [
+        {
+         "type": "split",
+         "count": 1
+        }
+       ],
+       "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+       "media": [
+        {
+         "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+         "url": "katf-demo-image:photo"
+        }
+       ],
+       "window": {
+        "start": "2026-10-08T08:00:00.000Z",
+        "end": "2026-10-08T10:00:00.000Z"
+       },
+       "area": {
+        "wilayat": {
+         "ar": "السيب",
+         "en": "Seeb"
+        },
+        "neighbourhood": {
+         "ar": "الخوض",
+         "en": "Al Khoudh"
+        }
+       },
+       "approx": {
+        "lat": 23.59,
+        "lng": 58.15
+       },
+       "location": {
+        "lat": 23.5872,
+        "lng": 58.1543
+       },
+       "address": {
+        "wayNo": "1234",
+        "flatNo": null,
+        "wilayat": "seeb",
+        "landmark": "قرب المسجد",
+        "buildingNo": "56",
+        "neighbourhood": "khoud",
+        "notes": "الطابق الثاني"
+       },
+       "customerFirstName": "عائشة",
+       "acceptDeadline": "2026-10-08T05:18:03.000Z",
+       "money": {
+        "visitFee": 5000,
+        "commissionBps": 500,
+        "commissionReason": "own_link",
+        "visitOnlyNet": 4500,
+        "quoteTotal": 20000,
+        "expectedNet": 19000,
+        "technicianNet": null,
+        "paid": 20000,
+        "payoutDueAt": null
+       },
+       "quote": {
+        "id": "54c7e95c-bbe8-40eb-885b-333253388240",
+        "version": 1,
+        "status": "approved",
+        "items": [
+         {
+          "kind": "labor",
+          "label": "تنظيف وإعادة تعبئة الغاز",
+          "qty": 1,
+          "unitPrice": 12000,
+          "amount": 12000
+         },
+         {
+          "kind": "part",
+          "label": "صمام",
+          "qty": 1,
+          "unitPrice": 8000,
+          "amount": 8000
+         }
+        ],
+        "total": 20000,
+        "laborTotal": 12000,
+        "partsTotal": 8000,
+        "visitFee": 5000,
+        "alreadyPaid": 20000,
+        "due": 0,
+        "validUntil": "2026-10-08T06:10:03.000Z",
+        "warrantyDays": 14
+       },
+       "diagnosis": {
+        "notes": "نقص غاز وتسريب بسيط عند الصمام",
+        "faults": [
+         "not_cooling"
+        ],
+        "photos": [
+         {
+          "id": "32c725e0-7c59-44a3-8937-36d65a545b73",
+          "url": "katf-demo-image:photo"
+         },
+         {
+          "id": "e957c4bd-6b59-4987-b7a6-a0fb9306c62c",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "durationMin": 60
+       },
+       "completion": {
+        "after": [
+         {
+          "id": "f58d9e2f-e224-4291-a671-7b9ccb430f90",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "notes": "تم الإصلاح وتجربة التبريد",
+        "parts": [
+         {
+          "label": "صمام"
+         }
+        ],
+        "before": [
+         {
+          "id": "527db5b8-d1a1-4fc0-8883-5d3ab4750f37",
+          "url": "katf-demo-image:photo"
+         }
+        ]
+       },
+       "arrival": {
+        "lat": 23.587699999999998,
+        "lng": 58.1543,
+        "distance": 56,
+        "override": false,
+        "simulated": false,
+        "photoFileId": "82b26683-1456-4685-918b-b946d67d3bef"
+       },
+       "timeline": {
+        "arrived": "2026-10-08T05:08:03.000Z",
+        "accepted": "2026-10-08T05:06:03.000Z",
+        "requested": "2026-10-08T05:03:03.000Z",
+        "diagnosing": "2026-10-08T05:09:03.000Z",
+        "on_the_way": "2026-10-08T05:07:03.000Z",
+        "quote_sent": "2026-10-08T05:10:03.000Z",
+        "in_progress": "2026-10-08T05:10:03.000Z",
+        "pending_payment": "2026-10-08T05:03:03.000Z",
+        "repair_payment_pending": "2026-10-08T05:10:03.000Z",
+        "completed_pending_confirmation": "2026-10-08T05:11:03.000Z"
+       },
+       "etaMinutes": 20,
+       "callAttempts": 0,
+       "waitUntil": 1791436983000,
+       "freeCancelUntil": 1791436383000,
+       "policy": {
+        "geofenceMeters": 300,
+        "warrantyDays": 14,
+        "quoteExpiryMinutes": 60,
+        "strikeHours": 2,
+        "probationMaxQuote": 100000
+       }
+      }
+     }
+    },
+    "then": {
+     "afterMs": 6000,
+     "set": {
+      "GET /api/tech/home": {
+       "status": 200,
+       "body": {
+        "status": "approved_probation",
+        "available": true,
+        "vacationUntil": null,
+        "publicName": "سالم ت.",
+        "rating": 4.7,
+        "ratingCount": 3,
+        "probationJobsLeft": 2,
+        "requests": [],
+        "today": [
+         {
+          "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+          "code": "KT-GX2TQ1",
+          "status": "accepted",
+          "problem": "لا يبرّد",
+          "problemEn": "Not cooling",
+          "window": {
+           "start": "2026-10-08T06:00:00.000Z",
+           "end": "2026-10-08T08:00:00.000Z"
+          },
+          "area": {
+           "wilayat": {
+            "ar": "السيب",
+            "en": "Seeb"
+           },
+           "neighbourhood": {
+            "ar": "الموالح",
+            "en": "Al Mawaleh"
+           }
+          },
+          "visitFee": 5000,
+          "net": null,
+          "isRevisit": false
+         }
+        ],
+        "next": {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "step": "accepted",
+         "isRevisit": false,
+         "entryMode": "direct_link",
+         "problem": {
+          "id": "not_cooling",
+          "ar": "لا يبرّد",
+          "en": "Not cooling"
+         },
+         "units": [
+          {
+           "type": "split",
+           "count": 1
+          }
+         ],
+         "problemText": "المكيف لا يبرد (طلب تجريبي)",
+         "media": [
+          {
+           "id": "ba7d0f5d-df80-4ab3-98a1-4f05659a8537",
+           "url": "katf-demo-image:photo"
+          }
+         ],
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "approx": {
+          "lat": 23.6,
+          "lng": 58.21
+         },
+         "location": {
+          "lat": 23.601399999999998,
+          "lng": 58.2093
+         },
+         "address": {
+          "wayNo": "1234",
+          "flatNo": null,
+          "wilayat": "seeb",
+          "landmark": "قرب المسجد",
+          "buildingNo": "56",
+          "neighbourhood": "mawaleh",
+          "notes": "الطابق الثاني"
+         },
+         "customerFirstName": "نورة",
+         "acceptDeadline": "2026-10-08T04:46:01.000Z",
+         "money": {
+          "visitFee": 5000,
+          "commissionBps": 500,
+          "commissionReason": "own_link",
+          "visitOnlyNet": 4500,
+          "quoteTotal": null,
+          "expectedNet": null,
+          "technicianNet": null,
+          "paid": 5000,
+          "payoutDueAt": null
+         },
+         "quote": null,
+         "diagnosis": null,
+         "completion": null,
+         "arrival": null,
+         "timeline": {
+          "accepted": "2026-10-08T04:31:01.000Z",
+          "requested": "2026-10-08T04:31:01.000Z",
+          "pending_payment": "2026-10-08T04:31:01.000Z"
+         },
+         "etaMinutes": null,
+         "callAttempts": 0,
+         "waitUntil": null,
+         "freeCancelUntil": 1791434461000,
+         "policy": {
+          "geofenceMeters": 300,
+          "warrantyDays": 14,
+          "quoteExpiryMinutes": 60,
+          "strikeHours": 2,
+          "probationMaxQuote": 100000
+         }
+        },
+        "week": {
+         "awaiting": 0,
+         "scheduled": 38000,
+         "paid": 23500
+        },
+        "alerts": {
+         "documentsExpiring": [],
+         "termsPending": [],
+         "strikes": 0,
+         "paused": null
+        }
+       }
+      },
+      "GET /api/tech/jobs?tab=today": {
+       "status": 200,
+       "body": [
+        {
+         "id": "1f62a01a-e277-423d-88d2-f11284f56f46",
+         "code": "KT-GX2TQ1",
+         "status": "accepted",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T06:00:00.000Z",
+          "end": "2026-10-08T08:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الموالح",
+           "en": "Al Mawaleh"
+          }
+         },
+         "visitFee": 5000,
+         "net": null,
+         "isRevisit": false
+        }
+       ]
+      },
+      "GET /api/tech/jobs?tab=past": {
+       "status": 200,
+       "body": [
+        {
+         "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "code": "KT-ZTXG5Z",
+         "status": "settled",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-08T08:00:00.000Z",
+          "end": "2026-10-08T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": 19000,
+         "isRevisit": false
+        },
+        {
+         "id": "805d50d8-39dd-4959-8765-4e057484750d",
+         "code": "KT-D5HRJR",
+         "status": "settled",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-05T10:00:00.000Z",
+          "end": "2026-10-05T12:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "بوشر",
+           "en": "Bawshar"
+          },
+          "neighbourhood": {
+           "ar": "الغبرة",
+           "en": "Al Ghubrah"
+          }
+         },
+         "visitFee": 5000,
+         "net": 19000,
+         "isRevisit": false
+        },
+        {
+         "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+         "code": "KT-ET0FP8",
+         "status": "closed_visit_only",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-04T08:00:00.000Z",
+          "end": "2026-10-04T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "المعبيلة",
+           "en": "Al Mabelah"
+          }
+         },
+         "visitFee": 5000,
+         "net": 4500,
+         "isRevisit": false
+        },
+        {
+         "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "code": "KT-0B3Q7X",
+         "status": "paid_out",
+         "problem": "لا يبرّد",
+         "problemEn": "Not cooling",
+         "window": {
+          "start": "2026-10-04T08:00:00.000Z",
+          "end": "2026-10-04T10:00:00.000Z"
+         },
+         "area": {
+          "wilayat": {
+           "ar": "السيب",
+           "en": "Seeb"
+          },
+          "neighbourhood": {
+           "ar": "الخوض",
+           "en": "Al Khoudh"
+          }
+         },
+         "visitFee": 5000,
+         "net": 19000,
+         "isRevisit": false
+        }
+       ]
+      },
+      "GET /api/notifications": {
+       "status": 200,
+       "body": [
+        {
+         "id": "3b5cadff-4b5e-47fe-8ec0-35f26949eaa9",
+         "key": "job_confirmed_tech",
+         "text": "أكّد الزبون إنجاز الطلب KT-ZTXG5Z. يُصرف مستحقك في 11 أكتوبر 2026.",
+         "link": "https://katf.example/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "read": false,
+         "at": "2026-10-08T05:11:03.000Z"
+        },
+        {
+         "id": "6f9cd1a7-86fe-449b-91ab-fc2f72aeb71a",
+         "key": "review_received",
+         "text": "حصلت على تقييم 5 نجوم على الطلب KT-ZTXG5Z.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-08T05:11:03.000Z"
+        },
+        {
+         "id": "074dd778-35c9-4ac7-8c0d-f826549c03ec",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-ZTXG5Z: وافق ودفع — ابدأ العمل.",
+         "link": "https://katf.example/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "read": false,
+         "at": "2026-10-08T05:10:03.000Z"
+        },
+        {
+         "id": "1ed0b726-6d77-4214-b798-7811162971f3",
+         "key": "new_request",
+         "text": "طلب جديد في الخوض: لا يبرّد · الخميس، 8 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+         "read": false,
+         "at": "2026-10-08T05:03:03.000Z"
+        },
+        {
+         "id": "47852cb2-7bb1-4abc-b4a7-33dcbc24c31c",
+         "key": "new_request",
+         "text": "طلب جديد في الخوير: لا يبرّد · الأحد، 11 أكتوبر · 8:00 ص – 10:00 ص. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/faea99f2-9b26-4b73-b1e2-a4023ef4b15b",
+         "read": false,
+         "at": "2026-10-08T04:32:02.000Z"
+        },
+        {
+         "id": "2a70d1ac-275c-4756-95d3-f112311d475d",
+         "key": "new_request",
+         "text": "طلب جديد في الموالح: لا يبرّد · الخميس، 8 أكتوبر · 10:00 ص – 12:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/1f62a01a-e277-423d-88d2-f11284f56f46",
+         "read": false,
+         "at": "2026-10-08T04:31:01.000Z"
+        },
+        {
+         "id": "33bb777e-3173-4e74-8a0b-2f645f6bea31",
+         "key": "payout_sent",
+         "text": "تم تحويل 23.500 ر.ع إلى حسابك. المرجع DEMO-REF-1.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-07T07:00:00.000Z"
+        },
+        {
+         "id": "9ded9ae9-786a-46c2-8a1e-7a044f41bac6",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-D5HRJR: وافق ودفع — ابدأ العمل.",
+         "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "23b9cd09-00c3-45bb-98a1-f507a2eef52c",
+         "key": "new_request",
+         "text": "طلب جديد في الغبرة: لا يبرّد · الاثنين، 5 أكتوبر · 2:00 م – 4:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "1ad653d1-c7d1-481c-b853-e597601a5dc8",
+         "key": "job_confirmed_tech",
+         "text": "أكّد الزبون إنجاز الطلب KT-D5HRJR. يُصرف مستحقك في 8 أكتوبر 2026.",
+         "link": "https://katf.example/tech/jobs/805d50d8-39dd-4959-8765-4e057484750d",
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "e2983412-d55d-4255-bd28-f2a65842392b",
+         "key": "review_received",
+         "text": "حصلت على تقييم 4 نجوم على الطلب KT-D5HRJR.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-05T05:01:01.000Z"
+        },
+        {
+         "id": "02f5786a-7ac8-4afa-944b-7438ae547c57",
+         "key": "new_request",
+         "text": "طلب جديد في المعبيلة: لا يبرّد · الأحد، 4 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c",
+         "read": false,
+         "at": "2026-10-04T03:05:05.000Z"
+        },
+        {
+         "id": "8f83ec86-83f2-43c2-8750-e10a3e1597c5",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-ET0FP8: رفض العرض — أنهِ الزيارة.",
+         "link": "https://katf.example/tech/jobs/1bea9cd5-9792-4d74-b4ef-83117819d30c",
+         "read": false,
+         "at": "2026-10-04T03:05:05.000Z"
+        },
+        {
+         "id": "98d426b2-1ada-449d-a3b5-89252da5bd58",
+         "key": "job_confirmed_tech",
+         "text": "أكّد الزبون إنجاز الطلب KT-0B3Q7X. يُصرف مستحقك في 7 أكتوبر 2026.",
+         "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "35c052ce-f16f-492e-88c3-bae50c203dc7",
+         "key": "quote_decision",
+         "text": "ردّ الزبون على عرض الطلب KT-0B3Q7X: وافق ودفع — ابدأ العمل.",
+         "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "4d4f7de2-e387-4925-aeec-633e186b20a0",
+         "key": "new_request",
+         "text": "طلب جديد في الخوض: لا يبرّد · الأحد، 4 أكتوبر · 12:00 م – 2:00 م. المضمون لك: 5.000 ر.ع. اقبل خلال 15 دقيقة.",
+         "link": "https://katf.example/tech/jobs/acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "9941e22a-a770-4dcc-b312-2e4c15a44e92",
+         "key": "review_received",
+         "text": "حصلت على تقييم 5 نجوم على الطلب KT-0B3Q7X.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-04T03:04:04.000Z"
+        },
+        {
+         "id": "89257805-fa40-4dc7-af7f-317afc599b60",
+         "key": "app_received",
+         "text": "وصلنا طلب انضمامك. نراجعه ونخبرك قريباً.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-04T03:01:01.000Z"
+        },
+        {
+         "id": "db545a8d-9b3d-437b-a964-2d2e87efd5e3",
+         "key": "approved",
+         "text": "تم اعتماد حسابك. يمكنك الآن استقبال الطلبات. أهلاً بك في كتف.",
+         "link": null,
+         "read": false,
+         "at": "2026-10-04T03:01:01.000Z"
+        }
+       ]
+      },
+      "GET /api/tech/earnings": {
+       "status": 200,
+       "body": {
+        "awaitingConfirmation": [],
+        "scheduled": 38000,
+        "scheduledItems": [
+         {
+          "id": "1963be12-c192-41a9-9eef-f13ef75b7a33",
+          "bookingId": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+          "amount": 19000,
+          "dueAt": "2026-10-11T05:11:03.000Z",
+          "status": "scheduled",
+          "due": false
+         },
+         {
+          "id": "60656977-722f-472b-8eb2-814fad023c64",
+          "bookingId": "805d50d8-39dd-4959-8765-4e057484750d",
+          "amount": 19000,
+          "dueAt": "2026-10-08T05:01:01.000Z",
+          "status": "scheduled",
+          "due": true
+         }
+        ],
+        "inBatch": 0,
+        "paid": 23500,
+        "jobs": [
+         {
+          "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+          "code": "KT-ZTXG5Z",
+          "status": "settled",
+          "customerPaid": 20000,
+          "commissionBps": 500,
+          "commission": 1000,
+          "net": 19000,
+          "payoutDueAt": "2026-10-11T05:11:03.000Z",
+          "date": "2026-10-08T08:00:00.000Z"
+         },
+         {
+          "id": "acbb1e8f-9ff2-4d94-934d-2585e44d60c1",
+          "code": "KT-0B3Q7X",
+          "status": "paid_out",
+          "customerPaid": 20000,
+          "commissionBps": 500,
+          "commission": 1000,
+          "net": 19000,
+          "payoutDueAt": "2026-10-07T03:04:04.000Z",
+          "date": "2026-10-04T08:00:00.000Z"
+         },
+         {
+          "id": "805d50d8-39dd-4959-8765-4e057484750d",
+          "code": "KT-D5HRJR",
+          "status": "settled",
+          "customerPaid": 20000,
+          "commissionBps": 500,
+          "commission": 1000,
+          "net": 19000,
+          "payoutDueAt": "2026-10-08T05:01:01.000Z",
+          "date": "2026-10-05T10:00:00.000Z"
+         },
+         {
+          "id": "1bea9cd5-9792-4d74-b4ef-83117819d30c",
+          "code": "KT-ET0FP8",
+          "status": "closed_visit_only",
+          "customerPaid": 5000,
+          "commissionBps": 500,
+          "commission": 500,
+          "net": 4500,
+          "payoutDueAt": "2026-10-07T03:05:05.000Z",
+          "date": "2026-10-04T08:00:00.000Z"
+         }
+        ],
+        "payouts": [
+         {
+          "id": "6e701d37-e7d4-49c2-9a16-34fc74dfd4df",
+          "amount": 23500,
+          "status": "paid",
+          "bankReference": "DEMO-REF-1",
+          "paidAt": "2026-10-07T07:00:00.000Z",
+          "createdAt": "2026-10-07T07:00:00.000Z"
+         }
+        ],
+        "adjustments": []
+       }
+      },
+      "GET /api/tech/jobs/a0b99631-d8a8-4181-8714-30fc2a69c2a2": {
+       "status": 200,
+       "body": {
+        "id": "a0b99631-d8a8-4181-8714-30fc2a69c2a2",
+        "code": "KT-ZTXG5Z",
+        "status": "settled",
+        "step": "customer_confirmed",
+        "isRevisit": false,
+        "entryMode": "direct_link",
+        "problem": {
+         "id": "not_cooling",
+         "ar": "لا يبرّد",
+         "en": "Not cooling"
+        },
+        "units": [
+         {
+          "type": "split",
+          "count": 1
+         }
+        ],
+        "problemText": "المكيف يسرّب ماء ولا يبرد (طلب تجريبي)",
+        "media": [
+         {
+          "id": "1229b331-6745-4a7b-8e58-56a819f4a667",
+          "url": "katf-demo-image:photo"
+         }
+        ],
+        "window": {
+         "start": "2026-10-08T08:00:00.000Z",
+         "end": "2026-10-08T10:00:00.000Z"
+        },
+        "area": {
+         "wilayat": {
+          "ar": "السيب",
+          "en": "Seeb"
+         },
+         "neighbourhood": {
+          "ar": "الخوض",
+          "en": "Al Khoudh"
+         }
+        },
+        "approx": {
+         "lat": 23.59,
+         "lng": 58.15
+        },
+        "location": {
+         "lat": 23.5872,
+         "lng": 58.1543
+        },
+        "address": {
+         "wayNo": "1234",
+         "flatNo": null,
+         "wilayat": "seeb",
+         "landmark": "قرب المسجد",
+         "buildingNo": "56",
+         "neighbourhood": "khoud",
+         "notes": "الطابق الثاني"
+        },
+        "customerFirstName": "عائشة",
+        "acceptDeadline": "2026-10-08T05:18:03.000Z",
+        "money": {
+         "visitFee": 5000,
+         "commissionBps": 500,
+         "commissionReason": "own_link",
+         "visitOnlyNet": 4500,
+         "quoteTotal": 20000,
+         "expectedNet": 19000,
+         "technicianNet": 19000,
+         "paid": 20000,
+         "payoutDueAt": "2026-10-11T05:11:03.000Z"
+        },
+        "quote": {
+         "id": "54c7e95c-bbe8-40eb-885b-333253388240",
+         "version": 1,
+         "status": "approved",
+         "items": [
+          {
+           "kind": "labor",
+           "label": "تنظيف وإعادة تعبئة الغاز",
+           "qty": 1,
+           "unitPrice": 12000,
+           "amount": 12000
+          },
+          {
+           "kind": "part",
+           "label": "صمام",
+           "qty": 1,
+           "unitPrice": 8000,
+           "amount": 8000
+          }
+         ],
+         "total": 20000,
+         "laborTotal": 12000,
+         "partsTotal": 8000,
+         "visitFee": 5000,
+         "alreadyPaid": 20000,
+         "due": 0,
+         "validUntil": "2026-10-08T06:10:03.000Z",
+         "warrantyDays": 14
+        },
+        "diagnosis": {
+         "notes": "نقص غاز وتسريب بسيط عند الصمام",
+         "faults": [
+          "not_cooling"
+         ],
+         "photos": [
+          {
+           "id": "32c725e0-7c59-44a3-8937-36d65a545b73",
+           "url": "katf-demo-image:photo"
+          },
+          {
+           "id": "e957c4bd-6b59-4987-b7a6-a0fb9306c62c",
+           "url": "katf-demo-image:photo"
+          }
+         ],
+         "durationMin": 60
+        },
+        "completion": {
+         "after": [
+          {
+           "id": "f58d9e2f-e224-4291-a671-7b9ccb430f90",
+           "url": "katf-demo-image:photo"
+          }
+         ],
+         "notes": "تم الإصلاح وتجربة التبريد",
+         "parts": [
+          {
+           "label": "صمام"
+          }
+         ],
+         "before": [
+          {
+           "id": "527db5b8-d1a1-4fc0-8883-5d3ab4750f37",
+           "url": "katf-demo-image:photo"
+          }
+         ]
+        },
+        "arrival": {
+         "lat": 23.587699999999998,
+         "lng": 58.1543,
+         "distance": 56,
+         "override": false,
+         "simulated": false,
+         "photoFileId": "82b26683-1456-4685-918b-b946d67d3bef"
+        },
+        "timeline": {
+         "arrived": "2026-10-08T05:08:03.000Z",
+         "settled": "2026-10-08T05:11:03.000Z",
+         "accepted": "2026-10-08T05:06:03.000Z",
+         "confirmed": "2026-10-08T05:11:03.000Z",
+         "requested": "2026-10-08T05:03:03.000Z",
+         "diagnosing": "2026-10-08T05:09:03.000Z",
+         "on_the_way": "2026-10-08T05:07:03.000Z",
+         "quote_sent": "2026-10-08T05:10:03.000Z",
+         "in_progress": "2026-10-08T05:10:03.000Z",
+         "pending_payment": "2026-10-08T05:03:03.000Z",
+         "repair_payment_pending": "2026-10-08T05:10:03.000Z",
+         "completed_pending_confirmation": "2026-10-08T05:11:03.000Z"
+        },
+        "etaMinutes": 20,
+        "callAttempts": 0,
+        "waitUntil": 1791436983000,
+        "freeCancelUntil": 1791436383000,
+        "policy": {
+         "geofenceMeters": 300,
+         "warrantyDays": 14,
+         "quoteExpiryMinutes": 60,
+         "strikeHours": 2,
+         "probationMaxQuote": 100000
+        }
+       }
+      }
+     }
+    }
+   }
+  ]
+ ]
+}

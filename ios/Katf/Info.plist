@@ -31,6 +31,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>KatfAPIURL</key>
 	<string>$(KATF_API_URL)</string>
+	<key>KatfOfflineDemo</key>
+	<string>$(KATF_OFFLINE_DEMO)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>

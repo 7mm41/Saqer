@@ -2,9 +2,23 @@
  * Native capabilities (iPhone app) with web fallbacks (PWA): secure token storage, camera,
  * location, push, haptics and biometric unlock.
  */
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
+import { demoActive } from './demo';
 
 export const isNative = () => Capacitor.isNativePlatform();
+
+// ---------------------------------------------------------------- settings of this iPhone build
+// Read from Info.plist by the in-app KatfConfig plugin (ios/Katf/KatfViewController.swift), so one web
+// bundle serves every Xcode build: KatfAPIURL ← KATF_API_URL, KatfOfflineDemo ← KATF_OFFLINE_DEMO.
+const KatfConfig = registerPlugin<{ get(): Promise<{ apiUrl?: string; offlineDemo?: boolean }> }>('KatfConfig');
+let nativeConfigPromise: Promise<{ apiUrl: string; offlineDemo: boolean }> | null = null;
+export function nativeConfig(): Promise<{ apiUrl: string; offlineDemo: boolean }> {
+  nativeConfigPromise ??= KatfConfig.get().then(
+    (c) => ({ apiUrl: (c.apiUrl ?? '').trim().replace(/\/+$/, ''), offlineDemo: c.offlineDemo === true }),
+    () => ({ apiUrl: '', offlineDemo: false }),
+  );
+  return nativeConfigPromise;
+}
 
 // ---------------------------------------------------------------- secure storage (Keychain on iOS)
 export async function secureGet(key: string): Promise<string | null> {
@@ -68,6 +82,8 @@ export async function takePhoto(): Promise<File | null> {
 
 // ---------------------------------------------------------------- location
 export async function currentPosition(): Promise<{ lat: number; lng: number; accuracy: number }> {
+  // the offline demo replays a recorded check-in, so it does not ask for the real location
+  if (__KATF_OFFLINE_DEMO__ && demoActive()) return { lat: 23.5869, lng: 58.1543, accuracy: 10 };
   if (isNative()) {
     const { Geolocation } = await import('@capacitor/geolocation');
     const p = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 20000 });

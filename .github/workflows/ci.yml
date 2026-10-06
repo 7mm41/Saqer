@@ -33,7 +33,7 @@ jobs:
       - name: Types
         run: pnpm typecheck
       - name: Unit and integration tests (money, state machine, API flows, security)
-        run: pnpm --filter @katf/shared --filter @katf/api test
+        run: pnpm --filter @katf/shared --filter @katf/demo --filter @katf/api test
       - name: Build everything
         run: pnpm build
       - name: OpenAPI and state machine docs are current

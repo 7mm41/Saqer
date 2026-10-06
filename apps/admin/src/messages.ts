@@ -1,6 +1,6 @@
 /** Admin panel copy. Arabic is the source of truth; English mirrors it key for key. */
 export const ar = {
-  app: { title: 'لوحة الإدارة', skip: 'انتقل إلى المحتوى', lang: 'English', theme: 'تبديل المظهر', menu: 'القائمة', signOut: 'تسجيل الخروج', demo: 'بيانات تجريبية — ليست حقيقية', gateClosed: 'البوابة القانونية مغلقة: لا دفع حقيقي ولا تسجيل عام ولا رسائل للعامة.', gateOpen: 'البوابة القانونية مفتوحة.', gateShort: 'البوابة مغلقة' },
+  app: { title: 'لوحة الإدارة', skip: 'انتقل إلى المحتوى', lang: 'English', theme: 'تبديل المظهر', menu: 'القائمة', signOut: 'تسجيل الخروج', demo: 'بيانات تجريبية — ليست حقيقية', demoOffline: 'لوحة تجريبية بدون إنترنت — بيانات غير حقيقية، ولا يُحفظ أي تغيير', demoExit: 'العودة إلى التطبيق', gateClosed: 'البوابة القانونية مغلقة: لا دفع حقيقي ولا تسجيل عام ولا رسائل للعامة.', gateOpen: 'البوابة القانونية مفتوحة.', gateShort: 'البوابة مغلقة' },
   nav: {
     overview: 'نظرة عامة', applications: 'طلبات الانضمام', technicians: 'الفنيون', customers: 'الزبائن', bookings: 'الحجوزات', dispatch: 'التوزيع', disputes: 'النزاعات',
     payments: 'المدفوعات', payouts: 'الصرف للفنيين', reports: 'التقارير والدفتر', catalog: 'الخدمات', areas: 'المناطق', legal: 'الوثائق القانونية', messaging: 'الرسائل',
@@ -99,7 +99,7 @@ export const ar = {
 type Shape<T> = { [K in keyof T]: T[K] extends string ? string : T[K] extends readonly string[] ? readonly string[] : Shape<T[K]> };
 
 export const en: Shape<typeof ar> = {
-  app: { title: 'Admin', skip: 'Skip to content', lang: 'العربية', theme: 'Switch theme', menu: 'Menu', signOut: 'Sign out', demo: 'Demo data — not real', gateClosed: 'Legal gate closed: no live payments, no public registration, no public messages.', gateOpen: 'Legal gate open.', gateShort: 'Gate closed' },
+  app: { title: 'Admin', skip: 'Skip to content', lang: 'العربية', theme: 'Switch theme', menu: 'Menu', signOut: 'Sign out', demo: 'Demo data — not real', demoOffline: 'Offline demo panel — not real data, nothing is saved', demoExit: 'Back to the app', gateClosed: 'Legal gate closed: no live payments, no public registration, no public messages.', gateOpen: 'Legal gate open.', gateShort: 'Gate closed' },
   nav: {
     overview: 'Overview', applications: 'Applications', technicians: 'Technicians', customers: 'Customers', bookings: 'Bookings', dispatch: 'Dispatch', disputes: 'Disputes',
     payments: 'Payments', payouts: 'Payouts', reports: 'Reports & ledger', catalog: 'Services', areas: 'Areas', legal: 'Legal documents', messaging: 'Messaging',

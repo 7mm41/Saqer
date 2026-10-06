@@ -1,6 +1,6 @@
 /** Technician app copy. Arabic is the source of truth; English mirrors it key for key. */
 export const ar = {
-  app: { title: 'كتف للفنيين', tagline: 'زبائن يصلونك، ودفعك مضمون', skip: 'انتقل إلى المحتوى', lang: 'English', theme: 'تبديل المظهر', demo: 'بيانات تجريبية — ليست حقيقية' },
+  app: { title: 'كتف للفنيين', tagline: 'زبائن يصلونك، ودفعك مضمون', skip: 'انتقل إلى المحتوى', lang: 'English', theme: 'تبديل المظهر', demo: 'بيانات تجريبية — ليست حقيقية', demoOffline: 'عرض تجريبي بدون إنترنت — بيانات غير حقيقية', demoExit: 'خروج من العرض' },
   tabs: { home: 'الرئيسية', jobs: 'المهام', earnings: 'الأرباح', account: 'حسابي' },
   welcome: {
     title: 'أهلاً بك في كتف',
@@ -8,6 +8,10 @@ export const ar = {
     phone: 'رقم الهاتف',
     signIn: 'دخول',
     biometric: 'افتح بالبصمة أو بالوجه',
+    demoTitle: 'تجربة التطبيق بدون إنترنت',
+    demoBody: 'حساب فني تجريبي ببيانات مسجّلة مسبقاً، فيه طلب جديد يمكن إكماله خطوة بخطوة. لا يتصل بأي خادم، ولا يُحفظ أو يُرسل شيء مما يُكتب فيه.',
+    demoEnter: 'دخول الحساب التجريبي',
+    demoAdmin: 'عرض لوحة الإدارة التجريبية',
   },
   wizard: {
     progress: 'الخطوة {n} من 10',
@@ -318,9 +322,9 @@ export const ar = {
 type Shape<T> = T extends string ? string : T extends readonly (infer U)[] ? Shape<U>[] : { [K in keyof T]: Shape<T[K]> };
 
 export const en: Shape<typeof ar> = {
-  app: { title: 'Katf Pro', tagline: 'Customers come to you, your pay is protected', skip: 'Skip to content', lang: 'العربية', theme: 'Switch theme', demo: 'Demo data — not real' },
+  app: { title: 'Katf Pro', tagline: 'Customers come to you, your pay is protected', skip: 'Skip to content', lang: 'العربية', theme: 'Switch theme', demo: 'Demo data — not real', demoOffline: 'Offline demo — not real data', demoExit: 'Leave demo' },
   tabs: { home: 'Home', jobs: 'Jobs', earnings: 'Earnings', account: 'Account' },
-  welcome: { title: 'Welcome to Katf', body: 'Sign in with your phone number. If you are new, we start your application right away.', phone: 'Phone number', signIn: 'Sign in', biometric: 'Unlock with Face ID / fingerprint' },
+  welcome: { title: 'Welcome to Katf', body: 'Sign in with your phone number. If you are new, we start your application right away.', phone: 'Phone number', signIn: 'Sign in', biometric: 'Unlock with Face ID / fingerprint', demoTitle: 'Try the app without internet', demoBody: 'A demo technician account with recorded data, including a new request you can take through every step. It does not connect to any server, and nothing typed in it is saved or sent.', demoEnter: 'Open the demo account', demoAdmin: 'Open the demo admin panel' },
   wizard: {
     progress: 'Step {n} of 10',
     saveLater: 'Save and continue later',

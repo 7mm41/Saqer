@@ -1,7 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Logo, OtpField, PhoneField, useT, Countdown } from '@katf/ui';
 import { api, errorText, signInWithOtp } from '../lib/api';
 import { useApp } from '../App';
+import { adminDemoUrl, demoAvailable, enterDemo } from '../lib/demo';
+
+/** Offline demo entry (D72): shown only in builds that carry the recording. */
+function DemoCard() {
+  const { m } = useApp();
+  const [show, setShow] = useState(false);
+  const admin = adminDemoUrl();
+  useEffect(() => {
+    void demoAvailable().then(setShow);
+  }, []);
+  if (!show) return null;
+  return (
+    <Card>
+      <div className="k-stack" style={{ gap: 10 }}>
+        <h2 style={{ fontSize: '1.1rem' }}>{m.welcome.demoTitle}</h2>
+        <p className="k-small k-muted">{m.welcome.demoBody}</p>
+        <Button variant="secondary" onClick={enterDemo}>
+          {m.welcome.demoEnter}
+        </Button>
+        {admin && (
+          <Button variant="quiet" onClick={() => window.location.assign(admin)}>
+            {m.welcome.demoAdmin}
+          </Button>
+        )}
+      </div>
+    </Card>
+  );
+}
 
 export function Welcome() {
   const { m, locale, reload, config } = useApp();
@@ -89,6 +117,7 @@ export function Welcome() {
           </div>
         )}
       </Card>
+      {__KATF_OFFLINE_DEMO__ && <DemoCard />}
     </div>
   );
 }

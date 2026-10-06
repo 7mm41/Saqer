@@ -32,6 +32,7 @@ import { commonAr, commonEn, interpolate } from '@katf/shared/i18n';
 import { ar, en, type AdminMessages } from './messages';
 import { api, BASE_PATH, onSessionLost, post } from './lib/api';
 import { SignIn } from './pages/SignIn';
+import { insideApp, leaveDemo } from './lib/demo';
 
 export type Role = 'owner' | 'verifier' | 'support' | 'finance';
 export interface Me {
@@ -96,7 +97,18 @@ function Shell({ children }: { children: ReactNode }) {
   const groups = (['work', 'money', 'setup', 'control'] as const).map((g) => ({ g, pages: PAGES.filter((p) => p.group === g && can(p.roles)) })).filter((x) => x.pages.length);
   return (
     <>
-      {me.demoMode && <div className="k-demo-banner">{m.app.demo}</div>}
+      {__KATF_OFFLINE_DEMO__ ? (
+        <div className="k-demo-banner" role="status">
+          {m.app.demoOffline}
+          {insideApp() && (
+            <button type="button" className="k-demo-exit" onClick={leaveDemo}>
+              {m.app.demoExit}
+            </button>
+          )}
+        </div>
+      ) : (
+        me.demoMode && <div className="k-demo-banner">{m.app.demo}</div>
+      )}
       <a href="#main" className="k-skip">
         {m.app.skip}
       </a>
@@ -149,6 +161,7 @@ function Shell({ children }: { children: ReactNode }) {
               className="k-icon-btn"
               aria-label={m.app.signOut}
               onClick={async () => {
+                if (__KATF_OFFLINE_DEMO__) return insideApp() ? leaveDemo() : undefined;
                 await post('/auth/sign-out').catch(() => {});
                 window.location.assign(BASE_PATH);
               }}
