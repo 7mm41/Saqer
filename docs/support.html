@@ -1,0 +1,202 @@
+<title>دعم ثقافة إسلامية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #f3f6f3;
+    --surface: #ffffff;
+    --ink: #14201b;
+    --muted: #55655d;
+    --line: #d9e3dc;
+    --accent: #0b6b4a;
+    --accent-soft: #e3f0ea;
+    --gold: #a8812f;
+    --display: "Amiri", "Noto Naskh Arabic", serif;
+    --body: "IBM Plex Sans Arabic", -apple-system, "Segoe UI", Tahoma, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0b1310; --surface: #111c17; --ink: #e8efe9; --muted: #9fb2a7;
+      --line: #22342b; --accent: #5ccf9a; --accent-soft: #15291f; --gold: #d8b56a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0b1310; --surface: #111c17; --ink: #e8efe9; --muted: #9fb2a7;
+    --line: #22342b; --accent: #5ccf9a; --accent-soft: #15291f; --gold: #d8b56a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.85 var(--body);
+    padding-inline: 16px; padding-block: 32px 56px;
+  }
+  main { max-width: 720px; margin-inline: auto; display: grid; gap: 28px; }
+  header { display: grid; gap: 10px; justify-items: start; }
+  .mark { display: flex; align-items: center; gap: 10px; color: var(--gold); font-weight: 700; letter-spacing: .04em; font-size: 13px; }
+  .star { width: 18px; height: 18px; }
+  h1 { font: 700 clamp(30px, 6vw, 42px)/1.3 var(--display); margin: 0; text-wrap: balance; }
+  .meta { color: var(--muted); font-size: 14px; margin: 0; }
+  a { color: var(--accent); }
+  .summary {
+    background: var(--accent-soft); border: 1px solid var(--line); border-radius: 18px;
+    padding: 18px 20px; display: grid; gap: 10px;
+  }
+  .summary p { margin: 0; font-weight: 500; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .facts li {
+    font-size: 13px; font-weight: 700; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 3px 12px;
+  }
+  section { display: grid; gap: 6px; }
+  h2 { font: 700 21px/1.4 var(--body); margin: 0; color: var(--accent); }
+  p, li { max-width: 65ch; }
+  section p { margin: 0; }
+  ul.plain { margin: 0; padding-inline-start: 22px; display: grid; gap: 4px; }
+  .divider { display: flex; align-items: center; gap: 12px; color: var(--gold); }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .en { direction: ltr; text-align: left; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; display: grid; gap: 20px; }
+  .en h2 { font-family: inherit; }
+  .en .title { font: 700 26px/1.3 -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; }
+  .contact {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
+  }
+  .email { font: 600 16px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; direction: ltr; user-select: all; }
+  button {
+    font: 700 13px/1 var(--body); color: var(--accent); background: var(--accent-soft);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 8px 14px; cursor: pointer;
+  }
+  button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  footer { color: var(--muted); font-size: 13px; text-align: center; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; }
+  details + details { margin-top: 0; }
+  summary { font-weight: 700; cursor: pointer; }
+  summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 6px; }
+  details p { margin: 8px 0 0; color: var(--muted); }
+  .faq { display: grid; gap: 10px; }
+</style>
+
+<main dir="rtl" lang="ar">
+  <header>
+    <div class="mark">
+      <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l3.1 3.8 4.9-.6-.6 4.9L23 12l-3.6 2.9.6 4.9-4.9-.6L12 23l-3.1-3.8-4.9.6.6-4.9L1 12l3.6-2.9-.6-4.9 4.9.6z"/></svg>
+      تطبيق ثقافة إسلامية · صقر
+    </div>
+    <h1>الدعم والمساعدة</h1>
+    <p class="meta">دروس تفاعلية وبنك أسئلة بست لغات، ومصحف كامل بالتفسير والتلاوات، وبوصلة القبلة — كلها تعمل دون إنترنت.</p>
+  </header>
+
+  <section>
+    <h2>راسلنا</h2>
+    <p>لأي مشكلة أو اقتراح أو ملاحظة على المحتوى، راسلنا وسنرد في أقرب وقت. أرفق لقطة شاشة إن أمكن، واذكر طراز جهازك ونسخة iOS.</p>
+    <div class="contact">
+      <span class="email">xiisaqer@gmail.com</span>
+      <button type="button" id="copy-ar" data-copy="xiisaqer@gmail.com">نسخ البريد</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>أسئلة شائعة</h2>
+    <div class="faq">
+      <details>
+        <summary>هل يعمل التطبيق دون إنترنت؟</summary>
+        <p>نعم. الدروس والأسئلة والمصحف والتفسير والترجمات وعدد من التلاوات مضمّنة في التطبيق. التلاوات غير المضمّنة تُحمَّل عند أول استماع وتُحفظ للاستماع لاحقًا دون إنترنت.</p>
+      </details>
+      <details>
+        <summary>كيف أغيّر القارئ؟</summary>
+        <p>من تبويب «القرآن» اضغط على اسم القارئ، أو من قائمة «…» داخل المصحف، واختر القارئ الذي تريده.</p>
+      </details>
+      <details>
+        <summary>البوصلة لا تشير إلى القبلة بدقة</summary>
+        <p>اسمح للتطبيق بالوصول إلى موقعك، وابتعد عن المعادن والمغناطيس، ثم حرّك الجهاز على شكل رقم ٨ لمعايرة البوصلة. أمسك الجهاز مسطّحًا، أو قائمًا والكاميرا الخلفية نحو القبلة.</p>
+      </details>
+      <details>
+        <summary>كيف أفتح تفسير آية أو أستمع منها؟</summary>
+        <p>اضغط ضغطًا مطوّلًا على الآية في المصحف واختر «التفسير» أو «استمع من هذه الآية».</p>
+      </details>
+      <details>
+        <summary>كيف أغيّر اللغة أو المظهر أو أفعّل التذكير؟</summary>
+        <p>من زر ⚙️ في أعلى الشاشة الرئيسية: اللغة (العربية، English، فارسی، Türkçe، हिन्दी، বাংলা)، والمظهر النهاري أو الليلي، وخلفية التطبيق، وأيقونته، والتذكير اليومي.</p>
+      </details>
+      <details>
+        <summary>كيف أضيف الصلاة القادمة إلى شاشة القفل، وزر القبلة إلى مركز التحكم؟</summary>
+        <p>شاشة القفل: اضغط عليها مطوّلًا ← «تخصيص» ← «إضافة أدوات» ← «ثقافة إسلامية». مركز التحكم (iOS 18 فأحدث): افتحه ← ➕ ← «إضافة عنصر» ← ابحث عن «ثقافة إسلامية» واختر «القبلة» أو «مواقيت الصلاة».</p>
+      </details>
+      <details>
+        <summary>هل يجمع التطبيق بياناتي؟</summary>
+        <p>لا. كل ما تفعله في التطبيق يبقى على جهازك. التفاصيل في <a href="privacy.html">سياسة الخصوصية</a>.</p>
+      </details>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">✦</div>
+
+  <div class="en" lang="en" dir="ltr">
+    <p class="title">Support — Islamic Culture (Saqer)</p>
+    <p class="meta">Interactive lessons and a question bank in six languages, the complete mushaf with tafsir and recitations, and a Qibla compass, all working offline.</p>
+    <section>
+      <h2>Contact us</h2>
+      <p>For any problem, suggestion or note about the content, email us and we will reply as soon as we can. A screenshot, your device model and iOS version help.</p>
+      <div class="contact">
+        <span class="email">xiisaqer@gmail.com</span>
+        <button type="button" id="copy-en" data-copy="xiisaqer@gmail.com">Copy email</button>
+      </div>
+    </section>
+    <section>
+      <h2>Frequently asked questions</h2>
+      <div class="faq">
+        <details>
+          <summary>Does the app work offline?</summary>
+          <p>Yes. Lessons, questions, the mushaf, tafsir, translations and several recitations are bundled. Other recitations download the first time you play them and are kept for offline listening.</p>
+        </details>
+        <details>
+          <summary>How do I change the reciter?</summary>
+          <p>In the Quran tab tap the reciter's name, or use the "…" menu inside the mushaf.</p>
+        </details>
+        <details>
+          <summary>The compass is not pointing to the Qibla accurately</summary>
+          <p>Allow location access, keep away from metal and magnets, then move the device in a figure 8 to calibrate. Hold it flat, or upright with the back camera facing the Qibla.</p>
+        </details>
+        <details>
+          <summary>How do I read the tafsir of an ayah or listen from it?</summary>
+          <p>Long-press the ayah in the mushaf and choose Tafsir or Listen from this ayah.</p>
+        </details>
+        <details>
+          <summary>How do I add the next prayer to the lock screen, or the Qibla button to Control Center?</summary>
+          <p>Lock screen: touch and hold it, then Customize, Add Widgets, Islamic Culture. Control Center (iOS 18 or later): open it, tap +, Add a Control, search for Islamic Culture, and choose Qibla or Prayer times.</p>
+        </details>
+        <details>
+          <summary>Does the app collect my data?</summary>
+          <p>No. Everything you do in the app stays on your device. See the <a href="privacy.html">privacy policy</a> for details.</p>
+        </details>
+      </div>
+    </section>
+  </div>
+
+  <footer>© ٢٠٢٦ صقر · Saqer</footer>
+</main>
+<script>
+  document.querySelectorAll("button[data-copy]").forEach(function (button) {
+    var label = button.textContent;
+    button.addEventListener("click", function () {
+      var done = function () {
+        button.textContent = button.id === "copy-ar" ? "تم النسخ" : "Copied";
+        setTimeout(function () { button.textContent = label; }, 1600);
+      };
+      var select = function () {
+        var target = button.previousElementSibling;
+        var range = document.createRange();
+        range.selectNodeContents(target);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      };
+      try {
+        navigator.clipboard.writeText(button.dataset.copy).then(done, select);
+      } catch (e) { select(); }
+    });
+  });
+</script>

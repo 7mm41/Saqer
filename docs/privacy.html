@@ -1,0 +1,195 @@
+<title>خصوصية ثقافة إسلامية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg: #f3f6f3;
+    --surface: #ffffff;
+    --ink: #14201b;
+    --muted: #55655d;
+    --line: #d9e3dc;
+    --accent: #0b6b4a;
+    --accent-soft: #e3f0ea;
+    --gold: #a8812f;
+    --display: "Amiri", "Noto Naskh Arabic", serif;
+    --body: "IBM Plex Sans Arabic", -apple-system, "Segoe UI", Tahoma, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0b1310; --surface: #111c17; --ink: #e8efe9; --muted: #9fb2a7;
+      --line: #22342b; --accent: #5ccf9a; --accent-soft: #15291f; --gold: #d8b56a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0b1310; --surface: #111c17; --ink: #e8efe9; --muted: #9fb2a7;
+    --line: #22342b; --accent: #5ccf9a; --accent-soft: #15291f; --gold: #d8b56a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.85 var(--body);
+    padding-inline: 16px; padding-block: 32px 56px;
+  }
+  main { max-width: 720px; margin-inline: auto; display: grid; gap: 28px; }
+  header { display: grid; gap: 10px; justify-items: start; }
+  .mark { display: flex; align-items: center; gap: 10px; color: var(--gold); font-weight: 700; letter-spacing: .04em; font-size: 13px; }
+  .star { width: 18px; height: 18px; }
+  h1 { font: 700 clamp(30px, 6vw, 42px)/1.3 var(--display); margin: 0; text-wrap: balance; }
+  .meta { color: var(--muted); font-size: 14px; margin: 0; }
+  .summary {
+    background: var(--accent-soft); border: 1px solid var(--line); border-radius: 18px;
+    padding: 18px 20px; display: grid; gap: 10px;
+  }
+  .summary p { margin: 0; font-weight: 500; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .facts li {
+    font-size: 13px; font-weight: 700; color: var(--accent);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 3px 12px;
+  }
+  section { display: grid; gap: 6px; }
+  h2 { font: 700 21px/1.4 var(--body); margin: 0; color: var(--accent); }
+  p, li { max-width: 65ch; }
+  section p { margin: 0; }
+  ul.plain { margin: 0; padding-inline-start: 22px; display: grid; gap: 4px; }
+  .divider { display: flex; align-items: center; gap: 12px; color: var(--gold); }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .en { direction: ltr; text-align: left; font-family: -apple-system, "Segoe UI", Roboto, sans-serif; display: grid; gap: 20px; }
+  .en h2 { font-family: inherit; }
+  .en .title { font: 700 26px/1.3 -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; }
+  .contact {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px;
+  }
+  .email { font: 600 16px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; direction: ltr; user-select: all; }
+  button {
+    font: 700 13px/1 var(--body); color: var(--accent); background: var(--accent-soft);
+    border: 1px solid var(--accent); border-radius: 999px; padding: 8px 14px; cursor: pointer;
+  }
+  button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  footer { color: var(--muted); font-size: 13px; text-align: center; }
+</style>
+
+<main dir="rtl" lang="ar">
+  <header>
+    <div class="mark">
+      <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l3.1 3.8 4.9-.6-.6 4.9L23 12l-3.6 2.9.6 4.9-4.9-.6L12 23l-3.1-3.8-4.9.6.6-4.9L1 12l3.6-2.9-.6-4.9 4.9.6z"/></svg>
+      تطبيق ثقافة إسلامية · صقر
+    </div>
+    <h1>سياسة الخصوصية</h1>
+    <p class="meta">آخر تحديث: ١٠ أكتوبر ٢٠٢٦</p>
+  </header>
+
+  <div class="summary">
+    <p>باختصار: التطبيق لا يجمع أي بيانات شخصية، ولا يتتبّعك، ولا يعرض إعلانات. كل ما تفعله فيه يبقى على جهازك.</p>
+    <ul class="facts">
+      <li>لا حسابات</li><li>لا إعلانات</li><li>لا تحليلات</li><li>لا تتبّع</li>
+    </ul>
+  </div>
+
+  <section>
+    <h2>البيانات المحفوظة على جهازك فقط</h2>
+    <p>يحفظ التطبيق على جهازك إعداداتك (اللغة والمظهر والخلفية وسرعة الصوت والتذكيرات)، وتقدّمك في الدروس والأسئلة، وموضع قراءتك في المصحف وعلاماتك، والقارئ المختار. لا تُرسل هذه البيانات إلى أي خادم، وتُحذف كلها عند حذف التطبيق.</p>
+  </section>
+
+  <section>
+    <h2>الموقع (للقبلة ومواقيت الصلاة فقط)</h2>
+    <p>يطلب التطبيق إذن الموقع أثناء الاستخدام عند فتح بوصلة القبلة أو مواقيت الصلاة. يُستخدم موقعك على جهازك لحساب اتجاه الكعبة ومواقيت الصلاة، ويُحفظ على الجهاز فقط لتبقى المواقيت متاحة دون إنترنت، ولا يُرسل إلى أي جهة. ويُعرف اسم مدينتك من قائمة أماكن مضمّنة في التطبيق دون إنترنت. وتعرض أداة شاشة القفل والشاشة الرئيسية المواقيت من الموقع نفسه المحفوظ على جهازك؛ وإن سمحت للأدوات باستخدام الموقع تحدده الأداة على جهازك أيضًا. يمكنك رفض الإذن أو سحبه في أي وقت من إعدادات الجهاز.</p>
+  </section>
+
+  <section>
+    <h2>الإشعارات</h2>
+    <p>تنبيهات الأذان والتذكير اليومي إشعارات محلية يجدولها جهازك نفسه. لا نستخدم إشعارات عن بُعد، ولا نعرف إن كانت التنبيهات مفعّلة.</p>
+  </section>
+
+  <section>
+    <h2>تحميل التلاوات</h2>
+    <p>معظم المحتوى، ومنه المصحف والتفسير والترجمات وعدد من التلاوات، مضمّن في التطبيق ويعمل دون إنترنت. عند اختيارك الاستماع إلى سورة غير مضمّنة، تُحمَّل من خوادم mp3quran.net عبر اتصال آمن. هذه الخوادم، مثل أي موقع، تتلقّى عنوان IP الخاص بجهازك لإتمام التحميل. لا نرسل معه أي معلومات عنك.</p>
+  </section>
+
+  <section>
+    <h2>الأطفال</h2>
+    <p>التطبيق مناسب لجميع الأعمار ولا يجمع بيانات من أي مستخدم، ومنهم الأطفال.</p>
+  </section>
+
+  <section>
+    <h2>التغييرات على هذه السياسة</h2>
+    <p>إن تغيّرت هذه السياسة سنحدّث تاريخها في أعلى الصفحة. لن نبدأ بجمع بيانات دون تحديث هذه السياسة وطلب موافقتك داخل التطبيق.</p>
+  </section>
+
+  <section>
+    <h2>تواصل معنا</h2>
+    <div class="contact">
+      <span class="email" id="email-ar">xiisaqer@gmail.com</span>
+      <button type="button" id="copy-ar" data-copy="xiisaqer@gmail.com">نسخ البريد</button>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">✦</div>
+
+  <div class="en" lang="en" dir="ltr">
+    <p class="title">Privacy Policy — Islamic Culture (Saqer)</p>
+    <p class="meta">Last updated: October 10, 2026</p>
+    <div class="summary">
+      <p>In short: the app collects no personal data, does not track you and shows no ads. Everything you do in it stays on your device.</p>
+    </div>
+    <section>
+      <h2>Data kept on your device only</h2>
+      <p>The app stores your settings (language, appearance, background, voice speed, reminders), your lesson and quiz progress, your mushaf reading position and bookmarks, and your chosen reciter on your device. None of it is sent to any server, and all of it is removed when you delete the app.</p>
+    </section>
+    <section>
+      <h2>Location (Qibla and prayer times only)</h2>
+      <p>When you open the Qibla compass or prayer times, the app asks for location access while in use. Your location is used on the device to compute the Qibla direction and prayer times, and is kept on the device only so the times work offline. It is never sent to us or anyone else. Your city's name comes from a list of places bundled in the app, offline. The lock-screen and home-screen widgets show times from the same location kept on your device; if you allow widgets to use your location, the widget determines it on your device too. You can decline or revoke access at any time in Settings.</p>
+    </section>
+    <section>
+      <h2>Notifications</h2>
+      <p>Adhan alerts and the daily reminder are local notifications scheduled by your device. We use no remote notifications and do not know whether alerts are on.</p>
+    </section>
+    <section>
+      <h2>Recitation downloads</h2>
+      <p>Most content, including the mushaf, tafsir, translations and several recitations, is bundled and works offline. If you play a surah that is not bundled, it is downloaded from mp3quran.net over a secure connection. Like any website, those servers receive your device's IP address to complete the download. We send no information about you with it.</p>
+    </section>
+    <section>
+      <h2>Children</h2>
+      <p>The app is suitable for all ages and collects no data from any user, including children.</p>
+    </section>
+    <section>
+      <h2>Changes</h2>
+      <p>If this policy changes, the date at the top will be updated. We will not start collecting data without updating this policy and asking for your consent in the app.</p>
+    </section>
+    <section>
+      <h2>Contact</h2>
+      <div class="contact">
+        <span class="email">xiisaqer@gmail.com</span>
+        <button type="button" id="copy-en" data-copy="xiisaqer@gmail.com">Copy email</button>
+      </div>
+    </section>
+  </div>
+
+  <footer>© ٢٠٢٦ صقر · Saqer</footer>
+</main>
+
+<script>
+  document.querySelectorAll("button[data-copy]").forEach(function (button) {
+    var label = button.textContent;
+    button.addEventListener("click", function () {
+      var done = function () {
+        button.textContent = button.id === "copy-ar" ? "تم النسخ" : "Copied";
+        setTimeout(function () { button.textContent = label; }, 1600);
+      };
+      var select = function () {
+        var target = button.previousElementSibling;
+        var range = document.createRange();
+        range.selectNodeContents(target);
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      };
+      try {
+        navigator.clipboard.writeText(button.dataset.copy).then(done, select);
+      } catch (e) { select(); }
+    });
+  });
+</script>
