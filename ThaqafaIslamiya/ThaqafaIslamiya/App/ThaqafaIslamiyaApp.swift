@@ -17,7 +17,7 @@ struct ThaqafaIslamiyaApp: App {
     @State private var library: LibraryViewModel
     @State private var bank = QuestionBankViewModel()
     @State private var progress = ProgressStore()
-    @State private var router = AppRouter()
+    @State private var router = AppRouter.shared
     @State private var voice = VoicePlayer()
     @State private var quran = QuranStore()
     @State private var quranDownloads = QuranDownloads()
@@ -59,6 +59,7 @@ struct ThaqafaIslamiyaApp: App {
                     if bank.language != nil { bank.load(language) }
                     if settings.reminderEnabled { ReminderScheduler.schedule(minutes: settings.reminderMinutes) }
                     if prayers.hasLocation { prayers.scheduleNotifications() }     // نص الإشعار بلغة التطبيق
+                    prayers.publishToWidgets()                                     // والأداة بلغة التطبيق أيضًا
                 }
                 .onChange(of: settings.showTashkeel) {
                     library.load(fileName: settings.contentFileName, language: settings.language)
@@ -70,7 +71,10 @@ struct ThaqafaIslamiyaApp: App {
                     prayers.refresh()
                     if prayers.hasLocation { prayers.scheduleNotifications() }
                     prayers.updateLocationIfAuthorized()                 // المواقيت تتبع المستخدم أينما سافر
+                    prayers.publishToWidgets()
                 }
+                // من الأداة (thaqafa://prayer) أو زر القبلة (thaqafa://qibla)
+                .onOpenURL { url in router.handle(url) }
         }
     }
 }
@@ -125,7 +129,7 @@ extension View {
     }
 }
 
-/// الحاوية الجذرية: الشريط السفلي (الرئيسية، الأسئلة، الإعدادات) + العروض بملء الشاشة + شاشة البداية.
+/// الحاوية الجذرية: الشريط السفلي (الرئيسية، القرآن، المواقيت، القبلة، الأسئلة) + العروض بملء الشاشة + شاشة البداية.
 struct RootView: View {
     @Environment(AppSettings.self) private var settings
     @Environment(LibraryViewModel.self) private var library
@@ -165,17 +169,19 @@ struct RootView: View {
                 .tabItem { Label(L10n.t("tab.quran"), systemImage: "book.closed.fill") }
                 .tag(AppRouter.Tab.quran)
 
+                PrayerTimesView()
+                    .tabItem { Label(L10n.t("tab.prayer"), systemImage: "clock.fill") }
+                    .tag(AppRouter.Tab.prayer)
+
+                QiblaView()
+                    .tabItem { Label(L10n.t("tab.qibla"), systemImage: "location.north.circle.fill") }
+                    .tag(AppRouter.Tab.qibla)
+
                 NavigationStack {
                     QuestionsHomeView()
                 }
                 .tabItem { Label(L10n.t("tab.questions"), systemImage: "questionmark.bubble.fill") }
                 .tag(AppRouter.Tab.questions)
-
-                NavigationStack {
-                    SettingsView()
-                }
-                .tabItem { Label(L10n.t("tab.settings"), systemImage: "gearshape.fill") }
-                .tag(AppRouter.Tab.settings)
             }
             // إعادة بناء الواجهة كاملة عند تغيير اللغة (النصوص والاتجاه والأرقام).
             .id(settings.language)
@@ -205,14 +211,6 @@ struct RootView: View {
             MushafReaderView(launch: launch)
                 .withAppEnvironment(env)
         }
-        .fullScreenCover(isPresented: $router.showPrayerTimes) {
-            PrayerTimesView()
-                .withAppEnvironment(env)
-        }
-        .fullScreenCover(isPresented: $router.showQibla) {
-            QiblaView()
-                .withAppEnvironment(env)
-        }
         .task {
             // شاشة بداية قصيرة (نصف ثانية) — الواجهة جاهزة خلفها
             try? await Task.sleep(for: .milliseconds(500))
@@ -240,6 +238,8 @@ struct RootView: View {
             }
         case .about:
             AboutView()
+        case .settings:
+            SettingsView()
         }
     }
 }

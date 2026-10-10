@@ -103,8 +103,9 @@ struct HomeView: View {
                 .buttonStyle(PressableCardStyle())
                 .accessibilityLabel(L10n.t("home.progressA11y"))
 
-                Button { router.tab = .settings } label: {
-                    Label(settings.language.nativeName, systemImage: "globe")
+                // الإعدادات (اللغة والمظهر…) — خرجت من الشريط السفلي لتتسع للمواقيت والقبلة
+                Button { router.open(.settings) } label: {
+                    Label(settings.language.nativeName, systemImage: "gearshape.fill")
                         .font(.caption.weight(.bold))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 7)

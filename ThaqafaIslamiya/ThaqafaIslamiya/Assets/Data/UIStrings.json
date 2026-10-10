@@ -367,6 +367,22 @@
   "hi": "{0}%",
   "tr": "%{0}"
  },
+ "control.prayer.description": {
+  "ar": "يفتح مواقيت الصلاة حسب موقعك",
+  "bn": "তোমার অবস্থান অনুযায়ী নামাজের সময় খোলে",
+  "en": "Opens prayer times for your location",
+  "fa": "اوقات نماز را بر اساس موقعیت تو باز می‌کند",
+  "hi": "आपकी जगह के अनुसार नमाज़ के समय खोलता है",
+  "tr": "Konumuna göre namaz vakitlerini açar"
+ },
+ "control.qibla.description": {
+  "ar": "يفتح بوصلة القبلة مباشرة",
+  "bn": "সরাসরি কিবলা কম্পাস খোলে",
+  "en": "Opens the Qibla compass directly",
+  "fa": "قطب‌نمای قبله را مستقیم باز می‌کند",
+  "hi": "क़िबला कंपास सीधे खोलता है",
+  "tr": "Kıble pusulasını doğrudan açar"
+ },
  "done.back": {
   "ar": "العودة",
   "bn": "ফিরে যাও",
@@ -2119,6 +2135,22 @@
   "hi": "होम",
   "tr": "Ana Sayfa"
  },
+ "tab.prayer": {
+  "ar": "المواقيت",
+  "bn": "নামাজ",
+  "en": "Prayer",
+  "fa": "اوقات نماز",
+  "hi": "नमाज़",
+  "tr": "Vakitler"
+ },
+ "tab.qibla": {
+  "ar": "القبلة",
+  "bn": "কিবলা",
+  "en": "Qibla",
+  "fa": "قبله",
+  "hi": "क़िबला",
+  "tr": "Kıble"
+ },
  "tab.questions": {
   "ar": "الأسئلة",
   "bn": "প্রশ্ন",
@@ -2182,5 +2214,37 @@
   "fa": "غروب",
   "hi": "सूर्यास्त",
   "tr": "Gün batımı"
+ },
+ "widget.description": {
+  "ar": "الصلاة القادمة والوقت المتبقي للأذان حسب موقعك",
+  "bn": "তোমার অবস্থান অনুযায়ী পরের নামাজ ও আজান পর্যন্ত বাকি সময়",
+  "en": "The next prayer and the time left until the adhan, for your location",
+  "fa": "نماز بعدی و زمان باقی‌مانده تا اذان، بر اساس موقعیت تو",
+  "hi": "आपकी जगह के अनुसार अगली नमाज़ और अज़ान में बाक़ी समय",
+  "tr": "Konumuna göre sıradaki namaz ve ezana kalan süre"
+ },
+ "widget.openApp": {
+  "ar": "افتح التطبيق وحدّد موقعك لعرض المواقيت",
+  "bn": "নামাজের সময় দেখতে অ্যাপ খুলে তোমার অবস্থান ঠিক করো",
+  "en": "Open the app and set your location to see prayer times",
+  "fa": "برنامه را باز کن و موقعیتت را تعیین کن تا اوقات نماز نمایش داده شود",
+  "hi": "नमाज़ के समय देखने के लिए ऐप खोलें और अपनी जगह तय करें",
+  "tr": "Namaz vakitleri için uygulamayı açıp konumunu belirle"
+ },
+ "widget.sinceAdhan": {
+  "ar": "مضى على الأذان",
+  "bn": "আজানের পর থেকে",
+  "en": "Since the adhan",
+  "fa": "از اذان گذشته",
+  "hi": "अज़ान को हुए",
+  "tr": "Ezandan beri"
+ },
+ "widget.untilAdhan": {
+  "ar": "متبقٍ على الأذان",
+  "bn": "আজান পর্যন্ত বাকি",
+  "en": "Until the adhan",
+  "fa": "تا اذان",
+  "hi": "अज़ान में बाक़ी",
+  "tr": "Ezana kalan"
  }
 }

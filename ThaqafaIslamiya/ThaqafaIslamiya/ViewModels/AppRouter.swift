@@ -3,6 +3,7 @@
 //  ثقافة إسلامية
 //
 //  يدير التبويب المختار في الشريط السفلي، ومسار التنقّل، وعرض الدرس التفاعلي وجولة الأسئلة بملء الشاشة.
+//  نسخة واحدة مشتركة (`shared`) لتصل إليها أوامر مركز التحكم والأداة بعد فتح التطبيق.
 //
 
 import SwiftUI
@@ -10,7 +11,10 @@ import Observation
 
 @Observable
 final class AppRouter {
-    enum Tab: Hashable { case home, quran, questions, settings }
+    /// الشريط السفلي: خمسة تبويبات (أكثر منها يُخفي iOS الزائد تحت «المزيد») — الإعدادات من زر الترس في الرئيسية.
+    enum Tab: Hashable { case home, quran, prayer, qibla, questions }
+
+    static let shared = AppRouter()
 
     /// فتح المصحف على صفحة، أو على سورة وحدها (مثل الكهف والملك) لا يتجاوز القارئ حدودها حتى تنتهي.
     struct MushafLaunch: Identifiable, Hashable {
@@ -27,10 +31,6 @@ final class AppRouter {
     var presentedQuiz: QuizSessionConfig?
     /// المصحف المعروض بملء الشاشة.
     var presentedMushaf: MushafLaunch?
-    /// بوصلة القبلة.
-    var showQibla = false
-    /// مواقيت الصلاة.
-    var showPrayerTimes = false
     /// اللغة الجاري تطبيقها (تظهر شاشة انتظار أنيقة بدل انقلاب الواجهة أمام المستخدم).
     private(set) var switchingLanguage: AppLanguage?
 
@@ -41,6 +41,24 @@ final class AppRouter {
     func openMushaf(page: Int) { presentedMushaf = MushafLaunch(page: page) }
     func openSurah(_ surah: Int, page: Int) { presentedMushaf = MushafLaunch(page: page, surah: surah) }
     func closeMushaf() { presentedMushaf = nil }
+
+    /// يفتح تبويبًا مباشرة (من زر مركز التحكم أو الأداة أو إشعار الأذان)، مغلقًا ما فوقه من شاشات.
+    func show(_ tab: Tab) {
+        presentedLesson = nil
+        presentedQuiz = nil
+        presentedMushaf = nil
+        self.tab = tab
+    }
+
+    /// thaqafa://qibla و thaqafa://prayer
+    func handle(_ url: URL) {
+        guard url.scheme == AppLink.scheme else { return }
+        switch url.host {
+        case "qibla": show(.qibla)
+        case "prayer": show(.prayer)
+        default: break
+        }
+    }
 
     /// تغيير اللغة خلف شاشة انتظار: تظهر الشاشة، ثم تُبدَّل اللغة وتُبنى الواجهة من جديد بلا حركة، ثم تختفي.
     @MainActor

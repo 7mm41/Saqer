@@ -11,7 +11,6 @@ import UIKit
 
 struct PrayerTimesView: View {
     @Environment(PrayerStore.self) private var prayers
-    @Environment(AppRouter.self) private var router
     @Environment(AppSettings.self) private var settings
     @Environment(\.scenePhase) private var scenePhase
 
@@ -73,16 +72,8 @@ struct PrayerTimesView: View {
 
     private var header: some View {
         HStack(spacing: 10) {
-            Button { prayers.stopAdhan(); router.showPrayerTimes = false } label: {
-                Image(systemName: "xmark")
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(.primary)
-                    .frame(width: 44, height: 44)
-                    .glassCircle(interactive: false)
-                    .contentShape(Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(L10n.t("common.close"))
+            // تبويب في الشريط السفلي (لا زر إغلاق) — فراغ بعرض زر الموقع ليبقى العنوان في الوسط
+            Color.clear.frame(width: 44, height: 44)
 
             VStack(spacing: 2) {
                 Text(L10n.t("prayer.title")).font(.title3.weight(.heavy))
@@ -390,7 +381,7 @@ struct NextPrayerCard: View {
     @Environment(AppSettings.self) private var settings
 
     var body: some View {
-        Button { router.showPrayerTimes = true } label: {
+        Button { router.show(.prayer) } label: {
             TimelineView(.periodic(from: .now, by: 30)) { context in
                 HStack(spacing: 14) {
                     ZStack {

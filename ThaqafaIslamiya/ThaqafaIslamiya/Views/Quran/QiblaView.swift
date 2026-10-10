@@ -159,7 +159,6 @@ final class QiblaCompass: NSObject, CLLocationManagerDelegate {
 // MARK: - View
 
 struct QiblaView: View {
-    @Environment(AppRouter.self) private var router
     @Environment(\.colorScheme) private var colorScheme
     @State private var compass = QiblaCompass()
     /// زاوية القرص تراكميًا (لتدور دائمًا بأقصر طريق عند عبور ٣٦٠°).
@@ -210,16 +209,8 @@ struct QiblaView: View {
 
     private var header: some View {
         HStack {
-            Button { router.showQibla = false } label: {
-                Image(systemName: "xmark")
-                    .font(.headline.weight(.bold))
-                    .foregroundStyle(.primary)
-                    .frame(width: 44, height: 44)
-                    .glassCircle(interactive: false)
-                    .contentShape(Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(L10n.t("common.close"))
+            // تبويب «القبلة» في الشريط السفلي (لا زر إغلاق)
+            Color.clear.frame(width: 44, height: 44)
             Spacer()
             VStack(spacing: 2) {
                 Text(L10n.t("qibla.title")).font(.title3.weight(.heavy))

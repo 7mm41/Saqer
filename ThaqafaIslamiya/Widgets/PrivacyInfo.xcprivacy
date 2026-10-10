@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- لا تتبّع ولا جمع بيانات: الموقع يُستخدم على الجهاز فقط لاتجاه القبلة، والتقدّم والإعدادات محفوظة محليًا -->
+	<!-- الأداة لا تتتبّع ولا تجمع بيانات: تقرأ موقع المستخدم وإعداداته من مجموعة التطبيق على الجهاز فقط -->
 	<key>NSPrivacyTracking</key>
 	<false/>
 	<key>NSPrivacyTrackingDomains</key>
@@ -12,7 +12,7 @@
 	<key>NSPrivacyAccessedAPITypes</key>
 	<array>
 		<dict>
-			<!-- UserDefaults: إعدادات التطبيق وموضع القراءة والتقدّم، ومشاركة إعدادات المواقيت مع أداة التطبيق (App Group) -->
+			<!-- UserDefaults: إعدادات المواقيت المشتركة من التطبيق (App Group)، وآخر موقع للأداة نفسها -->
 			<key>NSPrivacyAccessedAPIType</key>
 			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>

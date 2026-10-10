@@ -190,7 +190,7 @@ struct QuranHomeView: View {
     // MARK: - Qibla
 
     private var qiblaCard: some View {
-        Button { router.showQibla = true } label: {
+        Button { router.show(.qibla) } label: {
             HStack(spacing: 14) {
                 Image(systemName: "location.north.circle.fill")
                     .font(.title2)

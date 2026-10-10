@@ -12,4 +12,5 @@ enum Route: Hashable {
     case masala(id: String)
     case quiz(chapterId: String)
     case about
+    case settings
 }

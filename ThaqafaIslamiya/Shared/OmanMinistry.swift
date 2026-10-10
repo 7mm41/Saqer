@@ -29,8 +29,8 @@ enum OmanMinistry {
         lock.lock(); defer { lock.unlock() }
         if let cached { return cached }
         let loaded: Tables? = {
-            guard let metaURL = Bundle.main.url(forResource: "oman_ministry", withExtension: "json"),
-                  let binURL = Bundle.main.url(forResource: "oman_ministry", withExtension: "bin"),
+            guard let metaURL = AppResources.url(forResource: "oman_ministry", withExtension: "json"),
+                  let binURL = AppResources.url(forResource: "oman_ministry", withExtension: "bin"),
                   let meta = try? JSONSerialization.jsonObject(with: Data(contentsOf: metaURL)) as? [String: Any],
                   let start = meta["start"] as? String, let days = meta["days"] as? Int,
                   let rows = meta["places"] as? [[Any]],

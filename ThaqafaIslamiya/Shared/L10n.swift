@@ -14,7 +14,7 @@ enum L10n {
     nonisolated(unsafe) static var language: AppLanguage = .arabic
 
     private static let table: [String: [String: String]] = {
-        guard let url = Bundle.main.url(forResource: "UIStrings", withExtension: "json"),
+        guard let url = AppResources.url(forResource: "UIStrings", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let table = try? JSONDecoder().decode([String: [String: String]].self, from: data)
         else { return [:] }

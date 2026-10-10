@@ -6,7 +6,7 @@
 //  - إشعار محلي عند كل أذان صوته الأذان نفسه (مقطع ٢٩٫٥ ث — حد iOS لأصوات الإشعارات ٣٠ ث)،
 //    مجدول لأيام قادمة (حد iOS ٦٤ إشعارًا معلّقًا) ويُجدَّد كلما فُتح التطبيق.
 //  - إن كان التطبيق مفتوحًا وقت الأذان يُرفع الأذان كاملًا داخله.
-//  الموقع يُحفظ على الجهاز فقط لتبقى المواقيت متاحة دون إنترنت.
+//  الموقع يُحفظ على الجهاز فقط لتبقى المواقيت متاحة دون إنترنت، ويُشارَك مع أداة شاشة القفل (داخل الجهاز).
 //
 
 import Foundation
@@ -14,6 +14,7 @@ import Observation
 import CoreLocation
 import UserNotifications
 import AVFoundation
+import WidgetKit
 
 @Observable
 final class PrayerStore: NSObject, CLLocationManagerDelegate {
@@ -108,6 +109,18 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
         defaults.set(asrSchool.rawValue, forKey: Keys.asr)
         defaults.set(alertSound.rawValue, forKey: Keys.sound)
         defaults.set(alerts.map(\.rawValue), forKey: Keys.alerts)
+        publishToWidgets()
+    }
+
+    // MARK: Widgets
+
+    /// يشارك الموقع وطريقة الحساب ولغة الواجهة مع أداة شاشة القفل والشاشة الرئيسية، ويحدّثها إن تغيّر شيء
+    /// (فتطابق مواقيتُها مواقيتَ التطبيق تمامًا).
+    func publishToWidgets() {
+        guard let latitude, let longitude else { return }
+        let snapshot = PrayerSnapshot(latitude: latitude, longitude: longitude, method: method, asr: asrSchool,
+                                      placeName: placeName, language: L10n.language)
+        if snapshot.save() { WidgetCenter.shared.reloadAllTimelines() }
     }
 
     // MARK: Times
@@ -220,6 +233,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
         defaults.set(latitude, forKey: Keys.lat)
         defaults.set(longitude, forKey: Keys.lng)
         refresh()
+        publishToWidgets()
         if explicit { Task { await enableNotifications() } } else { scheduleNotifications() }
         // اسم المكان والبلد دون إنترنت: أقرب مكان مأهول من القائمة المدمجة
         let coordinate = location.coordinate
@@ -234,6 +248,7 @@ final class PrayerStore: NSObject, CLLocationManagerDelegate {
                 self.defaults.set(nearest.country, forKey: Keys.country)
                 self.applyAutomaticMethod()
                 self.scheduleNotifications()
+                self.publishToWidgets()
             }
         }
     }
@@ -353,7 +368,7 @@ final class NotificationHandler: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if response.notification.request.content.categoryIdentifier == PrayerStore.notificationCategory {
-            DispatchQueue.main.async { self.router?.showPrayerTimes = true }
+            DispatchQueue.main.async { self.router?.show(.prayer) }
         }
         completionHandler()
     }

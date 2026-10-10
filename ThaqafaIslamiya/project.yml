@@ -12,9 +12,14 @@ targets:
     platform: iOS
     sources:
       - path: ThaqafaIslamiya
+      - path: Shared
+    dependencies:
+      - target: ThaqafaWidgets
+        embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.saqer.ThaqafaIslamiya
+        CODE_SIGN_ENTITLEMENTS: Supporting/ThaqafaIslamiya.entitlements
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Supporting/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: "ثقافة إسلامية"
@@ -29,6 +34,26 @@ targets:
         ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: "AppIcon-Night AppIcon-Desert AppIcon-Emerald AppIcon-Rose"
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: 1
+  # أداة الصلاة القادمة (شاشة القفل والرئيسية) وأزرار القبلة والمواقيت في مركز التحكم
+  ThaqafaWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Widgets
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.saqer.ThaqafaIslamiya.Widgets
+        CODE_SIGN_ENTITLEMENTS: Supporting/Widgets.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Supporting/Widgets-Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: "ثقافة إسلامية"
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "WIDGET_EXTENSION $(inherited)"
+        SKIP_INSTALL: YES
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "5.0"
         MARKETING_VERSION: "1.0"
